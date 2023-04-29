@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>United States</title>
+  <style>
+    /* Define styles for the image */
+    #my-image {
+      width: 1181px;
+      height: 833px;
+    }
+  </style>
+</head>
+<body>
+  <h1>United States</h1>
+  <img id="my-image" src="https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20White.png" usemap="#us-map" />
+  <map name="us-map">
+    <area shape="poly" coords="383,178,467,505,72,372" href="#" alt="Washington" />
+    <area shape="poly" coords="914,259,800,504,1000,450" href="#" alt="Oregon" />
+  </map>
+  <script>
+    // Add event listeners to the areas
+    const areas = document.querySelectorAll('area');
+    areas.forEach(area => {
+      area.addEventListener('mouseover', () => {
+        area.style.opacity = '1'; // make the area opaque on mouseover
+      });
+      area.addEventListener('mouseout', () => {
+        area.style.opacity = '0'; // make the area transparent on mouseout
+      });
+    });
+  </script>
+</body>
+</html>
