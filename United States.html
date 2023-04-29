@@ -5,17 +5,8 @@
   <style>
     /* Define styles for the image */
     #my-image {
-      width: 1180px;
+      width: 1181px;
       height: 833px;
-    }
-
-    /* Define styles for the map areas */
-    #my-image area:hover {
-      filter: brightness(50%) !important; // change the brightness of the area on hover
-    }
-
-    #my-image area:active {
-      filter: invert(100%) !important; // invert the colors of the area when clicked
     }
   </style>
 </head>
@@ -30,13 +21,10 @@
     const areas = document.querySelectorAll('area');
     areas.forEach(area => {
       area.addEventListener('mouseover', () => {
-        area.style.filter = 'brightness(50%)'; // change the brightness of the area on hover
+        area.style.backgroundColor = 'white'; // fill the area with white on mouseover
       });
       area.addEventListener('mouseout', () => {
-        area.style.filter = 'brightness(100%)'; // change the brightness back to normal when the mouse leaves the area
-      });
-      area.addEventListener('click', () => {
-        area.style.filter = 'invert(100%)'; // invert the colors of the area when clicked
+        area.style.backgroundColor = 'transparent'; // remove the white on mouseout
       });
     });
   </script>
