@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* CSS */
+        #map {
+            position: relative;
+        }
+        #map img, #map svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        #map svg {
+            pointer-events: none;
+        }
+        #map svg path {
+            pointer-events: all;
+            fill: transparent;
+        }
+    </style>
+</head>
+<body>
+    <div id="map">
+        <!-- HTML -->
+        <img src="https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States.png" alt="Map of the United States">
+        <object id="svg-object" data="https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States.svg" type="image/svg+xml"></object>
+    </div>
+
+    <script>
+        // JavaScript
+        document.addEventListener("DOMContentLoaded", function() {
+            var svgObject = document.getElementById('svg-object');
+            svgObject.addEventListener("load", function() {
+                var svgDoc = svgObject.contentDocument;
+                var paths = svgDoc.querySelectorAll('path');
+                paths.forEach(function(path) {
+                    path.addEventListener('mouseenter', function() {
+                        if (this.style.fill !== 'white') {
+                            this.style.fill = '#ecd9c1';
+                        }
+                    });
+                    path.addEventListener('mouseleave', function() {
+                        if (this.style.fill !== 'white') {
+                            this.style.fill = 'transparent';
+                        }
+                    });
+                    path.addEventListener('click', function() {
+                        this.style.fill = 'white';
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
