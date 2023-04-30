@@ -28,11 +28,29 @@
         var rangeElement = document.getElementById("range");
         rangeElement.innerHTML = svg;
         var svgElement = rangeElement.querySelector("svg");
-        var paths = svgElement.querySelectorAll("path");
+        var defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+        var pattern = document.createElementNS("http://www.w3.org/2000/svg", "pattern");
+        pattern.setAttribute("id", "white-grey-pattern");
+        pattern.setAttribute("width", "4");
+        pattern.setAttribute("height", "4");
+        pattern.setAttribute("patternUnits", "userSpaceOnUse");
+        var rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        rect.setAttribute("width", "4");
+        rect.setAttribute("height", "4");
+        rect.setAttribute("fill", "#fff");
+        var path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("d", "M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2");
+        path.setAttribute("stroke", "#808080");
+        path.setAttribute("stroke-width", "1");
+        pattern.appendChild(rect);
+        pattern.appendChild(path);
+        defs.appendChild(pattern);
+        svgElement.insertBefore(defs, svgElement.firstChild);
+        var paths = svgElement.querySelectorAll("path:not(:first-child)");
         paths.forEach(function(path) {
           path.setAttribute("fill", "transparent");
           var mouseoverHandler = function() {
-            this.style.fill = "#f5e5d2";
+            this.style.fill = "white";
           };
           var mouseoutHandler = function() {
             this.style.fill = "transparent";
@@ -40,7 +58,7 @@
           path.addEventListener("mouseover", mouseoverHandler);
           path.addEventListener("mouseout", mouseoutHandler);
           path.addEventListener("click", function() {
-            this.style.fill = "white";
+            this.style.fill = "url(#white-grey-pattern)";
             this.removeEventListener("mouseover", mouseoverHandler);
             this.removeEventListener("mouseout", mouseoutHandler);
           });
