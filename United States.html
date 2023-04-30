@@ -1,54 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-<style>
-    #Washington:hover,
-    #Oregon:hover,
-    #California:hover,
-    #Montana:hover,
-    #Idaho:hover,
-    #Nevada:hover,
-    #Utah:hover,
-    #Arizona:hover,
-    #New_Mexico:hover,
-    #Colorado:hover,
-    #Wyoming:hover,
-    #North_Dakota:hover,
-    #South_Dakota:hover,
-    #Nebraska:hover,
-    #Kansas:hover,
-    #Minnesota:hover,
-    #Iowa:hover,
-    #Missouri:hover,
-    #Oklahoma:hover,
-    #Texas:hover,
-    #Arkansas:hover,
-    #Louisiana:hover,
-    #Wisconsin:hover,
-    #Illinois:hover,
-    #Michigan:hover,
-    #Indiana:hover,
-    #Ohio:hover,
-    #Kentucky:hover,
-    #Tennessee:hover,
-    #Mississippi:hover,
-    #Alabama:hover,
-    #Georgia:hover,
-    #Florida:hover,
-    #West_Virginia:hover,
-    #Virginia:hover,
-    #North_Carolina:hover,
-    #South_Carolina:hover,
-    #Central_New_England:hover,
-    #South_New_England:hover,
-    #New_York:hover,
-    #Southern_Mid-Atlantic_States:hover,
-    #North_New_England:hover {
-        fill: black !important;
-    }
-</style>
+  <title>Hover over SVG</title>
 </head>
 <body>
-<object data="https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20Paths.svg" type="image/svg+xml" width="1181" height="833"></object>
+  <div id="range"></div>
+  <script>
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20Paths.svg");
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        var svg = xhr.responseText;
+        var rangeElement = document.getElementById("range");
+        rangeElement.innerHTML = svg;
+        var svgElement = rangeElement.querySelector("svg");
+        var paths = svgElement.querySelectorAll("path");
+        paths.forEach(function(path) {
+          path.addEventListener("mouseover", function() {
+            this.style.fill = "black";
+          });
+          path.addEventListener("mouseout", function() {
+            this.style.fill = "";
+          });
+        });
+      } else {
+        console.log("Error loading SVG");
+      }
+    };
+    xhr.send();
+  </script>
 </body>
 </html>
