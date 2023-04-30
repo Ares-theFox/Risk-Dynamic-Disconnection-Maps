@@ -4,6 +4,7 @@
   <title>Hover over SVG</title>
 </head>
 <body>
+  <img src="https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States.png" alt="Map of United States">
   <div id="range"></div>
   <script>
     var xhr = new XMLHttpRequest();
@@ -16,12 +17,19 @@
         var svgElement = rangeElement.querySelector("svg");
         var paths = svgElement.querySelectorAll("path");
         paths.forEach(function(path) {
-          path.setAttribute("fill", "white");
-          path.addEventListener("mouseover", function() {
-            this.style.fill = "black";
-          });
-          path.addEventListener("mouseout", function() {
+          path.setAttribute("fill", "transparent");
+          var mouseoverHandler = function() {
+            this.style.fill = "#f5e5d2";
+          };
+          var mouseoutHandler = function() {
+            this.style.fill = "transparent";
+          };
+          path.addEventListener("mouseover", mouseoverHandler);
+          path.addEventListener("mouseout", mouseoutHandler);
+          path.addEventListener("click", function() {
             this.style.fill = "white";
+            this.removeEventListener("mouseover", mouseoverHandler);
+            this.removeEventListener("mouseout", mouseoutHandler);
           });
         });
       } else {
