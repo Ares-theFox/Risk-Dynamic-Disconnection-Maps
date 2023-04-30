@@ -16,13 +16,12 @@
         var svgElement = rangeElement.querySelector("svg");
         var paths = svgElement.querySelectorAll("path");
         paths.forEach(function(path) {
-          var originalFill = path.getAttribute("fill") || "";
-          path.setAttribute("fill", originalFill);
+          path.setAttribute("fill", "");
           path.addEventListener("mouseover", function() {
             this.style.fill = "black";
           });
           path.addEventListener("mouseout", function() {
-            this.style.fill = originalFill;
+            this.style.fill = "";
           });
         });
       } else {
