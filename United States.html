@@ -6,17 +6,14 @@
         #map {
             position: relative;
         }
-        #map img, #map svg {
+        #map img, #map iframe {
             position: absolute;
             top: 0;
             left: 0;
         }
-        #map svg {
+        #map iframe {
+            border: none;
             pointer-events: none;
-        }
-        #map svg path {
-            pointer-events: all;
-            fill: transparent;
         }
     </style>
 </head>
@@ -24,17 +21,18 @@
     <div id="map">
         <!-- HTML -->
         <img src="https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States.png" alt="Map of the United States">
-        <object id="svg-object" data="https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States.svg" type="image/svg+xml"></object>
+        <iframe id="svg-iframe" src="https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States.svg"></iframe>
     </div>
 
     <script>
         // JavaScript
         document.addEventListener("DOMContentLoaded", function() {
-            var svgObject = document.getElementById('svg-object');
-            svgObject.addEventListener("load", function() {
-                var svgDoc = svgObject.contentDocument;
+            var svgIframe = document.getElementById('svg-iframe');
+            svgIframe.addEventListener("load", function() {
+                var svgDoc = svgIframe.contentDocument;
                 var paths = svgDoc.querySelectorAll('path');
                 paths.forEach(function(path) {
+                    path.style.pointerEvents = 'all';
                     path.addEventListener('mouseenter', function() {
                         if (this.style.fill !== 'white') {
                             this.style.fill = '#ecd9c1';
