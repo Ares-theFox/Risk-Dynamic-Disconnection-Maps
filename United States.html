@@ -28,21 +28,7 @@
         var rangeElement = document.getElementById("range");
         rangeElement.innerHTML = svg;
         var svgElement = rangeElement.querySelector("svg");
-        var defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
-        var pattern = document.createElementNS("http://www.w3.org/2000/svg", "pattern");
-        pattern.setAttribute("id", "blizzard-pattern");
-        pattern.setAttribute("width", "100%");
-        pattern.setAttribute("height", "100%");
-        pattern.setAttribute("patternUnits", "objectBoundingBox");
-        var image = document.createElementNS("http://www.w3.org/2000/svg", "image");
-        image.setAttribute("href", "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20blizzard%20pattern.png");
-        image.setAttribute("width", "1");
-        image.setAttribute("height", "1");
-        image.setAttribute("preserveAspectRatio", "none");
-        pattern.appendChild(image);
-        defs.appendChild(pattern);
-        svgElement.insertBefore(defs, svgElement.firstChild);
-        var paths = svgElement.querySelectorAll("path:not(:first-child)");
+        var paths = svgElement.querySelectorAll("path");
         paths.forEach(function(path) {
           path.setAttribute("fill", "transparent");
           var mouseoverHandler = function() {
@@ -54,18 +40,29 @@
           path.addEventListener("mouseover", mouseoverHandler);
           path.addEventListener("mouseout", mouseoutHandler);
           path.addEventListener("click", function() {
-            var maskId = this.id + "-mask";
-            if (!document.getElementById(maskId)) {
-              var mask = document.createElementNS("http://www.w3.org/2000/svg", "mask");
-              mask.setAttribute("id", maskId);
-              var maskPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-              maskPath.setAttribute("d", this.getAttribute("d"));
-              maskPath.setAttribute("fill", "#fff");
-              mask.appendChild(maskPath);
-              defs.appendChild(mask);
-            }
-            this.style.fill = "url(#blizzard-pattern)";
-            this.style.mask = `url(#${maskId})`;
+            // Create a clipPath element and set its id
+            var clipPath = document.createElementNS("http://www.w3.org/2000/svg", "clipPath");
+            clipPath.setAttribute("id", "clip-" + this.id);
+
+            // Clone the clicked path and append it to the clipPath
+            var clonedPath = this.cloneNode(true);
+            clipPath.appendChild(clonedPath);
+
+            // Append the clipPath to the defs element
+            var defs = svgElement.querySelector("defs") || svgElement.insertBefore(document.createElementNS("http://www.w3.org/2000/svg", "defs"), svgElement.firstChild);
+            defs.appendChild(clipPath);
+
+            // Create an image element and set its attributes
+            var image = document.createElementNS("http://www.w3.org/2000/svg", "image");
+            image.setAttributeNS("http://www.w3.org/1999/xlink", "href", "https://github.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/blob/main/United%20States%20blizzard%20pattern.png");
+            image.setAttribute("width", "100%");
+            image.setAttribute("height", "100%");
+            image.setAttribute("clip-path", "url(#clip-" + this.id + ")");
+
+            // Append the image to the SVG
+            svgElement.appendChild(image);
+
+            // Remove mouseover and mouseout event listeners
             this.removeEventListener("mouseover", mouseoverHandler);
             this.removeEventListener("mouseout", mouseoutHandler);
           });
