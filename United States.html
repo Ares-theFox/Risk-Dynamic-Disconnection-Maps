@@ -10,7 +10,7 @@
       z-index: 1;
     }
     header {
-      font-size: 20px;
+      font-size: 35px;
       font-weight: bold;
     }
   </style>
@@ -62,6 +62,48 @@
             // Append the image to the SVG
             svgElement.appendChild(image);
 
+            // Create a filter element and set its id
+            var filter = document.createElementNS("http://www.w3.org/2000/svg", "filter");
+            filter.setAttribute("id", "filter-" + this.id);
+
+            // Create an feGaussianBlur element and set its attributes
+            var feGaussianBlur = document.createElementNS("http://www.w3.org/2000/svg", "feGaussianBlur");
+            feGaussianBlur.setAttribute("in", "SourceAlpha");
+            feGaussianBlur.setAttribute("stdDeviation", "2");
+
+            // Create an feOffset element and set its attributes
+            var feOffset = document.createElementNS("http://www.w3.org/2000/svg", "feOffset");
+            feOffset.setAttribute("dx", "0");
+            feOffset.setAttribute("dy", "0");
+
+            // Create an feComposite element and set its attributes
+            var feComposite = document.createElementNS("http://www.w3.org/2000/svg", "feComposite");
+            feComposite.setAttribute("in", "SourceGraphic");
+            feComposite.setAttribute("operator", "out");
+
+            // Create an feComponentTransfer element and set its attributes
+            var feComponentTransfer = document.createElementNS("http://www.w3.org/2000/svg", "feComponentTransfer");
+
+            // Create an feFuncA element and set its attributes
+            var feFuncA = document.createElementNS("http://www.w3.org/2000/svg", "feFuncA");
+            feFuncA.setAttribute("type", "table");
+            feFuncA.setAttribute("tableValues", "0.15 0.5");
+
+            // Append the feFuncA to the feComponentTransfer
+            feComponentTransfer.appendChild(feFuncA);
+
+            // Append the filter elements to the filter in the correct order
+            filter.appendChild(feGaussianBlur);
+            filter.appendChild(feOffset);
+            filter.appendChild(feComposite);
+            filter.appendChild(feComponentTransfer);
+
+            // Append the filter to the defs element
+            defs.appendChild(filter);
+
+            // Set the filter attribute of the clicked path
+            this.setAttribute("filter", "url(#filter-" + this.id + ")");          
+            
             // Remove mouseover and mouseout event listeners
             this.removeEventListener("mouseover", mouseoverHandler);
             this.removeEventListener("mouseout", mouseoutHandler);
