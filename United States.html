@@ -3,36 +3,25 @@
 <head>
     <style>
         /* CSS */
-        #map {
-            position: relative;
-        }
-        #map img, #map iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-        #map iframe {
-            border: none;
-            pointer-events: none;
+        #map svg path {
+            fill: transparent;
         }
     </style>
 </head>
 <body>
     <div id="map">
         <!-- HTML -->
-        <img src="https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States.png" alt="Map of the United States">
-        <iframe id="svg-iframe" src="https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States.svg"></iframe>
+        <object id="svg-object" data="https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States.svg" type="image/svg+xml"></object>
     </div>
 
     <script>
         // JavaScript
         document.addEventListener("DOMContentLoaded", function() {
-            var svgIframe = document.getElementById('svg-iframe');
-            svgIframe.addEventListener("load", function() {
-                var svgDoc = svgIframe.contentDocument;
+            var svgObject = document.getElementById('svg-object');
+            svgObject.addEventListener("load", function() {
+                var svgDoc = svgObject.contentDocument;
                 var paths = svgDoc.querySelectorAll('path');
                 paths.forEach(function(path) {
-                    path.style.pointerEvents = 'all';
                     path.addEventListener('mouseenter', function() {
                         if (this.style.fill !== 'white') {
                             this.style.fill = '#ecd9c1';
