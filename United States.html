@@ -1,29 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <style>
-        #map {
-            width: 1181px;
-            height: 833px;
-        }
-    </style>
+<style>
+    svg path:hover {
+        fill: black !important;
+    }
+</style>
 </head>
 <body>
-    <img id="map" src="https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States.png" alt="United States" usemap="#states">
-    <map name="states">
-        <area id="CA" shape="poly" coords="555,180,316,505,862,476" href="#">
-    </map>
-
-    <script>
-        const states = document.querySelectorAll('area');
-        states.forEach(state => {
-            state.addEventListener('mouseover', () => {
-                state.style.backgroundColor = 'black';
-            });
-            state.addEventListener('mouseout', () => {
-                state.style.backgroundColor = '';
-            });
-        });
-    </script>
+<object data="https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20Paths.svg" type="image/svg+xml"></object>
 </body>
 </html>
