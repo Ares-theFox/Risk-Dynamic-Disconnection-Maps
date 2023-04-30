@@ -3,8 +3,11 @@
 <head>
   <title>Hover over SVG</title>
   <style>
-    #map {
-      pointer-events: none;
+    #map, #range {
+      position: absolute;
+    }
+    #range {
+      z-index: 1;
     }
   </style>
 </head>
