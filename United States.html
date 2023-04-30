@@ -2,8 +2,14 @@
 <html>
 <head>
   <title>Hover over SVG</title>
+  <style>
+    #map {
+      pointer-events: none;
+    }
+  </style>
 </head>
 <body>
+  <img id="map" src="https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States.png" alt="Map of United States">
   <div id="range"></div>
   <script>
     var xhr = new XMLHttpRequest();
