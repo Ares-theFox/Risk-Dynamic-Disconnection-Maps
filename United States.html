@@ -2,40 +2,26 @@
 <html>
 <head>
     <style>
-        /* CSS */
-        #map svg path {
-            fill: transparent;
+        #map {
+            width: 1181px;
+            height: 833px;
         }
     </style>
 </head>
 <body>
-    <div id="map">
-        <!-- HTML -->
-        <object id="svg-object" data="https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States.svg" type="image/svg+xml"></object>
-    </div>
+    <img id="map" src="https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States.png" alt="United States" usemap="#states">
+    <map name="states">
+        <area id="CA" shape="poly" coords="555,180,316,505,862,476" href="#">
+    </map>
 
     <script>
-        // JavaScript
-        document.addEventListener("DOMContentLoaded", function() {
-            var svgObject = document.getElementById('svg-object');
-            svgObject.addEventListener("load", function() {
-                var svgDoc = svgObject.contentDocument;
-                var paths = svgDoc.querySelectorAll('path');
-                paths.forEach(function(path) {
-                    path.addEventListener('mouseenter', function() {
-                        if (this.style.fill !== 'white') {
-                            this.style.fill = '#ecd9c1';
-                        }
-                    });
-                    path.addEventListener('mouseleave', function() {
-                        if (this.style.fill !== 'white') {
-                            this.style.fill = 'transparent';
-                        }
-                    });
-                    path.addEventListener('click', function() {
-                        this.style.fill = 'white';
-                    });
-                });
+        const states = document.querySelectorAll('area');
+        states.forEach(state => {
+            state.addEventListener('mouseover', () => {
+                state.style.backgroundColor = 'black';
+            });
+            state.addEventListener('mouseout', () => {
+                state.style.backgroundColor = '';
             });
         });
     </script>
