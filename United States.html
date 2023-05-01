@@ -29,6 +29,7 @@
         rangeElement.innerHTML = svg;
         var svgElement = rangeElement.querySelector("svg");
         var paths = svgElement.querySelectorAll("path");
+        var clickCounter = 0; // Add a counter variable to keep track of the number of clicks
         paths.forEach(function(path) {
           path.setAttribute("fill", "transparent");
           path.setAttribute("stroke-opacity", "0");
@@ -41,31 +42,46 @@
           path.addEventListener("mouseover", mouseoverHandler);
           path.addEventListener("mouseout", mouseoutHandler);
           path.addEventListener("click", function() {
-            // Create a clipPath element and set its id
-            var clipPath = document.createElementNS("http://www.w3.org/2000/svg", "clipPath");
-            clipPath.setAttribute("id", "clip-" + this.id);
+            // Check if clickCounter is less than 3
+            if (clickCounter < 3) {
+              // Create a clipPath element and set its id
+              var clipPath = document.createElementNS("http://www.w3.org/2000/svg", "clipPath");
+              clipPath.setAttribute("id", "clip-" + this.id);
 
-            // Clone the clicked path and append it to the clipPath
-            var clonedPath = this.cloneNode(true);
-            clipPath.appendChild(clonedPath);
+              // Clone the clicked path and append it to the clipPath
+              var clonedPath = this.cloneNode(true);
+              clipPath.appendChild(clonedPath);
 
-            // Append the clipPath to the defs element
-            var defs = svgElement.querySelector("defs") || svgElement.insertBefore(document.createElementNS("http://www.w3.org/2000/svg", "defs"), svgElement.firstChild);
-            defs.appendChild(clipPath);
+              // Append the clipPath to the defs element
+              var defs = svgElement.querySelector("defs") || svgElement.insertBefore(document.createElementNS("http://www.w3.org/2000/svg", "defs"), svgElement.firstChild);
+              defs.appendChild(clipPath);
 
-            // Create an image element and set its attributes
-            var image = document.createElementNS("http://www.w3.org/2000/svg", "image");
-            image.setAttributeNS("http://www.w3.org/1999/xlink", "href", "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20blizzard%20pattern.png");
-            image.setAttribute("width", "100%");
-            image.setAttribute("height", "100%");
-            image.setAttribute("clip-path", "url(#clip-" + this.id + ")");
+              // Create an image element and set its attributes
+              var image = document.createElementNS("http://www.w3.org/2000/svg", "image");
+              image.setAttributeNS("http://www.w3.org/1999/xlink", "href", "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20blizzard%20pattern.png");
+              image.setAttribute("width", "100%");
+              image.setAttribute("height", "100%");
+              image.setAttribute("clip-path", "url(#clip-" + this.id + ")");
 
-            // Append the image to the SVG
-            svgElement.appendChild(image);
+              // Append the image to the SVG
+              svgElement.appendChild(image);
 
-            // Remove mouseover and mouseout event listeners
-            this.removeEventListener("mouseover", mouseoverHandler);
-            this.removeEventListener("mouseout", mouseoutHandler);
+              // Remove mouseover and mouseout event listeners
+              this.removeEventListener("mouseover", mouseoverHandler);
+              this.removeEventListener("mouseout", mouseoutHandler);
+            }
+
+            // Increment the click counter
+            clickCounter++;
+
+            // Check if the click counter has reached 3
+            if (clickCounter === 3) {
+              // Execute the Google Apps Script by making a GET request to the published web app URL
+              var scriptUrl = "https://script.google.com/macros/s/AKfycbwe71K6HNMU0TJmoF8vmmwV5qX1g73F3Ef_sS3H3ygmC3HOCXVHb5mM3Mg0etlNX_t7/exec";
+              var scriptRequest = new XMLHttpRequest();
+              scriptRequest.open("GET", scriptUrl);
+              scriptRequest.send();
+            }
           });
         });
       } else {
