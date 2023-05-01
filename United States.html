@@ -10,7 +10,7 @@
       z-index: 1;
     }
     header {
-      font-size: 30px;
+      font-size: 20px;
       font-weight: bold;
     }
   </style>
@@ -31,6 +31,7 @@
         var paths = svgElement.querySelectorAll("path");
         paths.forEach(function(path) {
           path.setAttribute("fill", "transparent");
+          path.setAttribute("stroke-opacity", "0");
           var mouseoverHandler = function() {
             this.style.fill = "white";
           };
@@ -40,11 +41,6 @@
           path.addEventListener("mouseover", mouseoverHandler);
           path.addEventListener("mouseout", mouseoutHandler);
           path.addEventListener("click", function() {
-            // Add border to complex polygon range
-            this.setAttribute("stroke", "black");
-            this.setAttribute("stroke-width", "10");
-            this.setAttribute("stroke-opacity", "0.5");
-
             // Create a clipPath element and set its id
             var clipPath = document.createElementNS("http://www.w3.org/2000/svg", "clipPath");
             clipPath.setAttribute("id", "clip-" + this.id);
