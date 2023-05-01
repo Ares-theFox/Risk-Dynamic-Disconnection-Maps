@@ -10,7 +10,7 @@
       z-index: 1;
     }
     header {
-      font-size: 10px;
+      font-size: 30px;
       font-weight: bold;
     }
   </style>
@@ -31,6 +31,7 @@
         var paths = svgElement.querySelectorAll("path");
         var clickCounter = 0; // Add a counter variable to keep track of the number of clicks
         var clickCounterMax = 3; // Specify max blizzards
+        var filledRanges = [];
         paths.forEach(function(path) {
           path.setAttribute("fill", "transparent");
           path.setAttribute("stroke-opacity", "0");
@@ -72,17 +73,20 @@
               // Remove mouseover and mouseout event listeners
               this.removeEventListener("mouseover", mouseoverHandler);
               this.removeEventListener("mouseout", mouseoutHandler);
+
+              // Add the clicked range ID to the filledRanges array
+              filledRanges.push(this.id);
             }
 
             // Increment the click counter
             clickCounter++;
 
             // Check if the click counter has reached 3
-            if (clickCounter === 3) {
+            if (clickCounter === clickCounterMax) {
               // Execute the Google Apps Script by making a GET request to the published web app URL
               var scriptUrl = "https://script.google.com/macros/s/AKfycbwe71K6HNMU0TJmoF8vmmwV5qX1g73F3Ef_sS3H3ygmC3HOCXVHb5mM3Mg0etlNX_t7/exec";
               var scriptRequest = new XMLHttpRequest();
-              scriptRequest.open("GET", scriptUrl);
+              scriptRequest.open("GET", scriptUrl + "?filledRanges=" + JSON.stringify(filledRanges));
               scriptRequest.send();
             }
           });
