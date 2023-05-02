@@ -10,11 +10,24 @@
       z-index: 1;
     }
     header {
-      font-size: 30px;
+      font-size: 10px;
       font-weight: bold;
     }
   </style>
   <script src="https://apis.google.com/js/api.js"></script>
+  <script>
+    gapi.load('client', function() {
+      gapi.client.init({
+        apiKey: 'AIzaSyDVphvVO2758QTdfRMDpXkpfJmB2uNTJI0',
+        discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
+      }).then(function() {
+        // gapi.client is now initialized and ready to use
+        gapi.client.load('sheets', 'v4', function() {
+          // your code here
+        });
+      });
+    });
+  </script>
 </head>
 <body>
   <header>United States</header>
@@ -80,18 +93,15 @@
 
             // Add this code after the clickCounter++ line
             if (clickCounter === clickCounterMax) {
-              // Load the Google Sheets API client library
-              gapi.client.load('sheets', 'v4', function() {
-                // Set the API key and the spreadsheet ID
-                var apiKey = 'AIzaSyDVphvVO2758QTdfRMDpXkpfJmB2uNTJI0';
-                var spreadsheetId = '17eLC2f7Mr-V0QZFjp8LU05NnD_fg3W1YefRznKs3xV0';
-
+              // Set spreadsheet ID
+              var spreadsheetId = '17eLC2f7Mr-V0QZFjp8LU05NnD_fg3W1YefRznKs3xV0';
+              
                 // Set the request parameters
                 var params = {
                   spreadsheetId: spreadsheetId,
                   sheetId: 0 // The sheet ID of the "United States" sheet
                 };
-
+              
                 // Clone the "United States" sheet
                 var request = gapi.client.sheets.spreadsheets.sheets.copyTo(params);
                 request.then(function(response) {
