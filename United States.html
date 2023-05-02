@@ -10,7 +10,7 @@
       z-index: 1;
     }
     header {
-      font-size: 10px;
+      font-size: 30px;
       font-weight: bold;
     }
   </style>
@@ -83,7 +83,8 @@
               // Access Google Sheets API to clone and rename the sheet
               var params = {
                 spreadsheetId: '17eLC2f7Mr-V0QZFjp8LU05NnD_fg3W1YefRznKs3xV0', // Replace with your spreadsheet ID
-                sheetName: 'United States'
+                sheetName: 'United States',
+                sheetId: 0 // Replace with the ID of the sheet you want to clone
               };
 
               // Define the request body for the API call
@@ -103,21 +104,21 @@
               var apiKey = 'AIzaSyDVphvVO2758QTdfRMDpXkpfJmB2uNTJI0';
               
               // Make a POST request to clone and rename the sheet
-              fetch('https://sheets.googleapis.com/v4/spreadsheets/' + params.spreadsheetId + ':batchUpdate', {
+              fetch('https://sheets.googleapis.com/v4/spreadsheets/' + params.spreadsheetId + ':batchUpdate?key=' + apiKey, {
                 method: 'POST',
                 headers: {
-                  'Authorization': 'Bearer ' + apiKey,
+                  'Authorization': 'Bearer ' + gapi.auth.getToken().access_token,
                   'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(requestBody)
               })
               .then(function(response) {
                 if (!response.ok) {
-                  console.log('Error cloning sheet:', response.status, response.statusText);
+                  throw new Error('Error cloning sheet: ' + response.status + ' ' + response.statusText);
                 }
               })
               .catch(function(error) {
-                console.log('Error cloning sheet:', error.message);
+                console.log(error);
               });
             }
           });
