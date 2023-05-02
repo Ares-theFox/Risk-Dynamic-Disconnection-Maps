@@ -10,7 +10,7 @@
       z-index: 1;
     }
     header {
-      font-size: 30px;
+      font-size: 10px;
       font-weight: bold;
     }
   </style>
@@ -161,10 +161,10 @@
                 }, function(reason) {
                   console.error('error: ' + reason.result.error.message);
                 });
-              };
-            })          
+              }
+            });     
           });
-        };
+        });
       } else {
         console.log("Error loading SVG");
       }
