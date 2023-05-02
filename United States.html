@@ -10,7 +10,7 @@
       z-index: 1;
     }
     header {
-      font-size: 10px;
+      font-size: 30px;
       font-weight: bold;
     }
   </style>
@@ -32,7 +32,6 @@
         var paths = svgElement.querySelectorAll("path");
         var clickCounter = 0; // Add a counter variable to keep track of the number of clicks
         var clickCounterMax = 3; // Specify max blizzards
-        var filledRanges = [];
         paths.forEach(function(path) {
           path.setAttribute("fill", "transparent");
           path.setAttribute("stroke-opacity", "0");
@@ -74,47 +73,10 @@
               // Remove mouseover and mouseout event listeners
               this.removeEventListener("mouseover", mouseoverHandler);
               this.removeEventListener("mouseout", mouseoutHandler);
-
-              // Add the clicked range ID to the filledRanges array
-              filledRanges.push(this.id);
-              
-              // Log the value of the filledRanges variable
-              console.log("filledRanges:", filledRanges);
             }
 
             // Increment the click counter
             clickCounter++;
-
-            // Check if the click counter has reached 3
-            if (clickCounter === clickCounterMax) {
-              // Add the SheetJS code here
-              var url = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Risk%20Connection%20Data.xlsx";
-              var oReq = new XMLHttpRequest();
-              oReq.open("GET", url, true);
-              oReq.responseType = "arraybuffer";
-
-              oReq.onload = function(e) {
-                var arraybuffer = oReq.response;
-                var data = new Uint8Array(arraybuffer);
-                var workbook = XLSX.read(data, {type: "array"});
-
-                // Get the "United States" sheet
-                var sheet = workbook.Sheets["United States"];
-
-                // Clone the sheet
-                var clonedSheet = XLSX.utils.sheet_to_json(sheet, {header:1, raw:true});
-                clonedSheet = XLSX.utils.aoa_to_sheet(clonedSheet);
-
-                // Rename the cloned sheet
-                var unixTime = Math.round((new Date()).getTime() / 1000);
-                XLSX.utils.book_append_sheet(workbook, clonedSheet, "United States " + unixTime);
-
-                // Write the updated workbook to a new xlsx file
-                XLSX.writeFile(workbook, "updatedRiskConnectionData.xlsx");
-              }
-
-              oReq.send();
-            }
           });
         });
       } else {
