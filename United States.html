@@ -10,7 +10,7 @@
       z-index: 1;
     }
     header {
-      font-size: 30px;
+      font-size: 10px;
       font-weight: bold;
     }
   </style>
@@ -99,11 +99,14 @@
                 ]
               };
 
+              // Define your API key here
+              var apiKey = 'AIzaSyDVphvVO2758QTdfRMDpXkpfJmB2uNTJI0';
+              
               // Make a POST request to clone and rename the sheet
               fetch('https://sheets.googleapis.com/v4/spreadsheets/' + params.spreadsheetId + ':batchUpdate', {
                 method: 'POST',
                 headers: {
-                  'Authorization': 'Bearer ' + AIzaSyDVphvVO2758QTdfRMDpXkpfJmB2uNTJI0, // Replace with your API key
+                  'Authorization': 'Bearer ' + apiKey,
                   'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(requestBody)
