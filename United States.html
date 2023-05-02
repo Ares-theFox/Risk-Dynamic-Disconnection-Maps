@@ -10,11 +10,19 @@
       z-index: 1;
     }
     header {
-      font-size: 30px;
+      font-size: 10px;
       font-weight: bold;
     }
   </style>
   <script src="https://apis.google.com/js/api.js"></script>
+  <script>
+    gapi.load('client', function() {
+      gapi.client.init({
+        apiKey: 'AIzaSyDVphvVO2758QTdfRMDpXkpfJmB2uNTJI0',
+        discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
+      });
+    });
+  </script>
 </head>
 <body>
   <header>United States</header>
