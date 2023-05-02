@@ -10,10 +10,11 @@
       z-index: 1;
     }
     header {
-      font-size: 30px;
+      font-size: 10px;
       font-weight: bold;
     }
   </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
 </head>
 <body>
   <header>United States</header>
@@ -86,11 +87,33 @@
 
             // Check if the click counter has reached 3
             if (clickCounter === clickCounterMax) {
-              // Execute the Google Apps Script by making a GET request to the published web app URL
-              var scriptUrl = "https://script.google.com/macros/s/AKfycbwe71K6HNMU0TJmoF8vmmwV5qX1g73F3Ef_sS3H3ygmC3HOCXVHb5mM3Mg0etlNX_t7/exec";
-              var scriptRequest = new XMLHttpRequest();
-              scriptRequest.open("GET", scriptUrl + "?filledRanges=" + filledRanges.join("-"));
-              scriptRequest.send();
+              // Add the SheetJS code here
+              var url = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Risk%20Connection%20Data.xlsx";
+              var oReq = new XMLHttpRequest();
+              oReq.open("GET", url, true);
+              oReq.responseType = "arraybuffer";
+
+              oReq.onload = function(e) {
+                var arraybuffer = oReq.response;
+                var data = new Uint8Array(arraybuffer);
+                var workbook = XLSX.read(data, {type: "array"});
+
+                // Get the "United States" sheet
+                var sheet = workbook.Sheets["United States"];
+
+                // Clone the sheet
+                var clonedSheet = XLSX.utils.sheet_to_json(sheet, {header:1, raw:true});
+                clonedSheet = XLSX.utils.aoa_to_sheet(clonedSheet);
+
+                // Rename the cloned sheet
+                var unixTime = Math.round((new Date()).getTime() / 1000);
+                XLSX.utils.book_append_sheet(workbook, clonedSheet, "United States " + unixTime);
+
+                // Write the updated workbook to a new xlsx file
+                XLSX.writeFile(workbook, "updatedRiskConnectionData.xlsx");
+              }
+
+              oReq.send();
             }
           });
         });
