@@ -10,24 +10,10 @@
       z-index: 1;
     }
     header {
-      font-size: 15px;
+      font-size: 10px;
       font-weight: bold;
     }
   </style>
-  <script src="https://apis.google.com/js/api.js"></script>
-  <script>
-    gapi.load('client', function() {
-      gapi.client.init({
-        apiKey: 'AIzaSyDVphvVO2758QTdfRMDpXkpfJmB2uNTJI0',
-        discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
-      }).then(function() {
-        // gapi.client is now initialized and ready to use
-        gapi.client.load('sheets', 'v4', function() {
-          // your code here
-        });
-      });
-    });
-  </script>
 </head>
 <body>
   <header>United States</header>
@@ -90,83 +76,13 @@
 
             // Increment the click counter
             clickCounter++;
-
-            // Add this code after the clickCounter++ line
-            if (clickCounter === clickCounterMax) {
-              // Set spreadsheet ID
-              var spreadsheetId = '17eLC2f7Mr-V0QZFjp8LU05NnD_fg3W1YefRznKs3xV0';
-              
-                // Set the request parameters
-                var params = {
-                  spreadsheetId: spreadsheetId,
-                  sheetId: 0 // The sheet ID of the "United States" sheet
-                };
-              
-                // Clone the "United States" sheet
-                var request = gapi.client.sheets.spreadsheets.sheets.copyTo(params);
-                request.then(function(response) {
-                  // Get the new sheet ID
-                  var newSheetId = response.result.sheetId;
-
-                  // Set the new sheet name
-                  var newSheetName = 'United States ' + Math.round(new Date().getTime() / 1000);
-
-                  // Set the request parameters
-                  var params = {
-                    spreadsheetId: spreadsheetId,
-                    resource: {
-                      requests: [{
-                        updateSheetProperties: {
-                          properties: {
-                            sheetId: newSheetId,
-                            title: newSheetName
-                          },
-                          fields: 'title'
-                        }
-                      }]
-                    }
-                  };
-
-                  // Rename the new sheet
-                  var request = gapi.client.sheets.spreadsheets.batchUpdate(params);
-                  request.then(function(response) {
-                    console.log('Sheet renamed');
-                  }, function(reason) {
-                    console.error('error: ' + reason.result.error.message);
-                  });
-
-                  // Set the range and values to update
-                  var range = 'AC2';
-                  var values = [[this.id]];
-
-                  // Set the request parameters
-                  var params = {
-                    spreadsheetId: spreadsheetId,
-                    range: range,
-                    valueInputOption: 'RAW'
-                  };
-                  var valueRangeBody = {
-                    range: range,
-                    majorDimension: 'ROWS',
-                    values: values
-                  };
-
-                  // Update the cell in the new sheet
-                  var request = gapi.client.sheets.spreadsheets.values.update(params, valueRangeBody);
-                  request.then(function(response) {
-                    console.log('Cell updated');
-                  }, function(reason) {
-                    console.error('error: ' + reason.result.error.message);
-                  });
-                }, function(reason) {
-                  console.error('error: ' + reason.result.error.message);
-                });
-            };
           });
-        })
-      };
-      xhr.send();
-    }
+        });
+      } else {
+        console.log("Error loading SVG");
+      }
+    };
+    xhr.send();
   </script>
 </body>
 </html>
