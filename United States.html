@@ -14,6 +14,7 @@
       font-weight: bold;
     }
   </style>
+  <script src="https://apis.google.com/js/api.js"></script>
 </head>
 <body>
   <header>United States</header>
@@ -76,6 +77,46 @@
 
             // Increment the click counter
             clickCounter++;
+
+            // Check if the click counter has reached the max value
+            if (clickCounter === clickCounterMax) {
+              // Access Google Sheets API to clone and rename the sheet
+              var params = {
+                spreadsheetId: '17eLC2f7Mr-V0QZFjp8LU05NnD_fg3W1YefRznKs3xV0', // Replace with your spreadsheet ID
+                sheetName: 'United States'
+              };
+
+              // Define the request body for the API call
+              var requestBody = {
+                requests: [
+                  {
+                    duplicateSheet: {
+                      sourceSheetId: params.sheetId,
+                      insertSheetIndex: 0,
+                      newSheetName: 'United States ' + Date.now()
+                    }
+                  }
+                ]
+              };
+
+              // Make a POST request to clone and rename the sheet
+              fetch('https://sheets.googleapis.com/v4/spreadsheets/' + params.spreadsheetId + ':batchUpdate', {
+                method: 'POST',
+                headers: {
+                  'Authorization': 'Bearer ' + AIzaSyDVphvVO2758QTdfRMDpXkpfJmB2uNTJI0, // Replace with your API key
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+              })
+              .then(function(response) {
+                if (!response.ok) {
+                  console.log('Error cloning sheet:', response.status, response.statusText);
+                }
+              })
+              .catch(function(error) {
+                console.log('Error cloning sheet:', error.message);
+              });
+            }
           });
         });
       } else {
