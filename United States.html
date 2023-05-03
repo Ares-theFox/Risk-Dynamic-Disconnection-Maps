@@ -1,134 +1,129 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Hover over SVG</title>
-  <style>
-    #map, #range {
-      position: absolute;
-    }
-    #range {
-      z-index: 1;
-    }
-    header {
-      font-size: 30px;
-      font-weight: bold;
-    }
-  </style>
-  <script src="https://apis.google.com/js/api.js"></script>
-</head>
-<body>
-  <header>United States</header>
-  <img id="map" src="https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States.png" alt="Map of United States">
-  <div id="range"></div>
-  <script>
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20Paths.svg");
-    xhr.onload = function() {
-      if (xhr.status === 200) {
-        var svg = xhr.responseText;
-        var rangeElement = document.getElementById("range");
-        rangeElement.innerHTML = svg;
-        var svgElement = rangeElement.querySelector("svg");
-        var paths = svgElement.querySelectorAll("path");
-        var clickCounter = 0; // Add a counter variable to keep track of the number of clicks
-        var clickCounterMax = 3; // Specify max blizzards
-        paths.forEach(function(path) {
-          path.setAttribute("fill", "transparent");
-          path.setAttribute("stroke-opacity", "0");
-          var mouseoverHandler = function() {
-            if (clickCounter < clickCounterMax) {
-              this.style.fill = "white";
-            }
-          };
-          var mouseoutHandler = function() {
-            this.style.fill = "transparent";
-          };
-          path.addEventListener("mouseover", mouseoverHandler);
-          path.addEventListener("mouseout", mouseoutHandler);
-          path.addEventListener("click", function() {
-            // Check if clickCounter is less than Max
-            if (clickCounter < clickCounterMax) {
-              // Create a clipPath element and set its id
-              var clipPath = document.createElementNS("http://www.w3.org/2000/svg", "clipPath");
-              clipPath.setAttribute("id", "clip-" + this.id);
-
-              // Clone the clicked path and append it to the clipPath
-              var clonedPath = this.cloneNode(true);
-              clipPath.appendChild(clonedPath);
-
-              // Append the clipPath to the defs element
-              var defs = svgElement.querySelector("defs") || svgElement.insertBefore(document.createElementNS("http://www.w3.org/2000/svg", "defs"), svgElement.firstChild);
-              defs.appendChild(clipPath);
-
-              // Create an image element and set its attributes
-              var image = document.createElementNS("http://www.w3.org/2000/svg", "image");
-              image.setAttributeNS("http://www.w3.org/1999/xlink", "href", "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20blizzard%20pattern.png");
-              image.setAttribute("width", "100%");
-              image.setAttribute("height", "100%");
-              image.setAttribute("clip-path", "url(#clip-" + this.id + ")");
-
-              // Append the image to the SVG
-              svgElement.appendChild(image);
-
-              // Remove mouseover and mouseout event listeners
-              this.removeEventListener("mouseover", mouseoverHandler);
-              this.removeEventListener("mouseout", mouseoutHandler);
-            }
-
-            // Increment the click counter
-            clickCounter++;
-            
-            // Access google sheets via API
-            if (clickCounter === clickCounterMax) {
-                // Load the Google API client library
-                gapi.load('client:auth2', function() {
-                    // Initialize the client with your API key and client ID
-                    gapi.client.init({
-                        apiKey: 'AIzaSyDVphvVO2758QTdfRMDpXkpfJmB2uNTJI0',
-                        clientId: '125331571585-tr6a9o08ljfb7tb8c78d48p424ade0jk.apps.googleusercontent.com',
-                        discoveryDocs: ["https://sheets.googleapis.com/$discovery/rest?version=v4"],
-                        scope: 'https://www.googleapis.com/auth/spreadsheets'
-                    }).then(function() {
-                        // Sign in the user if they are not already signed in
-                        if (!gapi.auth2.getAuthInstance().isSignedIn.get()) {
-                            gapi.auth2.getAuthInstance().signIn();
-                        }
-
-                        // Get the current Unix time
-                        var unixTime = Math.round((new Date()).getTime() / 1000);
-
-                        // Clone the "United States" sheet and rename it
-                        gapi.client.sheets.spreadsheets.sheets.copyTo({
-                            spreadsheetId: '17eLC2f7Mr-V0QZFjp8LU05NnD_fg3W1YefRznKs3xV0',
-                            sheetId: '0',
-                            resource: {
-                                destinationSpreadsheetId: '17eLC2f7Mr-V0QZFjp8LU05NnD_fg3W1YefRznKs3xV0'
-                            }
-                        }).then(function(response) {
-                            var newSheetId = response.result.sheetId;
-                            gapi.client.sheets.spreadsheets.batchUpdate({
-                                spreadsheetId: '17eLC2f7Mr-V0QZFjp8LU05NnD_fg3W1YefRznKs3xV0',
-                                requests: [{
-                                    updateSheetProperties: {
-                                        properties: {
-                                            sheetId: newSheetId,
-                                            title: 'United States ' + unixTime
-                                        },
-                                        fields: 'title'
-                                    }
-                                }]
-                            });
-                        });
-                    });
-                });
-            }
-          });
-        });
-      } else {
-        console.log("Error loading SVG");
+  <head>
+    <title>Hover over SVG</title>
+    <style>
+      #map, #range {
+        position: absolute;
       }
-    };
-    xhr.send();
-  </script>
-</body>
+      #range {
+        z-index: 1;
+      }
+      header {
+        font-size: 10px;
+        font-weight: bold;
+      }
+    </style>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+  </head>
+  <body>
+    <header>United States</header>
+    <img id="map" src="https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States.png" alt="Map of United States">
+    <div id="range"></div>
+    <div id="g_id_onload"
+         data-client_id="125331571585-tr6a9o08ljfb7tb8c78d48p424ade0jk.apps.googleusercontent.com"
+         data-callback="handleCredentialResponse">
+    </div>
+    <div class="g_id_signin" data-type="standard"></div>
+    <script>
+      function handleCredentialResponse(response) {
+        // Handle the sign-in response here
+        console.log(response);
+      }
+
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20Paths.svg");
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          var svg = xhr.responseText;
+          var rangeElement = document.getElementById("range");
+          rangeElement.innerHTML = svg;
+          var svgElement = rangeElement.querySelector("svg");
+          var paths = svgElement.querySelectorAll("path");
+          var clickCounter = 0; // Add a counter variable to keep track of the number of clicks
+          var clickCounterMax = 3; // Specify max blizzards
+          paths.forEach(function(path) {
+            path.setAttribute("fill", "transparent");
+            path.setAttribute("stroke-opacity", "0");
+            var mouseoverHandler = function() {
+              if (clickCounter < clickCounterMax) {
+                this.style.fill = "white";
+              }
+            };
+            var mouseoutHandler = function() {
+              this.style.fill = "transparent";
+            };
+            path.addEventListener("mouseover", mouseoverHandler);
+            path.addEventListener("mouseout", mouseoutHandler);
+            path.addEventListener("click", function() {
+              // Check if clickCounter is less than Max
+              if (clickCounter < clickCounterMax) {
+                // Create a clipPath element and set its id
+                var clipPath = document.createElementNS("http://www.w3.org/2000/svg", "clipPath");
+                clipPath.setAttribute("id", "clip-" + this.id);
+                // Clone the clicked path and append it to the clipPath
+                var clonedPath = this.cloneNode(true);
+                clipPath.appendChild(clonedPath);
+                // Append the clipPath to the defs element
+                var defs = svgElement.querySelector("defs") || svgElement.insertBefore(document.createElementNS("http://www.w3.org/2000/svg", "defs"), svgElement.firstChild);
+                defs.appendChild(clipPath);
+                // Create an image element and set its attributes
+                var image = document.createElementNS("http://www.w3.org/2000/svg", "image");
+                image.setAttributeNS("http://www.w3.org/1999/xlink", "href", "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20blizzard%20pattern.png");
+                image.setAttribute("width", "100%");
+                image.setAttribute("height", "100%");
+                image.setAttribute("clip-path", "url(#clip-" + this.id + ")");
+                // Append the image to the SVG
+                svgElement.appendChild(image);
+                // Remove mouseover and mouseout event listeners
+                this.removeEventListener("mouseover", mouseoverHandler);
+                this.removeEventListener("mouseout", mouseoutHandler);
+              }
+              // Increment the click counter
+              clickCounter++;
+              if (clickCounter === clickCounterMax) {
+                gapi.load('client', function() {
+                  gapi.client.init({
+                    apiKey: 'AIzaSyDVphvVO2758QTdfRMDpXkpfJmB2uNTJI0',
+                    discoveryDocs: ["https://sheets.googleapis.com/$discovery/rest?version=v4"],
+                    scope: 'https://www.googleapis.com/auth/spreadsheets'
+                  }).then(function() {
+
+                    // Get the current Unix time
+                    var unixTime = Math.round((new Date()).getTime() / 1000);
+
+                    // Clone the "United States" sheet and rename it
+                    gapi.client.sheets.spreadsheets.sheets.copyTo({
+                      spreadsheetId: '17eLC2f7Mr-V0QZFjp8LU05NnD_fg3W1YefRznKs3xV0',
+                      sheetId: '0',
+                      resource: {
+                        destinationSpreadsheetId: '17eLC2f7Mr-V0QZFjp8LU05NnD_fg3W1YefRznKs3xV0'
+                      }
+                    }).then(function(response) {
+                      var newSheetId = response.result.sheetId;
+                      gapi.client.sheets.spreadsheets.batchUpdate({
+                        spreadsheetId: '17eLC2f7Mr-V0QZFjp8LU05NnD_fg3W1YefRznKs3xV0',
+                        requests: [{
+                          updateSheetProperties: {
+                            properties: {
+                              sheetId: newSheetId,
+                              title: 'United States ' + unixTime
+                            },
+                            fields: 'title'
+                          }
+                        }]
+                      });
+                    });
+                  });
+                });
+              }
+            });
+          });
+        } else {
+          console.log("Error loading SVG");
+        }
+      };
+      xhr.send();
+    </script>
+  </body>
 </html>
