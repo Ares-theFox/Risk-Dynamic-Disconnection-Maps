@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 30px;
+        font-size: 10px;
         font-weight: bold;
       }
     </style>
@@ -24,147 +24,161 @@
       alt="Map of United States"
     />
     <div id="range"></div>
-
-    <!-- Add a script tag to load the Papa Parse library -->
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-
     <script>
-      
-      // Create a color dictionary object
-      const colorDictionary = {
-        0: "transparent",
-        1: "e73135",
-        2: "f98037",
-        3: "f9ed2a",
-        4: "2ccd4d",
-        5: "2aa6ed",
-        6: "484fc8"
-      };
-      
-      var xhr = new XMLHttpRequest();
-      xhr.open(
-        "GET",
-        "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20Paths.svg"
-      );
-      xhr.onload = function () {
-        if (xhr.status === 200) {
-          var svg = xhr.responseText;
-          var rangeElement = document.getElementById("range");
-          rangeElement.innerHTML = svg;
-          var svgElement = rangeElement.querySelector("svg");
-          var paths = svgElement.querySelectorAll("path");
-          var clickCounter = 0; // Add a counter variable to keep track of the number of clicks
-          var clickCounterMax = 3; // Specify max blizzards
-          paths.forEach(function (path) {
-            path.setAttribute("fill", "transparent");
-            path.setAttribute("stroke-opacity", "0");
-            var mouseoverHandler = function () {
-              if (clickCounter < clickCounterMax) {
-                this.style.fill = "white";
-              }
+      // Define tableData outside of Papa.parse function
+      let tableData;
+
+      Papa.parse(
+        "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Risk%20Connection%20Data%20CSV.csv",
+        {
+          download: true,
+          header: true,
+          complete: function (results) {
+            // Assign parsed data to tableData
+            tableData = results.data;
+            console.log(tableData);
+
+            // Place the rest of your code that uses tableData here
+
+            // Create a color dictionary object
+            const colorDictionary = {
+              0: "transparent",
+              1: "e73135",
+              2: "f98037",
+              3: "f9ed2a",
+              4: "2ccd4d",
+              5: "2aa6ed",
+              6: "484fc8"
             };
-            var mouseoutHandler = function () {
-              this.style.fill = "transparent";
-            };
-            path.addEventListener("mouseover", mouseoverHandler);
-            path.addEventListener("mouseout", mouseoutHandler);
-            path.addEventListener("click", function () {
-              // Check if clickCounter is less than Max
-              if (clickCounter < clickCounterMax) {
-                // Create a clipPath element and set its id
-                var clipPath = document.createElementNS(
-                  "http://www.w3.org/2000/svg",
-                  "clipPath"
-                );
-                clipPath.setAttribute("id", "clip-" + this.id);
 
-                // Clone the clicked path and append it to the clipPath
-                var clonedPath = this.cloneNode(true);
-                clipPath.appendChild(clonedPath);
+            var xhr = new XMLHttpRequest();
+            xhr.open(
+              "GET",
+              "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20Paths.svg"
+            );
+            xhr.onload = function () {
+              if (xhr.status === 200) {
+                var svg = xhr.responseText;
+                var rangeElement = document.getElementById("range");
+                rangeElement.innerHTML = svg;
+                var svgElement = rangeElement.querySelector("svg");
+                var paths = svgElement.querySelectorAll("path");
+                var clickCounter = 0; // Add a counter variable to keep track of the number of clicks
+                var clickCounterMax = 3; // Specify max blizzards
+                paths.forEach(function (path) {
+                  path.setAttribute("fill", "transparent");
+                  path.setAttribute("stroke-opacity", "0");
+                  var mouseoverHandler = function () {
+                    if (clickCounter < clickCounterMax) {
+                      this.style.fill = "white";
+                    }
+                  };
+                  var mouseoutHandler = function () {
+                    this.style.fill = "transparent";
+                  };
+                  path.addEventListener("mouseover", mouseoverHandler);
+                  path.addEventListener("mouseout", mouseoutHandler);
+                  path.addEventListener("click", function () {
+                    // Check if clickCounter is less than Max
+                    if (clickCounter < clickCounterMax) {
+                      // Create a clipPath element and set its id
+                      var clipPath = document.createElementNS(
+                        "http://www.w3.org/2000/svg",
+                        "clipPath"
+                      );
+                      clipPath.setAttribute("id", "clip-" + this.id);
 
-                // Append the clipPath to the defs element
-                var defs = svgElement.querySelector("defs") || svgElement.insertBefore(document.createElementNS("http://www.w3.org/2000/svg", "defs"), svgElement.firstChild);
-                defs.appendChild(clipPath);
+                      // Clone the clicked path and append it to the clipPath
+                      var clonedPath = this.cloneNode(true);
+                      clipPath.appendChild(clonedPath);
 
-                // Create an image element and set its attributes
-                var image = document.createElementNS("http://www.w3.org/2000/svg", "image");
-                image.setAttributeNS("http://www.w3.org/1999/xlink", "href", "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20blizzard%20pattern.png");
-                image.setAttribute("width", "100%");
-                image.setAttribute("height", "100%");
-                image.setAttribute("clip-path", "url(#clip-" + this.id + ")");
+                      // Append the clipPath to the defs element
+                      var defs = svgElement.querySelector("defs") || svgElement.insertBefore(document.createElementNS("http://www.w3.org/2000/svg", "defs"), svgElement.firstChild);
+                      defs.appendChild(clipPath);
 
-                // Append the image to the SVG
-                svgElement.appendChild(image);
+                      // Create an image element and set its attributes
+                      var image = document.createElementNS("http://www.w3.org/2000/svg", "image");
+                      image.setAttributeNS("http://www.w3.org/1999/xlink", "href", "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20blizzard%20pattern.png");
+                      image.setAttribute("width", "100%");
+                      image.setAttribute("height", "100%");
+                      image.setAttribute("clip-path", "url(#clip-" + this.id + ")");
 
-                // Remove mouseover and mouseout event listeners
-                this.removeEventListener("mouseover", mouseoverHandler);
-                this.removeEventListener("mouseout", mouseoutHandler);
-              }
+                      // Append the image to the SVG
+                      svgElement.appendChild(image);
 
-              // Increment the click counter
-              clickCounter++;
-            });
+                      // Remove mouseover and mouseout event listeners
+                      this.removeEventListener("mouseover", mouseoverHandler);
+                      this.removeEventListener("mouseout", mouseoutHandler);
+                    }
 
-            // Add code to update table data and fill in SVG ranges with colors after 3 clicks/fill events
-            if (clickCounter === clickCounterMax) {
-              // Find rows in table data where column A matches clicked path's ID
-              const rows = tableData.filter(row => clickedPaths.includes(row['A']));
+                    // Increment the click counter
+                    clickCounter++;
+                  });
 
-              // Remove all values from those rows in columns B through K
-              rows.forEach(row => {
-                for (let i = 'B'.charCodeAt(0); i <= 'K'.charCodeAt(0); i++) {
-                  row[String.fromCharCode(i)] = '';
-                }
-              });
+                  // Add code to update table data and fill in SVG ranges with colors after 3 clicks/fill events
+                  if (clickCounter === clickCounterMax) {
+                    // Find rows in table data where column A matches clicked path's ID
+                    const rows = tableData.filter(row => clickedPaths.includes(row['A']));
 
-              // Remove all instances of clicked path's ID from columns B through K
-              tableData.forEach(row => {
-                for (let i = 'B'.charCodeAt(0); i <= 'K'.charCodeAt(0); i++) {
-                  if (clickedPaths.includes(row[String.fromCharCode(i)])) {
-                    row[String.fromCharCode(i)] = '';
+                    // Remove all values from those rows in columns B through K
+                    rows.forEach(row => {
+                      for (let i = 'B'.charCodeAt(0); i <= 'K'.charCodeAt(0); i++) {
+                        row[String.fromCharCode(i)] = '';
+                      }
+                    });
+
+                    // Remove all instances of clicked path's ID from columns B through K
+                    tableData.forEach(row => {
+                      for (let i = 'B'.charCodeAt(0); i <= 'K'.charCodeAt(0); i++) {
+                        if (clickedPaths.includes(row[String.fromCharCode(i)])) {
+                          row[String.fromCharCode(i)] = '';
+                        }
+                      }
+                    });
+
+                    // Recalculate columns L through P for all rows
+                    tableData.forEach(row => {
+                      // Column L: Join columns B-K with a comma separator
+                      row['L'] = Object.values(row)
+                        .slice(2, 11)
+                        .join(',');
+
+                      // Column M: Join columns B-K with a comma separator and look up values in column A
+                      row['M'] = Object.values(row)
+                        .slice(1, 11)
+                        .map(value => {
+                          const match = tableData.find(entry => entry['A'] === value);
+                          return match ? match['L'] : '';
+                        })
+                        .join(',');
+
+                      // Column N: Remove duplicate values from column M
+                      row['N'] = [...new Set(row['M'].split(','))].join(',');
+
+                      // Column O: Count non-empty cells in columns B-K
+                      row['O'] = Object.values(row).slice(1, 11).filter(value => value).length;
+
+                      // Column P: Count the number of commas in column N
+                      row['P'] = (row['N'].match(/,/g) || []).length;
+                    });
+
+                    // Loop through table data and fill in SVG ranges with colors
+                    tableData.forEach(row => {
+                      // Find path in SVG with ID that matches value in column A
+                      const path = svgElement.querySelector(`#${row['A']}`);
+
+                      // Set fill attribute of path to color from color dictionary that corresponds to value in column O
+                      path.setAttribute("fill", colorDictionary[row["O"]]);
+                    });
                   }
-                }
-              });
-
-              // Recalculate columns L through P for all rows
-              tableData.forEach(row => {
-                // Column L: Join columns B-K with a comma separator
-                row['L'] = Object.values(row)
-                  .slice(2, 11)
-                  .join(',');
-
-                // Column M: Join columns B-K with a comma separator and look up values in column A
-                row['M'] = Object.values(row)
-                  .slice(1, 11)
-                  .map(value => {
-                    const match = tableData.find(entry => entry['A'] === value);
-                    return match ? match['L'] : '';
-                  })
-                  .join(',');
-
-                // Column N: Remove duplicate values from column M
-                row['N'] = [...new Set(row['M'].split(','))].join(',');
-
-                // Column O: Count non-empty cells in columns B-K
-                row['O'] = Object.values(row).slice(1, 11).filter(value => value).length;
-
-                // Column P: Count the number of commas in column N
-                row['P'] = (row['N'].match(/,/g) || []).length;
-              });
-
-              // Loop through table data and fill in SVG ranges with colors
-              tableData.forEach(row => {
-                // Find path in SVG with ID that matches value in column A
-                const path = svgElement.querySelector(`#${row['A']}`);
-
-                // Set fill attribute of path to color from color dictionary that corresponds to value in column O
-                path.setAttribute("fill", colorDictionary[row['O']]);
-})
-}
-})
-}
-}
-xhr.send();
-</script>
-</body>
+                });
+              }
+            };
+            xhr.send();
+          }
+        }
+      );
+    </script>
+  </body>
 </html>
