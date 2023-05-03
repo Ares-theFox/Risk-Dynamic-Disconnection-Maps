@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 10px;
+        font-size: 30px;
         font-weight: bold;
       }
     </style>
@@ -136,7 +136,7 @@
                 });
 
                 // Move this code outside of the forEach loop
-                if (clickCounter === clickCounterMax) {
+                if (clickCounter === clickCounterMax - 1) {
                   // Find rows in table data where column A matches clicked path's ID
                   const rows = tableData.filter(row =>
                     clickedPaths.includes(row["A"])
