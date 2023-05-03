@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 30px;
+        font-size: 10px;
         font-weight: bold;
       }
     </style>
@@ -106,31 +106,11 @@
           // Parse the CSV data using Papa Parse
           const data = Papa.parse(csvString, { header: true }).data;
 
-          // Create a table element
-          const table = document.createElement('table');
+          // Store the parsed CSV data in a variable
+          let tableData = data;
+        
+          // Use the tableData variable to perform calculations using sheetJS
 
-          // Create a table row for the headers
-          const headerRow = document.createElement('tr');
-          Object.keys(data[0]).forEach(key => {
-            const th = document.createElement('th');
-            th.textContent = key;
-            headerRow.appendChild(th);
-          });
-          table.appendChild(headerRow);
-
-          // Create a table row for each data entry
-          data.forEach(entry => {
-            const tr = document.createElement('tr');
-            Object.values(entry).forEach(value => {
-              const td = document.createElement('td');
-              td.textContent = value;
-              tr.appendChild(td);
-            });
-            table.appendChild(tr);
-          });
-
-          // Append the table to the body of the HTML document
-          document.body.appendChild(table);
         });
     </script>
   </body>
