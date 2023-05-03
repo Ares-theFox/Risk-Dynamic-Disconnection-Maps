@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 30px;
+        font-size: 10px;
         font-weight: bold;
       }
     </style>
@@ -123,7 +123,8 @@
 
                       // Append the image to the SVG
                       svgElement.appendChild(image);
-
+                      console.log(clickCounter);
+                      
                       // Remove mouseover and mouseout event listeners
                       this.removeEventListener("mouseover", mouseoverHandler);
                       this.removeEventListener("mouseout", mouseoutHandler);
