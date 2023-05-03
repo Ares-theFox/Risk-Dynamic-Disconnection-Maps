@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 10px;
+        font-size: 30px;
         font-weight: bold;
       }
     </style>
@@ -100,7 +100,7 @@
       xhr.send();
 
       // Fetch the CSV data from the provided URL
-      fetch('"https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Risk%20Connection%20Data%20CSV.csv')
+      fetch('https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Risk%20Connection%20Data%20CSV.csv')
         .then((response) => response.text())
         .then((csvString) => {
           // Parse the CSV data using Papa Parse
