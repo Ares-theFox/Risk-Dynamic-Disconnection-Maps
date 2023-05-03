@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 10px;
+        font-size: 30px;
         font-weight: bold;
       }
     </style>
@@ -132,8 +132,6 @@
 
                     // Increment the click counter
                     clickCounter++;
-                  });
-                });
 
                 // Move this code outside of the forEach loop
                 if (clickCounter === clickCounterMax) {
@@ -208,12 +206,14 @@
                     // Set fill attribute of path to color from color dictionary that corresponds to value in column O
                     path.setAttribute("fill", colorDictionary[row["O"]]);
                   });
-
+                  
                   // Log updated table data to console
                   console.log(tableData);
                 }
               }
             };
+      });
+      });
             xhr.send();
           }
         }
