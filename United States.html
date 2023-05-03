@@ -10,19 +10,11 @@
       z-index: 1;
     }
     header {
-      font-size: 10px;
+      font-size: 30px;
       font-weight: bold;
     }
   </style>
   <script src="https://apis.google.com/js/api.js"></script>
-  <script>
-    gapi.load('client', function() {
-      gapi.client.init({
-        apiKey: 'AIzaSyDVphvVO2758QTdfRMDpXkpfJmB2uNTJI0',
-        discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
-      });
-    });
-  </script>
 </head>
 <body>
   <header>United States</header>
@@ -85,49 +77,50 @@
 
             // Increment the click counter
             clickCounter++;
-
-            // Check if the click counter has reached the max value
+            
+            // Access google sheets via API
             if (clickCounter === clickCounterMax) {
-              // Access Google Sheets API to clone and rename the sheet
-              var params = {
-                spreadsheetId: '17eLC2f7Mr-V0QZFjp8LU05NnD_fg3W1YefRznKs3xV0', // Replace with your spreadsheet ID
-                sheetName: 'United States',
-                sheetId: 0 // Replace with the ID of the sheet you want to clone
-              };
+                // Load the Google API client library
+                gapi.load('client:auth2', function() {
+                    // Initialize the client with your API key and client ID
+                    gapi.client.init({
+                        apiKey: 'AIzaSyDVphvVO2758QTdfRMDpXkpfJmB2uNTJI0',
+                        clientId: '125331571585-tr6a9o08ljfb7tb8c78d48p424ade0jk.apps.googleusercontent.com',
+                        discoveryDocs: ["https://sheets.googleapis.com/$discovery/rest?version=v4"],
+                        scope: 'https://www.googleapis.com/auth/spreadsheets'
+                    }).then(function() {
+                        // Sign in the user if they are not already signed in
+                        if (!gapi.auth2.getAuthInstance().isSignedIn.get()) {
+                            gapi.auth2.getAuthInstance().signIn();
+                        }
 
-              // Define the request body for the API call
-              var requestBody = {
-                requests: [
-                  {
-                    duplicateSheet: {
-                      sourceSheetId: params.sheetId,
-                      insertSheetIndex: 0,
-                      newSheetName: 'United States ' + Date.now()
-                    }
-                  }
-                ]
-              };
+                        // Get the current Unix time
+                        var unixTime = Math.round((new Date()).getTime() / 1000);
 
-              // Define your API key here
-              var apiKey = 'AIzaSyDVphvVO2758QTdfRMDpXkpfJmB2uNTJI0';
-              
-              // Make a POST request to clone and rename the sheet
-              fetch('https://sheets.googleapis.com/v4/spreadsheets/' + params.spreadsheetId + ':batchUpdate?key=' + apiKey, {
-                method: 'POST',
-                headers: {
-                  'Authorization': 'Bearer ' + gapi.auth.getToken().access_token,
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(requestBody)
-              })
-              .then(function(response) {
-                if (!response.ok) {
-                  throw new Error('Error cloning sheet: ' + response.status + ' ' + response.statusText);
-                }
-              })
-              .catch(function(error) {
-                console.log(error);
-              });
+                        // Clone the "United States" sheet and rename it
+                        gapi.client.sheets.spreadsheets.sheets.copyTo({
+                            spreadsheetId: '17eLC2f7Mr-V0QZFjp8LU05NnD_fg3W1YefRznKs3xV0',
+                            sheetId: '0',
+                            resource: {
+                                destinationSpreadsheetId: '17eLC2f7Mr-V0QZFjp8LU05NnD_fg3W1YefRznKs3xV0'
+                            }
+                        }).then(function(response) {
+                            var newSheetId = response.result.sheetId;
+                            gapi.client.sheets.spreadsheets.batchUpdate({
+                                spreadsheetId: '17eLC2f7Mr-V0QZFjp8LU05NnD_fg3W1YefRznKs3xV0',
+                                requests: [{
+                                    updateSheetProperties: {
+                                        properties: {
+                                            sheetId: newSheetId,
+                                            title: 'United States ' + unixTime
+                                        },
+                                        fields: 'title'
+                                    }
+                                }]
+                            });
+                        });
+                    });
+                });
             }
           });
         });
