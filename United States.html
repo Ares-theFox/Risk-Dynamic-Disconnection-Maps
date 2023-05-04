@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 30px;
+        font-size: 10px;
         font-weight: bold;
       }
     </style>
@@ -83,37 +83,6 @@
                     // Log clicked path ID to console
                     console.log(this.id);
 
-                    
-                    
-                    
-                    // Get a NodeList of all path elements
-                    const paths = svgElement.querySelectorAll("path");
-
-                    // Iterate over the NodeList of path elements
-                    paths.forEach(path => {
-                      // Log the id attribute of the current path element to the console
-                      console.log(path.getAttribute('id'));
-                    });
-                    
-                    
-                    // Create a Set to store the unique values
-                    let uniqueValues = new Set();
-
-                    // Iterate through each row in the tableData array
-                    tableData.forEach(row => {
-                      // Iterate through each cell in the row
-                      Object.values(row).forEach(value => {
-                        // Add the value to the Set of unique values
-                        uniqueValues.add(value);
-                      });
-                    });
-
-                    // Convert the Set of unique values to an array and log it to the console
-                    console.log(Array.from(uniqueValues));
-                    
-                    
-                    
-                    
                     // Check if clickCounter is less than Max
                     if (clickCounter < clickCounterMax) {
                       // Create a clipPath element and set its id
@@ -205,11 +174,18 @@
                           .filter(value => value)
                           .join(",");
 
+                        
+                        
+                        
+                        
                         // Column M: Join columns A-K with a comma separator and look up values in column A
-                        const firstValue = row["L"].includes(",") ? row["L"].split(",")[0] : row["L"];
-                        let foundRow = tableData.find(row => row["A"] === firstValue);
-                        if (foundRow !== undefined) {
-                          row["M"] = foundRow["L"];
+                        if (row["B"] !== undefined) {
+                          let foundRow = tableData.find(row => row["A"] === row["B"]);
+                          if (foundRow !== undefined) {
+                            row["M"] = foundRow["L"];
+                          } else {
+                            row["M"] = undefined;
+                          }
                         } else {
                           row["M"] = undefined;
                         }
