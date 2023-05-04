@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 30px;
+        font-size: 10px;
         font-weight: bold;
       }
     </style>
@@ -178,7 +178,9 @@
                         row["M"] = row["L"]
                           .split(",")
                           .map(value => {
-                            const match = tableData.find(entry => entry["A"] === value);
+                            const match = tableData.find(
+                              entry => entry["A"].toLowerCase() === value.toLowerCase()
+                            );
                             return match ? match["L"] : "";
                           })
                           .concat(Object.values(row).slice(0, 11))
