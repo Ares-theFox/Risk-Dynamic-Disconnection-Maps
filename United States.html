@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 30px;
+        font-size: 10px;
         font-weight: bold;
       }
     </style>
@@ -182,13 +182,7 @@
                             const result = match ? match["L"] : "";
                             return result;
                           });
-                        console.log("Values from column L:", valuesFromColumnL);
-
-                        const valuesFromColumnsAK = Object.values(row).slice(0, 11);
-                        console.log("Values from columns A-K:", valuesFromColumnsAK);
-
-                        row["M"] = valuesFromColumnL.concat(valuesFromColumnsAK).join(",");
-                        console.log("Final result:", row["M"]);
+                        row["M"] = valuesFromColumnL
 
                         // Column N: Remove duplicate values from column M
                         row["N"] = [...new Set(row["M"].split(","))].join(",");
