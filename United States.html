@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 10px;
+        font-size: 30px;
         font-weight: bold;
       }
     </style>
@@ -138,7 +138,7 @@
                       console.log(clickCounter)
                       // Find rows in table data where column A matches clicked path's ID
                       const rows = tableData.filter(row =>
-                        clickedPaths.includes(row["A"])
+                        clickedPaths.includes(row["Territory"])
                       );
 
                       // Remove all values from those rows in columns B through K
@@ -178,7 +178,7 @@
                           .slice(1, 11)
                           .map(value => {
                             const match = tableData.find(
-                              entry => entry["A"] === value
+                              entry => entry["Territory"] === value
                             );
                             return match ? match["L"] : "";
                           })
