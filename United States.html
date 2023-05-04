@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 10px;
+        font-size: 30px;
         font-weight: bold;
       }
     </style>
@@ -30,7 +30,7 @@
       let tableData;
 
       Papa.parse(
-        "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Risk%20Connection%20Data%20CSV.csv",
+        "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20CSV.csv",
         {
           download: true,
           header: true,
@@ -81,7 +81,7 @@
                   path.addEventListener("click", function () {
                     
                     // Log clicked path ID to console
-                    clickedPaths = clickedPaths.concat(this.id);
+                    clickedPaths.push(this.id);
                     console.log(this.id);
                     console.log(clickedPaths);
                     
@@ -142,7 +142,7 @@
                       console.log(clickedPaths)
                       // Find rows in table data where column A matches clicked path's ID
                       const rows = tableData.filter(row =>
-                        clickedPaths.includes(row["Territory"])
+                        clickedPaths.includes(row["A"])
                       );
 
                       // Remove all values from those rows in columns B through K
@@ -182,7 +182,7 @@
                           .slice(1, 11)
                           .map(value => {
                             const match = tableData.find(
-                              entry => entry["Territory"] === value
+                              entry => entry["A"] === value
                             );
                             return match ? match["L"] : "";
                           })
