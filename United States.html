@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 10px;
+        font-size: 30px;
         font-weight: bold;
       }
     </style>
@@ -174,15 +174,14 @@
                           .filter(value => value)
                           .join(",");
 
-                        // Column M: Join columns B-K with a comma separator and look up values in column A
-                        row["M"] = Object.values(row)
-                          .slice(1, 11)
+                        // Column M: Join columns A-K with a comma separator and look up values in column A
+                        row["M"] = row["L"]
+                          .split(",")
                           .map(value => {
-                            const match = tableData.find(
-                              entry => entry["A"] === value
-                            );
+                            const match = tableData.find(entry => entry["A"] === value);
                             return match ? match["L"] : "";
                           })
+                          .concat(Object.values(row).slice(0, 11))
                           .join(",");
 
                         // Column N: Remove duplicate values from column M
