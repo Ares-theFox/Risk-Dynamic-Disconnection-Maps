@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 30px;
+        font-size: 10px;
         font-weight: bold;
       }
     </style>
@@ -167,9 +167,10 @@
 
                       // Recalculate columns L through P for all rows
                       tableData.forEach(row => {
-                        // Column L: Join columns B-K with a comma separator
+                        // Column L: Join non-empty cells in columns B-K with a comma separator
                         row["L"] = Object.values(row)
                           .slice(1, 11)
+                          .filter(value => value)
                           .join(",");
 
                         // Column M: Join columns B-K with a comma separator and look up values in column A
