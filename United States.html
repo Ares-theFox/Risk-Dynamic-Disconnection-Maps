@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 10px;
+        font-size: 30px;
         font-weight: bold;
       }
     </style>
@@ -79,9 +79,9 @@
                   path.addEventListener("mouseout", mouseoutHandler);
                   let clickedPaths = [];
                   path.addEventListener("click", function () {
-                    clickedPaths.push(this.id)
                     // Log clicked path ID to console
                     console.log(this.id);
+                    console.log(clickedPaths);
                     // Check if clickCounter is less than Max
                     if (clickCounter < clickCounterMax) {
                       // Create a clipPath element and set its id
