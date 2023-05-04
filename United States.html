@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 30px;
+        font-size: 10px;
         font-weight: bold;
       }
     </style>
@@ -175,7 +175,11 @@
                           .join(",");
 
                         // Column M: Join columns A-K with a comma separator and look up values in column A
-                        row["M"] = tableData.find(row => row["A"] === row["L"].split(",")[0])["L"];
+                        if (row["L"] !== undefined) {
+                          row["M"] = tableData.find(row => row["A"] === row["L"].split(",")[0])["L"];
+                        } else {
+                          row["M"] = undefined;
+                        }
                         
                         
                         
