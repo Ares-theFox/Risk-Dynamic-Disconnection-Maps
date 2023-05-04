@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 10px;
+        font-size: 30px;
         font-weight: bold;
       }
     </style>
@@ -179,16 +179,16 @@
                         
                         
                         // Column M: Join columns A-K with a comma separator and look up values in column A
-                        if (row["B"] !== undefined) {
-                          let foundRow = tableData.find(row => row["A"] === row["B"]);
-                          if (foundRow !== undefined) {
-                            row["M"] = foundRow["L"];
-                          } else {
-                            row["M"] = undefined;
+                        row["M"] = ""; // initialize column M to blank
+                        if (row["L"] && row["L"].trim() !== "") { // check if column L is not empty or undefined
+                          const values = row["L"].split(","); // split the values in column L by comma
+                          const searchValue = values[0].trim(); // take the first value and remove any leading/trailing whitespace
+                          const searchResult = data.find(item => item["A"] === searchValue); // search for a row in the data where column A matches the search value
+                          if (searchResult) { // if a matching row is found
+                            row["M"] = searchResult["L"]; // set the value of column M to the value in column L of the matching row
                           }
-                        } else {
-                          row["M"] = undefined;
                         }
+
                     
                         
                         
