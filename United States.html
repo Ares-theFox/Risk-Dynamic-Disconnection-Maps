@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 30px;
+        font-size: 10px;
         font-weight: bold;
       }
     </style>
@@ -77,9 +77,9 @@
                   };
                   path.addEventListener("mouseover", mouseoverHandler);
                   path.addEventListener("mouseout", mouseoutHandler);
-                  let clickedPaths = [];
                   path.addEventListener("click", function () {
                     // Log clicked path ID to console
+                    let clickedPaths = [];
                     console.log(this.id);
                     console.log(clickedPaths);
                     // Check if clickCounter is less than Max
