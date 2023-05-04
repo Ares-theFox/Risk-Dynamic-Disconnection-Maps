@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 30px;
+        font-size: 10px;
         font-weight: bold;
       }
     </style>
@@ -189,7 +189,7 @@
                         
 
                         // Column N: Remove duplicate values from column M
-                        row["N"] = [...new Set(row["M"].split(","))].join(",");
+                        // row["N"] = [...new Set(row["M"].split(","))].join(",");
 
                         // Column O: Count non-empty cells in columns B-K
                         row["O"] = Object.values(row)
@@ -197,7 +197,7 @@
                           .filter(value => value).length;
 
                         // Column P: Count the number of commas in column N
-                        row["P"] = (row["N"].match(/,/g) || []).length;
+                        // row["P"] = (row["N"].match(/,/g) || []).length;
                       });
 
                       // Log updated table data to console
