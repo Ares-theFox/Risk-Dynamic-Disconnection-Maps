@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 30px;
+        font-size: 10px;
         font-weight: bold;
       }
     </style>
@@ -133,42 +133,39 @@
 
                     // Increment the click counter and push value to clickedPaths array
                     clickCounter++;
-                    clickedPaths[clickCounter-1] = this.id;
-                    console.log(clickedPaths);
+                    clickedPaths.push(this.id);
 
-                    // Check if clickCounter has reached its maximum value
-                    if (clickCounter === clickCounterMax) {
-                      console.log(clickCounter)
-                      console.log(clickedPaths)
-                      // Find rows in table data where column A matches clicked path's ID
-                      const rows = tableData.filter(row =>
-                        clickedPaths.includes(row["A"])
-                      );
+                    // Find rows in table data where column A matches clicked path's ID
+                    const rows = tableData.filter(row =>
+                      clickedPaths.includes(row["A"])
+                    );
 
-                      // Remove all values from those rows in columns B through K
-                      rows.forEach(row => {
-                        for (
-                          let i = "B".charCodeAt(0);
-                          i <= "K".charCodeAt(0);
-                          i++
-                        ) {
+                    // Remove all values from those rows in columns B through K
+                    rows.forEach(row => {
+                      for (
+                        let i = "B".charCodeAt(0);
+                        i <= "K".charCodeAt(0);
+                        i++
+                      ) {
+                        row[String.fromCharCode(i)] = "";
+                      }
+                    });
+                    
+                    // Remove all instances of clicked path's ID from columns B through K
+                    tableData.forEach(row => {
+                      for (
+                        let i = "B".charCodeAt(0);
+                        i <= "K".charCodeAt(0);
+                        i++
+                      ) {
+                        if (clickedPaths.includes(row[String.fromCharCode(i)])) {
                           row[String.fromCharCode(i)] = "";
                         }
-                      });
-
-                      // Remove all instances of clicked path's ID from columns B through K
-                      tableData.forEach(row => {
-                        for (
-                          let i = "B".charCodeAt(0);
-                          i <= "K".charCodeAt(0);
-                          i++
-                        ) {
-                          if (clickedPaths.includes(row[String.fromCharCode(i)])) {
-                            row[String.fromCharCode(i)] = "";
-                          }
-                        }
-                      });
-
+                      }
+                    });
+                    
+                    // Check if clickCounter has reached its maximum value
+                    if (clickCounter === clickCounterMax) {
                       // Recalculate columns L through P for all rows
                       tableData.forEach(row => {
                         // Column L: Join non-empty cells in columns B-K with a comma separator
@@ -211,9 +208,6 @@
                         // Set fill attribute of path to color from color dictionary that corresponds to value in column O
                         path.setAttribute("fill", colorDictionary[row["O"]]);
                       });
-
-                      // Log updated table data to console
-                      console.log(tableData);
                     }
                   });
 })
