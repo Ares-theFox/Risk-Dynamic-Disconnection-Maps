@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 10px;
+        font-size: 30px;
         font-weight: bold;
       }
     </style>
@@ -169,7 +169,7 @@
                       tableData.forEach(row => {
                         // Column L: Join columns B-K with a comma separator
                         row["L"] = Object.values(row)
-                          .slice(2, 11)
+                          .slice(1, 11)
                           .join(",");
 
                         // Column M: Join columns B-K with a comma separator and look up values in column A
