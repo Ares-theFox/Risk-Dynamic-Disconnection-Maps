@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 30px;
+        font-size: 10px;
         font-weight: bold;
       }
     </style>
@@ -178,10 +178,10 @@
                         row["M"] = row["L"]
                           .split(",")
                           .map(value => {
-                            console.log("Searching for value:", value);
                             const match = tableData.find(entry => entry["A"] === value);
-                            console.log("Match found:", match);
-                            return match ? match["L"] : "";
+                            const result = match ? match["L"] : "";
+                            console.log("Value being returned:", result);
+                            return result;
                           })
                           .concat(Object.values(row).slice(0, 11))
                           .join(",");
