@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 10px;
+        font-size: 30px;
         font-weight: bold;
       }
     </style>
@@ -210,14 +210,6 @@
                       // Log updated table data to console
                       console.log(tableData);
 
-                      // Loop through table data and fill in SVG ranges with colors
-                      tableData.forEach(row => {
-                        // Find path in SVG with ID that matches value in column A
-                        const path = svgElement.querySelector(`#${row["A"]}`);
-
-                        // Set fill attribute of path to color from color dictionary that corresponds to value in column O
-                        path.setAttribute("fill", colorDictionary[row["O"]]);
-                      });
                     }
                   });
 })
