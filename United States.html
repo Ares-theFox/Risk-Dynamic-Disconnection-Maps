@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 10px;
+        font-size: 30px;
         font-weight: bold;
       }
     </style>
@@ -175,14 +175,17 @@
                           .join(",");
 
                         // Column M: Join columns A-K with a comma separator and look up values in column A
-                        const valuesFromColumnL = row["L"]
-                          .split(",")
-                          .map(value => {
+                        const valuesFromColumnL = [];
+                          for (const value of row["L"].split(",")) {
+                            console.log("Searching for value:", value);
                             const match = tableData.find(entry => entry["A"] === value);
+                            console.log("Match found:", match);
                             const result = match ? match["L"] : "";
-                            return result;
-                          });
-                        row["M"] = valuesFromColumnL
+                            console.log("Value being returned:", result);
+                            valuesFromColumnL.push(result);
+                          }
+                        const valuesFromColumnsAK = Object.values(row).slice(0, 11);
+                        row["M"] = valuesFromColumnL.concat(valuesFromColumnsAK).join(",");
 
                         // Column N: Remove duplicate values from column M
                         row["N"] = [...new Set(row["M"].split(","))].join(",");
