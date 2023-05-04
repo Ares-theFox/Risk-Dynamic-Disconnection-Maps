@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 10px;
+        font-size: 30px;
         font-weight: bold;
       }
     </style>
@@ -175,12 +175,14 @@
                           .join(",");
 
                         // Column M: Join columns A-K with a comma separator and look up values in column A
-                        if (row["L"] !== undefined) {
-                          row["M"] = tableData.find(row => row["A"] === row["L"].split(",")[0])["L"];
+                        const firstValue = row["L"].includes(",") ? row["L"].split(",")[0] : row["L"];
+                        let foundRow = tableData.find(row => row["A"] === firstValue);
+                        if (foundRow !== undefined) {
+                          row["M"] = foundRow["L"];
                         } else {
                           row["M"] = undefined;
                         }
-                        
+                    
                         
                         
                         
