@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 10px;
+        font-size: 30px;
         font-weight: bold;
       }
     </style>
@@ -83,6 +83,37 @@
                     // Log clicked path ID to console
                     console.log(this.id);
 
+                    
+                    
+                    
+                    // Get a NodeList of all path elements
+                    const paths = svgElement.querySelectorAll("path");
+
+                    // Iterate over the NodeList of path elements
+                    paths.forEach(path => {
+                      // Log the id attribute of the current path element to the console
+                      console.log(path.getAttribute('id'));
+                    });
+                    
+                    
+                    // Create a Set to store the unique values
+                    let uniqueValues = new Set();
+
+                    // Iterate through each row in the tableData array
+                    tableData.forEach(row => {
+                      // Iterate through each cell in the row
+                      Object.values(row).forEach(value => {
+                        // Add the value to the Set of unique values
+                        uniqueValues.add(value);
+                      });
+                    });
+
+                    // Convert the Set of unique values to an array and log it to the console
+                    console.log(Array.from(uniqueValues));
+                    
+                    
+                    
+                    
                     // Check if clickCounter is less than Max
                     if (clickCounter < clickCounterMax) {
                       // Create a clipPath element and set its id
