@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 30px;
+        font-size: 10px;
         font-weight: bold;
       }
     </style>
@@ -81,7 +81,7 @@
                   path.addEventListener("click", function () {
                     
                     // Log clicked path ID to console
-                    clickedPaths.push(this.id);
+                    clickedPaths = clickedPaths.concat(this.id);
                     console.log(this.id);
                     console.log(clickedPaths);
                     
