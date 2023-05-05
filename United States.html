@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 10px;
+        font-size: 30px;
         font-weight: bold;
       }
     </style>
@@ -214,9 +214,11 @@
 
                       // Loop through each row of tableData
                       tableData.forEach((row) => {
+                        // Escape any invalid characters in the id
+                        const escapedId = CSS.escape(row["A"]);
                         // Get the SVG path element with an id that matches the value in column A
-                        const path = svgElement.querySelector(`#${row["A"]}`);
-                        // Check if the value in column O is not 0
+                        const path = svgElement.querySelector(`#${escapedId}`);
+                        // Check if the path exists and if the value in column O is not 0
                         if (path && row["O"] !== 0) {
                           // Get the value in column O for this row
                           const value = row["O"];
@@ -224,6 +226,8 @@
                           const color = colorDictionary[value];
                           // Set the fill attribute of the path to the color
                           path.setAttribute("fill", `#${color}`);
+                          // Remove the mouseout event listener from the path
+                          path.removeEventListener("mouseout", mouseoutHandler);
                         }
                       });
                       
