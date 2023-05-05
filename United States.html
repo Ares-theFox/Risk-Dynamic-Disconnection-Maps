@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 30px;
+        font-size: 10px;
         font-weight: bold;
       }
     </style>
@@ -50,7 +50,6 @@
             
             // Create a color dictionary object
             const colorDictionary = {
-              0: "transparent",
               1: "e73135",
               2: "f98037",
               3: "f9ed2a",
@@ -211,25 +210,28 @@
                           row["P"] = 0;
                         }
                       });
-
-                      // Loop through each row of tableData
-                      tableData.forEach((row) => {
-                        // Escape any invalid characters in the id
-                        const escapedId = CSS.escape(row["A"]);
-                        // Get the SVG path element with an id that matches the value in column A
-                        const path = svgElement.querySelector(`#${escapedId}`);
-                        // Check if the path exists and if the value in column O is not 0
-                        if (path && row["O"] !== 0) {
-                          // Get the value in column O for this row
-                          const value = row["O"];
-                          // Look up the corresponding color in the color dictionary
-                          const color = colorDictionary[value];
-                          // Set the fill attribute of the path to the color
-                          path.setAttribute("fill", `#${color}`);
-                          // Remove the mouseout event listener from the path
-                          path.removeEventListener("mouseout", mouseoutHandler);
+                      
+                        // Color in the map
+                        function updateSVGColors() {
+                          tableData.forEach((row) => {
+                            // Get the SVG element with the same ID as the value in column A
+                            const svgElement = document.querySelector(`#${row["A"]}`);
+                            // Check if the SVG element exists and if it has a matching value in column A
+                            if (svgElement && row["A"]) {
+                              // Check if the value in column O is 0 to determine if a blizzard pattern exists
+                              const hasBlizzardPattern = row["O"] === 0;
+                              // If it doesn't have a blizzard pattern
+                              if (!hasBlizzardPattern) {
+                                // Get the value in column O
+                                const valueO = row["O"];
+                                // Look up the corresponding color in the color dictionary
+                                const color = colorDictionary[valueO];
+                                // Fill in the SVG element with that color
+                                svgElement.style.fill = color;
+                              }
+                            }
+                          });
                         }
-                      });
                       
                       // Log updated table data to console
                       console.log(tableData);
