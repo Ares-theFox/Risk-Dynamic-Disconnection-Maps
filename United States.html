@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 10px;
+        font-size: 30px;
         font-weight: bold;
       }
     </style>
@@ -229,12 +229,22 @@ xhr.send();
 <script>
 var regex = /&#8203;/g;
 
-var matches = regex.exec(document.documentElement.textContent);
+var matches = [];
 
-if (matches) {
-  console.log('The HTML contains the zero-width space character.');
-} else {
-  console.log('The HTML does not contain the zero-width space character.');
+var lines = document.documentElement.textContent.split('\n');
+
+for (var i = 0; i < lines.length; i++) {
+  var match = regex.exec(lines[i]);
+
+  if (match) {
+    matches.push(i + 1);
+  }
+}
+
+console.log('The following lines contain the zero-width space character:');
+
+for (var i = 0; i < matches.length; i++) {
+  console.log(matches[i]);
 }
 </script>
 
