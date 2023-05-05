@@ -11,13 +11,13 @@
         z-index: 1;
       }
       header {
-        font-size: 30px;
+        font-size: 40px;
         font-weight: bold;
       }
     </style>
   </head>
   <body>
-    <header>United States</header>
+    <header>United States Dynamic Disconnection Map</header>
     <img
       id="map"
       src="https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States.png"
@@ -242,19 +242,22 @@ paths.forEach(function (path) {
 
             // Add text to the midpoint of the path
             value = tableData[i]["P"];
-            var bbox = path.getBBox();
-            var x = bbox.x + bbox.width / 2;
-            var y = bbox.y + bbox.height / 2;
+            if (value !== 0) {
+                var bbox = path.getBBox();
+                var x = bbox.x + bbox.width / 2;
+                var y = bbox.y + bbox.height / 2;
 
-            var text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-            text.setAttribute("x", x);
-            text.setAttribute("y", y);
-            text.setAttribute("text-anchor", "middle");
-            text.setAttribute("alignment-baseline", "middle");
-            text.setAttribute("font-size", fontSize);
-            text.textContent = value;
+                var text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                text.setAttribute("x", x);
+                text.setAttribute("y", y);
+                text.setAttribute("text-anchor", "middle");
+                text.setAttribute("alignment-baseline", "middle");
+                text.setAttribute("font-size", fontSize);
+                text.setAttribute("font-weight", "bold");
+                text.textContent = value;
 
-            svgElement.appendChild(text);
+                svgElement.appendChild(text);
+            }
             break;
         }
     }
