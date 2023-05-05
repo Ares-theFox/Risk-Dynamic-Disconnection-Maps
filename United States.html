@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 30px;
+        font-size: 10px;
         font-weight: bold;
       }
     </style>
@@ -208,13 +208,27 @@
                           const values = row["N"].split(",");
                           row["P"] = values.length - 1;
                         } else {
-                          row["P"] = "";
+                          row["P"] = 0;
                         }
                       });
 
+                      // Loop through each row of tableData
+                      tableData.forEach((row) => {
+                        // Get the SVG path element with an id that matches the value in column A
+                        const path = svgElement.querySelector(`#${row["A"]}`);
+                        // Check if the value in column O is not 0
+                        if (path && row["O"] !== 0) {
+                          // Get the value in column O for this row
+                          const value = row["O"];
+                          // Look up the corresponding color in the color dictionary
+                          const color = colorDictionary[value];
+                          // Set the fill attribute of the path to the color
+                          path.setAttribute("fill", `#${color}`);
+                        }
+                      });
+                      
                       // Log updated table data to console
                       console.log(tableData);
-
                     }
                   });
 })
