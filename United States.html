@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 10px;
+        font-size: 30px;
         font-weight: bold;
       }
     </style>
@@ -225,16 +225,36 @@ paths.forEach(function (path) {
 // Update the paths variable to reference the cloned paths
 paths = svgElement.querySelectorAll("path");
 
-// Color in the map
+// Set font size of indirect connections
+var fontSize = 30
+
+// Color in the map and add indirect connections
 paths.forEach(function (path) {
     var pathId = path.getAttribute("id");
     for (var i = 0; i < tableData.length; i++) {
         if (tableData[i]["A"] === pathId) {
+            // Color in the map
             var value = tableData[i]["O"];
             if (value !== 0) {
                 var color = colorDictionary[value];
                 path.style.setProperty("fill", color, "important");
             }
+
+            // Add text to the midpoint of the path
+            value = tableData[i]["P"];
+            var bbox = path.getBBox();
+            var x = bbox.x + bbox.width / 2;
+            var y = bbox.y + bbox.height / 2;
+
+            var text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            text.setAttribute("x", x);
+            text.setAttribute("y", y);
+            text.setAttribute("text-anchor", "middle");
+            text.setAttribute("alignment-baseline", "middle");
+            text.setAttribute("font-size", fontSize);
+            text.textContent = value;
+
+            svgElement.appendChild(text);
             break;
         }
     }
