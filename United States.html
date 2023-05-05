@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 10px;
+        font-size: 30px;
         font-weight: bold;
       }
     </style>
@@ -75,6 +75,10 @@
                 paths.forEach(function (path) {
                   path.setAttribute("fill", "transparent");
                   path.setAttribute("stroke-opacity", "0");
+
+// Check if clickCounter is less than Max
+if (clickCounter < clickCounterMax) {
+                  
                   var mouseoverHandler = function () {
                     if (clickCounter < clickCounterMax) {
                       this.style.fill = "white";
@@ -83,6 +87,7 @@
                   var mouseoutHandler = function () {
                     this.style.fill = "transparent";
                   };
+}
                   path.addEventListener("mouseover", mouseoverHandler);
                   path.addEventListener("mouseout", mouseoutHandler);
                   let clickedPaths = [];
