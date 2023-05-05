@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 30px;
+        font-size: 10px;
         font-weight: bold;
       }
     </style>
@@ -216,7 +216,16 @@
 
 
 
-// Color in the map             
+// Clone the paths to remove any event listeners
+paths.forEach(function (path) {
+    var clone = path.cloneNode(true);
+    path.parentNode.replaceChild(clone, path);
+});
+
+// Update the paths variable to reference the cloned paths
+paths = svgElement.querySelectorAll("path");
+
+// Color in the map
 paths.forEach(function (path) {
     var pathId = path.getAttribute("id");
     for (var i = 0; i < tableData.length; i++) {
