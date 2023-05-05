@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 30px;
+        font-size: 10px;
         font-weight: bold;
       }
     </style>
@@ -26,6 +26,7 @@
     <div id="range"></div>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
     <script>
+      
       // Define tableData outside of Papa.parse function
       let tableData;
 
@@ -37,6 +38,14 @@
           complete: function (results) {
             // Assign parsed data to tableData
             tableData = results.data;
+            // Remove zero-width space character from tableData
+            for (let i = 0; i < tableData.length; i++) {
+              for (let key in tableData[i]) {
+                if (tableData[i].hasOwnProperty(key)) {
+                  tableData[i][key] = tableData[i][key].replace(/\u200B/g, "");
+                }
+              }
+            }
             console.log(tableData);
             
             // Create a color dictionary object
