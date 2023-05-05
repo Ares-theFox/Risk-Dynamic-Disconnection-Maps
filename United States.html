@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 30px;
+        font-size: 10px;
         font-weight: bold;
       }
     </style>
@@ -215,6 +215,10 @@
                       console.log(tableData);
 
 // Color in the map
+paths.forEach(function (path) {
+    path.removeEventListener("mouseover", mouseoverHandler);
+    path.removeEventListener("mouseout", mouseoutHandler);
+});
 paths.forEach(function (path) {
     var pathId = path.getAttribute("id");
     for (var i = 0; i < tableData.length; i++) {
