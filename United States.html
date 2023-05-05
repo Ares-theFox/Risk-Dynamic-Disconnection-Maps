@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 10px;
+        font-size: 30px;
         font-weight: bold;
       }
     </style>
@@ -236,25 +236,17 @@ xhr.send();
 </script>
 
 <script>
-var regex = /&#8203;/g;
+// Get all elements on the page
+const allElements = document.querySelectorAll("*");
 
-var matches = [];
-
-var lines = document.documentElement.textContent.split('\n');
-
-for (var i = 0; i < lines.length; i++) {
-  var match = regex.exec(lines[i]);
-
-  if (match) {
-    matches.push(i + 1);
+// Iterate over all elements
+allElements.forEach((element) => {
+  // Check if element contains zero-width space character
+  if (element.textContent.includes("\u200B")) {
+    // Output element and its text content
+    console.log(element, element.textContent);
   }
-}
-
-console.log('The following lines contain the zero-width space character:');
-
-for (var i = 0; i < matches.length; i++) {
-  console.log(matches[i]);
-}
+});
 </script>
 
 </body>
