@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 30px;
+        font-size: 10px;
         font-weight: bold;
       }
     </style>
@@ -145,85 +145,71 @@
                     clickedPaths.push(this.id);
 
                     // Find rows in table data where column A matches clicked path's ID
-                    //const rows = tableData.filter(row =>
-                      //clickedPaths.includes(row["A"])
-                    //);
+                    const rows = tableData.filter(row =>
+                      clickedPaths.includes(row["A"])
+                    );
 
-                    // Remove all values from those rows in columns B through K
-                    //rows.forEach(row => {
-                      //for (
-                        //let i = "B".charCodeAt(0);
-                        //i <= "K".charCodeAt(0);
-                        //i++
-                      //) {
-                        //row[String.fromCharCode(i)] = "";
-                      //}
-                    //});
+                    // Find the row in table data where column A matches clicked path's ID
+                    const row = tableData.find((row) => row["A"] === this.id);
+
+                    // Remove everything in column B for that row
+                    if (row) {
+                      row["B"] = "";
+                    }
                     
-                    // Remove all instances of clicked path's ID from columns B through K
-                    //tableData.forEach(row => {
-                      //for (
-                        //let i = "B".charCodeAt(0);
-                        //i <= "K".charCodeAt(0);
-                        //i++
-                      //) {
-                        //if (clickedPaths.includes(row[String.fromCharCode(i)])) {
-                          //row[String.fromCharCode(i)] = "";
-                        //}
-                      //}
-                    //});
+                    // Remove all instances of clicked path's ID from column B
+                    tableData.forEach((row) => {
+                      if (row["B"]) {
+                        // Split the value in column B into an array of values
+                        let values = row["B"].split(",");
+                        // Filter out any values that are included in the clickedPaths array
+                        values = values.filter((value) => !clickedPaths.includes(value));
+                        // Join the remaining values back into a string and update the value in column B
+                        row["B"] = values.join(",");
+                      }
+                    });
                     
                     // Check if clickCounter has reached its maximum value
                     if (clickCounter === clickCounterMax) {
+                      
                       // Recalculate columns L through P for all rows
                       tableData.forEach(row => {
-                        row["L"] = "PlaceholderValue"
-                        // Column L: Join non-empty cells in columns B-K with a comma separator
-                        //row["L"] = Object.values(row)
-                          //.slice(1, 11)
-                          //.filter(value => value)
-                          //.join(",");
-
-                        
-                        
-                        
                         
                         // Column M: Join columns A-K with a comma separator and look up values in column A
                         row["M"] = ""; // initialize column M to blank
                         if (row["B"] && row["B"].trim() !== "") { // check if column B is not empty or undefined
-                          const searchValue = row["B"].split(",")[0].replace(/\u200B/g, "");
-                          let searchResult;
-                          for (let i = 0; i < tableData.length; i++) {
-                            if (tableData[i]["A"] === searchValue) {
-                              searchResult = tableData[i];
-                              break;
+                          const searchValues = row["B"].split(",");
+                          let searchResults = [];
+                          for (const searchValue of searchValues) {
+                            const trimmedSearchValue = searchValue.trim().replace(/\u200B/g, "");
+                            for (let i = 0; i < tableData.length; i++) {
+                              if (tableData[i]["A"] === trimmedSearchValue) {
+                                searchResults.push(tableData[i]["B"]);
+                                break;
+                              }
                             }
                           }
-                          console.log(row["A"])
-                          console.log(searchValue)
-                          console.log(searchResult["B"])
-                          if (searchResult) { // if a matching row is found
-                            row["M"] = searchResult["B"]; // set the value of column M to the value in column B of the matching row
-                          }
+                          row["M"] = searchResults.join(",");
                         }
 
-
-                    
-                        
-                        
-                        
-                        
-
                         // Column N: Remove duplicate values from column M
-                        // row["N"] = [...new Set(row["M"].split(","))].join(",");
+                        row["N"] = [...new Set(row["M"].split(","))].join(",");
 
-                        // Column O: Count non-empty cells in columns B-K
-                        row["O"] = Object.values(row)
-                          .slice(1, 11)
-                          .filter(value => value).length;
+                        // Column O: Count how many comma-separated values are in column B
+                        if (row["B"] && row["B"].trim() !== "") { // check if column B is not empty or undefined
+                          const values = row["B"].split(",");
+                          row["O"] = values.length;
+                        } else {
+                          row["O"] = 0;
+                        }
 
-                        // Column P: Count the number of commas in column N
-                        // row["P"] = (row["N"].match(/,/g) || []).length;
+                        // Column P: Count how many comma-separated values are in column N, and then subtract 1 (unless it's empty, then set it to "")
+                        if (row["N"] && row["N"].trim() !== "") { // check if column N is not empty or undefined
+                          const values = row["N"].split(",");
+                          row["P"] = values.length - 1;
+                        } else {
+                          row["P"] = "";
+                        }
                       });
 
                       // Log updated table data to console
