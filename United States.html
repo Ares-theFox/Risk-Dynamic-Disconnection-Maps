@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 30px;
+        font-size: 10px;
         font-weight: bold;
       }
     </style>
@@ -215,29 +215,19 @@
                       console.log(tableData);
 
 // Color in the map
-console.log("About to execute svg colors")
-function updateSVGColors() {
-  console.log("Called function")
-  tableData.forEach((row) => {
-    // Get the SVG element with the same ID as the value in column A
-    const svgElement = document.querySelector(`#${row["A"]}`);
-    console.log(svgElement)
-    // Check if the SVG element exists and if it has a matching value in column A
-    if (svgElement && row["A"]) {
-      // Check if the value in column O is 0 to determine if a blizzard pattern exists
-      const hasBlizzardPattern = row["O"] === 0;
-      // If it doesn't have a blizzard pattern
-      if (!hasBlizzardPattern) {
-        // Get the value in column O
-        const valueO = row["O"];
-        // Look up the corresponding color in the color dictionary
-        const color = colorDictionary[valueO];
-        // Fill in the SVG element with that color
-        svgElement.style.fill = color;
-      }
+paths.forEach(function (path) {
+    var pathId = path.getAttribute("id");
+    for (var i = 0; i < tableData.length; i++) {
+        if (tableData[i]["A"] === pathId) {
+            var value = tableData[i]["O"];
+            if (value !== 0) {
+                var color = colorDictionary[value];
+                path.setAttribute("fill", color);
+            }
+            break;
+        }
     }
-  });
-}
+});
                     
                     
                     
