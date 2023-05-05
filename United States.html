@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 10px;
+        font-size: 30px;
         font-weight: bold;
       }
     </style>
@@ -203,10 +203,10 @@
                           row["O"] = 0;
                         }
 
-                        // Column P: Count how many comma-separated values are in column N, and then subtract 1 (unless it's empty, then set it to "")
+                        // Column P: Count how many comma-separated values are in column N (unless it's empty, then set it to "")
                         if (row["N"] && row["N"].trim() !== "") { // check if column N is not empty or undefined
                           const values = row["N"].split(",");
-                          row["P"] = values.length - 1;
+                          row["P"] = values.length;
                         } else {
                           row["P"] = "";
                         }
