@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 10px;
+        font-size: 30px;
         font-weight: bold;
       }
     </style>
@@ -216,10 +216,12 @@
                     }
 
 // Color in the map
+console.log("About to execute svg colors")
 function updateSVGColors() {
   tableData.forEach((row) => {
     // Get the SVG element with the same ID as the value in column A
     const svgElement = document.querySelector(`#${row["A"]}`);
+    console.log(svgElement)
     // Check if the SVG element exists and if it has a matching value in column A
     if (svgElement && row["A"]) {
       // Check if the value in column O is 0 to determine if a blizzard pattern exists
