@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 30px;
+        font-size: 10px;
         font-weight: bold;
       }
     </style>
@@ -191,7 +191,7 @@
                         row["M"] = ""; // initialize column M to blank
                         if (row["B"] && row["B"].trim() !== "") { // check if column B is not empty or undefined
                           console.log(row["B"])
-                          const searchValue = row["B"].trim(); // remove any leading/trailing whitespace from the value in column B
+                          const searchValue = row["B"].replace(/\u200B/g, "");
                           console.log(searchValue)
                           const searchResult = tableData.find(item => item["A"] === searchValue); // search for a row in the data where column A matches the search value
                           console.log(searchResult)
