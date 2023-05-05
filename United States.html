@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 10px;
+        font-size: 30px;
         font-weight: bold;
       }
     </style>
@@ -177,11 +177,12 @@
                     if (clickCounter === clickCounterMax) {
                       // Recalculate columns L through P for all rows
                       tableData.forEach(row => {
+                        row["L"] = "PlaceholderValue"
                         // Column L: Join non-empty cells in columns B-K with a comma separator
-                        row["L"] = Object.values(row)
-                          .slice(1, 11)
-                          .filter(value => value)
-                          .join(",");
+                        //row["L"] = Object.values(row)
+                          //.slice(1, 11)
+                          //.filter(value => value)
+                          //.join(",");
 
                         
                         
