@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 10px;
+        font-size: 30px;
         font-weight: bold;
       }
     </style>
@@ -192,6 +192,7 @@
                         row["M"] = ""; // initialize column M to blank
                         if (row["B"] && row["B"].trim() !== "") { // check if column B is not empty or undefined
                           const searchValue = row["B"].replace(/\u200B/g, "");
+                          console.log(row["A"])
                           console.log(searchValue)
                           let searchResult;
                           for (let i = 0; i < tableData.length; i++) {
