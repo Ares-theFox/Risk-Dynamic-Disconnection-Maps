@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 30px;
+        font-size: 10px;
         font-weight: bold;
       }
     </style>
@@ -75,10 +75,6 @@
                 paths.forEach(function (path) {
                   path.setAttribute("fill", "transparent");
                   path.setAttribute("stroke-opacity", "0");
-
-// Check if clickCounter is less than Max
-if (clickCounter < clickCounterMax) {
-                  
                   var mouseoverHandler = function () {
                     if (clickCounter < clickCounterMax) {
                       this.style.fill = "white";
@@ -87,7 +83,6 @@ if (clickCounter < clickCounterMax) {
                   var mouseoutHandler = function () {
                     this.style.fill = "transparent";
                   };
-}
                   path.addEventListener("mouseover", mouseoverHandler);
                   path.addEventListener("mouseout", mouseoutHandler);
                   let clickedPaths = [];
@@ -219,11 +214,11 @@ if (clickCounter < clickCounterMax) {
                       // Log updated table data to console
                       console.log(tableData);
 
-// Color in the map
-paths.forEach(function (path) {
-    path.removeEventListener("mouseover", mouseoverHandler);
-    path.removeEventListener("mouseout", mouseoutHandler);
-});
+// Remove mouseover and mouseout event listeners
+this.removeEventListener("mouseover", mouseoverHandler);
+this.removeEventListener("mouseout", mouseoutHandler);
+
+// Color in the map             
 paths.forEach(function (path) {
     var pathId = path.getAttribute("id");
     for (var i = 0; i < tableData.length; i++) {
