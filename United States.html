@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 30px;
+        font-size: 10px;
         font-weight: bold;
       }
     </style>
@@ -195,6 +195,10 @@
                           console.log(searchValue)
                           const searchResult = tableData.find(item => item["A"] === searchValue); // search for a row in the data where column A matches the search value
                           console.log(searchResult)
+                          console.log(searchResult["A"])
+                          console.log(searchResult["B"])
+                          console.log(searchResult["C"])
+                          console.log(searchResult["D"])
                           console.log(searchResult["L"])
                           if (searchResult) { // if a matching row is found
                             console.log(searchResult["L"])
@@ -234,20 +238,5 @@ xhr.send();
 }
 )
 </script>
-
-<script>
-// Get all elements on the page
-const allElements = document.querySelectorAll("*");
-
-// Iterate over all elements
-allElements.forEach((element) => {
-  // Check if element contains zero-width space character
-  if (element.textContent.includes("\u200B")) {
-    // Output element and its text content
-    console.log(element, element.textContent);
-  }
-});
-</script>
-
 </body>
 </html>
