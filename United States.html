@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 30px;
+        font-size: 10px;
         font-weight: bold;
       }
     </style>
@@ -175,7 +175,7 @@
                       // Recalculate columns L through P for all rows
                       tableData.forEach(row => {
                         
-                        // Column M: Join columns A-K with a comma separator and look up values in column A
+                        // Column M: vlookup col B values and add them + current value A
                         row["M"] = ""; // initialize column M to blank
                         if (row["B"] && row["B"].trim() !== "") { // check if column B is not empty or undefined
                           const searchValues = row["B"].split(",");
@@ -189,7 +189,7 @@
                               }
                             }
                           }
-                          row["M"] = searchResults.join(",");
+                          row["M"] = [row["A"], ...searchResults].join(",");
                         }
 
                         // Column N: Remove duplicate values from column M
@@ -206,7 +206,7 @@
                         // Column P: Count how many comma-separated values are in column N (unless it's empty, then set it to "")
                         if (row["N"] && row["N"].trim() !== "") { // check if column N is not empty or undefined
                           const values = row["N"].split(",");
-                          row["P"] = values.length;
+                          row["P"] = values.length - 1;
                         } else {
                           row["P"] = "";
                         }
