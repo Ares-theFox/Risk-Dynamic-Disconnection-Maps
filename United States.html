@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 10px;
+        font-size: 30px;
         font-weight: bold;
       }
     </style>
@@ -217,6 +217,7 @@
 // Color in the map
 console.log("About to execute svg colors")
 function updateSVGColors() {
+  console.log("Called function")
   tableData.forEach((row) => {
     // Get the SVG element with the same ID as the value in column A
     const svgElement = document.querySelector(`#${row["A"]}`);
