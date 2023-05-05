@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 10px;
+        font-size: 30px;
         font-weight: bold;
       }
     </style>
@@ -214,9 +214,7 @@
                       // Log updated table data to console
                       console.log(tableData);
 
-// Remove mouseover and mouseout event listeners
-this.removeEventListener("mouseover", mouseoverHandler);
-this.removeEventListener("mouseout", mouseoutHandler);
+
 
 // Color in the map             
 paths.forEach(function (path) {
@@ -226,7 +224,7 @@ paths.forEach(function (path) {
             var value = tableData[i]["O"];
             if (value !== 0) {
                 var color = colorDictionary[value];
-                path.setAttribute("fill", color);
+                path.style.setProperty("fill", color, "important");
             }
             break;
         }
