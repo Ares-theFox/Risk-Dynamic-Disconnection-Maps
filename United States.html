@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 10px;
+        font-size: 30px;
         font-weight: bold;
       }
     </style>
@@ -145,33 +145,33 @@
                     clickedPaths.push(this.id);
 
                     // Find rows in table data where column A matches clicked path's ID
-                    const rows = tableData.filter(row =>
-                      clickedPaths.includes(row["A"])
-                    );
+                    //const rows = tableData.filter(row =>
+                      //clickedPaths.includes(row["A"])
+                    //);
 
                     // Remove all values from those rows in columns B through K
-                    rows.forEach(row => {
-                      for (
-                        let i = "B".charCodeAt(0);
-                        i <= "K".charCodeAt(0);
-                        i++
-                      ) {
-                        row[String.fromCharCode(i)] = "";
-                      }
-                    });
+                    //rows.forEach(row => {
+                      //for (
+                        //let i = "B".charCodeAt(0);
+                        //i <= "K".charCodeAt(0);
+                        //i++
+                      //) {
+                        //row[String.fromCharCode(i)] = "";
+                      //}
+                    //});
                     
                     // Remove all instances of clicked path's ID from columns B through K
-                    tableData.forEach(row => {
-                      for (
-                        let i = "B".charCodeAt(0);
-                        i <= "K".charCodeAt(0);
-                        i++
-                      ) {
-                        if (clickedPaths.includes(row[String.fromCharCode(i)])) {
-                          row[String.fromCharCode(i)] = "";
-                        }
-                      }
-                    });
+                    //tableData.forEach(row => {
+                      //for (
+                        //let i = "B".charCodeAt(0);
+                        //i <= "K".charCodeAt(0);
+                        //i++
+                      //) {
+                        //if (clickedPaths.includes(row[String.fromCharCode(i)])) {
+                          //row[String.fromCharCode(i)] = "";
+                        //}
+                      //}
+                    //});
                     
                     // Check if clickCounter has reached its maximum value
                     if (clickCounter === clickCounterMax) {
@@ -191,9 +191,7 @@
                         // Column M: Join columns A-K with a comma separator and look up values in column A
                         row["M"] = ""; // initialize column M to blank
                         if (row["B"] && row["B"].trim() !== "") { // check if column B is not empty or undefined
-                          const searchValue = row["B"].replace(/\u200B/g, "");
-                          console.log(row["A"])
-                          console.log(searchValue)
+                          const searchValue = row["B"].split(",")[0].replace(/\u200B/g, "");
                           let searchResult;
                           for (let i = 0; i < tableData.length; i++) {
                             if (tableData[i]["A"] === searchValue) {
@@ -201,9 +199,11 @@
                               break;
                             }
                           }
-                          console.log(searchResult["L"])
+                          console.log(row["A"])
+                          console.log(searchValue)
+                          console.log(searchResult["B"])
                           if (searchResult) { // if a matching row is found
-                            row["M"] = searchResult["L"]; // set the value of column M to the value in column L of the matching row
+                            row["M"] = searchResult["B"]; // set the value of column M to the value in column B of the matching row
                           }
                         }
 
