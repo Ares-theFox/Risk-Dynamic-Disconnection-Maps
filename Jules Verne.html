@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 40px;
+        font-size: 20px;
         font-weight: bold;
       }
     </style>
@@ -233,43 +233,67 @@ paths = svgElement.querySelectorAll("path");
 var fontSize = 30
 
 // Color in the map and add indirect connections
-paths.forEach(function (path) {
-    var pathId = path.getAttribute("id");
-    for (var i = 0; i < tableData.length; i++) {
-        if (tableData[i]["A"] === pathId) {
+function processCSV() {
+  var csvURL =
+    "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20Indirect%20Connection%20Locations%20CSV.csv";
+
+  // Fetch the CSV file
+  Papa.parse(csvURL, {
+    download: true,
+    header: true,
+    complete: function (results) {
+      var locationData = results.data;
+
+      // Color in the map and add indirect connections
+      paths.forEach(function (path) {
+        var pathId = path.getAttribute("id");
+        for (var i = 0; i < locationData.length; i++) {
+          if (locationData[i]["Range"] === pathId) {
             // Color in the map
-            var value = tableData[i]["O"];
-            if (value !== 0) {
-                var color = colorDictionary[value];
-                path.style.setProperty("fill", color, "important");
-                path.setAttribute("stroke-opacity", "100");
-                path.style.setProperty("stroke", "black", "important");
-                path.style.setProperty("stroke-width", "1", "important");
+            var value = locationData[i]["O"];
+            if (value !== "0") {
+              var color = colorDictionary[value];
+              path.style.setProperty("fill", color, "important");
+              path.setAttribute("stroke-opacity", "100");
+              path.style.setProperty("stroke", "black", "important");
+              path.style.setProperty("stroke-width", "1", "important");
             }
 
-            // Add text to the midpoint of the path
-            value = tableData[i]["P"];
-            if (value !== 0) {
-                var bbox = path.getBBox();
-                var x = bbox.x + bbox.width / 2;
-                var y = bbox.y + bbox.height / 2;
+            // Get the coordinates from the CSV
+            var x = locationData[i]["Pixel Pair 1"];
+            var y = locationData[i]["Pixel Pair 2"];
 
-                var text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-                text.setAttribute("x", x);
-                text.setAttribute("y", y);
-                text.setAttribute("text-anchor", "middle");
-                text.setAttribute("alignment-baseline", "middle");
-                text.setAttribute("font-size", fontSize);
-                text.setAttribute("font-weight", "bold");
-                text.textContent = value;
+            // Add text using the specified coordinates as the midpoint
+            value = locationData[i]["P"];
+            if (value !== "0") {
+              var text = document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "text"
+              );
+              text.setAttribute("x", x);
+              text.setAttribute("y", y);
+              text.setAttribute("text-anchor", "middle");
+              text.setAttribute("alignment-baseline", "middle");
+              text.setAttribute("font-size", fontSize);
+              text.setAttribute("font-weight", "bold");
+              text.textContent = value;
 
-                svgElement.appendChild(text);
+              // Adjust the text position based on the actual midpoint
+              var bbox = text.getBBox();
+              var textX = parseFloat(x) - bbox.width / 2;
+              var textY = parseFloat(y) - bbox.height / 2;
+              text.setAttribute("x", textX);
+              text.setAttribute("y", textY);
+
+              svgElement.appendChild(text);
             }
             break;
+          }
         }
-    }
-});
-                    
+      });
+    },
+  });
+}                   
                     
                     
                     }
