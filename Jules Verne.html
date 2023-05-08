@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 40px;
+        font-size: 20px;
         font-weight: bold;
       }
     </style>
@@ -242,6 +242,7 @@ paths.forEach(function (path) {
             if (value !== 0) {
                 var color = colorDictionary[value];
                 path.style.setProperty("fill", color, "important");
+                path.setAttribute("stroke-opacity", "100");
                 path.style.setProperty("stroke", color, "important");
                 path.style.setProperty("stroke-width", "3", "important");
             }
