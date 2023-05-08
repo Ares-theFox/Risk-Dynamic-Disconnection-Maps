@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hover over SVG</title>
+    <style>
+      #map,
+      #range {
+        position: absolute;
+      }
+      #range {
+        z-index: 1;
+      }
+      header {
+        font-size: 40px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <header>Ares' United States Dynamic Disconnection Map</header>
+    <img
+      id="map"
+      src="https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States.png"
+      alt="Map of United States"
+    />
+    <div id="range"></div>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
+    <script>
+      
+      // Define tableData outside of Papa.parse function
+      let tableData;
+
+      Papa.parse(
+        "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20CSV.csv",
+        {
+          download: true,
+          header: true,
+          complete: function (results) {
+            // Assign parsed data to tableData
+            tableData = results.data;
+            // Remove zero-width space character from tableData
+            for (let i = 0; i < tableData.length; i++) {
+              for (let key in tableData[i]) {
+                if (tableData[i].hasOwnProperty(key)) {
+                  tableData[i][key] = tableData[i][key].replace(/\u200B/g, "");
+                }
+              }
+            }
+            console.log(tableData);
+            
+            // Create a color dictionary object
+	    const colorDictionary = {
+  	      1: "#ec1c24",
+  	      2: "#ff7f27",
+  	      3: "#fff200",
+  	      4: "#0ed145",
+  	      5: "#00a8f3",
+  	      6: "#3f48cc",
+  	      7: "#b83dba",
+  	      8: "#b97a56",
+  	      9: "#585858",
+  	      10: "#38784a",
+  	      11: "#ffaec8",
+  	      12: "#ffffff"
+	    };
+
+            var xhr = new XMLHttpRequest();
+            xhr.open(
+              "GET",
+              "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20Paths.svg"
+            );
+            xhr.onload = function () {
+              if (xhr.status === 200) {
+                var svg = xhr.responseText;
+                var rangeElement = document.getElementById("range");
+                rangeElement.innerHTML = svg;
+                var svgElement = rangeElement.querySelector("svg");
+                var paths = svgElement.querySelectorAll("path");
+                var clickCounter = 0; // Add a counter variable to keep track of the number of clicks
+                var clickCounterMax = 3; // Specify max blizzards
+                paths.forEach(function (path) {
+                  path.setAttribute("fill", "transparent");
+                  path.setAttribute("stroke-opacity", "0");
+                  var mouseoverHandler = function () {
+                    if (clickCounter < clickCounterMax) {
+                      this.style.fill = "white";
+                    }
+                  };
+                  var mouseoutHandler = function () {
+                    this.style.fill = "transparent";
+                  };
+                  path.addEventListener("mouseover", mouseoverHandler);
+                  path.addEventListener("mouseout", mouseoutHandler);
+                  let clickedPaths = [];
+                  path.addEventListener("click", function () {
+                    
+                    // Log clicked path ID to console
+                    console.log(this.id);
+
+                    // Check if clickCounter is less than Max
+                    if (clickCounter < clickCounterMax) {
+                      // Create a clipPath element and set its id
+                      var clipPath = document.createElementNS(
+                        "http://www.w3.org/2000/svg",
+                        "clipPath"
+                      );
+                      clipPath.setAttribute("id", "clip-" + this.id);
+
+                      // Clone the clicked path and append it to the clipPath
+                      var clonedPath = this.cloneNode(true);
+                      clipPath.appendChild(clonedPath);
+
+                      // Append the clipPath to the defs element
+                      var defs =
+                        svgElement.querySelector("defs") ||
+                        svgElement.insertBefore(
+                          document.createElementNS(
+                            "http://www.w3.org/2000/svg",
+                            "defs"
+                          ),
+                          svgElement.firstChild
+                        );
+                      defs.appendChild(clipPath);
+
+                      // Create an image element and set its attributes
+                      var image = document.createElementNS(
+                        "http://www.w3.org/2000/svg",
+                        "image"
+                      );
+                      image.setAttributeNS(
+                        "http://www.w3.org/1999/xlink",
+                        "href",
+                        "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20blizzard%20pattern.png"
+                      );
+                      image.setAttribute("width", "100%");
+                      image.setAttribute("height", "100%");
+                      image.setAttribute("clip-path", "url(#clip-" + this.id + ")");
+
+                      // Append the image to the SVG
+                      svgElement.appendChild(image);
+                      console.log(clickCounter);
+                      
+                      // Remove mouseover and mouseout event listeners
+                      this.removeEventListener("mouseover", mouseoverHandler);
+                      this.removeEventListener("mouseout", mouseoutHandler);
+                    }
+
+                    // Increment the click counter and push value to clickedPaths array
+                    clickCounter++;
+                    clickedPaths.push(this.id);
+
+                    // Find rows in table data where column A matches clicked path's ID
+                    const rows = tableData.filter(row =>
+                      clickedPaths.includes(row["A"])
+                    );
+
+                    // Find the row in table data where column A matches clicked path's ID
+                    const row = tableData.find((row) => row["A"] === this.id);
+
+                    // Remove everything in column B for that row
+                    if (row) {
+                      row["B"] = "";
+                    }
+                    
+                    // Remove all instances of clicked path's ID from column B
+                    tableData.forEach((row) => {
+                      if (row["B"]) {
+                        // Split the value in column B into an array of values
+                        let values = row["B"].split(",");
+                        // Filter out any values that are included in the clickedPaths array
+                        values = values.filter((value) => !clickedPaths.includes(value));
+                        // Join the remaining values back into a string and update the value in column B
+                        row["B"] = values.join(",");
+                      }
+                    });
+                    
+                    // Check if clickCounter has reached its maximum value
+                    if (clickCounter === clickCounterMax) {
+                      
+                      // Recalculate columns L through P for all rows
+                      tableData.forEach(row => {
+                        
+                        // Column M: vlookup col B values and add them + current value A and B
+                        row["M"] = ""; // initialize column M to blank
+                        if (row["B"] && row["B"].trim() !== "") { // check if column B is not empty or undefined
+                          const searchValues = row["B"].split(",");
+                          let searchResults = [];
+                          for (const searchValue of searchValues) {
+                            const trimmedSearchValue = searchValue.trim().replace(/\u200B/g, "");
+                            for (let i = 0; i < tableData.length; i++) {
+                              if (tableData[i]["A"] === trimmedSearchValue) {
+                                searchResults.push(tableData[i]["B"]);
+                                break;
+                              }
+                            }
+                          }
+                          row["M"] = [row["A"], row["B"], ...searchResults].join(",");
+                        }
+
+                        // Column N: Remove duplicate values from column M
+                        row["N"] = [...new Set(row["M"].split(","))].join(",");
+
+                        // Column O: Count how many comma-separated values are in column B
+                        if (row["B"] && row["B"].trim() !== "") { // check if column B is not empty or undefined
+                          const values = row["B"].split(",");
+                          row["O"] = values.length;
+                        } else {
+                          row["O"] = 0;
+                        }
+
+                        // Column P: Count how many comma-separated values are in column N (unless it's empty, then set it to "")
+                        if (row["N"] && row["N"].trim() !== "") { // check if column N is not empty or undefined
+                          const values = row["N"].split(",");
+                          row["P"] = values.length - 1;
+                        } else {
+                          row["P"] = 0;
+                        }
+                      });
+       
+                      // Log updated table data to console
+                      console.log(tableData);
+
+
+
+// Clone the paths to remove any event listeners
+paths.forEach(function (path) {
+    var clone = path.cloneNode(true);
+    path.parentNode.replaceChild(clone, path);
+});
+
+// Color in the map and add indirect connections
+Papa.parse("https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20Indirect%20Connection%20Locations%20CSV.csv", {
+    download: true,
+    header: true,
+    complete: function(results) {
+        var csvData = results.data;
+
+        // Update the paths variable to reference the cloned paths
+        paths = svgElement.querySelectorAll("path");
+
+        // Set font size of indirect connections
+        var fontSize = 30
+
+        // Color in the map and add indirect connections
+        paths.forEach(function (path) {
+            var pathId = path.getAttribute("id");
+            for (var i = 0; i < tableData.length; i++) {
+                if (tableData[i]["A"] === pathId) {
+                    // Color in the map
+                    var value = tableData[i]["O"];
+                    if (value !== 0) {
+                        var color = colorDictionary[value];
+                        path.style.setProperty("fill", color, "important");
+                        path.setAttribute("stroke-opacity", "100");
+                        path.style.setProperty("stroke", "black", "important");
+                        path.style.setProperty("stroke-width", "1", "important");
+                    }
+
+                    // Add text to the specified location from CSV data
+                    value = tableData[i]["P"];
+                    if (value !== 0) {
+                        // Find matching row in CSV data
+                        var csvRow = csvData.find(function(row) {
+                            return row["Range"] === pathId;
+                        });
+
+                        // Get coordinates from CSV data
+                        var x = csvRow["Pixel Pair 1"];
+                        var y = csvRow["Pixel Pair 2"];
+
+                        var text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                        text.setAttribute("x", x);
+                        text.setAttribute("y", y);
+                        text.setAttribute("text-anchor", "middle");
+                        text.setAttribute("alignment-baseline", "middle");
+                        text.setAttribute("font-size", fontSize);
+                        text.setAttribute("font-weight", "bold");
+                        text.textContent = value;
+
+                        // Adjust x and y coordinates to position midpoint of text at specified coordinates
+                        var bbox = text.getBBox();
+                        text.setAttribute("x", x - bbox.width / 2);
+                        text.setAttribute("y", y - bbox.height / 2);
+
+                        svgElement.appendChild(text);
+                    }
+                    break;
+                }
+            }
+        });
+    }
+});
+                    
+                    
+                    
+                    }
+                  });
+})
+}
+}
+xhr.send();
+}
+}
+)
+</script>
+</body>
+</html>
