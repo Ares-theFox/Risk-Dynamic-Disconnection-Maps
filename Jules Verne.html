@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 20px;
+        font-size: 40px;
         font-weight: bold;
       }
     </style>
@@ -226,47 +226,66 @@ paths.forEach(function (path) {
     path.parentNode.replaceChild(clone, path);
 });
 
-// Update the paths variable to reference the cloned paths
-paths = svgElement.querySelectorAll("path");
-
-// Set font size of indirect connections
-var fontSize = 30
-
 // Color in the map and add indirect connections
-paths.forEach(function (path) {
-    var pathId = path.getAttribute("id");
-    for (var i = 0; i < tableData.length; i++) {
-        if (tableData[i]["A"] === pathId) {
-            // Color in the map
-            var value = tableData[i]["O"];
-            if (value !== 0) {
-                var color = colorDictionary[value];
-                path.style.setProperty("fill", color, "important");
-                path.setAttribute("stroke-opacity", "100");
-                path.style.setProperty("stroke", "black", "important");
-                path.style.setProperty("stroke-width", "1", "important");
+Papa.parse("https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20Indirect%20Connection%20Locations%20CSV.csv", {
+    download: true,
+    header: true,
+    complete: function(results) {
+        var csvData = results.data;
+
+        // Update the paths variable to reference the cloned paths
+        paths = svgElement.querySelectorAll("path");
+
+        // Set font size of indirect connections
+        var fontSize = 30
+
+        // Color in the map and add indirect connections
+        paths.forEach(function (path) {
+            var pathId = path.getAttribute("id");
+            for (var i = 0; i < tableData.length; i++) {
+                if (tableData[i]["A"] === pathId) {
+                    // Color in the map
+                    var value = tableData[i]["O"];
+                    if (value !== 0) {
+                        var color = colorDictionary[value];
+                        path.style.setProperty("fill", color, "important");
+                        path.setAttribute("stroke-opacity", "100");
+                        path.style.setProperty("stroke", "black", "important");
+                        path.style.setProperty("stroke-width", "1", "important");
+                    }
+
+                    // Add text to the specified location from CSV data
+                    value = tableData[i]["P"];
+                    if (value !== 0) {
+                        // Find matching row in CSV data
+                        var csvRow = csvData.find(function(row) {
+                            return row["Range"] === pathId;
+                        });
+
+                        // Get coordinates from CSV data
+                        var x = csvRow["Pixel Pair 1"];
+                        var y = csvRow["Pixel Pair 2"];
+
+                        var text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                        text.setAttribute("x", x);
+                        text.setAttribute("y", y);
+                        text.setAttribute("text-anchor", "middle");
+                        text.setAttribute("alignment-baseline", "middle");
+                        text.setAttribute("font-size", fontSize);
+                        text.setAttribute("font-weight", "bold");
+                        text.textContent = value;
+
+                        // Adjust x and y coordinates to position midpoint of text at specified coordinates
+                        var bbox = text.getBBox();
+                        text.setAttribute("x", x - bbox.width / 2);
+                        text.setAttribute("y", y - bbox.height / 2);
+
+                        svgElement.appendChild(text);
+                    }
+                    break;
+                }
             }
-
-            // Add text to the midpoint of the path
-            value = tableData[i]["P"];
-            if (value !== 0) {
-                var bbox = path.getBBox();
-                var x = bbox.x + bbox.width / 2;
-                var y = bbox.y + bbox.height / 2;
-
-                var text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-                text.setAttribute("x", x);
-                text.setAttribute("y", y);
-                text.setAttribute("text-anchor", "middle");
-                text.setAttribute("alignment-baseline", "middle");
-                text.setAttribute("font-size", fontSize);
-                text.setAttribute("font-weight", "bold");
-                text.textContent = value;
-
-                svgElement.appendChild(text);
-            }
-            break;
-        }
+        });
     }
 });
                     
