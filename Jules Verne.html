@@ -17,7 +17,7 @@
     </style>
   </head>
   <body>
-    <header>Jules Verne Dynamic Disconnection Map</header>
+    <header>Ares' Jules Verne Dynamic Disconnection Map</header>
     <img
       id="map"
       src="https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne.PNG"
@@ -242,6 +242,8 @@ paths.forEach(function (path) {
             if (value !== 0) {
                 var color = colorDictionary[value];
                 path.style.setProperty("fill", color, "important");
+                path.style.setProperty("stroke", color, "important");
+                path.style.setProperty("stroke-width", "3", "important");
             }
 
             // Add text to the midpoint of the path
