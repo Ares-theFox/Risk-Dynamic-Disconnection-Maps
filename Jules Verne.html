@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 35px;
+        font-size: 40px;
         font-weight: bold;
       }
     </style>
@@ -65,6 +65,7 @@
     <script>
       // Define tableData outside of Papa.parse function
       let tableData;
+      let paths;
 
       Papa.parse(
         "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv",
@@ -113,7 +114,6 @@
   	      11: "#805764",
   	      12: "#808080"
 	    };
-	    let paths;
             var xhr = new XMLHttpRequest();
             xhr.open(
               "GET",
