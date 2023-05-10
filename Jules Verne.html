@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 20px;
+        font-size: 50px;
         font-weight: bold;
       }
     </style>
@@ -33,15 +33,24 @@
 	  button:hover {
 	    background-color: #3E8E41;
 	  }
+
+	/* Position the button above the image and to the right of the header */
+	  header {
+	    display: inline-block;
+	  }
+
+	  button {
+	    display: block;
+	    margin-left: auto;
+	  }		
 	</style>
 	  <button onclick="generateButton()">Generate Map</button>
 	  <script>
-		  var generateButtonClicked = false;
-	  </script>
-	  <script>
+		var generateButtonClicked = false;
 		function generateButton() {
 		if (!generateButtonClicked) {
 		generateButtonClicked = true;
+			alert("Generating Map");
 		}
 		}
 	</script>
@@ -121,7 +130,6 @@
                 var paths = svgElement.querySelectorAll("path");
                 var clickCounter = 0; // Add a counter variable to keep track of the number of clicks
                 var clickCounterMax = 3; // Specify max blizzards
-		var generateButtonClicked = false; // Generate button
                 paths.forEach(function (path) {
                   path.setAttribute("fill", "transparent");
                   path.setAttribute("stroke-opacity", "0");
