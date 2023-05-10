@@ -18,43 +18,43 @@
   </head>
   <body>
     <header>Jules Verne Dynamic Disconnection Map</header>
-	<style>
-	  /* Add some basic styles to the button */
-	  button {
-	    font-size: 16px;
-	    padding: 8px 16px;
-	    background-color: #4CAF50;
-	    color: white;
-	    border: none;
-	    cursor: pointer;
-	  }
+    <style>
+      /* Add some basic styles to the button */
+      button {
+        font-size: 16px;
+        padding: 8px 16px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
 
-	  /* Change the background color of the button on hover */
-	  button:hover {
-	    background-color: #3E8E41;
-	  }
+      /* Change the background color of the button on hover */
+      button:hover {
+        background-color: #3e8e41;
+      }
 
-	/* Position the button above the image and to the right of the header */
-	  header {
-	    display: inline-block;
-	  }
+      /* Position the button above the image and to the right of the header */
+      header {
+        display: block;
+      }
 
-	  button {
-	    display: block;
-	    margin-left: auto;
-	  }		
-	</style>
-	  <button onclick="generateButton()">Generate Map</button>
-	  <script>
-		var generateButtonClicked = false;
-		function generateButton() {
-		if (!generateButtonClicked) {
-		generateButtonClicked = true;
-			alert("Generating Map");
-		}
-		}
-	</script>
-		  
+      button {
+        display: block;
+      }
+    </style>
+    <button onclick="generateButton()">Generate Map</button>
+    <script>
+      var generateButtonClicked = false;
+      function generateButton() {
+        if (!generateButtonClicked) {
+          generateButtonClicked = true;
+          alert("Generating Map");
+          generateMap();
+        }
+      }
+    </script>
+
     <img
       id="map"
       src="https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne.PNG"
@@ -63,7 +63,6 @@
     <div id="range"></div>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
     <script>
-      
       // Define tableData outside of Papa.parse function
       let tableData;
 
@@ -84,9 +83,9 @@
               }
             }
             console.log(tableData);
-            
-            // Create a color dictionary object
-	    const colorDictionary = {
+
+            // Create color dictionary objects
+            const colorDictionary = {
   	      1: "#ec1c24",
   	      2: "#ff7f27",
   	      3: "#fff200",
@@ -100,8 +99,7 @@
   	      11: "#ffaec8",
   	      12: "#ffffff"
 	    };
-
-	    const colorDarktionary = {
+            const colorDarktionary = {
   	      1: "#760E12",
   	      2: "#804014",
   	      3: "#807900",
@@ -115,7 +113,6 @@
   	      11: "#805764",
   	      12: "#808080"
 	    };
-
             var xhr = new XMLHttpRequest();
             xhr.open(
               "GET",
@@ -140,18 +137,16 @@
                   };
                   var mouseoutHandler = function () {
                     this.style.fill = "transparent";
-			  						console.log("generateButtonClicked:", generateButtonClicked);
                   };
                   path.addEventListener("mouseover", mouseoverHandler);
                   path.addEventListener("mouseout", mouseoutHandler);
                   let clickedPaths = [];
                   path.addEventListener("click", function () {
-                    
                     // Log clicked path ID to console
                     console.log(this.id);
 
                     // Check if clickCounter is less than Max
-                    if (clickCounter < clickCounterMax || generateButtonClicked) {
+                    if (clickCounter < clickCounterMax) {
                       // Create a clipPath element and set its id
                       var clipPath = document.createElementNS(
                         "http://www.w3.org/2000/svg",
@@ -192,7 +187,7 @@
                       // Append the image to the SVG
                       svgElement.appendChild(image);
                       console.log(clickCounter);
-                      
+
                       // Remove mouseover and mouseout event listeners
                       this.removeEventListener("mouseover", mouseoverHandler);
                       this.removeEventListener("mouseout", mouseoutHandler);
@@ -203,7 +198,7 @@
                     clickedPaths.push(this.id);
 
                     // Find rows in table data where column A matches clicked path's ID
-                    const rows = tableData.filter(row =>
+                    const rows = tableData.filter((row) =>
                       clickedPaths.includes(row["A"])
                     );
 
@@ -214,146 +209,158 @@
                     if (row) {
                       row["B"] = "";
                     }
-                    
+
                     // Remove all instances of clicked path's ID from column B
                     tableData.forEach((row) => {
                       if (row["B"]) {
                         // Split the value in column B into an array of values
                         let values = row["B"].split(",");
                         // Filter out any values that are included in the clickedPaths array
-                        values = values.filter((value) => !clickedPaths.includes(value));
+                        values = values.filter(
+                          (value) => !clickedPaths.includes(value)
+                        );
                         // Join the remaining values back into a string and update the value in column B
                         row["B"] = values.join(",");
                       }
                     });
-                    
-                    // Check if clickCounter has reached its maximum value
+
+                    // Check if clickCounter has reached its maximum value or if generateButtonClicked is true
                     if (clickCounter === clickCounterMax || generateButtonClicked) {
-                      
-                      // Recalculate columns L through P for all rows
-                      tableData.forEach(row => {
-                        
-                        // Column M: vlookup col B values and add them + current value A and B
-                        row["M"] = ""; // initialize column M to blank
-                        if (row["B"] && row["B"].trim() !== "") { // check if column B is not empty or undefined
-                          const searchValues = row["B"].split(",");
-                          let searchResults = [];
-                          for (const searchValue of searchValues) {
-                            const trimmedSearchValue = searchValue.trim().replace(/\u200B/g, "");
-                            for (let i = 0; i < tableData.length; i++) {
-                              if (tableData[i]["A"] === trimmedSearchValue) {
-                                searchResults.push(tableData[i]["B"]);
-                                break;
-                              }
-                            }
-                          }
-                          row["M"] = [row["A"], row["B"], ...searchResults].join(",");
-                        }
+                      generateMap();
+                    }
+                  });
+                });
+              }
+            };
+            xhr.send();
+          },
+        }
+      );
 
-                        // Column N: Remove duplicate values from column M
-                        row["N"] = [...new Set(row["M"].split(","))].join(",");
+      function generateMap() {
+        // Recalculate columns L through P for all rows
+        tableData.forEach((row) => {
+          // Column M: vlookup col B values and add them + current value A and B
+          row["M"] = ""; // initialize column M to blank
+          if (row["B"] && row["B"].trim() !== "") {
+            // check if column B is not empty or undefined
+            const searchValues = row["B"].split(",");
+            let searchResults = [];
+            for (const searchValue of searchValues) {
+              const trimmedSearchValue = searchValue
+                .trim()
+                .replace(/\u200B/g, "");
+              for (let i = 0; i < tableData.length; i++) {
+                if (tableData[i]["A"] === trimmedSearchValue) {
+                  searchResults.push(tableData[i]["B"]);
+                  break;
+                }
+              }
+            }
+            row["M"] = [row["A"], row["B"], ...searchResults].join(",");
+          }
 
-                        // Column O: Count how many comma-separated values are in column B
-                        if (row["B"] && row["B"].trim() !== "") { // check if column B is not empty or undefined
-                          const values = row["B"].split(",");
-                          row["O"] = values.length;
-                        } else {
-                          row["O"] = 0;
-                        }
+          // Column N: Remove duplicate values from column M
+          row["N"] = [...new Set(row["M"].split(","))].join(",");
 
-                        // Column P: Count how many comma-separated values are in column N (unless it's empty, then set it to "")
-                        if (row["N"] && row["N"].trim() !== "") { // check if column N is not empty or undefined
-                          const values = row["N"].split(",");
-                          row["P"] = values.length - 1;
-                        } else {
-                          row["P"] = 0;
-                        }
-                      });
-       
-                      // Log updated table data to console
-                      console.log(tableData);
+          // Column O: Count how many comma-separated values are in column B
+          if (row["B"] && row["B"].trim() !== "") {
+            // check if column B is not empty or undefined
+            const values = row["B"].split(",");
+            row["O"] = values.length;
+          } else {
+            row["O"] = 0;
+          }
 
-// Clone the paths to remove any event listeners
-paths.forEach(function (path) {
-    var clone = path.cloneNode(true);
-    path.parentNode.replaceChild(clone, path);
-});
+          // Column P: Count how many comma-separated values are in column N (unless it's empty, then set it to "")
+          if (row["N"] && row["N"].trim() !== "") {
+            // check if column N is not empty or undefined
+            const values = row["N"].split(",");
+            row["P"] = values.length - 1;
+          } else {
+            row["P"] = 0;
+          }
+        });
 
-// Color in the map and add indirect connections
-Papa.parse("https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20Indirect%20Connection%20Locations%20CSV.csv", {
-    download: true,
-    header: true,
-    complete: function(results) {
-        var csvData = results.data;
+        // Log updated table data to console
+        console.log(tableData);
 
-        // Update the paths variable to reference the cloned paths
-        paths = svgElement.querySelectorAll("path");
-
-        // Set font size of indirect connections
-        var fontSize = 30
+        // Clone the paths to remove any event listeners
+        paths.forEach(function (path) {
+          var clone = path.cloneNode(true);
+          path.parentNode.replaceChild(clone, path);
+        });
 
         // Color in the map and add indirect connections
-        paths.forEach(function (path) {
-            var pathId = path.getAttribute("id");
-            for (var i = 0; i < tableData.length; i++) {
-                if (tableData[i]["A"] === pathId) {
+        Papa.parse(
+          "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20Indirect%20Connection%20Locations%20CSV.csv",
+          {
+            download: true,
+            header: true,
+            complete: function (results) {
+              var csvData = results.data;
+
+              // Update the paths variable to reference the cloned paths
+              paths = svgElement.querySelectorAll("path");
+
+              // Set font size of indirect connections
+              var fontSize = 30;
+
+              // Color in the map and add indirect connections
+              paths.forEach(function (path) {
+                var pathId = path.getAttribute("id");
+                for (var i = 0; i < tableData.length; i++) {
+                  if (tableData[i]["A"] === pathId) {
                     // Color in the map
                     var value = tableData[i]["O"];
                     if (value !== 0) {
-                        var color = colorDictionary[value];
-			var border_color = colorDarktionary[value];
-                        path.style.setProperty("fill", color, "important");
-                        path.setAttribute("stroke-opacity", "100");
-                        path.style.setProperty("stroke", border_color, "important");
-                        path.style.setProperty("stroke-width", "2", "important");
+                      var color = colorDictionary[value];
+                      var border_color = colorDarktionary[value];
+                      path.style.setProperty("fill", color, "important");
+                      path.setAttribute("stroke-opacity", "100");
+                      path.style.setProperty("stroke", border_color, "important");
+                      path.style.setProperty("stroke-width", "2", "important");
                     }
 
                     // Add text to the specified location from CSV data
                     value = tableData[i]["P"];
                     if (value !== 0) {
-                        // Find matching row in CSV data
-                        var csvRow = csvData.find(function(row) {
-                            return row["Range"] === pathId;
-                        });
+                      // Find matching row in CSV data
+                      var csvRow = csvData.find(function (row) {
+                        return row["Range"] === pathId;
+                      });
 
-                        // Get coordinates from CSV data
-                        var x = csvRow["Pixel Pair 1"];
-                        var y = csvRow["Pixel Pair 2"];
+                      // Get coordinates from CSV data
+                      var x = csvRow["Pixel Pair 1"];
+                      var y = csvRow["Pixel Pair 2"];
 
-                        var text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-                        text.setAttribute("x", x);
-                        text.setAttribute("y", y);
-                        text.setAttribute("text-anchor", "middle");
-                        text.setAttribute("alignment-baseline", "middle");
-                        text.setAttribute("font-size", fontSize);
-                        text.setAttribute("font-weight", "bold");
-                        text.textContent = value;
+                      var text = document.createElementNS(
+                        "http://www.w3.org/2000/svg",
+                        "text"
+                      );
+                      text.setAttribute("x", x);
+                      text.setAttribute("y", y);
+                      text.setAttribute("text-anchor", "middle");
+                      text.setAttribute("alignment-baseline", "middle");
+                      text.setAttribute("font-size", fontSize);
+                      text.setAttribute("font-weight", "bold");
+                      text.textContent = value;
 
-                        // Adjust x and y coordinates to position midpoint of text at specified coordinates
-                        var bbox = text.getBBox();
-                        text.setAttribute("x", x - bbox.width / 2);
-                        text.setAttribute("y", y - bbox.height / 2);
+                      // Adjust x and y coordinates to position midpoint of text at specified coordinates
+                      var bbox = text.getBBox();
+                      text.setAttribute("x", x - bbox.width / 2);
+                      text.setAttribute("y", y - bbox.height / 2);
 
-                        svgElement.appendChild(text);
+                      svgElement.appendChild(text);
                     }
                     break;
+                  }
                 }
-            }
-        });
-    }
-});
-                    
-                    
-                    
-                    }
-                  });
-})
-}
-}
-xhr.send();
-}
-}
-)
-</script>
-</body>
+              });
+            },
+          }
+        );
+      }
+    </script>
+  </body>
 </html>
