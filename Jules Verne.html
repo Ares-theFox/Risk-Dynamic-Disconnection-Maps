@@ -11,13 +11,13 @@
         z-index: 1;
       }
       header {
-        font-size: 20px;
+        font-size: 40px;
         font-weight: bold;
       }
     </style>
   </head>
   <body>
-    <header>Jules Verne Dynamic Disconnection Map (WIP)</header>
+    <header>Jules Verne Dynamic Disconnection Map</header>
     <style>
       /* Add some basic styles to the button */
       button {
@@ -118,6 +118,7 @@
               "GET",
               "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20Paths.svg"
             );
+	    let paths;
             xhr.onload = function () {
               if (xhr.status === 200) {
                 var svg = xhr.responseText;
