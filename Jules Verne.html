@@ -17,7 +17,35 @@
     </style>
   </head>
   <body>
-    <header>Ares' Jules Verne Dynamic Disconnection Map</header>
+    <header>Jules Verne Dynamic Disconnection Map</header>
+	<style>
+	  /* Add some basic styles to the button */
+	  button {
+	    font-size: 16px;
+	    padding: 8px 16px;
+	    background-color: #4CAF50;
+	    color: white;
+	    border: none;
+	    cursor: pointer;
+	  }
+
+	  /* Change the background color of the button on hover */
+	  button:hover {
+	    background-color: #3E8E41;
+	  }
+	</style>
+	  <button onclick="generateButton()">Generate Map</button>
+	  <script>
+		  var generateButtonClicked = false;
+	  </script>
+	  <script>
+		function generateButton() {
+		if (!generateButtonClicked) {
+		generateButtonClicked = true;
+		}
+		}
+	</script>
+		  
     <img
       id="map"
       src="https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne.PNG"
@@ -93,6 +121,7 @@
                 var paths = svgElement.querySelectorAll("path");
                 var clickCounter = 0; // Add a counter variable to keep track of the number of clicks
                 var clickCounterMax = 3; // Specify max blizzards
+		var generateButtonClicked = false; // Generate button
                 paths.forEach(function (path) {
                   path.setAttribute("fill", "transparent");
                   path.setAttribute("stroke-opacity", "0");
@@ -113,7 +142,7 @@
                     console.log(this.id);
 
                     // Check if clickCounter is less than Max
-                    if (clickCounter < clickCounterMax) {
+                    if (clickCounter < clickCounterMax || generateButtonClicked) {
                       // Create a clipPath element and set its id
                       var clipPath = document.createElementNS(
                         "http://www.w3.org/2000/svg",
@@ -190,7 +219,7 @@
                     });
                     
                     // Check if clickCounter has reached its maximum value
-                    if (clickCounter === clickCounterMax) {
+                    if (clickCounter === clickCounterMax || generateButtonClicked) {
                       
                       // Recalculate columns L through P for all rows
                       tableData.forEach(row => {
@@ -234,8 +263,6 @@
        
                       // Log updated table data to console
                       console.log(tableData);
-
-
 
 // Clone the paths to remove any event listeners
 paths.forEach(function (path) {
