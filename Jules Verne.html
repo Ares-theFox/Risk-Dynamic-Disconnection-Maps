@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 10px;
+        font-size: 35px;
         font-weight: bold;
       }
     </style>
@@ -67,6 +67,7 @@
       let tableData;
       let paths;
 
+      function parseCSV(callback) {
       Papa.parse(
         "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv",
         {
@@ -224,11 +225,10 @@
                         row["B"] = values.join(",");
                       }
                     });
-console.log(paths)
+
                     // Check if clickCounter has reached its maximum value or if generateButtonClicked is true
                     if (clickCounter === clickCounterMax || generateButtonClicked) {
-                      generateMap();
-			    console.log(paths)
+                      callback();
                     }
                   });
                 });
@@ -238,6 +238,7 @@ console.log(paths)
           },
         }
       );
+      }
 
       function generateMap() {
 	      console.log(paths)
@@ -364,6 +365,7 @@ console.log(paths)
           }
         );
       }
+parseCSV(generateMap);
     </script>
   </body>
 </html>
