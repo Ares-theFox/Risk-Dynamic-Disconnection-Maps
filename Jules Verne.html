@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 40px;
+        font-size: 35px;
         font-weight: bold;
       }
     </style>
@@ -113,12 +113,12 @@
   	      11: "#805764",
   	      12: "#808080"
 	    };
+	    let paths;
             var xhr = new XMLHttpRequest();
             xhr.open(
               "GET",
               "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20Paths.svg"
             );
-	    let paths;
             xhr.onload = function () {
               if (xhr.status === 200) {
                 var svg = xhr.responseText;
