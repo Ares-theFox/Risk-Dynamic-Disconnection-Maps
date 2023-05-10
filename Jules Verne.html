@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 40px;
+        font-size: 20px;
         font-weight: bold;
       }
     </style>
@@ -239,6 +239,7 @@
       );
 
       function generateMap() {
+	      console.log(paths)
         // Recalculate columns L through P for all rows
         tableData.forEach((row) => {
           // Column M: vlookup col B values and add them + current value A and B
