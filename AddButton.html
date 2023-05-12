@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 35px;
+        font-size: 15px;
         font-weight: bold;
       }
     </style>
@@ -262,6 +262,7 @@ function addBlizzards() {
       if (blizzardClickCounter === blizzardClickCounterMax) {
         document.getElementById('button1').disabled = false;
         document.getElementById('button3').disabled = false;
+	document.getElementById('button1').textContent = 'Generate Map';
 	document.getElementById('button3').textContent = 'Add Portals';
       }
     });
@@ -410,7 +411,8 @@ function generateMap() {
       addBlizzards();
       document.getElementById('button1').disabled = true;
       document.getElementById('button3').disabled = true;
-      document.getElementById('button3').textContent = 'Finish adding blizzards to add portals';
+      document.getElementById('button1').textContent = 'Generate Map (finish blizzards first)';  
+      document.getElementById('button3').textContent = 'Add Portals (finish blizzards first)';
     }
   }
   function button_AddPortals() {
@@ -418,9 +420,32 @@ function generateMap() {
       button_AddPortals_clicked = true;
       //addPortals();
       //document.getElementById('button1').disabled = true;
-      //document.getElementById('button2').disabled = true;    
+      //document.getElementById('button2').disabled = true;
+      //document.getElementById('button1').textContent = 'Generate Map (finish portals first)';  
+      //document.getElementById('button2').textContent = 'Add Blizzards (finish portals first)';
     }
   }
+</script>
+
+<script>
+// Update button text on page load
+updateButtonText();
+
+function updateButtonText() {
+    // Update "Add Blizzards" button text
+    if (blizzardClickCounterMax - blizzardClickCounter === 0) {
+        document.getElementById("button2").innerHTML = "Added all Blizzards";
+    } else {
+        document.getElementById("button2").innerHTML = "Add Blizzards (" + (blizzardClickCounterMax - blizzardClickCounter) + " left)";
+    }
+
+    // Update "Add Portals" button text
+    if (portalClickCounterMax - portalClickCounter === 0) {
+        document.getElementById("button3").innerHTML = "Added all Portals";
+    } else {
+        document.getElementById("button3").innerHTML = "Add Portals (" + (portalClickCounterMax - portalClickCounter) + " left)";
+    }
+}
 </script>
 </body>
 </html>
