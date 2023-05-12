@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 15px;
+        font-size: 35px;
         font-weight: bold;
       }
     </style>
@@ -19,47 +19,55 @@
   <body>
     <header>Ares' Jules Verne Dynamic Disconnection Map</header>
 <div>
-  <button id="button1" onclick="button_GenerateMap()">Generate Map</button>
-  <button id="button2" onclick="button_AddBlizzards()">Add Blizzards</button>
-  <button id="button3" onclick="button_AddPortals()">Add Portals</button>
+  <button id="button1" onclick="button_GenerateMap()" title="Finish adding blizzards/portals!">Generate Map</button>
+  <button id="button2" onclick="button_AddBlizzards()" title="Finish adding portals!">Add Blizzards</button>
+  <button id="button3" onclick="button_AddPortals()" title="Finish adding blizzards!">Add Portals</button>
 </div>	  
 	<style>
-	  /* Add some basic styles to the button */
-	  button {
-	    font-size: 16px;
-	    padding: 8px 16px;
-	    border: none;
-	    cursor: pointer;
-	  }
+	/* Add some basic styles to the button */
+	button {
+	  font-size: 16px;
+	  padding: 8px 16px;
+	  border: none;
+	  cursor: pointer;
+	}
 
-	  #button1 {
-	    background-color: #4caf50;
-	    color: white;
-	  }
+	#button1 {
+	  background-color: #4caf50;
+	  color: white;
+	}
 
-	  #button1:hover {
-	    background-color: #3e8e41;
-	    color: white;
-	  }
+	#button1:hover {
+	  background-color: #3e8e41;
+	  color: white;
+	}
 
-	  #button2 {
-	    background-color: white;
-	    color: black;
-	  }
+	#button2 {
+	  background-color: white;
+	  color: black;
+	}
 
-	  #button2:hover {
-	    background-color: grey;
-	  }
+	#button2:hover {
+	  background-color: grey;
+	}
 
-	  #button3 {
-	    background-color: aqua;
-	    color: black;
-	  }
+	#button2:disabled:hover {
+	  background-color: white;
+	}
 
-	  #button3:hover {
-	    background-color: navy;
-	    color: white;
-	  }
+	#button3 {
+	  background-color: aqua;
+	  color: black;
+	}
+
+	#button3:hover {
+	  background-color: navy;
+	  color: white;
+	}
+
+	#button3:disabled:hover {
+	  background-color: aqua;
+	}
 	</style>
 	  
     <img
