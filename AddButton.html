@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 35px;
+        font-size: 15px;
         font-weight: bold;
       }
     </style>
@@ -343,9 +343,6 @@ function addPortals() {
         var x = csvRow["Pixel Pair 1"];
         var y = csvRow["Pixel Pair 2"];
 
-        // Shrink the image by 75%
-        image.setAttribute("transform", "scale(0.25)");
-
         // Set pointer-events attribute of the image element to none
         image.setAttribute("pointer-events", "none");
 
@@ -358,6 +355,9 @@ function addPortals() {
         // Update the x and y attributes of the image element to center it over the clicked area
         image.setAttribute("x", x - bbox.width / 2);
         image.setAttribute("y", y - bbox.height / 2);
+
+        // Shrink the image by 75%
+        image.setAttribute("transform", "scale(0.25)");
 
         // Remove mouseover and mouseout event listeners from clicked path
         this.removeEventListener("mouseover", mouseoverHandler);
