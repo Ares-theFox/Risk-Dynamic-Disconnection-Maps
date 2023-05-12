@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 35px;
+        font-size: 15px;
         font-weight: bold;
       }
     </style>
@@ -19,10 +19,32 @@
   <body>
     <header>Ares' Jules Verne Dynamic Disconnection Map</header>
 <div>
-  <button id="button1" onclick="button_GenerateMap()" title="Finish adding blizzards/portals!">Generate Map</button>
-  <button id="button2" onclick="button_AddBlizzards()" title="Finish adding portals!">Add Blizzards</button>
-  <button id="button3" onclick="button_AddPortals()" title="Finish adding blizzards!">Add Portals</button>
+  <button id="button1" onclick="button_GenerateMap()" data-title="Finish adding blizzards/portals!">Generate Map</button>
+  <button id="button2" onclick="button_AddBlizzards()" data-title="Finish adding portals!">Add Blizzards</button>
+  <button id="button3" onclick="button_AddPortals()" data-title="Finish adding blizzards!">Add Portals</button>
 </div>	  
+<div id="popup" style="position: absolute; display: none; pointer-events: none;"></div>
+
+<script>
+  var buttons = document.querySelectorAll('button');
+  var popup = document.getElementById('popup');
+
+  buttons.forEach(function(button) {
+    button.addEventListener('mouseover', function() {
+      if (this.disabled) {
+        popup.textContent = this.getAttribute('data-title');
+        popup.style.display = 'block';
+      }
+    });
+    button.addEventListener('mouseout', function() {
+      popup.style.display = 'none';
+    });
+    button.addEventListener('mousemove', function(event) {
+      popup.style.left = event.clientX + 'px';
+      popup.style.top = event.clientY + 'px';
+    });
+  });
+</script>
 	<style>
 	/* Add some basic styles to the button */
 	button {
