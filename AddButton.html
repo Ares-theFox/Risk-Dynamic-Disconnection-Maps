@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 35px;
+        font-size: 15px;
         font-weight: bold;
       }
     </style>
@@ -81,11 +81,13 @@
 	  
 <script>
 // Define global variables
-	// Define blizzard/portal clicks
-		var blizzardClickCounter = 0
-		var blizzardClickCounterMax = 3
-		var portalClickCounter = 0
-		var portalClickCounterMax = 5
+	// Define blizzard/portal clicks/paths
+	var blizzardClickCounter = 0
+	var blizzardClickCounterMax = 3
+	var portalClickCounter = 0
+	var portalClickCounterMax = 5
+	let clickedPathsBlizzardsPortals = []
+	
 	// Define connections tableData
 	let tableData;
 	Papa.parse(
@@ -186,7 +188,7 @@
 // Add blizzards
 function addBlizzards() {
   var mouseoverHandler = function () {
-    if (blizzardClickCounter < blizzardClickCounterMax) {
+    if (blizzardClickCounter < blizzardClickCounterMax && !clickedPathsBlizzardsPortals.includes(this.id)) {
       this.style.fill = "white";
     }
   };
@@ -207,8 +209,8 @@ function addBlizzards() {
       }
 
       // Check if the clicked path has already been clicked during the addPortals phase
-      if (clickedPaths.includes(this.id)) {
-        // If it has, return early from the function
+      if (clickedPathsBlizzardsPortals.includes(this.id)) {
+        // If it has, do not perform any actions
         return;
       }
 
@@ -263,6 +265,7 @@ function addBlizzards() {
       // Increment the click counter and push value to clickedPaths array
       blizzardClickCounter++;
       clickedPaths.push(this.id);
+      clickedPathsBlizzardsPortals.push(this.id);
 
       // Find rows in table data where column A matches clicked path's ID
       const rows = tableData.filter((row) => clickedPaths.includes(row["A"]));
@@ -283,6 +286,7 @@ function addBlizzards() {
           // Filter out any values that are included in the clickedPaths array
           values = values.filter((value) => !clickedPaths.includes(value));
           // Join the remaining values back into a string and update the value in column B
+          // Join the remaining values back into a string and update the value in column B
           row["B"] = values.join(",");
         }
       });
@@ -294,14 +298,15 @@ function addBlizzards() {
       // Update button text after each click
       updateButtonText();
     });
-  });
+ });
 }
 </script>
 	
 <script>
+// Add portals
 function addPortals() {
   var mouseoverHandler = function () {
-    if (portalClickCounter < portalClickCounterMax) {
+    if (portalClickCounter < portalClickCounterMax && !clickedPathsBlizzardsPortals.includes(this.id)) {
       this.style.fill = "white";
     }
   };
@@ -318,6 +323,12 @@ function addPortals() {
       // Check if portalClickCounter is less than portalClickCounterMax
       if (portalClickCounter >= portalClickCounterMax) {
         // If it is not, return early from the function
+        return;
+      }
+
+      // Check if the clicked path has already been clicked during the addBlizzards phase
+      if (clickedPathsBlizzardsPortals.includes(this.id)) {
+        // If it has, do not perform any actions
         return;
       }
 
@@ -377,15 +388,19 @@ function addPortals() {
         // Remove mouseover and mouseout event listeners from clicked path
         this.removeEventListener("mouseover", mouseoverHandler);
         this.removeEventListener("mouseout", mouseoutHandler);
+
+        // Set fill color of clicked path to transparent
+        this.style.fill = "transparent";
       }
 
       // Increment the click counter and push value to clickedPaths array
       portalClickCounter++;
       clickedPaths.push(this.id);
+      clickedPathsBlizzardsPortals.push(this.id);
 
       if (portalClickCounter === portalClickCounterMax) {
         document.getElementById('button1').disabled = false;
-        document.getElementById('button2').disabled = false;
+        document.getElementById('button3').disabled = false;
       }
       // Update button text after each click
       updateButtonText();
