@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 20px;
+        font-size: 35px;
         font-weight: bold;
       }
     </style>
@@ -96,13 +96,13 @@
 	      for (let key in tableData[i]) {
 		if (tableData[i].hasOwnProperty(key)) {
 		  tableData[i][key] = tableData[i][key].replace(/\u200B/g, "");
+		  }
 		}
 	      }
-	    }
+	      console.log(tableData);
+	    },
 	  }
-	}
-		)
-	    console.log(tableData);
+	);
 
 	// Define color dictionaries 
 	const colorDictionary = {
