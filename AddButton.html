@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 35px;
+        font-size: 15px;
         font-weight: bold;
       }
     </style>
@@ -358,10 +358,10 @@ function addPortals() {
           image.setAttribute("x", x - bbox.width / 2);
           image.setAttribute("y", y - bbox.height / 2);
 
-          // Rotate the image a random number of degrees between 0 and 359 along its center point
+          // Rotate the image a random number of degrees between 0 and 359 around its center point
           var angle = Math.floor(Math.random() * 360);
-          var cx = bbox.x + bbox.width / 2;
-          var cy = bbox.y + bbox.height / 2;
+          var cx = x;
+          var cy = y;
           image.setAttribute(
             "transform",
             "rotate(" + angle + " " + cx + " " + cy + ")"
