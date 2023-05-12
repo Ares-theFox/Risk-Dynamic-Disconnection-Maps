@@ -11,12 +11,22 @@
         z-index: 1;
       }
       header {
-        font-size: 35px;
+        font-size: 15px;
         font-weight: bold;
       }
     </style>
   </head>
   <body>
+	  
+<div id="loading-message" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">Loading...</div>
+
+<script>
+// Add this to your JavaScript code
+window.addEventListener('load', function() {
+    document.getElementById('loading-message').style.display = 'none';
+});
+</script>
+	  
     <header>Ares' Jules Verne Dynamic Disconnection Map</header>
 <div>
   <button id="button1" onclick="button_GenerateMap()">Generate Map</button>
@@ -429,14 +439,14 @@ updateButtonText();
 
 function updateButtonText() {
     // Update "Add Blizzards" button text
-    if (blizzardClickCounterMax - blizzardClickCounter === 0) {
+    if (blizzardClickCounterMax - blizzardClickCounter <= 0) {
         document.getElementById("button2").innerHTML = "Added all Blizzards";
     } else {
         document.getElementById("button2").innerHTML = "Add Blizzards (" + (blizzardClickCounterMax - blizzardClickCounter) + " left)";
     }
 
     // Update "Add Portals" button text
-    if (portalClickCounterMax - portalClickCounter === 0) {
+    if (portalClickCounterMax - portalClickCounter <= 0) {
         document.getElementById("button3").innerHTML = "Added all Portals";
     } else {
         document.getElementById("button3").innerHTML = "Add Portals (" + (portalClickCounterMax - portalClickCounter) + " left)";
