@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 15px;
+        font-size: 35px;
         font-weight: bold;
       }
     </style>
@@ -23,6 +23,8 @@
   <button id="button2" onclick="button_AddBlizzards()">Add Blizzards</button>
   <button id="button3" onclick="button_AddPortals()">Add Portals</button>
 </div>
+	  
+<img id="snowflake" src="https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/snowflake.png" style="display: none; position: absolute; pointer-events: none;">
 	<style>
 	  /* Add some basic styles to the button */
 	  button {
@@ -59,10 +61,6 @@
 	  #button3:hover {
 	    background-color: navy;
 	    color: white;
-	  }
-		
-	  .snowflake-cursor {
-	    cursor: url('https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/snowflake.png') 24 24, auto;
 	  }
 	</style>
 	  
@@ -395,8 +393,14 @@ function generateMap() {
     if (!button_AddBlizzards_clicked && !button_GenerateMap_clicked) {
       button_AddBlizzards_clicked = true;
       addBlizzards();
-      document.body.classList.add('snowflake-cursor');
+      document.getElementById('snowflake').style.display = 'block';
+      document.addEventListener('mousemove', updateSnowflakePosition);
     }
+  }
+  function updateSnowflakePosition(event) {
+    var snowflake = document.getElementById('snowflake');
+    snowflake.style.left = event.clientX + 'px';
+    snowflake.style.top = event.clientY + 'px';
   }
   function button_AddPortals() {
     if (!button_AddPortals_clicked && !button_GenerateMap_clicked) {
