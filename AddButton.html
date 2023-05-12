@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 15px;
+        font-size: 35px;
         font-weight: bold;
       }
     </style>
@@ -262,9 +262,9 @@ function addBlizzards() {
       if (blizzardClickCounter === blizzardClickCounterMax) {
         document.getElementById('button1').disabled = false;
         document.getElementById('button3').disabled = false;
-	document.getElementById('button1').textContent = 'Generate Map';
-	document.getElementById('button3').textContent = 'Add Portals';
       }
+      // Update button text after each click
+      updateButtonText();
     });
   });
 }
@@ -411,8 +411,6 @@ function generateMap() {
       addBlizzards();
       document.getElementById('button1').disabled = true;
       document.getElementById('button3').disabled = true;
-      document.getElementById('button1').textContent = 'Generate Map (finish blizzards first)';  
-      document.getElementById('button3').textContent = 'Add Portals (finish blizzards first)';
     }
   }
   function button_AddPortals() {
@@ -421,8 +419,6 @@ function generateMap() {
       //addPortals();
       //document.getElementById('button1').disabled = true;
       //document.getElementById('button2').disabled = true;
-      //document.getElementById('button1').textContent = 'Generate Map (finish portals first)';  
-      //document.getElementById('button2').textContent = 'Add Blizzards (finish portals first)';
     }
   }
 </script>
