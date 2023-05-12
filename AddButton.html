@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 15px;
+        font-size: 35px;
         font-weight: bold;
       }
     </style>
@@ -171,7 +171,8 @@ function addBlizzards() {
     path.addEventListener("mouseout", mouseoutHandler);
   });
   let clickedPaths = [];
-  paths.addEventListener("click", function () {
+  paths.forEach(function(path) {
+    path.addEventListener("click", function() {
     // Log clicked path ID to console
     console.log(this.id);
 
@@ -246,6 +247,7 @@ function addBlizzards() {
         row["B"] = values.join(",");
       }
     });
+   })
   });
 }
 </script>
