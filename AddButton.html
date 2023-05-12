@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 35px;
+        font-size: 15px;
         font-weight: bold;
       }
     </style>
@@ -59,6 +59,10 @@
 	  #button3:hover {
 	    background-color: navy;
 	    color: white;
+	  }
+		
+	  .snowflake-cursor {
+	    cursor: url('https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/snowflake.png') 24 24, auto;
 	  }
 	</style>
 	  
@@ -391,6 +395,7 @@ function generateMap() {
     if (!button_AddBlizzards_clicked && !button_GenerateMap_clicked) {
       button_AddBlizzards_clicked = true;
       addBlizzards();
+      document.body.classList.add('snowflake-cursor');
     }
   }
   function button_AddPortals() {
