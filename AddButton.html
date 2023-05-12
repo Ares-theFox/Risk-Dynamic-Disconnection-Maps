@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 15px;
+        font-size: 35px;
         font-weight: bold;
       }
     </style>
@@ -342,13 +342,9 @@ function addPortals() {
         // Get coordinates from CSV data
         var x = csvRow["Pixel Pair 1"];
         var y = csvRow["Pixel Pair 2"];
-	      
+
         // Shrink the image by 75%
         image.setAttribute("transform", "scale(0.25)");
-
-        // Set x and y attributes of the image element
-        image.setAttribute("x", x);
-        image.setAttribute("y", y);
 
         // Set pointer-events attribute of the image element to none
         image.setAttribute("pointer-events", "none");
