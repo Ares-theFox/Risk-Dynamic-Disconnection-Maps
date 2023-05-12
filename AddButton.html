@@ -11,17 +11,18 @@
         z-index: 1;
       }
       header {
-        font-size: 15px;
+        font-size: 35px;
         font-weight: bold;
       }
     </style>
   </head>
   <body>
     <header>Ares' Jules Verne Dynamic Disconnection Map</header>
-	  
-	<button id="button1" onclick="button_GenerateMap()">Generate Map</button>
-	<button id="button2" onclick="button_AddBlizzards()">Add Blizzards</button>
-	<button id="button3" onclick="button_AddPortals()">Add Portals</button>
+<div>
+  <button id="button1" onclick="button_GenerateMap()">Generate Map</button>
+  <button id="button2" onclick="button_AddBlizzards()">Add Blizzards</button>
+  <button id="button3" onclick="button_AddPortals()">Add Portals</button>
+</div>
 	<style>
 	  /* Add some basic styles to the button */
 	  button {
@@ -31,22 +32,13 @@
 	    cursor: pointer;
 	  }
 
-	  /* Change the background color of the button on hover */
-	  button:hover {
-	    background-color: #3e8e41;
-	  }
-
-	  /* Position the button above the image and to the right of the header */
-	  header {
-	    display: block;
-	  }
-
-	  button {
-	    display: inline-block;
-	  }
-
 	  #button1 {
 	    background-color: #4caf50;
+	    color: white;
+	  }
+
+	  #button1:hover {
+	    background-color: #3e8e41;
 	    color: white;
 	  }
 
