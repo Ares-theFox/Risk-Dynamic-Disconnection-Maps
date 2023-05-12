@@ -11,22 +11,12 @@
         z-index: 1;
       }
       header {
-        font-size: 15px;
+        font-size: 35px;
         font-weight: bold;
       }
     </style>
   </head>
-  <body>
-	  
-<div id="loading-message" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">Loading...</div>
-
-<script>
-// Add this to your JavaScript code
-window.addEventListener('load', function() {
-    document.getElementById('loading-message').style.display = 'none';
-});
-</script>
-	  
+  <body>	  
     <header>Ares' Jules Verne Dynamic Disconnection Map</header>
 <div>
   <button id="button1" onclick="button_GenerateMap()">Generate Map</button>
@@ -194,6 +184,12 @@ function addBlizzards() {
   let clickedPaths = [];
   paths.forEach(function(path) {
     path.addEventListener("click", function() {
+      // Check if blizzardClickCounter is less than blizzardClickCounterMax
+      if (blizzardClickCounter >= blizzardClickCounterMax) {
+        // If it is not, return early from the function
+        return;
+      }
+
       // Log clicked path ID to console
       console.log(this.id);
 
