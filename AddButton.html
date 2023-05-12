@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 35px;
+        font-size: 15px;
         font-weight: bold;
       }
     </style>
@@ -293,7 +293,6 @@ function addBlizzards() {
 </script>
 	
 <script>
-// Add portals
 function addPortals() {
   var mouseoverHandler = function () {
     if (portalClickCounter < portalClickCounterMax) {
@@ -329,11 +328,28 @@ function addPortals() {
         image.setAttributeNS(
           "http://www.w3.org/1999/xlink",
           "href",
-          "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20portal.png"
+          "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/portal.png"
         );
+
+        // Find matching row in CSV data
+        var csvRow = csvData.find(function (row) {
+          return row["Range"] === this.id;
+        });
+
+        // Get coordinates from CSV data
+        var x = csvRow["Pixel Pair 1"];
+        var y = csvRow["Pixel Pair 2"];
+
+        // Set x and y attributes of the image element
+        image.setAttribute("x", x);
+        image.setAttribute("y", y);
 
         // Append the image to the SVG
         svgElement.appendChild(image);
+
+        // Remove mouseover and mouseout event listeners from clicked path
+        this.removeEventListener("mouseover", mouseoverHandler);
+        this.removeEventListener("mouseout", mouseoutHandler);
       }
 
       // Increment the click counter and push value to clickedPaths array
