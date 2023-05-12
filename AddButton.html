@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 15px;
+        font-size: 35px;
         font-weight: bold;
       }
     </style>
@@ -348,8 +348,10 @@ function addPortals() {
         image.setAttribute("y", y);
 
         // Shrink the image by 75%
-        image.setAttribute("width", "75%");
-        image.setAttribute("height", "75%");
+        image.setAttribute("transform", "scale(0.25)");
+
+        // Set pointer-events attribute of the image element to none
+        image.setAttribute("pointer-events", "none");
 
         // Append the image to the SVG
         svgElement.appendChild(image);
