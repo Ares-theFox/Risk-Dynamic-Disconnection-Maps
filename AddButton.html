@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Hover over SVG</title>
+    <title>Jules Verne's Mysterious Island</title>
     <style>
       #map,
       #range {
@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 35px;
+        font-size: 15px;
         font-weight: bold;
       }
     </style>
@@ -139,6 +139,7 @@
 <script>
   // Load SVG
   let paths;
+  let svgElement;
   var xhr = new XMLHttpRequest();
   xhr.open(
     "GET",
@@ -149,7 +150,7 @@
       var svg = xhr.responseText;
       var rangeElement = document.getElementById("range");
       rangeElement.innerHTML = svg;
-      var svgElement = rangeElement.querySelector("svg");
+      svgElement = rangeElement.querySelector("svg");
       paths = svgElement.querySelectorAll("path");
       paths.forEach(function (path) {
         path.setAttribute("fill", "transparent");
@@ -173,10 +174,10 @@ function addBlizzards() {
   var mouseoutHandler = function () {
     this.style.fill = "transparent";
   };
-  path.addEventListener("mouseover", mouseoverHandler);
-  path.addEventListener("mouseout", mouseoutHandler);
+  paths.addEventListener("mouseover", mouseoverHandler);
+  paths.addEventListener("mouseout", mouseoutHandler);
   let clickedPaths = [];
-  path.addEventListener("click", function () {
+  paths.addEventListener("click", function () {
     // Log clicked path ID to console
     console.log(this.id);
 
