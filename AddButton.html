@@ -455,8 +455,10 @@ function generateMap() {
     }
 
     // Column N: Remove duplicate values from column M
-    row["N"] = [...new Set(row["M"].split(","))].join(",");
-
+    row["N"] = [...new Set(row["M"].split(","))]
+      .filter((value) => value !== row["A"])
+      .join(",");
+	  
     // Column O: Count how many comma-separated values are in column B
     if (row["B"] && row["B"].trim() !== "") {
       // check if column B is not empty or undefined
