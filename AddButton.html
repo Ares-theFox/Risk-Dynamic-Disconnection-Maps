@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 35px;
+        font-size: 15px;
         font-weight: bold;
       }
     </style>
@@ -166,8 +166,10 @@ function addBlizzards() {
   var mouseoutHandler = function () {
     this.style.fill = "transparent";
   };
-  paths.addEventListener("mouseover", mouseoverHandler);
-  paths.addEventListener("mouseout", mouseoutHandler);
+  paths.forEach(function(path) {
+    path.addEventListener("mouseover", mouseoverHandler);
+    path.addEventListener("mouseout", mouseoutHandler);
+  });
   let clickedPaths = [];
   paths.addEventListener("click", function () {
     // Log clicked path ID to console
