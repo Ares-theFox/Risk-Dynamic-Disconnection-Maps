@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 35px;
+        font-size: 15px;
         font-weight: bold;
       }
     </style>
@@ -276,6 +276,71 @@ function addBlizzards() {
 }
 </script>
 	
+<script>
+// Add portals
+function addPortals() {
+  var mouseoverHandler = function () {
+    if (portalClickCounter < portalClickCounterMax) {
+      this.style.fill = "white";
+    }
+  };
+  var mouseoutHandler = function () {
+    this.style.fill = "transparent";
+  };
+  paths.forEach(function(path) {
+    path.addEventListener("mouseover", mouseoverHandler);
+    path.addEventListener("mouseout", mouseoutHandler);
+  });
+  let clickedPaths = [];
+  paths.forEach(function(path) {
+    path.addEventListener("click", function() {
+      // Check if portalClickCounter is less than portalClickCounterMax
+      if (portalClickCounter >= portalClickCounterMax) {
+        // If it is not, return early from the function
+        return;
+      }
+
+      // Log clicked path ID to console
+      console.log(this.id);
+
+      // Check if clickCounter is less than Max
+      if (portalClickCounter < portalClickCounterMax) {
+        // Create an image element and set its attributes
+        var image = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "image"
+        );
+        image.setAttributeNS(
+          "http://www.w3.org/1999/xlink",
+          "href",
+          "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20portal.png"
+        );
+        image.setAttribute("width", "100%");
+        image.setAttribute("height", "100%");
+
+        // Append the image to the SVG
+        svgElement.appendChild(image);
+
+        // Remove mouseover and mouseout event listeners
+        this.removeEventListener("mouseover", mouseoverHandler);
+        this.removeEventListener("mouseout", mouseoutHandler);
+      }
+
+      // Increment the click counter and push value to clickedPaths array
+      portalClickCounter++;
+      clickedPaths.push(this.id);
+
+      if (portalClickCounter === portalClickCounterMax) {
+        document.getElementById('button1').disabled = false;
+        document.getElementById('button2').disabled = false;
+      }
+      // Update button text after each click
+      updateButtonText();
+    });
+  });
+}
+</script>
+	  
 <script>
 // Generate the map
 function generateMap() {
