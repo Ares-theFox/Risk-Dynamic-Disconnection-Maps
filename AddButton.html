@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 35px;
+        font-size: 15px;
         font-weight: bold;
       }
     </style>
@@ -347,8 +347,19 @@ function addPortals() {
         image.setAttribute("x", x);
         image.setAttribute("y", y);
 
+        // Shrink the image by 75%
+        image.setAttribute("width", "75%");
+        image.setAttribute("height", "75%");
+
         // Append the image to the SVG
         svgElement.appendChild(image);
+
+        // Get the bounding box of the image element
+        var bbox = image.getBBox();
+
+        // Update the x and y attributes of the image element to center it over the clicked area
+        image.setAttribute("x", x - bbox.width / 2);
+        image.setAttribute("y", y - bbox.height / 2);
 
         // Remove mouseover and mouseout event listeners from clicked path
         this.removeEventListener("mouseover", mouseoverHandler);
