@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 35px;
+        font-size: 15px;
         font-weight: bold;
       }
     </style>
@@ -22,9 +22,7 @@
   <button id="button1" onclick="button_GenerateMap()">Generate Map</button>
   <button id="button2" onclick="button_AddBlizzards()">Add Blizzards</button>
   <button id="button3" onclick="button_AddPortals()">Add Portals</button>
-</div>
-	  
-<img id="snowflake" src="https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/snowflake.png" style="display: none; position: absolute; pointer-events: none;">
+</div>	  
 	<style>
 	  /* Add some basic styles to the button */
 	  button {
@@ -75,6 +73,11 @@
 	  
 <script>
 // Define global variables
+	// Define blizzard/portal clicks
+		var blizzardClickCounter = 0
+		var blizzardClickCounterMax = 3
+		var portalClickCounter = 0
+		var portalClickCounterMax = 5
 	// Define connections tableData
 	let tableData;
 	Papa.parse(
@@ -158,10 +161,8 @@
 <script>
 // Add blizzards
 function addBlizzards() {
-  var clickCounter = 0; // Add a counter variable to keep track of the number of clicks
-  var clickCounterMax = 3; // Specify max blizzards
   var mouseoverHandler = function () {
-    if (clickCounter < clickCounterMax) {
+    if (blizzardClickCounter < blizzardClickCounterMax) {
       this.style.fill = "white";
     }
   };
@@ -175,85 +176,90 @@ function addBlizzards() {
   let clickedPaths = [];
   paths.forEach(function(path) {
     path.addEventListener("click", function() {
-    // Log clicked path ID to console
-    console.log(this.id);
+      // Log clicked path ID to console
+      console.log(this.id);
 
-    // Check if clickCounter is less than Max
-    if (clickCounter < clickCounterMax) {
-      // Create a clipPath element and set its id
-      var clipPath = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "clipPath"
-      );
-      clipPath.setAttribute("id", "clip-" + this.id);
-
-      // Clone the clicked path and append it to the clipPath
-      var clonedPath = this.cloneNode(true);
-      clipPath.appendChild(clonedPath);
-
-      // Append the clipPath to the defs element
-      var defs =
-        svgElement.querySelector("defs") ||
-        svgElement.insertBefore(
-          document.createElementNS("http://www.w3.org/2000/svg", "defs"),
-          svgElement.firstChild
+      // Check if clickCounter is less than Max
+      if (blizzardClickCounter < blizzardClickCounterMax) {
+        // Create a clipPath element and set its id
+        var clipPath = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "clipPath"
         );
-      defs.appendChild(clipPath);
+        clipPath.setAttribute("id", "clip-" + this.id);
 
-      // Create an image element and set its attributes
-      var image = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "image"
-      );
-      image.setAttributeNS(
-        "http://www.w3.org/1999/xlink",
-        "href",
-        "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20blizzard%20pattern.png"
-      );
-      image.setAttribute("width", "100%");
-      image.setAttribute("height", "100%");
-      image.setAttribute("clip-path", "url(#clip-" + this.id + ")");
+        // Clone the clicked path and append it to the clipPath
+        var clonedPath = this.cloneNode(true);
+        clipPath.appendChild(clonedPath);
 
-      // Append the image to the SVG
-      svgElement.appendChild(image);
-      console.log(clickCounter);
+        // Append the clipPath to the defs element
+        var defs =
+          svgElement.querySelector("defs") ||
+          svgElement.insertBefore(
+            document.createElementNS("http://www.w3.org/2000/svg", "defs"),
+            svgElement.firstChild
+          );
+        defs.appendChild(clipPath);
 
-      // Remove mouseover and mouseout event listeners
-      this.removeEventListener("mouseover", mouseoverHandler);
-      this.removeEventListener("mouseout", mouseoutHandler);
-    }
+        // Create an image element and set its attributes
+        var image = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "image"
+        );
+        image.setAttributeNS(
+          "http://www.w3.org/1999/xlink",
+          "href",
+          "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20blizzard%20pattern.png"
+        );
+        image.setAttribute("width", "100%");
+        image.setAttribute("height", "100%");
+        image.setAttribute("clip-path", "url(#clip-" + this.id + ")");
 
-    // Increment the click counter and push value to clickedPaths array
-    clickCounter++;
-    clickedPaths.push(this.id);
+        // Append the image to the SVG
+        svgElement.appendChild(image);
+        console.log(blizzardClickCounter);
 
-    // Find rows in table data where column A matches clicked path's ID
-    const rows = tableData.filter((row) => clickedPaths.includes(row["A"]));
+        // Remove mouseover and mouseout event listeners
+        this.removeEventListener("mouseover", mouseoverHandler);
+        this.removeEventListener("mouseout", mouseoutHandler);
+      }
 
-    // Find the row in table data where column A matches clicked path's ID
-    const row = tableData.find((row) => row["A"] === this.id);
+      // Increment the click counter and push value to clickedPaths array
+      blizzardClickCounter++;
+      clickedPaths.push(this.id);
 
-    // Remove everything in column B for that row
-    if (row) {
-      row["B"] = "";
-    }
+      // Find rows in table data where column A matches clicked path's ID
+      const rows = tableData.filter((row) => clickedPaths.includes(row["A"]));
 
-    // Remove all instances of clicked path's ID from column B
-    tableData.forEach((row) => {
-      if (row["B"]) {
-        // Split the value in column B into an array of values
-        let values = row["B"].split(",");
-        // Filter out any values that are included in the clickedPaths array
-        values = values.filter((value) => !clickedPaths.includes(value));
-        // Join the remaining values back into a string and update the value in column B
-        row["B"] = values.join(",");
+      // Find the row in table data where column A matches clicked path's ID
+      const row = tableData.find((row) => row["A"] === this.id);
+
+      // Remove everything in column B for that row
+      if (row) {
+        row["B"] = "";
+      }
+
+      // Remove all instances of clicked path's ID from column B
+      tableData.forEach((row) => {
+        if (row["B"]) {
+          // Split the value in column B into an array of values
+          let values = row["B"].split(",");
+          // Filter out any values that are included in the clickedPaths array
+          values = values.filter((value) => !clickedPaths.includes(value));
+          // Join the remaining values back into a string and update the value in column B
+          row["B"] = values.join(",");
+        }
+      });
+
+      if (blizzardClickCounter === blizzardClickCounterMax) {
+        document.getElementById('button1').disabled = false;
+        document.getElementById('button3').disabled = false;
       }
     });
-   })
   });
 }
 </script>
-	  
+	
 <script>
 // Generate the map
 function generateMap() {
@@ -378,7 +384,7 @@ function generateMap() {
   );
 }
 </script>
-	  
+  
 <script>
   var button_GenerateMap_clicked = false;
   var button_AddBlizzards_clicked = false;
@@ -393,19 +399,16 @@ function generateMap() {
     if (!button_AddBlizzards_clicked && !button_GenerateMap_clicked) {
       button_AddBlizzards_clicked = true;
       addBlizzards();
-      document.getElementById('snowflake').style.display = 'block';
-      document.addEventListener('mousemove', updateSnowflakePosition);
+      document.getElementById('button1').disabled = true;
+      document.getElementById('button3').disabled = true;    
     }
-  }
-  function updateSnowflakePosition(event) {
-    var snowflake = document.getElementById('snowflake');
-    snowflake.style.left = event.clientX + 'px';
-    snowflake.style.top = event.clientY + 'px';
   }
   function button_AddPortals() {
     if (!button_AddPortals_clicked && !button_GenerateMap_clicked) {
       button_AddPortals_clicked = true;
       //addPortals();
+      //document.getElementById('button1').disabled = true;
+      //document.getElementById('button2').disabled = true;    
     }
   }
 </script>
