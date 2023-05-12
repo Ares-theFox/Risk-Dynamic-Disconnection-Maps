@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 15px;
+        font-size: 35px;
         font-weight: bold;
       }
     </style>
@@ -399,9 +399,22 @@ function addPortals() {
       clickedPathsBlizzardsPortals.push(this.id);
 
       if (portalClickCounter === portalClickCounterMax) {
+        // Update tableData
+        clickedPaths.forEach((clickedPath) => {
+          // Find the row in table data where column A matches clicked path's ID
+          const row = tableData.find((row) => row["A"] === clickedPath);
+          if (row) {
+            // Add all other clicked paths to column B for that row
+            const otherClickedPaths = clickedPaths.filter(
+              (path) => path !== clickedPath
+            );
+            row["B"] = otherClickedPaths.join(",");
+          }
+        });
         document.getElementById('button1').disabled = false;
-        document.getElementById('button2').disabled = false;
+        document.getElementById('button3').disabled = false;
       }
+
       // Update button text after each click
       updateButtonText();
     });
