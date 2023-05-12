@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 15px;
+        font-size: 35px;
         font-weight: bold;
       }
     </style>
@@ -203,6 +203,12 @@ function addBlizzards() {
       // Check if blizzardClickCounter is less than blizzardClickCounterMax
       if (blizzardClickCounter >= blizzardClickCounterMax) {
         // If it is not, return early from the function
+        return;
+      }
+
+      // Check if the clicked path has already been clicked during the addPortals phase
+      if (clickedPaths.includes(this.id)) {
+        // If it has, return early from the function
         return;
       }
 
