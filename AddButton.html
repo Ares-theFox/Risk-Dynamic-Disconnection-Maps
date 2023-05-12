@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 15px;
+        font-size: 35px;
         font-weight: bold;
       }
     </style>
@@ -331,9 +331,12 @@ function addPortals() {
           "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/portal.png"
         );
 
+        // Store the value of this.id in a variable
+        var pathId = this.id;
+
         // Find matching row in CSV data
         var csvRow = csvData.find(function (row) {
-          return row["Range"] === this.id;
+          return row["Range"] === pathId;
         });
 
         // Get coordinates from CSV data
