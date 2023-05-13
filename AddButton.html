@@ -121,32 +121,32 @@
 
 	// Define color dictionaries 
 	const colorDictionary = {
-	1: "#ec1c24",
-	2: "#ff7f27",
-	3: "#fff200",
-	4: "#0ed145",
-	5: "#00a8f3",
-	6: "#3f48cc",
-	7: "#b83dba",
-	8: "#b97a56",
-	9: "#585858",
-	10: "#38784a",
-	11: "#ffaec8",
-	12: "#ffffff"
+	  1: "#eb3337",
+	  2: "#fd8238",
+	  3: "#fdf12c",
+	  4: "#2ed14f",
+	  5: "#2ca9f1",
+	  6: "#4a51cc",
+	  7: "#b948ba",
+	  8: "#8b2c32",
+	  9: "#5f5f5f",
+	 10: "#377a46",
+	 11: "#460055",
+	 12: "#161616"
 	};
 	const colorDarktionary = {
-	1: "#760E12",
-	2: "#804014",
-	3: "#807900",
-	4: "#076923",
-	5: "#00547A",
-	6: "#101233",
-	7: "#5C1F5D",
-	8: "#5D3D2B",
-	9: "#2C2C2C",
-	10: "#1C3C25",
-	11: "#805764",
-	12: "#808080"
+	 1: "#761a1c",
+	 2: "#7f411c",
+	 3: "#7f7916",
+	 4: "#176928",
+	 5: "#165579",
+	 6: "#252966",
+	 7: "#5d245d",
+	 8: "#461619",
+	 9: "#303030",
+	10: "#1c3d23",
+	11: "#23002b",
+	12: "#000000"
 	};
 	
 	// Define csvData as a global variable
@@ -502,6 +502,9 @@ function generateMap() {
       if (tableData[i]["A"] === pathId) {
         // Color in the map
         var value = tableData[i]["O"];
+        if (value >= 12) {
+          value = 12;
+        }
         if (value !== 0) {
           var color = colorDictionary[value];
           var border_color = colorDarktionary[value];
