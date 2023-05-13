@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 15px;
+        font-size: 35px;
         font-weight: bold;
       }
     </style>
@@ -556,24 +556,30 @@ function generateMap() {
       }
     }
   });
-  // Find the maximum value in column O
-  var maxO = Math.max(...tableData.map((row) => row["O"]));
+	// Find the maximum value in column O
+	var maxO = Math.max(...tableData.map((row) => row["O"]));
 
-  // Create an image element and set its attributes
-  var image = document.createElement("img");
-  image.style.position = "absolute";
-  image.style.top = "5px";
-  image.style.left = "5px";
+	// Create an image element and set its attributes
+	var image = document.createElement("img");
 
-  // Decide which image to display based on the maximum value in column O
-  if (maxO >= 11) {
-    image.src = legendOverlayExtended;
-  } else {
-    image.src = legendOverlayDefault;
-  }
+	// Decide which image to display based on the maximum value in column O
+	if (maxO >= 11) {
+	  image.src = legendOverlayExtended;
+	} else {
+	  image.src = legendOverlayDefault;
+	}
 
-  // Append the image to the body
-  document.body.appendChild(image);
+	// Append the image to the body
+	document.body.appendChild(image);
+
+	// Get the position of the base image
+	var baseImage = document.getElementById("map");
+	var baseImageRect = baseImage.getBoundingClientRect();
+
+	// Set the position of the legend image relative to the base image
+	image.style.position = "absolute";
+	image.style.top = baseImageRect.top + 5 + "px";
+	image.style.left = baseImageRect.left + 5 + "px";
 }
 </script>
   
