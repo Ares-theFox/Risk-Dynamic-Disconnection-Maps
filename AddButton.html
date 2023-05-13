@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 15px;
+        font-size: 35px;
         font-weight: bold;
       }
     </style>
@@ -73,7 +73,7 @@
     <img
       id="map"
       src="https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne.PNG"
-      alt="Map of United States"
+      alt="Jules Verne"
     />
     <div id="range"></div>
 	  
@@ -81,17 +81,25 @@
 	  
 <script>
 // Define global variables
-	// Define blizzard/portal clicks/paths
+	// Define map-specific items
+	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
+	var IndirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20Indirect%20Connection%20Locations%20CSV.csv"
+	var SVG = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20Paths.svg"
+	var BlizzardPattern = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20blizzard%20pattern.png"
+	var PortalImage = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20portal.png"
+	// Remember to change the img src and the alt title!!!!!!!!
+	
 	var blizzardClickCounter = 0
 	var blizzardClickCounterMax = 3
 	var portalClickCounter = 0
 	var portalClickCounterMax = 5
+	
 	let clickedPathsBlizzardsPortals = []
 	
 	// Define connections tableData
 	let tableData;
 	Papa.parse(
-	"https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv",
+	  DirectConnections,
 	{
 	  download: true,
 	  header: true,
@@ -145,7 +153,7 @@
 	var csvData;
 
 	Papa.parse(
-	  "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20Indirect%20Connection%20Locations%20CSV.csv",
+	  IndirectConnections,
 	  {
 	    download: true,
 	    header: true,
@@ -166,7 +174,7 @@
   var xhr = new XMLHttpRequest();
   xhr.open(
     "GET",
-    "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20Paths.svg"
+    SVG
   );
   xhr.onload = function () {
     if (xhr.status === 200) {
@@ -247,7 +255,7 @@ function addBlizzards() {
         image.setAttributeNS(
           "http://www.w3.org/1999/xlink",
           "href",
-          "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20blizzard%20pattern.png"
+          BlizzardPattern
         );
         image.setAttribute("width", "100%");
         image.setAttribute("height", "100%");
@@ -345,7 +353,7 @@ function addPortals() {
         image.setAttributeNS(
           "http://www.w3.org/1999/xlink",
           "href",
-          "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20portal.png"
+          PortalImage
         );
 
         // Store the value of this.id in a variable
