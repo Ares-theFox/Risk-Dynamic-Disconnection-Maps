@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 35px;
+        font-size: 15px;
         font-weight: bold;
       }
     </style>
@@ -87,6 +87,8 @@
 	var SVG = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20Paths.svg"
 	var BlizzardPattern = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20blizzard%20pattern.png"
 	var PortalImage = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20portal.png"
+	var legendOverlayDefault = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20Colors%20Default.PNG"
+	var legendOverlayExtended = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20Colors%20Extended.PNG";
 	// Remember to change the img src and the alt title!!!!!!!!
 	
 	var blizzardClickCounter = 0
@@ -554,6 +556,24 @@ function generateMap() {
       }
     }
   });
+  // Find the maximum value in column O
+  var maxO = Math.max(...tableData.map((row) => row["O"]));
+
+  // Create an image element and set its attributes
+  var image = document.createElement("img");
+  image.style.position = "absolute";
+  image.style.top = "5px";
+  image.style.left = "5px";
+
+  // Decide which image to display based on the maximum value in column O
+  if (maxO >= 11) {
+    image.src = legendOverlayExtended;
+  } else {
+    image.src = legendOverlayDefault;
+  }
+
+  // Append the image to the body
+  document.body.appendChild(image);
 }
 </script>
   
