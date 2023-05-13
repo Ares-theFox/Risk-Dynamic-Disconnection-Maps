@@ -536,6 +536,11 @@ function generateMap() {
           text.setAttribute("alignment-baseline", "middle");
           text.setAttribute("font-size", fontSize);
           text.setAttribute("font-weight", "bold");
+	  if (tableData[i]["O"] >= 11) {
+	    text.setAttribute("fill", "white");
+	  } else {
+	    text.setAttribute("fill", "black");
+	  }
           text.textContent = value;
 
           // Adjust x and y coordinates to position midpoint of text at specified coordinates
