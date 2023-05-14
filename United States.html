@@ -615,7 +615,7 @@ function generateMap() {
 
 	// Set the position of the legend image relative to the base image
 	image.style.position = "absolute";
-	image.style.top = baseImageRect.top + 5 + "px";
+	image.style.top = baseImageRect.bottom - image.offsetHeight + "px";
 	image.style.left = baseImageRect.left + 5 + "px";
 }
 </script>
