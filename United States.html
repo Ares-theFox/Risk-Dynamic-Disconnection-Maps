@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 35px;
+        font-size: 15px;
         font-weight: bold;
       }
       header img {
@@ -615,7 +615,7 @@ function generateMap() {
 
 	// Set the position of the legend image relative to the base image
 	image.style.position = "absolute";
-	image.style.top = baseImageRect.bottom - image.offsetHeight + "px";
+	image.style.bottom = window.innerHeight - baseImageRect.bottom + 5 + "px";
 	image.style.left = baseImageRect.left + 5 + "px";
 }
 </script>
