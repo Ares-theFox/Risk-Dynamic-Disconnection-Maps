@@ -114,12 +114,6 @@ window.onload = function() {
 	var IndirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20Indirect%20Connection%20Locations%20CSV.csv"
 	var SVG = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20Paths.svg"
 	var BlizzardPattern = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20blizzard%20pattern.png"
-	var PortalImage = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20portal.png"
-	var legendOverlayDefault = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20Colors%20Default.png"
-	var legendOverlay7 = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20Colors%207.png"
-	var legendOverlay8 = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20Colors%208.png"
-	var legendOverlay9 = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20Colors%209.png"
-	var legendOverlay10 = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20Colors%2010.png"
 	// Remember to change the img src and the alt title!!!!!!!!
 	
 	var blizzardClickCounter = 0
@@ -386,7 +380,7 @@ function addPortals() {
         image.setAttributeNS(
           "http://www.w3.org/1999/xlink",
           "href",
-          PortalImage
+          "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/portal.png"
         );
 
         // Store the value of this.id in a variable
@@ -594,16 +588,24 @@ function generateMap() {
 	var image = document.createElement("img");
 
 	// Decide which image to display based on the maximum value in column O
-	if (maxO == 7) {
-	  image.src = legendOverlay7;
+	if (maxO == 4) {
+	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_4.png";
+	} else if (maxO == 5) {
+	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_5.png";
+	} else if (maxO == 6) {
+	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_6.png";
+	} else if (maxO == 7) {
+	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_7.png";
 	} else if (maxO == 8) {
-	  image.src = legendOverlay8;
+	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_8.png";
 	} else if (maxO == 9) {
-	  image.src = legendOverlay9;
+	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_9.png";
 	} else if (maxO == 10) {
-	  image.src = legendOverlay10;
+	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_10.png";
+	} else if (maxO == 11) {
+	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_11.png";
 	} else {
-	  image.src = legendOverlayDefault;
+	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_12.png";
 	}
 
 	// Append the image to the body
