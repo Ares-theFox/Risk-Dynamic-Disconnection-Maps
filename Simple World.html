@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 35px;
+        font-size: 15px;
         font-weight: bold;
       }
       header img {
@@ -274,29 +274,23 @@ function addBlizzards() {
           );
         defs.appendChild(clipPath);
 
-	// Get the position of the base png
-	var basePng = document.getElementById("map");
-	var rect = basePng.getBoundingClientRect();
-	var x = rect.left;
-	var y = rect.top;
+        // Create an image element and set its attributes
+        var image = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "image"
+        );
+        image.setAttributeNS(
+          "http://www.w3.org/1999/xlink",
+          "href",
+          BlizzardPattern
+        );
+        image.setAttribute("width", "100%");
+        image.setAttribute("height", "100%");
+        image.setAttribute("clip-path", "url(#clip-" + this.id + ")");
 
-	// Create an image element and set its attributes
-	var image = document.createElementNS(
-	  "http://www.w3.org/2000/svg",
-	  "image"
-	);
-	image.setAttributeNS(
-	  "http://www.w3.org/1999/xlink",
-	  "href",
-	  BlizzardPattern
-	);
-	image.setAttribute("x", x);
-	image.setAttribute("y", y);
-	image.setAttribute("clip-path", "url(#clip-" + this.id + ")");
-
-	// Append the image to the SVG
-	svgElement.appendChild(image);
-	console.log(blizzardClickCounter);
+        // Append the image to the SVG
+        svgElement.appendChild(image);
+        console.log(blizzardClickCounter);
 
         // Remove mouseover and mouseout event listeners
         this.removeEventListener("mouseover", mouseoverHandler);
