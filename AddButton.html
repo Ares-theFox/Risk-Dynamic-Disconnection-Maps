@@ -11,7 +11,7 @@
         z-index: 1;
       }
       header {
-        font-size: 35px;
+        font-size: 15px;
         font-weight: bold;
       }
       header img {
@@ -203,6 +203,7 @@ window.onload = function() {
         path.setAttribute("fill", "transparent");
         path.setAttribute("stroke-opacity", "0");
       });
+    generateMap();
     }
   };
   xhr.send();
@@ -374,7 +375,6 @@ function generateMap() {
 	image.style.top = baseImageRect.top + 5 + "px";
 	image.style.left = baseImageRect.left + 5 + "px";
 }
-generateMap();
 </script>
 </body>
 </html>
