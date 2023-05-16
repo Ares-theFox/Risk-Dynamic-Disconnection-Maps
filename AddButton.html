@@ -25,7 +25,6 @@
 	<img src="" />
     </header>
 <div>
-  <button id="button1" onclick="button_GenerateMap()">Generate Map</button>
   <button id="button2" onclick="button_AddBlizzards()">Add Blizzards</button>
   <button id="button3" onclick="button_AddPortals()">Add Portals</button>
 </div>
@@ -58,16 +57,6 @@ window.onload = function() {
 	  padding: 8px 16px;
 	  border: none;
 	  cursor: pointer;
-	}
-
-	#button1 {
-	  background-color: #4caf50;
-	  color: white;
-	}
-
-	#button1:hover {
-	  background-color: #3e8e41;
-	  color: white;
 	}
 
 	#button2 {
@@ -218,256 +207,24 @@ window.onload = function() {
   };
   xhr.send();
 </script>
-
-<script>
-// Add blizzards
-function addBlizzards() {
-  var mouseoverHandler = function () {
-    if (blizzardClickCounter < blizzardClickCounterMax && !clickedPathsBlizzardsPortals.includes(this.id)) {
-      this.style.fill = "white";
-    }
-  };
-  var mouseoutHandler = function () {
-    this.style.fill = "transparent";
-  };
-  paths.forEach(function(path) {
-    path.addEventListener("mouseover", mouseoverHandler);
-    path.addEventListener("mouseout", mouseoutHandler);
-  });
-  let clickedPaths = [];
-  paths.forEach(function(path) {
-    path.addEventListener("click", function() {
-      // Check if blizzardClickCounter is less than blizzardClickCounterMax
-      if (blizzardClickCounter >= blizzardClickCounterMax) {
-        // If it is not, return early from the function
-        return;
-      }
-
-      // Check if the clicked path has already been clicked during the addPortals phase
-      if (clickedPathsBlizzardsPortals.includes(this.id)) {
-        // If it has, do not perform any actions
-        return;
-      }
-
-      // Log clicked path ID to console
-      console.log(this.id);
-
-      // Check if clickCounter is less than Max
-      if (blizzardClickCounter < blizzardClickCounterMax) {
-        // Create a clipPath element and set its id
-        var clipPath = document.createElementNS(
-          "http://www.w3.org/2000/svg",
-          "clipPath"
-        );
-        clipPath.setAttribute("id", "clip-" + this.id);
-
-        // Clone the clicked path and append it to the clipPath
-        var clonedPath = this.cloneNode(true);
-        clipPath.appendChild(clonedPath);
-
-        // Append the clipPath to the defs element
-        var defs =
-          svgElement.querySelector("defs") ||
-          svgElement.insertBefore(
-            document.createElementNS("http://www.w3.org/2000/svg", "defs"),
-            svgElement.firstChild
-          );
-        defs.appendChild(clipPath);
-
-        // Create an image element and set its attributes
-        var image = document.createElementNS(
-          "http://www.w3.org/2000/svg",
-          "image"
-        );
-        image.setAttributeNS(
-          "http://www.w3.org/1999/xlink",
-          "href",
-          BlizzardPattern
-        );
-        image.setAttribute("width", "100%");
-        image.setAttribute("height", "100%");
-        image.setAttribute("clip-path", "url(#clip-" + this.id + ")");
-
-        // Append the image to the SVG
-        svgElement.appendChild(image);
-        console.log(blizzardClickCounter);
-
-        // Remove mouseover and mouseout event listeners
-        this.removeEventListener("mouseover", mouseoverHandler);
-        this.removeEventListener("mouseout", mouseoutHandler);
-      }
-
-      // Increment the click counter and push value to clickedPaths array
-      blizzardClickCounter++;
-      clickedPaths.push(this.id);
-      clickedPathsBlizzardsPortals.push(this.id);
-
-      // Find rows in table data where column A matches clicked path's ID
-      const rows = tableData.filter((row) => clickedPaths.includes(row["A"]));
-
-      // Find the row in table data where column A matches clicked path's ID
-      const row = tableData.find((row) => row["A"] === this.id);
-
-      // Remove everything in column B for that row
-      if (row) {
-        row["B"] = "";
-      }
-
-      // Remove all instances of clicked path's ID from column B
-      tableData.forEach((row) => {
-        if (row["B"]) {
-          // Split the value in column B into an array of values
-          let values = row["B"].split(",");
-          // Filter out any values that are included in the clickedPaths array
-          values = values.filter((value) => !clickedPaths.includes(value));
-          // Join the remaining values back into a string and update the value in column B
-          // Join the remaining values back into a string and update the value in column B
-          row["B"] = values.join(",");
-        }
-      });
-
-      if (blizzardClickCounter === blizzardClickCounterMax) {
-        document.getElementById('button1').disabled = false;
-        document.getElementById('button3').disabled = false;
-      }
-      // Update button text after each click
-      updateButtonText();
-    });
- });
-}
-</script>
-	
-<script>
-// Add portals
-function addPortals() {
-  var mouseoverHandler = function () {
-    if (portalClickCounter < portalClickCounterMax && !clickedPathsBlizzardsPortals.includes(this.id)) {
-      this.style.fill = "white";
-    }
-  };
-  var mouseoutHandler = function () {
-    this.style.fill = "transparent";
-  };
-  paths.forEach(function(path) {
-    path.addEventListener("mouseover", mouseoverHandler);
-    path.addEventListener("mouseout", mouseoutHandler);
-  });
-  let clickedPaths = [];
-  paths.forEach(function(path) {
-    path.addEventListener("click", function() {
-      // Check if portalClickCounter is less than portalClickCounterMax
-      if (portalClickCounter >= portalClickCounterMax) {
-        // If it is not, return early from the function
-        return;
-      }
-
-      // Check if the clicked path has already been clicked during the addBlizzards phase
-      if (clickedPathsBlizzardsPortals.includes(this.id)) {
-        // If it has, do not perform any actions
-        return;
-      }
-
-      // Log clicked path ID to console
-      console.log(this.id);
-
-      // Check if clickCounter is less than Max
-      if (portalClickCounter < portalClickCounterMax) {
-        // Create an image element and set its attributes
-        var image = document.createElementNS(
-          "http://www.w3.org/2000/svg",
-          "image"
-        );
-        image.setAttributeNS(
-          "http://www.w3.org/1999/xlink",
-          "href",
-          "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/portal.png"
-        );
-
-        // Store the value of this.id in a variable
-        var pathId = this.id;
-
-        // Find matching row in CSV data
-        var csvRow = csvData.find(function (row) {
-          return row["Range"] === pathId;
-        });
-
-        // Get coordinates from CSV data
-        var x = csvRow["Pixel Pair 1"];
-        var y = csvRow["Pixel Pair 2"];
-
-        // Set pointer-events attribute of the image element to none
-        image.setAttribute("pointer-events", "none");
-
-        // Append the image to the SVG
-        svgElement.appendChild(image);
-
-        // Add an event listener to the image element to update its x and y attributes after it has been loaded
-        image.addEventListener("load", function() {
-          // Get the bounding box of the image element
-          var bbox = image.getBBox();
-
-          // Update the x and y attributes of the image element to center it over the clicked area
-          image.setAttribute("x", x - bbox.width / 2);
-          image.setAttribute("y", y - bbox.height / 2);
-
-          // Rotate the image a random number of degrees between 0 and 359 around its center point
-          var angle = Math.floor(Math.random() * 360);
-          var cx = x;
-          var cy = y;
-          image.setAttribute(
-            "transform",
-            "rotate(" + angle + " " + cx + " " + cy + ")"
-          );
-        });
-
-        // Remove mouseover and mouseout event listeners from clicked path
-        this.removeEventListener("mouseover", mouseoverHandler);
-        this.removeEventListener("mouseout", mouseoutHandler);
-
-        // Set fill color of clicked path to transparent
-        this.style.fill = "transparent";
-      }
-
-      // Increment the click counter and push value to clickedPaths array
-      portalClickCounter++;
-      clickedPaths.push(this.id);
-      clickedPathsBlizzardsPortals.push(this.id);
-
-	if (portalClickCounter === portalClickCounterMax) {
-	  // Update tableData
-	  clickedPaths.forEach((clickedPath) => {
-	    // Find the row in table data where column A matches clicked path's ID
-	    const row = tableData.find((row) => row["A"] === clickedPath);
-	    if (row) {
-	      // Add all other clicked paths to column B for that row
-	      const otherClickedPaths = clickedPaths.filter(
-		(path) => path !== clickedPath
-	      );
-	      if (row["B"]) {
-		row["B"] += "," + otherClickedPaths.join(",");
-	      } else {
-		row["B"] = otherClickedPaths.join(",");
-	      }
-	    }
-	  });
-	  document.getElementById('button1').disabled = false;
-	  document.getElementById('button2').disabled = false;
-	}
-
-      // Update button text after each click
-      updateButtonText();
-    });
-  });
-}
-</script>
 	  
 <script>
 // Generate the map
 function generateMap() {
-  paths.forEach(function (path) {
-    var clone = path.cloneNode(true);
-    path.parentNode.replaceChild(clone, path);
+  // Clear columns L through P
+  tableData.forEach((row) => {
+    row["L"] = "";
+    row["M"] = "";
+    row["N"] = "";
+    row["O"] = "";
+    row["P"] = "";
   });
+
+  // Remove existing image
+  var existingImage = document.querySelector("img[src^='https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict']");
+  if (existingImage) {
+    existingImage.remove();
+  }
 
   // Recalculate columns L through P for all rows
   tableData.forEach((row) => {
@@ -515,9 +272,6 @@ function generateMap() {
 
   // Log updated table data to console
   console.log(tableData);
-
-  // Update the paths variable to reference the cloned paths
-  paths = svgElement.querySelectorAll("path");
 
   // Set font size of indirect connections
   var fontSize = 30;
@@ -620,55 +374,24 @@ function generateMap() {
 	image.style.top = baseImageRect.top + 5 + "px";
 	image.style.left = baseImageRect.left + 5 + "px";
 }
+generateMap();
 </script>
-  
-<script>
-  var button_GenerateMap_clicked = false;
-  var button_AddBlizzards_clicked = false;
-  var button_AddPortals_clicked = false;
-  function button_GenerateMap() {
-    if (!button_GenerateMap_clicked) {
-      button_GenerateMap_clicked = true;
-      generateMap();
-    }
-  }
-  function button_AddBlizzards() {
-    if (!button_AddBlizzards_clicked && !button_GenerateMap_clicked) {
-      button_AddBlizzards_clicked = true;
-      addBlizzards();
-      document.getElementById('button1').disabled = true;
-      document.getElementById('button3').disabled = true;
-    }
-  }
-  function button_AddPortals() {
-    if (!button_AddPortals_clicked && !button_GenerateMap_clicked) {
-      button_AddPortals_clicked = true;
-      addPortals();
-      document.getElementById('button1').disabled = true;
-      document.getElementById('button2').disabled = true;
-    }
-  }
-</script>
-
-<script>
-// Update button text on page load
-updateButtonText();
-
-function updateButtonText() {
-    // Update "Add Blizzards" button text
-    if (blizzardClickCounterMax - blizzardClickCounter <= 0) {
-        document.getElementById("button2").innerHTML = "Added all Blizzards";
-    } else {
-        document.getElementById("button2").innerHTML = "Add Blizzards (" + (blizzardClickCounterMax - blizzardClickCounter) + " left)";
-    }
-
-    // Update "Add Portals" button text
-    if (portalClickCounterMax - portalClickCounter <= 0) {
-        document.getElementById("button3").innerHTML = "Added all Portals";
-    } else {
-        document.getElementById("button3").innerHTML = "Add Portals (" + (portalClickCounterMax - portalClickCounter) + " left)";
-    }
-}
-</script>
-</body>
-</html>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
