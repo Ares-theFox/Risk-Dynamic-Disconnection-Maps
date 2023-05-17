@@ -584,51 +584,28 @@ function generateMap() {
 	// Find the maximum value in column O
 	var maxO = Math.max(...tableData.map((row) => row["O"]));
 
-	// Create an image element and set its attributes
-	var image = document.createElement("img");
+	// Get the base image element
+	var baseImage = document.getElementById("map");
 
 	// Decide which image to display based on the maximum value in column O
 	if (maxO == 4) {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_4.png";
+	  baseImage.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%204.png";
 	} else if (maxO == 5) {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_5.png";
+	  baseImage.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%205.png";
 	} else if (maxO == 6) {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_6.png";
+	  baseImage.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%206.png";
 	} else if (maxO == 7) {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_7.png";
+	  baseImage.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%207.png";
 	} else if (maxO == 8) {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_8.png";
+	  baseImage.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%208.png";
 	} else if (maxO == 9) {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_9.png";
+	  baseImage.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%209.png";
 	} else if (maxO == 10) {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_10.png";
+	  baseImage.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%2010.png";
 	} else if (maxO == 11) {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_11.png";
+	  baseImage.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%2011.png";
 	} else {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_12.png";
-	}
-
-	// Append the image to the body
-	document.body.appendChild(image);
-
-	// Wait for the image to load before setting its position
-	image.addEventListener("load", function () {
-	  // Get the position of the base image
-	  var baseImage = document.getElementById("map");
-	  var baseImageRect = baseImage.getBoundingClientRect();
-	  var header = document.querySelector("header");
-	  var headerHeight = header.offsetHeight;
-	  var buttons = document.querySelector("div");
-	  var buttonsHeight = buttons.offsetHeight;
-		console.log(headerHeight)
-		console.log(buttonsHeight)
-		console.log(image.height)
-
-	  // Set the position of the legend image relative to the bottom left corner of the base image
-	  image.style.position = "absolute";
-	  image.style.top = baseImageRect.bottom - image.height + headerHeight + buttonsHeight - 5 + "px";
-	  image.style.left = baseImageRect.left + 5 + "px";
-	});
+	  baseImage.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%2012.png";
 	}
 </script>
   
