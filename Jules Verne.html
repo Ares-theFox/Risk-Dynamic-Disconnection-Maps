@@ -601,6 +601,10 @@ function generateMap() {
 	// Find the maximum value in column O
 	var maxO = Math.max(...tableData.map((row) => row["O"]));
 
+	// Ensure that maxO is never greater than 12
+	if (maxO > 12) {
+	  maxO = 12;
+	}
 	// Get the base image element & define base URL
 	var baseImage = document.getElementById("map");
 	var baseURL = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/";
