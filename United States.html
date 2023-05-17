@@ -622,10 +622,11 @@ function generateMap() {
 	  var buttonsHeight = buttons.offsetHeight;
 		console.log(headerHeight)
 		console.log(buttonsHeight)
+		console.log(image.height)
 
 	  // Set the position of the legend image relative to the bottom left corner of the base image
 	  image.style.position = "absolute";
-	  image.style.top = baseImageRect.bottom - image.height - headerHeight - buttonsHeight + 5 + "px";
+	  image.style.top = baseImageRect.bottom - image.height + headerHeight + buttonsHeight - 5 + "px";
 	  image.style.left = baseImageRect.left + 5 + "px";
 	});
 	}
