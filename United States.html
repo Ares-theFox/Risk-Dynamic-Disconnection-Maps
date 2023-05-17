@@ -619,7 +619,7 @@ function generateMap() {
 
 	  // Set the position of the legend image relative to the bottom left corner of the base image
 	  image.style.position = "absolute";
-	  image.style.top = baseImageRect.height - image.height + 5 + "px";
+	  image.style.bottom = baseImageRect.bottom + 5 + "px";
 	  image.style.left = baseImageRect.left + 5 + "px";
 	});
 	}
