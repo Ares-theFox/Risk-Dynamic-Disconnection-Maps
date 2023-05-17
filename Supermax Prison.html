@@ -28,7 +28,13 @@
   <button id="button1" onclick="button_GenerateMap()">Generate Map</button>
   <button id="button2" onclick="button_AddBlizzards()">Add Blizzards</button>
   <button id="button3" onclick="button_AddPortals()">Add Portals</button>
+  <button id="resetButton">Reset Map</button>
 </div>
+<script>
+  document.getElementById("resetButton").addEventListener("click", function () {
+    location.reload();
+  });
+</script>
 <script>
 var images = [
   "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox1.PNG",
@@ -96,6 +102,16 @@ window.onload = function() {
 	#button3:disabled:hover {
 	  background-color: aqua;
 	}
+		
+	#resetButton {
+	background-color: grey;
+	color: white;
+	}
+
+	#resetButton:hover {
+	background-color: black;
+	color: white;
+	}
 	</style>
 	  
     <img
@@ -110,6 +126,7 @@ window.onload = function() {
 <script>
 // Define global variables
 	// Define map-specific items
+	var colorLegend = "Supermax%20Prison%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Supermax%20Prison%20CSV.csv"
 	var IndirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Supermax%20Prison%20Indirect%20Connection%20Locations%20CSV.csv"
 	var SVG = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Supermax%20Prison%20Paths.svg"
@@ -584,41 +601,16 @@ function generateMap() {
 	// Find the maximum value in column O
 	var maxO = Math.max(...tableData.map((row) => row["O"]));
 
-	// Create an image element and set its attributes
-	var image = document.createElement("img");
+	// Ensure that maxO is never greater than 12
+	if (maxO > 12) {
+	  maxO = 12;
+	}
+	// Get the base image element & define base URL
+	var baseImage = document.getElementById("map");
+	var baseURL = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/";
 
 	// Decide which image to display based on the maximum value in column O
-	if (maxO == 4) {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_4.png";
-	} else if (maxO == 5) {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_5.png";
-	} else if (maxO == 6) {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_6.png";
-	} else if (maxO == 7) {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_7.png";
-	} else if (maxO == 8) {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_8.png";
-	} else if (maxO == 9) {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_9.png";
-	} else if (maxO == 10) {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_10.png";
-	} else if (maxO == 11) {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_11.png";
-	} else {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_12.png";
-	}
-
-	// Append the image to the body
-	document.body.appendChild(image);
-
-	// Get the position of the base image
-	var baseImage = document.getElementById("map");
-	var baseImageRect = baseImage.getBoundingClientRect();
-
-	// Set the position of the legend image relative to the base image
-	image.style.position = "absolute";
-	image.style.bottom = window.innerHeight - baseImageRect.bottom + 5 + "px";
-	image.style.left = baseImageRect.left + 5 + "px";
+	baseImage.src = baseURL + colorLegend + maxO + ".png";
 }
 </script>
   
