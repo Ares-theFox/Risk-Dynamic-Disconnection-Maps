@@ -110,6 +110,7 @@ window.onload = function() {
 <script>
 // Define global variables
 	// Define map-specific items
+	var colorLegend = "United%20States%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20CSV.csv"
 	var IndirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20Indirect%20Connection%20Locations%20CSV.csv"
 	var SVG = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20Paths.svg"
@@ -584,30 +585,13 @@ function generateMap() {
 	// Find the maximum value in column O
 	var maxO = Math.max(...tableData.map((row) => row["O"]));
 
-	// Get the base image element
+	// Get the base image element & define base URL
 	var baseImage = document.getElementById("map");
+	var baseURL = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/";
 
 	// Decide which image to display based on the maximum value in column O
-	if (maxO == 4) {
-	  baseImage.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%204.png";
-	} else if (maxO == 5) {
-	  baseImage.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%205.png";
-	} else if (maxO == 6) {
-	  baseImage.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%206.png";
-	} else if (maxO == 7) {
-	  baseImage.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%207.png";
-	} else if (maxO == 8) {
-	  baseImage.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%208.png";
-	} else if (maxO == 9) {
-	  baseImage.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%209.png";
-	} else if (maxO == 10) {
-	  baseImage.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%2010.png";
-	} else if (maxO == 11) {
-	  baseImage.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%2011.png";
-	} else {
-	  baseImage.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%2012.png";
-	}
-	}
+	baseImage.src = baseURL + colorLegend + maxO + ".png";
+}
 </script>
   
 <script>
