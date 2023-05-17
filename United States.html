@@ -616,10 +616,14 @@ function generateMap() {
 	  // Get the position of the base image
 	  var baseImage = document.getElementById("map");
 	  var baseImageRect = baseImage.getBoundingClientRect();
+	  var header = document.querySelector("header");
+	  var headerHeight = header.offsetHeight;
+	  var buttons = document.querySelector("div");
+	  var buttonsHeight = buttons.offsetHeight;
 
 	  // Set the position of the legend image relative to the bottom left corner of the base image
 	  image.style.position = "absolute";
-	  image.style.bottom = baseImageRect.bottom + 5 + "px";
+	  image.style.top = baseImageRect.bottom - image.height - headerHeight - buttonsHeight + 5 + "px";
 	  image.style.left = baseImageRect.left + 5 + "px";
 	});
 	}
