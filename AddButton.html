@@ -19,7 +19,7 @@
       }
     </style>
   </head>
-  <body>	  
+  <body>
     <header>
 	Jules Verne Dynamic Disconnection Map 
 	<img src="" />
@@ -27,7 +27,13 @@
 <div>
   <button id="button2" onclick="button_AddBlizzards()">Add Blizzards</button>
   <button id="button3" onclick="button_AddPortals()">Add Portals</button>
+  <button id="resetButton">Reset Map</button>
 </div>
+<script>
+  document.getElementById("resetButton").addEventListener("click", function () {
+    location.reload();
+  });
+</script>
 <script>
 var images = [
   "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox1.PNG",
@@ -58,7 +64,7 @@ window.onload = function() {
 	  border: none;
 	  cursor: pointer;
 	}
-
+		
 	#button2 {
 	  background-color: white;
 	  color: black;
@@ -85,6 +91,16 @@ window.onload = function() {
 	#button3:disabled:hover {
 	  background-color: aqua;
 	}
+
+	#resetButton {
+	background-color: grey;
+	color: white;
+	}
+
+	#resetButton:hover {
+	background-color: black;
+	color: white;
+	}
 	</style>
 	  
     <img
@@ -99,38 +115,44 @@ window.onload = function() {
 <script>
 // Define global variables
 	// Define map-specific items
+	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
 	var IndirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20Indirect%20Connection%20Locations%20CSV.csv"
 	var SVG = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20Paths.svg"
 	var BlizzardPattern = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20blizzard%20pattern.png"
 	// Remember to change the img src and the alt title!!!!!!!!
-	
 	var blizzardClickCounter = 0
 	var blizzardClickCounterMax = 3
 	var portalClickCounter = 0
 	var portalClickCounterMax = 5
 	
+	let blizzardArray = []
+	let portalArray = []
 	let clickedPathsBlizzardsPortals = []
 	
 	// Define connections tableData
 	let tableData;
+	let tableDataClone;
 	Papa.parse(
 	  DirectConnections,
-	{
-	  download: true,
-	  header: true,
-	  complete: function (results) {
-	    // Assign parsed data to tableData
-	    tableData = results.data;
-	    // Remove zero-width space character from tableData
-	    for (let i = 0; i < tableData.length; i++) {
-	      for (let key in tableData[i]) {
-		if (tableData[i].hasOwnProperty(key)) {
-		  tableData[i][key] = tableData[i][key].replace(/\u200B/g, "");
+	  {
+	    download: true,
+	    header: true,
+	    complete: function (results) {
+	      // Assign parsed data to tableData
+	      tableData = results.data;
+	      // Remove zero-width space character from tableData
+	      for (let i = 0; i < tableData.length; i++) {
+		for (let key in tableData[i]) {
+		  if (tableData[i].hasOwnProperty(key)) {
+		    tableData[i][key] = tableData[i][key].replace(/\u200B/g, "");
 		  }
 		}
 	      }
+	      // Create a deep copy of tableData
+	      tableDataClone = JSON.parse(JSON.stringify(tableData));
 	      console.log(tableData);
+	      console.log(tableDataClone);
 	    },
 	  }
 	);
@@ -208,25 +230,42 @@ window.onload = function() {
   };
   xhr.send();
 </script>
-	  
+
 <script>
 // Generate the map
 function generateMap() {
-  // Clear columns L through P
-  tableData.forEach((row) => {
-    row["L"] = "";
-    row["M"] = "";
-    row["N"] = "";
-    row["O"] = "";
-    row["P"] = "";
-  });
+  updateButtonText();
+  // Reset tableData to its original values
+  tableData = JSON.parse(JSON.stringify(tableDataClone));
+  // Remove everything contained in the blizzard array
+	// Find rows in table data where column A matches values in blizzardArray
+	const rows = tableData.filter((row) => blizzardArray.includes(row["A"]));
 
-  // Remove existing image
-  var existingImage = document.querySelector("img[src^='https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict']");
-  if (existingImage) {
-    existingImage.remove();
-  }
+	// Remove everything in column B for those rows
+	rows.forEach((row) => {
+	  row["B"] = "";
+	});
 
+	// Remove all instances of values in blizzardArray from column B
+	tableData.forEach((row) => {
+	  if (row["B"]) {
+	    // Split the value in column B into an array of values
+	    let values = row["B"].split(",");
+	    // Filter out any values that are included in the blizzardArray
+	    values = values.filter((value) => !blizzardArray.includes(value));
+	    // Join the remaining values back into a string and update the value in column B
+	    row["B"] = values.join(",");
+	  }
+	});
+  // Add everything contained in the portal array
+	// Iterate over tableData
+	tableData.forEach((row) => {
+	  // Check if value in column A matches a value in portalArray
+	  if (portalArray.includes(row["A"])) {
+	    // Add contents of portalArray to column B
+	    row["B"] = [...new Set([...(row["B"] ? row["B"].split(",") : []), ...portalArray])].join(",");
+	  }
+	});
   // Recalculate columns L through P for all rows
   tableData.forEach((row) => {
     // Column M: vlookup col B values and add them + current value A and B
@@ -339,42 +378,63 @@ function generateMap() {
 	// Find the maximum value in column O
 	var maxO = Math.max(...tableData.map((row) => row["O"]));
 
-	// Create an image element and set its attributes
-	var image = document.createElement("img");
+	// Ensure that maxO is never greater than 12
+	if (maxO > 12) {
+	  maxO = 12;
+	}
+	// Get the base image element & define base URL
+	var baseImage = document.getElementById("map");
+	var baseURL = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/";
 
 	// Decide which image to display based on the maximum value in column O
-	if (maxO == 4) {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_4.png";
-	} else if (maxO == 5) {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_5.png";
-	} else if (maxO == 6) {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_6.png";
-	} else if (maxO == 7) {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_7.png";
-	} else if (maxO == 8) {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_8.png";
-	} else if (maxO == 9) {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_9.png";
-	} else if (maxO == 10) {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_10.png";
-	} else if (maxO == 11) {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_11.png";
-	} else {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_12.png";
-	}
-
-	// Append the image to the body
-	document.body.appendChild(image);
-
-	// Get the position of the base image
-	var baseImage = document.getElementById("map");
-	var baseImageRect = baseImage.getBoundingClientRect();
-
-	// Set the position of the legend image relative to the base image
-	image.style.position = "absolute";
-	image.style.top = baseImageRect.top + 5 + "px";
-	image.style.left = baseImageRect.left + 5 + "px";
+	baseImage.src = baseURL + colorLegend + maxO + ".png";
 }
+</script>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 </script>
 </body>
 </html>
+	  
+
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
