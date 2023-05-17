@@ -611,15 +611,17 @@ function generateMap() {
 	// Append the image to the body
 	document.body.appendChild(image);
 
-	// Get the position of the base image
-	var baseImage = document.getElementById("map");
-	var baseImageRect = baseImage.getBoundingClientRect();
+	// Wait for the image to load before setting its position
+	image.addEventListener("load", function () {
+	  // Get the position of the base image
+	  var baseImage = document.getElementById("map");
+	  var baseImageRect = baseImage.getBoundingClientRect();
 
-	// Set the position of the legend image relative to the base image
-	image.style.position = "absolute";
-	image.style.bottom = window.innerHeight - baseImageRect.bottom + 5 + "px";
-	image.style.left = baseImageRect.left + 5 + "px";
-}
+	  // Set the position of the legend image relative to the bottom left corner of the base image
+	  image.style.position = "absolute";
+	  image.style.top = baseImageRect.height - image.height + 5 + "px";
+	  image.style.left = baseImageRect.left + 5 + "px";
+	});
 </script>
   
 <script>
