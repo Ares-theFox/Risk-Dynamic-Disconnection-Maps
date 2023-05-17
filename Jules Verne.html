@@ -110,6 +110,7 @@ window.onload = function() {
 <script>
 // Define global variables
 	// Define map-specific items
+	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
 	var IndirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20Indirect%20Connection%20Locations%20CSV.csv"
 	var SVG = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20Paths.svg"
@@ -584,41 +585,12 @@ function generateMap() {
 	// Find the maximum value in column O
 	var maxO = Math.max(...tableData.map((row) => row["O"]));
 
-	// Create an image element and set its attributes
-	var image = document.createElement("img");
+	// Get the base image element & define base URL
+	var baseImage = document.getElementById("map");
+	var baseURL = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/";
 
 	// Decide which image to display based on the maximum value in column O
-	if (maxO == 4) {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_4.png";
-	} else if (maxO == 5) {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_5.png";
-	} else if (maxO == 6) {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_6.png";
-	} else if (maxO == 7) {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_7.png";
-	} else if (maxO == 8) {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_8.png";
-	} else if (maxO == 9) {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_9.png";
-	} else if (maxO == 10) {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_10.png";
-	} else if (maxO == 11) {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_11.png";
-	} else {
-	  image.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ColorDict_12.png";
-	}
-
-	// Append the image to the body
-	document.body.appendChild(image);
-
-	// Get the position of the base image
-	var baseImage = document.getElementById("map");
-	var baseImageRect = baseImage.getBoundingClientRect();
-
-	// Set the position of the legend image relative to the base image
-	image.style.position = "absolute";
-	image.style.top = baseImageRect.top + 5 + "px";
-	image.style.left = baseImageRect.left + 5 + "px";
+	baseImage.src = baseURL + colorLegend + maxO + ".png";
 }
 </script>
   
