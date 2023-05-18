@@ -589,14 +589,14 @@ function updateButtonText() {
     if (totalBlizzards - blizzardArray.length <= 0) {
         document.getElementById("button2").innerHTML = "Added all Blizzards";
     } else {
-        document.getElementById("button2").innerHTML = "Add Blizzards (" + (blizzardClickCounterMax - blizzardClickCounter) + " left)";
+        document.getElementById("button2").innerHTML = "Add Blizzards (" + (totalBlizzards - blizzardArray.length) + " left)";
     }
 
     // Update "Add Portals" button text
     if (totalPortals - portalArray.length <= 0) {
         document.getElementById("button3").innerHTML = "Added all Portals";
     } else {
-        document.getElementById("button3").innerHTML = "Add Portals (" + (portalClickCounterMax - portalClickCounter) + " left)";
+        document.getElementById("button3").innerHTML = "Add Portals (" + (totalPortals - portalArray.length) + " left)";
     }
 }
 </script>
