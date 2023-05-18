@@ -28,6 +28,8 @@
   <button id="button2" onclick="button_AddBlizzards()">Add Blizzards</button>
   <button id="button3" onclick="button_AddPortals()">Add Portals</button>
   <button id="resetButton">Reset Map</button>
+  <label for="fontSizeInput">Font Size:</label>
+  <input type="number" id="fontSizeInput" name="fontSizeInput" value="30">
 </div>
 <script>
   document.getElementById("resetButton").addEventListener("click", function () {
@@ -114,7 +116,7 @@ window.onload = function() {
 	  
 <script>
 // Define global variables
-	console.log("Muppet")
+	console.log("Muskrat")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -323,7 +325,11 @@ function generateMap() {
   console.log(tableData);
 
   // Set font size of indirect connections
-  var fontSize = 30;
+  var fontSizeInput = document.getElementById("fontSizeInput");
+  var fontSize = fontSizeInput.value ? parseInt(fontSizeInput.value) : 30;
+  fontSizeInput.addEventListener("input", function() {
+    generateMap();
+  });
 
   // Color in the map and add indirect connections
   paths.forEach(function (path) {
