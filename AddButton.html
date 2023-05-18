@@ -120,7 +120,7 @@ window.onload = function() {
 	  
 <script>
 // Define global variables
-	console.log("Vulpes")
+	console.log("Hawk")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -469,43 +469,47 @@ function addBlizzards() {
     }
     // Check if path is NOT in clickedPathsBlizzardsPortals array
     if (!clickedPathsBlizzardsPortals.includes(this.id)) {
-    // Create a clipPath element and set its id
-    var clipPath = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "clipPath"
-    );
-    clipPath.setAttribute("id", "clip-" + this.id);
+	// Create a clipPath element and set its id
+	var clipPath = document.createElementNS(
+	  "http://www.w3.org/2000/svg",
+	  "clipPath"
+	);
+	clipPath.setAttribute("id", "clip-" + this.id);
 
-    // Clone the clicked path and append it to the clipPath
-    var clonedPath = this.cloneNode(true);
-    clipPath.appendChild(clonedPath);
+	// Clone the clicked path and append it to the clipPath
+	var clonedPath = this.cloneNode(true);
+	clipPath.appendChild(clonedPath);
 
-    // Append the clipPath to the defs element
-    var defs =
-      svgElement.querySelector("defs") ||
-      svgElement.insertBefore(
-        document.createElementNS("http://www.w3.org/2000/svg", "defs"),
-        svgElement.firstChild
-      );
-    defs.appendChild(clipPath);
+	// Append the clipPath to the defs element
+	var defs =
+	  svgElement.querySelector("defs") ||
+	  svgElement.insertBefore(
+	    document.createElementNS("http://www.w3.org/2000/svg", "defs"),
+	    svgElement.firstChild
+	  );
+	defs.appendChild(clipPath);
 
-    // Create an image element and set its attributes
-    var image = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "image"
-    );
-    image.setAttributeNS(
-      "http://www.w3.org/1999/xlink",
-      "href",
-      BlizzardPattern
-    );
-    image.setAttribute("width", "100%");
-    image.setAttribute("height", "100%");
-    image.setAttribute("clip-path", "url(#clip-" + this.id + ")");
+	// Create an image element and set its attributes
+	var image = document.createElementNS(
+	  "http://www.w3.org/2000/svg",
+	  "image"
+	);
+	image.setAttributeNS(
+	  "http://www.w3.org/1999/xlink",
+	  "href",
+	  BlizzardPattern
+	);
+	image.setAttribute("width", "100%");
+	image.setAttribute("height", "100%");
+	image.setAttribute("clip-path", "url(#clip-" + this.id + ")");
+	image.setAttribute("pointer-events", "none");
 
-    // Append the image to the SVG
-    svgElement.appendChild(image);
+	// Append the image to the SVG
+	svgElement.appendChild(image);
 
+	// Move the image behind the path element
+	svgElement.insertBefore(image, svgElement.firstChild);
+	    
     // Add clicked path to blizzardArray and clickedPathsBlizzardsPortals array
     blizzardArray.push(this.id);
     clickedPathsBlizzardsPortals.push(this.id);
@@ -682,17 +686,20 @@ function button_AddPortals() {
     document.getElementById("button4").innerHTML = "Stop Erasing";
 
     // Define mouseover, mouseout, and click event handlers
-    const mouseoverHandler = function () {
-      // Check if path is in clickedPathsBlizzardsPortals array
-      if (clickedPathsBlizzardsPortals.includes(this.id)) {
-        // Store original stroke color and width in custom attributes
-        this.setAttribute("data-stroke", this.style.stroke);
-        this.setAttribute("data-stroke-width", this.style.strokeWidth);
-        // Change stroke color to #ff1111 and stroke width to 4
-        this.style.setProperty("stroke", "#ff1111", "important");
-        this.style.setProperty("stroke-width", "4", "important");
-      }
-    };
+	const mouseoverHandler = function () {
+	  // Check if path is in clickedPathsBlizzardsPortals array
+	  if (clickedPathsBlizzardsPortals.includes(this.id)) {
+	    // Check if data-stroke and data-stroke-width attributes already exist
+	    if (!this.hasAttribute("data-stroke") && !this.hasAttribute("data-stroke-width")) {
+	      // Store original stroke color and width in custom attributes
+	      this.setAttribute("data-stroke", this.style.stroke);
+	      this.setAttribute("data-stroke-width", this.style.strokeWidth);
+	    }
+	    // Change stroke color to #ff1111 and stroke width to 4
+	    this.style.setProperty("stroke", "#ff1111", "important");
+	    this.style.setProperty("stroke-width", "4", "important");
+	  }
+	};
     const mouseoutHandler = function () {
       // Reset stroke color and width to original values
       this.style.setProperty("stroke", this.getAttribute("data-stroke"), "important");
@@ -711,10 +718,12 @@ function button_AddPortals() {
           // Remove clicked path from blizzardArray
           blizzardArray = blizzardArray.filter((path) => path !== this.id);
 
-          // Remove blizzard fill from clicked path
-          var clipPathId = "clip-" + this.id;
-          var clipPath = document.getElementById(clipPathId);
-          clipPath.remove();
+	// Remove blizzard fill from clicked path
+	var clipPathId = "blizzard-clip-" + this.id;
+	var clipPath = document.getElementById(clipPathId);
+	if (clipPath) {
+	  clipPath.remove();
+	}
         }
 
         // Check if path is in portalArray
@@ -722,14 +731,14 @@ function button_AddPortals() {
           // Remove clicked path from portalArray
           portalArray = portalArray.filter((path) => path !== this.id);
 
-          // Remove portal image overlay from clicked path
-          var images = svgElement.querySelectorAll("image");
-          images.forEach(function (image) {
-            var clipPathUrl = image.getAttribute("clip-path");
-            if (clipPathUrl === "url(#clip-" + this.id + ")") {
-              image.remove();
-            }
-          });
+	// Remove portal image overlay from clicked path
+	var images = svgElement.querySelectorAll("image");
+	images.forEach(function (image) {
+	  var clipPathUrl = image.getAttribute("clip-path");
+	  if (clipPathUrl === "url(#portal-clip-" + this.id + ")") {
+	    image.remove();
+	  }
+	});
         }
 
         // Call generateMap function
