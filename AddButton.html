@@ -129,7 +129,7 @@ window.onload = function() {
 	  
 <script>
 // Define global variables
-	console.log("Cardinal")
+	console.log("Blue jay")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -600,24 +600,27 @@ function addPortals() {
     }
     // Check if path is NOT in clickedPathsBlizzardsPortals array
     if (!clickedPathsBlizzardsPortals.includes(this.id)) {
-      // Create an image element and set its attributes
-      var image = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "image"
-      );
-      image.setAttributeNS(
-        "http://www.w3.org/1999/xlink",
-        "href",
-        "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/portal.png"
-      );
+	// Create an image element and set its attributes
+	var image = document.createElementNS(
+	  "http://www.w3.org/2000/svg",
+	  "image"
+	);
+	image.setAttributeNS(
+	  "http://www.w3.org/1999/xlink",
+	  "href",
+	  "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/portal.png"
+	);
 
-      // Store the value of this.id in a variable
-      var pathId = this.id;
-	    
-      // Find matching row in CSV data
-      var csvRow = csvData.find(function (row) {
-        return row["Range"] === pathId;
-      });
+	// Set a custom attribute to store the id of the clicked path
+	image.setAttribute("data-path-id", this.id);
+
+	// Store the value of this.id in a variable
+	var pathId = this.id;
+
+	// Find matching row in CSV data
+	var csvRow = csvData.find(function (row) {
+	  return row["Range"] === pathId;
+	});
 
       // Get coordinates from CSV data
       var x = csvRow["Pixel Pair 1"];
@@ -751,8 +754,9 @@ function button_AddPortals() {
 	// Remove portal image overlay from clicked path
 	var images = svgElement.querySelectorAll("image");
 	images.forEach(function (image) {
-	  var clipPathUrl = image.getAttribute("clip-path");
-	  if (clipPathUrl === "url(#portal-clip-" + clickedPathId + ")") {
+	  // Check if the data-path-id attribute of the image matches the id of the clicked path
+	  if (image.getAttribute("data-path-id") === clickedPathId) {
+	    // Remove the image
 	    image.remove();
 	  }
 	});
