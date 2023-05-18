@@ -114,7 +114,7 @@ window.onload = function() {
 	  
 <script>
 // Define global variables
-	console.log("Dove")
+	console.log("Garbage")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -403,6 +403,11 @@ function generateMap() {
 	
 <script>
 function addBlizzards() {
+  // Check if size of blizzardArray is greater than or equal to totalBlizzards
+  if (blizzardArray.length >= totalBlizzards) {
+    // Return early from the function
+    return;
+  }
   // Define mouseover, mouseout, and click event handlers
   const mouseoverHandler = function () {
     // Check if path is NOT in clickedPathsBlizzardsPortals array
@@ -495,12 +500,11 @@ function addBlizzards() {
 
 <script>
 function addPortals() {
-  // Check if size of portalArray is greater than or equal to 5
+  // Check if size of portalArray is greater than or equal to totalPortals
   if (portalArray.length >= totalPortals) {
-    // If it is, return early from the function
+    // Return early from the function
     return;
   }
-
   // Define mouseover, mouseout, and click event handlers
   const mouseoverHandler = function () {
     // Check if path is NOT in clickedPathsBlizzardsPortals array
@@ -575,7 +579,19 @@ function addPortals() {
       // Add clicked path to portalArray and clickedPathsBlizzardsPortals array
       portalArray.push(this.id);
       clickedPathsBlizzardsPortals.push(this.id);
-      
+
+       // Check if size of blizzardArray is greater than or equal to totalBlizzards
+       if (portalArray.length >= totalPortals) {
+         // Remove existing event listeners from elements in paths array
+         paths.forEach(function (path) {
+           path.removeEventListener("mouseover", mouseoverHandler);
+           path.removeEventListener("mouseout", mouseoutHandler);
+           path.removeEventListener("click", clickHandler);
+         });
+	       generateMap();
+	       return;
+       }
+
        // Execute generateMap function
        generateMap();
     }
