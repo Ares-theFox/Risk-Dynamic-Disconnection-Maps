@@ -129,7 +129,7 @@ window.onload = function() {
 	  
 <script>
 // Define global variables
-	console.log("Owl")
+	console.log("Falcon")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -692,17 +692,26 @@ function eraser() {
     return;
   }
 
+  let shouldReturn = false;
+
+  const handleButton2Click = function () {
+    shouldReturn = true;
+  };
+  const handleButton3Click = function () {
+    shouldReturn = true;
+  };
+
+  document.getElementById("button2").addEventListener("click", handleButton2Click);
+  document.getElementById("button3").addEventListener("click", handleButton3Click);
+
   // Change button text to "Stop Erasing"
   document.getElementById("button4").innerHTML = "Stop Erasing";
 
-  // Add event listener for "Stop Erasing" button click
-  const handleButton4Click = function () {
-    stopListening();
-  };
-  document.getElementById("button4").addEventListener("click", handleButton4Click);
-
   // Define mouseover, mouseout, and click event handlers
   const mouseoverHandler = function () {
+    if (shouldReturn) {
+      return;
+    }
     // Check if path is in clickedPathsBlizzardsPortals array
     if (clickedPathsBlizzardsPortals.includes(this.id)) {
       // Check if data-stroke and data-stroke-width attributes already exist
@@ -717,6 +726,9 @@ function eraser() {
     }
   };
   const mouseoutHandler = function () {
+    if (shouldReturn) {
+      return;
+    }
     // Reset stroke color and width to original values
     if (clickedPathsBlizzardsPortals.includes(this.id)) {
       this.style.setProperty("stroke", this.getAttribute("data-stroke"), "important");
@@ -724,6 +736,9 @@ function eraser() {
     }
   };
   const clickHandler = function () {
+    if (shouldReturn) {
+      return;
+    }
     // Check if path is in clickedPathsBlizzardsPortals array
     if (clickedPathsBlizzardsPortals.includes(this.id)) {
       // Remove clicked path from clickedPathsBlizzardsPortals array
@@ -768,34 +783,10 @@ function eraser() {
 
       // Check if clickedPathsBlizzardsPortals array is empty
       if (clickedPathsBlizzardsPortals.length === 0) {
-        stopListening();
         return;
       }
     }
   };
-
-  const handleButton2Click = function () {
-    stopListening();
-  };
-
-  const handleButton3Click = function () {
-    stopListening();
-  };
-
-  document.getElementById("button2").addEventListener("click", handleButton2Click);
-  document.getElementById("button3").addEventListener("click", handleButton3Click);
-
-  function stopListening() {
-    // Remove existing event listeners from elements in paths array
-    paths.forEach(function (path) {
-      path.removeEventListener("mouseover", mouseoverHandler);
-      path.removeEventListener("mouseout", mouseoutHandler);
-      path.removeEventListener("click", clickHandler);
-    });
-
-    // Reset button text to "Eraser"
-    document.getElementById("button4").innerHTML = "Eraser";
-  }
 
   // Add event listeners to elements in paths array
   paths.forEach(function (path) {
