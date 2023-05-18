@@ -121,10 +121,9 @@ window.onload = function() {
 	var SVG = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20Paths.svg"
 	var BlizzardPattern = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20blizzard%20pattern.png"
 	// Remember to change the img src and the alt title!!!!!!!!
-	var blizzardClickCounter = 0
-	var blizzardClickCounterMax = 3
-	var portalClickCounter = 0
-	var portalClickCounterMax = 5
+
+	var totalBlizzards = 3
+	var totalPortals = 5
 	
 	let blizzardArray = []
 	let portalArray = []
@@ -391,50 +390,215 @@ function generateMap() {
 }
 </script>
 	
+<script>
+function addBlizzards() {
+  // Check if size of blizzardArray is greater than or equal to 3
+  if (blizzardArray.length >= totalBlizzards) {
+    // If it is, return early from the function
+    return;
+  }
+
+  // Define mouseover, mouseout, and click event handlers
+  const mouseoverHandler = function () {
+    // Check if path is NOT in clickedPathsBlizzardsPortals array
+    if (!clickedPathsBlizzardsPortals.includes(this.id)) {
+      // Store original stroke color and width in custom attributes
+      this.setAttribute("data-stroke", this.style.stroke);
+      this.setAttribute("data-stroke-width", this.style.strokeWidth);
+      // Change stroke color to white and stroke width to 3
+      this.style.setProperty("stroke", "white", "important");
+      this.style.setProperty("stroke-width", "3", "important");
+    }
+  };
+  const mouseoutHandler = function () {
+    // Check if path is NOT in clickedPathsBlizzardsPortals array
+    if (!clickedPathsBlizzardsPortals.includes(this.id)) {
+      // Reset stroke color and width to original values
+      this.style.setProperty("stroke", this.getAttribute("data-stroke"), "important");
+      this.style.setProperty("stroke-width", this.getAttribute("data-stroke-width"), "important");
+    }
+  };
+  const clickHandler = function () {
+    // Check if path is NOT in clickedPathsBlizzardsPortals array
+    if (!clickedPathsBlizzardsPortals.includes(this.id)) {
+      // Create a clipPath element and set its id
+      var clipPath = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "clipPath"
+      );
+      clipPath.setAttribute("id", "clip-" + this.id);
+
+      // Clone the clicked path and append it to the clipPath
+      var clonedPath = this.cloneNode(true);
+      clipPath.appendChild(clonedPath);
+
+      // Append the clipPath to the defs element
+      var defs =
+        svgElement.querySelector("defs") ||
+        svgElement.insertBefore(
+          document.createElementNS("http://www.w3.org/2000/svg", "defs"),
+          svgElement.firstChild
+        );
+      defs.appendChild(clipPath);
+
+      // Create an image element and set its attributes
+      var image = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "image"
+      );
+      image.setAttributeNS(
+        "http://www.w3.org/1999/xlink",
+        "href",
+        BlizzardPattern
+      );
+      image.setAttribute("width", "100%");
+      image.setAttribute("height", "100%");
+      image.setAttribute("clip-path", "url(#clip-" + this.id + ")");
+
+      // Append the image to the SVG
+      svgElement.appendChild(image);
+
+      // Add clicked path to blizzardArray and clickedPathsBlizzardsPortals array
+      blizzardArray.push(this.id);
+      clickedPathsBlizzardsPortals.push(this.id);
+    }
+  };
+
+  // Add event listeners to elements in paths array
+  paths.forEach(function (path) {
+    path.addEventListener("mouseover", mouseoverHandler);
+    path.addEventListener("mouseout", mouseoutHandler);
+    path.addEventListener("click", clickHandler);
+  });
+
+  // Execute generateMap function
+  generateMap();
+}
+</script>
+
+<script>
+function addPortals() {
+  // Check if size of portalArray is greater than or equal to 5
+  if (portalArray.length >= totalPortals) {
+    // If it is, return early from the function
+    return;
+  }
+
+  // Define mouseover, mouseout, and click event handlers
+  const mouseoverHandler = function () {
+    // Check if path is NOT in clickedPathsBlizzardsPortals array
+    if (!clickedPathsBlizzardsPortals.includes(this.id)) {
+      // Store original stroke color and width in custom attributes
+      this.setAttribute("data-stroke", this.style.stroke);
+      this.setAttribute("data-stroke-width", this.style.strokeWidth);
+      // Change stroke color to white and stroke width to 3
+      this.style.setProperty("stroke", "white", "important");
+      this.style.setProperty("stroke-width", "3", "important");
+    }
+  };
+  const mouseoutHandler = function () {
+    // Check if path is NOT in clickedPathsBlizzardsPortals array
+    if (!clickedPathsBlizzardsPortals.includes(this.id)) {
+      // Reset stroke color and width to original values
+      this.style.setProperty("stroke", this.getAttribute("data-stroke"), "important");
+      this.style.setProperty("stroke-width", this.getAttribute("data-stroke-width"), "important");
+    }
+  };
+  const clickHandler = function () {
+    // Check if path is NOT in clickedPathsBlizzardsPortals array
+    if (!clickedPathsBlizzardsPortals.includes(this.id)) {
+      // Create an image element and set its attributes
+      var image = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "image"
+      );
+      image.setAttributeNS(
+        "http://www.w3.org/1999/xlink",
+        "href",
+        "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/portal.png"
+      );
+
+      // Find matching row in CSV data
+      var csvRow = csvData.find(function (row) {
+        return row["Range"] === pathId;
+      });
+
+      // Get coordinates from CSV data
+      var x = csvRow["Pixel Pair 1"];
+      var y = csvRow["Pixel Pair 2"];
+
+      // Set pointer-events attribute of the image element to none
+      image.setAttribute("pointer-events", "none");
+
+      // Append the image to the SVG
+      svgElement.appendChild(image);
+
+      // Add an event listener to the image element to update its x and y attributes after it has been loaded
+      image.addEventListener("load", function() {
+        // Get the bounding box of the image element
+        var bbox = image.getBBox();
+
+        // Update the x and y attributes of the image element to center it over the clicked area
+        image.setAttribute("x", x - bbox.width / 2);
+        image.setAttribute("y", y - bbox.height / 2);
+
+        // Rotate the image a random number of degrees between 0 and 359 around its center point
+        var angle = Math.floor(Math.random() * 360);
+        var cx = x;
+        var cy = y;
+        image.setAttribute(
+          "transform",
+          "rotate(" + angle + " " + cx + " " + cy + ")"
+        );
+      });
+
+      // Add clicked path to portalArray and clickedPathsBlizzardsPortals array
+      portalArray.push(this.id);
+      clickedPathsBlizzardsPortals.push(this.id);
+    }
+  };
+
+  // Add event listeners to elements in paths array
+  paths.forEach(function (path) {
+    path.addEventListener("mouseover", mouseoverHandler);
+    path.addEventListener("mouseout", mouseoutHandler);
+    path.addEventListener("click", clickHandler);
+  });
+
+  // Execute generateMap function
+  generateMap();
+}
+</script>
+
+<script>
+function button_AddBlizzards() {
+  addBlizzards();
+}
+
+function button_AddPortals() {
+  addPortals();
+}
+</script>
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+<script>
+// Update button text on page load
+updateButtonText();
+
+function updateButtonText() {
+    // Update "Add Blizzards" button text
+    if (blizzardArray.length - blizzardClickCounter <= 0) {
+        document.getElementById("button2").innerHTML = "Added all Blizzards";
+    } else {
+        document.getElementById("button2").innerHTML = "Add Blizzards (" + (blizzardClickCounterMax - blizzardClickCounter) + " left)";
+    }
+
+    // Update "Add Portals" button text
+    if (portalArray.length - portalClickCounter <= 0) {
+        document.getElementById("button3").innerHTML = "Added all Portals";
+    } else {
+        document.getElementById("button3").innerHTML = "Add Portals (" + (portalClickCounterMax - portalClickCounter) + " left)";
+    }
+}
 </script>
 </body>
 </html>
-	  
-
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
