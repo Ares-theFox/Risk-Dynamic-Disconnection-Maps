@@ -114,7 +114,7 @@ window.onload = function() {
 	  
 <script>
 // Define global variables
-	console.log("Duck")
+	console.log("Rabbit")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -237,6 +237,8 @@ function generateMap() {
   updateButtonText();
   // Reset tableData to its original values
   tableData = JSON.parse(JSON.stringify(tableDataClone));
+  // Remove existing text elements
+  svgElement.querySelectorAll("text").forEach((text) => text.remove());
   // Remove everything contained in the blizzard array
 	// Find rows in table data where column A matches values in blizzardArray
 	const rows = tableData.filter((row) => blizzardArray.includes(row["A"]));
@@ -561,6 +563,10 @@ function addPortals() {
       // Add clicked path to portalArray and clickedPathsBlizzardsPortals array
       portalArray.push(this.id);
       clickedPathsBlizzardsPortals.push(this.id);
+      
+       // Execute generateMap function
+       generateMap();
+	    return;
     }
   };
 
@@ -570,9 +576,6 @@ function addPortals() {
     path.addEventListener("mouseout", mouseoutHandler);
     path.addEventListener("click", clickHandler);
   });
-
-  // Execute generateMap function
-  generateMap();
 }
 </script>
 
