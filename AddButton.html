@@ -352,6 +352,7 @@ function generateMap() {
           );
           text.setAttribute("x", x);
           text.setAttribute("y", y);
+	  text.setAttribute("pointer-events", "none");
           text.setAttribute("text-anchor", "middle");
           text.setAttribute("alignment-baseline", "middle");
           text.setAttribute("font-size", fontSize);
@@ -518,6 +519,9 @@ function addPortals() {
         "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/portal.png"
       );
 
+      // Store the value of this.id in a variable
+      var pathId = this.id;
+	    
       // Find matching row in CSV data
       var csvRow = csvData.find(function (row) {
         return row["Range"] === pathId;
