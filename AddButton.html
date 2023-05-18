@@ -114,7 +114,7 @@ window.onload = function() {
 	  
 <script>
 // Define global variables
-	console.log("Rabbit")
+	console.log("Turtle")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -265,7 +265,14 @@ function generateMap() {
 	  // Check if value in column A matches a value in portalArray
 	  if (portalArray.includes(row["A"])) {
 	    // Add contents of portalArray to column B
-	    row["B"] = [...new Set([...(row["B"] ? row["B"].split(",") : []), ...portalArray])].join(",");
+	    row["B"] = [
+	      ...new Set([
+		...(row["B"] ? row["B"].split(",") : []),
+		...portalArray,
+	      ]),
+	    ]
+	      .filter((value) => value !== row["A"])
+	      .join(",");
 	  }
 	});
   // Recalculate columns L through P for all rows
@@ -398,7 +405,13 @@ function generateMap() {
 function addBlizzards() {
   // Check if size of blizzardArray is greater than or equal to 3
   if (blizzardArray.length >= totalBlizzards) {
-    // If it is, return early from the function
+    // Remove existing event listeners from elements in paths array
+    paths.forEach(function (path) {
+      path.removeEventListener("mouseover", mouseoverHandler);
+      path.removeEventListener("mouseout", mouseoutHandler);
+      path.removeEventListener("click", clickHandler);
+    });
+    // And, return early from the function
     return;
   }
 
@@ -468,7 +481,6 @@ function addBlizzards() {
       
        // Execute generateMap function
        generateMap();
-	    return;
     }
   };
 
@@ -566,7 +578,6 @@ function addPortals() {
       
        // Execute generateMap function
        generateMap();
-	    return;
     }
   };
 
