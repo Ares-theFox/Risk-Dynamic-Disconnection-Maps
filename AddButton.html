@@ -114,7 +114,7 @@ window.onload = function() {
 	  
 <script>
 // Define global variables
-	console.log("Panda")
+	console.log("Muppet")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -416,18 +416,20 @@ function addBlizzards() {
     // Return early from the function
     return;
   }
-
   // Define mouseover, mouseout, and click event handlers
   const mouseoverHandler = function () {
     if (shouldReturn) {
       return;
     }
-    // Store original stroke color and width in custom attributes
-    this.setAttribute("data-stroke", this.style.stroke);
-    this.setAttribute("data-stroke-width", this.style.strokeWidth);
-    // Change stroke color to white and stroke width to 3
-    this.style.setProperty("stroke", "white", "important");
-    this.style.setProperty("stroke-width", "3", "important");
+    // Check if path is NOT in clickedPathsBlizzardsPortals array
+    if (!clickedPathsBlizzardsPortals.includes(this.id)) {
+      // Store original stroke color and width in custom attributes
+      this.setAttribute("data-stroke", this.style.stroke);
+      this.setAttribute("data-stroke-width", this.style.strokeWidth);
+      // Change stroke color to white and stroke width to 3
+      this.style.setProperty("stroke", "white", "important");
+      this.style.setProperty("stroke-width", "3", "important");
+    }
   };
   const mouseoutHandler = function () {
     if (shouldReturn) {
@@ -441,6 +443,8 @@ function addBlizzards() {
     if (shouldReturn) {
       return;
     }
+    // Check if path is NOT in clickedPathsBlizzardsPortals array
+    if (!clickedPathsBlizzardsPortals.includes(this.id)) {
     // Create a clipPath element and set its id
     var clipPath = document.createElementNS(
       "http://www.w3.org/2000/svg",
@@ -496,7 +500,8 @@ function addBlizzards() {
 
     // Execute generateMap function
     generateMap();
-  };
+    }
+    };
 
   // Add event listeners to elements in paths array
   paths.forEach(function (path) {
@@ -509,6 +514,14 @@ function addBlizzards() {
 
 <script>
 function addPortals() {
+  let shouldReturn = false;
+
+  const handleButton2Click = function () {
+    shouldReturn = true;
+  };
+
+  document.getElementById("button2").addEventListener("click", handleButton2Click);
+
   // Check if size of portalArray is greater than or equal to totalPortals
   if (portalArray.length >= totalPortals) {
     // Return early from the function
@@ -516,6 +529,9 @@ function addPortals() {
   }
   // Define mouseover, mouseout, and click event handlers
   const mouseoverHandler = function () {
+    if (shouldReturn) {
+      return;
+    }
     // Check if path is NOT in clickedPathsBlizzardsPortals array
     if (!clickedPathsBlizzardsPortals.includes(this.id)) {
       // Store original stroke color and width in custom attributes
@@ -527,11 +543,17 @@ function addPortals() {
     }
   };
   const mouseoutHandler = function () {
+    if (shouldReturn) {
+      return;
+    }
     // Reset stroke color and width to original values
     this.style.setProperty("stroke", this.getAttribute("data-stroke"), "important");
     this.style.setProperty("stroke-width", this.getAttribute("data-stroke-width"), "important");
   };
   const clickHandler = function () {
+    if (shouldReturn) {
+      return;
+    }
     // Check if path is NOT in clickedPathsBlizzardsPortals array
     if (!clickedPathsBlizzardsPortals.includes(this.id)) {
       // Create an image element and set its attributes
@@ -610,10 +632,6 @@ function addPortals() {
     path.addEventListener("click", clickHandler);
   });
 
-  // Add event listener to blizzard button
-  document.getElementById("button2").addEventListener("click", function() {
-    // Add code...
-  });
 }
 </script>
 
