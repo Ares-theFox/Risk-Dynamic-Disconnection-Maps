@@ -114,7 +114,7 @@ window.onload = function() {
 	  
 <script>
 // Define global variables
-	console.log("Snail")
+	console.log("Slug")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -402,96 +402,94 @@ function generateMap() {
 </script>
 	
 <script>
-function addBlizzards(buttonClicked) {
-  // Check if function was called by the portal button
-  if (buttonClicked === "portal") {
-    // Return early from the function
-    return;
-  }
+function addBlizzards() {
+  shouldReturn = false;
+
   // Check if size of blizzardArray is greater than or equal to totalBlizzards
   if (blizzardArray.length >= totalBlizzards) {
     // Return early from the function
     return;
   }
+
   // Define mouseover, mouseout, and click event handlers
   const mouseoverHandler = function () {
-    // Check if path is NOT in clickedPathsBlizzardsPortals array
-    if (!clickedPathsBlizzardsPortals.includes(this.id)) {
-      // Store original stroke color and width in custom attributes
-      this.setAttribute("data-stroke", this.style.stroke);
-      this.setAttribute("data-stroke-width", this.style.strokeWidth);
-      // Change stroke color to white and stroke width to 3
-      this.style.setProperty("stroke", "white", "important");
-      this.style.setProperty("stroke-width", "3", "important");
+    if (shouldReturn) {
+      return;
     }
+    // Store original stroke color and width in custom attributes
+    this.setAttribute("data-stroke", this.style.stroke);
+    this.setAttribute("data-stroke-width", this.style.strokeWidth);
+    // Change stroke color to white and stroke width to 3
+    this.style.setProperty("stroke", "white", "important");
+    this.style.setProperty("stroke-width", "3", "important");
   };
   const mouseoutHandler = function () {
-    // Check if path is NOT in clickedPathsBlizzardsPortals array
-    if (!clickedPathsBlizzardsPortals.includes(this.id)) {
-      // Reset stroke color and width to original values
-      this.style.setProperty("stroke", this.getAttribute("data-stroke"), "important");
-      this.style.setProperty("stroke-width", this.getAttribute("data-stroke-width"), "important");
+    if (shouldReturn) {
+      return;
     }
+    // Reset stroke color and width to original values
+    this.style.setProperty("stroke", this.getAttribute("data-stroke"), "important");
+    this.style.setProperty("stroke-width", this.getAttribute("data-stroke-width"), "important");
   };
   const clickHandler = function () {
-    // Check if path is NOT in clickedPathsBlizzardsPortals array
-    if (!clickedPathsBlizzardsPortals.includes(this.id)) {
-      // Create a clipPath element and set its id
-      var clipPath = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "clipPath"
-      );
-      clipPath.setAttribute("id", "clip-" + this.id);
-
-      // Clone the clicked path and append it to the clipPath
-      var clonedPath = this.cloneNode(true);
-      clipPath.appendChild(clonedPath);
-
-      // Append the clipPath to the defs element
-      var defs =
-        svgElement.querySelector("defs") ||
-        svgElement.insertBefore(
-          document.createElementNS("http://www.w3.org/2000/svg", "defs"),
-          svgElement.firstChild
-        );
-      defs.appendChild(clipPath);
-
-      // Create an image element and set its attributes
-      var image = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "image"
-      );
-      image.setAttributeNS(
-        "http://www.w3.org/1999/xlink",
-        "href",
-        BlizzardPattern
-      );
-      image.setAttribute("width", "100%");
-      image.setAttribute("height", "100%");
-      image.setAttribute("clip-path", "url(#clip-" + this.id + ")");
-
-      // Append the image to the SVG
-      svgElement.appendChild(image);
-
-      // Add clicked path to blizzardArray and clickedPathsBlizzardsPortals array
-      blizzardArray.push(this.id);
-      clickedPathsBlizzardsPortals.push(this.id);
-
-       // Check if size of blizzardArray is greater than or equal to totalBlizzards
-       if (blizzardArray.length >= totalBlizzards) {
-         // Remove existing event listeners from elements in paths array
-         paths.forEach(function (path) {
-           path.removeEventListener("mouseover", mouseoverHandler);
-           path.removeEventListener("mouseout", mouseoutHandler);
-           path.removeEventListener("click", clickHandler);
-         });
-	       generateMap();
-	       return;
-       }
-
-       // Execute generateMap function
-       generateMap();
+    if (shouldReturn) {
+      return;
     }
+    // Create a clipPath element and set its id
+    var clipPath = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "clipPath"
+    );
+    clipPath.setAttribute("id", "clip-" + this.id);
+
+    // Clone the clicked path and append it to the clipPath
+    var clonedPath = this.cloneNode(true);
+    clipPath.appendChild(clonedPath);
+
+    // Append the clipPath to the defs element
+    var defs =
+      svgElement.querySelector("defs") ||
+      svgElement.insertBefore(
+        document.createElementNS("http://www.w3.org/2000/svg", "defs"),
+        svgElement.firstChild
+      );
+    defs.appendChild(clipPath);
+
+    // Create an image element and set its attributes
+    var image = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "image"
+    );
+    image.setAttributeNS(
+      "http://www.w3.org/1999/xlink",
+      "href",
+      BlizzardPattern
+    );
+    image.setAttribute("width", "100%");
+    image.setAttribute("height", "100%");
+    image.setAttribute("clip-path", "url(#clip-" + this.id + ")");
+
+    // Append the image to the SVG
+    svgElement.appendChild(image);
+
+    // Add clicked path to blizzardArray and clickedPathsBlizzardsPortals array
+    blizzardArray.push(this.id);
+    clickedPathsBlizzardsPortals.push(this.id);
+
+    // Check if size of blizzardArray is greater than or equal to totalBlizzards
+    if (blizzardArray.length >= totalBlizzards) {
+      // Remove existing event listeners from elements in paths array
+      paths.forEach(function (path) {
+        path.removeEventListener("mouseover", mouseoverHandler);
+        path.removeEventListener("mouseout", mouseoutHandler);
+        path.removeEventListener("click", clickHandler);
+      });
+      generateMap();
+      return;
+    }
+
+    // Execute generateMap function
+    generateMap();
   };
 
   // Add event listeners to elements in paths array
@@ -504,12 +502,7 @@ function addBlizzards(buttonClicked) {
 </script>
 
 <script>
-function addPortals(buttonClicked) {
-  // Check if function was called by the blizzard button
-  if (buttonClicked === "blizzard") {
-    // Return early from the function
-    return;
-  }
+function addPortals() {
   // Check if size of portalArray is greater than or equal to totalPortals
   if (portalArray.length >= totalPortals) {
     // Return early from the function
@@ -528,12 +521,9 @@ function addPortals(buttonClicked) {
     }
   };
   const mouseoutHandler = function () {
-    // Check if path is NOT in clickedPathsBlizzardsPortals array
-    if (!clickedPathsBlizzardsPortals.includes(this.id)) {
-      // Reset stroke color and width to original values
-      this.style.setProperty("stroke", this.getAttribute("data-stroke"), "important");
-      this.style.setProperty("stroke-width", this.getAttribute("data-stroke-width"), "important");
-    }
+    // Reset stroke color and width to original values
+    this.style.setProperty("stroke", this.getAttribute("data-stroke"), "important");
+    this.style.setProperty("stroke-width", this.getAttribute("data-stroke-width"), "important");
   };
   const clickHandler = function () {
     // Check if path is NOT in clickedPathsBlizzardsPortals array
@@ -613,17 +603,20 @@ function addPortals(buttonClicked) {
     path.addEventListener("mouseout", mouseoutHandler);
     path.addEventListener("click", clickHandler);
   });
+
+  // Add event listener to blizzard button
+  document.getElementById("button2").addEventListener("click", function() {
+    // Add code...
+  });
 }
 </script>
 
 <script>
 function button_AddBlizzards() {
   addBlizzards();
-  addPortals("blizzard");
 }
 
 function button_AddPortals() {
-  addBlizzards("portal");
   addPortals();
 }
 </script>
