@@ -114,7 +114,7 @@ window.onload = function() {
 	  
 <script>
 // Define global variables
-	console.log("Slug")
+	console.log("Panda")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -403,7 +403,13 @@ function generateMap() {
 	
 <script>
 function addBlizzards() {
-  shouldReturn = false;
+  let shouldReturn = false;
+
+  const handleButton3Click = function () {
+    shouldReturn = true;
+  };
+
+  document.getElementById("button3").addEventListener("click", handleButton3Click);
 
   // Check if size of blizzardArray is greater than or equal to totalBlizzards
   if (blizzardArray.length >= totalBlizzards) {
@@ -498,7 +504,7 @@ function addBlizzards() {
     path.addEventListener("mouseout", mouseoutHandler);
     path.addEventListener("click", clickHandler);
   });
-}
+}  
 </script>
 
 <script>
