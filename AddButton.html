@@ -462,6 +462,10 @@ function addBlizzards() {
       // Add clicked path to blizzardArray and clickedPathsBlizzardsPortals array
       blizzardArray.push(this.id);
       clickedPathsBlizzardsPortals.push(this.id);
+      
+       // Execute generateMap function
+       generateMap();
+	    return;
     }
   };
 
@@ -471,9 +475,6 @@ function addBlizzards() {
     path.addEventListener("mouseout", mouseoutHandler);
     path.addEventListener("click", clickHandler);
   });
-
-  // Execute generateMap function
-  generateMap();
 }
 </script>
 
