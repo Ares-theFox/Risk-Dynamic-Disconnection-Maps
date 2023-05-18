@@ -120,7 +120,7 @@ window.onload = function() {
 	  
 <script>
 // Define global variables
-	console.log("Tortoise")
+	console.log("Vulpes")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -428,8 +428,12 @@ function addBlizzards() {
   const handleButton3Click = function () {
     shouldReturn = true;
   };
+  const handleButton4Click = function () {
+    shouldReturn = true;
+  };
 
   document.getElementById("button3").addEventListener("click", handleButton3Click);
+  document.getElementById("button4").addEventListener("click", handleButton4Click);
 
   // Check if size of blizzardArray is greater than or equal to totalBlizzards
   if (blizzardArray.length >= totalBlizzards) {
@@ -539,8 +543,12 @@ function addPortals() {
   const handleButton2Click = function () {
     shouldReturn = true;
   };
+  const handleButton4Click = function () {
+    shouldReturn = true;
+  };
 
   document.getElementById("button2").addEventListener("click", handleButton2Click);
+  document.getElementById("button4").addEventListener("click", handleButton4Click);
 
   // Check if size of portalArray is greater than or equal to totalPortals
   if (portalArray.length >= totalPortals) {
