@@ -17,6 +17,9 @@
       header img {
         vertical-align: bottom;
       }
+      #fontSizeInput {
+        width: 33%;
+      }
     </style>
   </head>
   <body>
@@ -116,7 +119,7 @@ window.onload = function() {
 	  
 <script>
 // Define global variables
-	console.log("Muskrat")
+	console.log("Llama")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -328,7 +331,7 @@ function generateMap() {
   var fontSizeInput = document.getElementById("fontSizeInput");
   var fontSize = fontSizeInput.value ? parseInt(fontSizeInput.value) : 30;
   fontSizeInput.addEventListener("input", function() {
-    generateMap();
+    debouncedGenerateMap();
   });
 
   // Color in the map and add indirect connections
@@ -405,6 +408,16 @@ function generateMap() {
 	// Decide which image to display based on the maximum value in column O
 	baseImage.src = baseURL + colorLegend + maxO + ".png";
 }
+	
+function debounce(func, wait) {
+  let timeout;
+  return function() {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, arguments), wait);
+  };
+}
+
+const debouncedGenerateMap = debounce(generateMap, 500);
 </script>
 	
 <script>
