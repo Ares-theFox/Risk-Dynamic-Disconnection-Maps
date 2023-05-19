@@ -28,10 +28,10 @@
 	<img src="" />
     </header>
 <div>
-  <button id="button2" onclick="button_AddBlizzards()">Add Blizzards</button>
-  <button id="button3" onclick="button_AddPortals()">Add Portals</button>
+  <button id="blizzardButton" onclick="button_AddBlizzards()">Add Blizzards</button>
+  <button id="portalButton" onclick="button_AddPortals()">Add Portals</button>
+  <button id="eraserButton" onclick="eraser()">Eraser</button>
   <button id="resetButton">Reset Map</button>
-  <button id="button4" onclick="eraser()">Eraser</button>
   <label for="fontSizeInput">Font Size:</label>
   <input type="number" id="fontSizeInput" name="fontSizeInput" value="30">
 </div>
@@ -71,31 +71,23 @@ window.onload = function() {
 	  cursor: pointer;
 	}
 		
-	#button2 {
+	#blizzardButton {
 	  background-color: white;
 	  color: black;
 	}
 
-	#button2:hover {
+	#blizzardButton:hover {
 	  background-color: grey;
 	}
 
-	#button2:disabled:hover {
-	  background-color: white;
-	}
-
-	#button3 {
+	#portalButton {
 	  background-color: aqua;
 	  color: black;
 	}
 
-	#button3:hover {
+	#portalButton:hover {
 	  background-color: navy;
 	  color: white;
-	}
-
-	#button3:disabled:hover {
-	  background-color: aqua;
 	}
 
 	#resetButton {
@@ -108,12 +100,12 @@ window.onload = function() {
 	color: white;
 	}
 		
-	#button4 {
+	#eraserButton {
 	background-color: #dd9d90;
 	color: black;
 	}
 
-	#button4:hover {
+	#eraserButton:hover {
 	background-color: #c89790;
 	}
 	</style>
@@ -129,7 +121,7 @@ window.onload = function() {
 	  
 <script>
 // Define global variables
-	console.log("Cyclone")
+	console.log("Whisper")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -429,19 +421,19 @@ const debouncedGenerateMap = debounce(generateMap, 500);
 function addBlizzards() {
   let shouldReturn = false;
 
-  const handleButton2Click = function () {
+  const blizzardButtonClick = function () {
     shouldReturn = true;
   };
-  const handleButton3Click = function () {
+  const portalButtonClick = function () {
     shouldReturn = true;
   };
-  const handleButton4Click = function () {
+  const eraserButtonClick = function () {
     shouldReturn = true;
   };
 
-  document.getElementById("button2").addEventListener("click", handleButton3Click);
-  document.getElementById("button3").addEventListener("click", handleButton3Click);
-  document.getElementById("button4").addEventListener("click", handleButton4Click);
+  document.getElementById("blizzardButton").addEventListener("click", blizzardButtonClick);
+  document.getElementById("portalButton").addEventListener("click", portalButtonClick);
+  document.getElementById("eraserButton").addEventListener("click", eraserButtonClick);
 
   // Check if size of blizzardArray is greater than or equal to totalBlizzards
   if (blizzardArray.length >= totalBlizzards) {
@@ -525,6 +517,10 @@ function addBlizzards() {
     // Change the fill of the clicked path to transparent
     this.style.setProperty("fill", "transparent", "important");
 
+    // Change stroke color to white and stroke width to 2
+    this.style.setProperty("stroke", "white", "important");
+    this.style.setProperty("stroke-width", "2", "important");
+	    
     // Check if size of blizzardArray is greater than or equal to totalBlizzards
     if (blizzardArray.length >= totalBlizzards) {
       // Remove existing event listeners from elements in paths array
@@ -555,19 +551,19 @@ function addBlizzards() {
 function addPortals() {
   let shouldReturn = false;
 
-  const handleButton2Click = function () {
+  const blizzardButtonClick = function () {
     shouldReturn = true;
   };
-  const handleButton3Click = function () {
+  const portalButtonClick = function () {
     shouldReturn = true;
   };
-  const handleButton4Click = function () {
+  const eraserButtonClick = function () {
     shouldReturn = true;
   };
 
-  document.getElementById("button2").addEventListener("click", handleButton3Click);
-  document.getElementById("button3").addEventListener("click", handleButton3Click);
-  document.getElementById("button4").addEventListener("click", handleButton4Click);
+  document.getElementById("blizzardButton").addEventListener("click", blizzardButtonClick);
+  document.getElementById("portalButton").addEventListener("click", portalButtonClick);
+  document.getElementById("eraserButton").addEventListener("click", eraserButtonClick);
 
   // Check if size of portalArray is greater than or equal to totalPortals
   if (portalArray.length >= totalPortals) {
@@ -701,27 +697,27 @@ function eraser() {
   }
   let shouldReturn = false;
 
-  const handleButton2Click = function () {
+  const blizzardButtonClick = function () {
     shouldReturn = true;
   };
-  const handleButton3Click = function () {
+  const portalButtonClick = function () {
     shouldReturn = true;
   };
-  const handleButton4Click = function () {
+  const eraserButtonClick = function () {
     shouldReturn = true;
   };
 
-  document.getElementById("button2").addEventListener("click", handleButton3Click);
-  document.getElementById("button3").addEventListener("click", handleButton3Click);
-  document.getElementById("button4").addEventListener("click", handleButton4Click);
+  document.getElementById("blizzardButton").addEventListener("click", blizzardButtonClick);
+  document.getElementById("portalButton").addEventListener("click", portalButtonClick);
+  document.getElementById("eraserButton").addEventListener("click", eraserButtonClick);
 
   // Change button text to "Stop Erasing"
-  document.getElementById("button4").innerHTML = "Stop Erasing";
+  document.getElementById("eraserButton").innerHTML = "Stop Erasing";
 
   // Define mouseover, mouseout, and click event handlers
   const mouseoverHandler = function () {
     if (shouldReturn) {
-      document.getElementById("button4").innerHTML = "Eraser";
+      document.getElementById("eraserButton").innerHTML = "Eraser";
       return;
     }
     // Check if path is in clickedPathsBlizzardsPortals array
@@ -739,7 +735,7 @@ function eraser() {
   };
   const mouseoutHandler = function () {
     if (shouldReturn) {
-      document.getElementById("button4").innerHTML = "Eraser";
+      document.getElementById("eraserButton").innerHTML = "Eraser";
       return;
     }
     // Reset stroke color and width to original values
@@ -750,7 +746,7 @@ function eraser() {
   };
   const clickHandler = function () {
     if (shouldReturn) {
-      document.getElementById("button4").innerHTML = "Eraser";
+      document.getElementById("eraserButton").innerHTML = "Eraser";
       return;
     }
     // Check if path is in clickedPathsBlizzardsPortals array
@@ -818,16 +814,16 @@ updateButtonText();
 function updateButtonText() {
     // Update "Add Blizzards" button text
     if (totalBlizzards - blizzardArray.length <= 0) {
-        document.getElementById("button2").innerHTML = "Added all Blizzards";
+        document.getElementById("blizzardButton").innerHTML = "Added all Blizzards";
     } else {
-        document.getElementById("button2").innerHTML = "Add Blizzards (" + (totalBlizzards - blizzardArray.length) + " left)";
+        document.getElementById("blizzardButton").innerHTML = "Add Blizzards (" + (totalBlizzards - blizzardArray.length) + " left)";
     }
 
     // Update "Add Portals" button text
     if (totalPortals - portalArray.length <= 0) {
-        document.getElementById("button3").innerHTML = "Added all Portals";
+        document.getElementById("portalButton").innerHTML = "Added all Portals";
     } else {
-        document.getElementById("button3").innerHTML = "Add Portals (" + (totalPortals - portalArray.length) + " left)";
+        document.getElementById("portalButton").innerHTML = "Add Portals (" + (totalPortals - portalArray.length) + " left)";
     }
 }
 </script>
