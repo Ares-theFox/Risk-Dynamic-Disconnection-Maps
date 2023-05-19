@@ -129,7 +129,7 @@ window.onload = function() {
 	  
 <script>
 // Define global variables
-	console.log("Tornado")
+	console.log("Cyclone")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -721,6 +721,7 @@ function eraser() {
   // Define mouseover, mouseout, and click event handlers
   const mouseoverHandler = function () {
     if (shouldReturn) {
+      document.getElementById("button4").innerHTML = "Eraser";
       return;
     }
     // Check if path is in clickedPathsBlizzardsPortals array
@@ -738,6 +739,7 @@ function eraser() {
   };
   const mouseoutHandler = function () {
     if (shouldReturn) {
+      document.getElementById("button4").innerHTML = "Eraser";
       return;
     }
     // Reset stroke color and width to original values
@@ -748,6 +750,7 @@ function eraser() {
   };
   const clickHandler = function () {
     if (shouldReturn) {
+      document.getElementById("button4").innerHTML = "Eraser";
       return;
     }
     // Check if path is in clickedPathsBlizzardsPortals array
