@@ -129,7 +129,7 @@ window.onload = function() {
 	  
 <script>
 // Define global variables
-	console.log("Falcon")
+	console.log("Tornado")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -429,6 +429,9 @@ const debouncedGenerateMap = debounce(generateMap, 500);
 function addBlizzards() {
   let shouldReturn = false;
 
+  const handleButton2Click = function () {
+    shouldReturn = true;
+  };
   const handleButton3Click = function () {
     shouldReturn = true;
   };
@@ -436,6 +439,7 @@ function addBlizzards() {
     shouldReturn = true;
   };
 
+  document.getElementById("button2").addEventListener("click", handleButton3Click);
   document.getElementById("button3").addEventListener("click", handleButton3Click);
   document.getElementById("button4").addEventListener("click", handleButton4Click);
 
@@ -554,11 +558,15 @@ function addPortals() {
   const handleButton2Click = function () {
     shouldReturn = true;
   };
+  const handleButton3Click = function () {
+    shouldReturn = true;
+  };
   const handleButton4Click = function () {
     shouldReturn = true;
   };
 
-  document.getElementById("button2").addEventListener("click", handleButton2Click);
+  document.getElementById("button2").addEventListener("click", handleButton3Click);
+  document.getElementById("button3").addEventListener("click", handleButton3Click);
   document.getElementById("button4").addEventListener("click", handleButton4Click);
 
   // Check if size of portalArray is greater than or equal to totalPortals
@@ -691,7 +699,6 @@ function eraser() {
   if (clickedPathsBlizzardsPortals.length === 0) {
     return;
   }
-
   let shouldReturn = false;
 
   const handleButton2Click = function () {
@@ -700,9 +707,13 @@ function eraser() {
   const handleButton3Click = function () {
     shouldReturn = true;
   };
+  const handleButton4Click = function () {
+    shouldReturn = true;
+  };
 
-  document.getElementById("button2").addEventListener("click", handleButton2Click);
+  document.getElementById("button2").addEventListener("click", handleButton3Click);
   document.getElementById("button3").addEventListener("click", handleButton3Click);
+  document.getElementById("button4").addEventListener("click", handleButton4Click);
 
   // Change button text to "Stop Erasing"
   document.getElementById("button4").innerHTML = "Stop Erasing";
