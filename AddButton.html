@@ -26,6 +26,7 @@
     <header>
 	Jules Verne Dynamic Disconnection Map 
 	<img src="" />
+        <span id="invalidText" style="color: red; font-style: italic;"></span>
     </header>
 <div>
   <button id="blizzardButton" onclick="button_AddBlizzards()">Add Blizzards</button>
@@ -141,7 +142,7 @@ window.onload = function() {
 	  
 <script>
 // Define global variables
-	console.log("Relax")
+	console.log("Breathe")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -273,7 +274,20 @@ function stopEditing() {
 <script>
 // Generate the map
 function generateMap() {
+  // Update buttons
   updateButtonText();
+  // Update invalid check
+  	var invalidText = document.getElementById("invalidText");
+	  if (
+	    (blizzardArray.length > 0 && blizzardArray.length < totalBlizzards) ||
+	    (portalArray.length > 0 && portalArray.length < totalPortals)
+	  ) {
+	    // Set the text content of the invalidText element to "! Invalid Generation!"
+	    invalidText.textContent = "! Invalid Generation !";
+	  } else {
+	    // Set the text content of the invalidText element to blank
+	    invalidText.textContent = "";
+	  }
   // Reset tableData to its original values
   tableData = JSON.parse(JSON.stringify(tableDataClone));
   // Remove existing text elements
