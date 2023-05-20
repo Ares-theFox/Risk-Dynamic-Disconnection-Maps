@@ -139,7 +139,7 @@ window.onload = function() {
 };
 
 // Define global variables
-	console.log("JustDie")
+	console.log("UGH")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -438,10 +438,9 @@ function generateMap() {
 	// Decide which image to display based on the maximum value in column O
 	baseImage.src = baseURL + colorLegend + maxO + ".png";
 
-console.log('Checking if map is disconnected using Floyd-Warshall algorithm');
-
 // Create a mapping of node names to indices
 console.log('Creating mapping of node names to indices');
+	console.log(tableData)
 let nodeToIndex = {};
 let index = 0;
 tableData.forEach(row => {
