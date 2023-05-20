@@ -31,10 +31,10 @@
   <button id="blizzardButton" onclick="button_AddBlizzards()">Add Blizzards</button>
   <button id="portalButton" onclick="button_AddPortals()">Add Portals</button>
   <button id="eraserButton" onclick="eraser()">Eraser</button>
-  <button id="stopButton" onclick="stopEditing()">Stop Editing</button>
+  <button id="stopButton" onclick="button_StopEditing()">Stop Editing</button>
   <label for="fontSizeInput">Font Size:</label>
-  <button id="resetButton">Reset Map</button>
   <input type="number" id="fontSizeInput" name="fontSizeInput" value="30">
+  <button id="resetButton">Reset Map</button>
 </div>
 <script>
   document.getElementById("resetButton").addEventListener("click", function () {
@@ -131,7 +131,7 @@ window.onload = function() {
 	  
 <script>
 // Define global variables
-	console.log("Stacked")
+	console.log("Grateful")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -581,10 +581,14 @@ function addPortals() {
   const eraserButtonClick = function () {
     shouldReturn = true;
   };
-
+  const stopButtonClick = function () {
+    shouldReturn = true;
+  };
+	
   document.getElementById("blizzardButton").addEventListener("click", blizzardButtonClick);
   document.getElementById("portalButton").addEventListener("click", portalButtonClick);
   document.getElementById("eraserButton").addEventListener("click", eraserButtonClick);
+  document.getElementById("stopButton").addEventListener("click", stopButtonClick);
 
   // Check if size of portalArray is greater than or equal to totalPortals
   if (portalArray.length >= totalPortals) {
@@ -703,6 +707,10 @@ function addPortals() {
 </script>
 
 <script>
+function button_StopEditing() {
+  stopEditing();
+}
+	
 function button_AddBlizzards() {
   addBlizzards();
 }
@@ -727,18 +735,18 @@ function eraser() {
   const eraserButtonClick = function () {
     shouldReturn = true;
   };
-
+  const stopButtonClick = function () {
+    shouldReturn = true;
+  };
+	
   document.getElementById("blizzardButton").addEventListener("click", blizzardButtonClick);
   document.getElementById("portalButton").addEventListener("click", portalButtonClick);
   document.getElementById("eraserButton").addEventListener("click", eraserButtonClick);
-
-  // Change button text to "Stop Erasing"
-  document.getElementById("eraserButton").innerHTML = "Stop Erasing";
+  document.getElementById("stopButton").addEventListener("click", stopButtonClick);
 
   // Define mouseover, mouseout, and click event handlers
   const mouseoverHandler = function () {
     if (shouldReturn) {
-      document.getElementById("eraserButton").innerHTML = "Eraser";
       return;
     }
     // Check if path is in clickedPathsBlizzardsPortals array
