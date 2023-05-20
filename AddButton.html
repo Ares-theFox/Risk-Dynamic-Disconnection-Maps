@@ -38,33 +38,6 @@
   <button id="resetButton">Reset Map</button>
   <button id="mapDirectoryButton">Map Directory</button>
 </div>
-<script>
-  document.getElementById("resetButton").addEventListener("click", function () {
-    location.reload();
-  });
-</script>
-<script>
-var images = [
-  "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox1.PNG",
-  "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox2.png",
-  "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox3.png",
-  "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox4.png",
-  "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox5.png",
-  "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox6.png",
-  "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox7.png",
-  "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox8.png",
-  "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox9.png",
-  "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox10.png",
-  "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox11.png",
-  "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox12.png",
-];
-
-window.onload = function() {
-  var img = document.querySelector("header img");
-  var randomIndex = Math.floor(Math.random() * images.length);
-  img.src = images[randomIndex];
-};
-</script>
 	<style>
 	/* Add some basic styles to the button */
 	button {
@@ -139,10 +112,34 @@ window.onload = function() {
     <div id="range"></div>
 	  
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  
 <script>
+  document.getElementById("resetButton").addEventListener("click", function () {
+    location.reload();
+  });
+
+var images = [
+  "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox1.PNG",
+  "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox2.png",
+  "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox3.png",
+  "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox4.png",
+  "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox5.png",
+  "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox6.png",
+  "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox7.png",
+  "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox8.png",
+  "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox9.png",
+  "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox10.png",
+  "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox11.png",
+  "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox12.png",
+];
+
+window.onload = function() {
+  var img = document.querySelector("header img");
+  var randomIndex = Math.floor(Math.random() * images.length);
+  img.src = images[randomIndex];
+};
+
 // Define global variables
-	console.log("Pray")
+	console.log("Version5")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -235,9 +232,7 @@ window.onload = function() {
 	});
 	
 // End of global variables
-</script>
 
-<script>
   // Load SVG
   let paths;
   let svgElement;
@@ -261,17 +256,13 @@ window.onload = function() {
     }
   };
   xhr.send();
-</script>
 
-<script>
 // Stop editing
 function stopEditing() {
 	document.getElementById("stopButton").innerHTML = "Stop Editing";
 	return;
 }
-</script>
-	
-<script>
+
 // Generate the map
 function generateMap() {
   // Update buttons
@@ -472,9 +463,7 @@ function debounce(func, wait) {
 }
 
 const debouncedGenerateMap = debounce(generateMap, 500);
-</script>
-	
-<script>
+
 function addBlizzards() {
   let shouldReturn = false;
   document.getElementById("stopButton").innerHTML = "Stop Adding Blizzards";
@@ -609,9 +598,7 @@ function addBlizzards() {
     path.addEventListener("click", clickHandler);
   });
 }  
-</script>
 
-<script>
 function addPortals() {
   let shouldReturn = false;
   document.getElementById("stopButton").innerHTML = "Stop Adding Portals";
@@ -751,9 +738,7 @@ function addPortals() {
   });
 
 }
-</script>
 
-<script>
 function button_StopEditing() {
   stopEditing();
 }
@@ -886,9 +871,7 @@ function eraser() {
     path.addEventListener("click", clickHandler);
   });
 }
-</script>
 
-<script>
 // Update button text on page load
 updateButtonText();
 
