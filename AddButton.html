@@ -121,10 +121,7 @@ window.onload = function() {
 	}
 
 	#mapDirectoryButton {
-	position: absolute;
-	right: 0;
-	top: 50%;
-	transform: translateY(-50%);
+	float: right;
 	background-color: white;
 	color: black;
 	}
@@ -145,7 +142,7 @@ window.onload = function() {
 	  
 <script>
 // Define global variables
-	console.log("Opportunity")
+	console.log("Serenity")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -579,6 +576,7 @@ function addBlizzards() {
         path.removeEventListener("mouseout", mouseoutHandler);
         path.removeEventListener("click", clickHandler);
       });
+      document.getElementById("stopButton").innerHTML = "Stop Editing";
       generateMap();
       return;
     }
@@ -719,6 +717,7 @@ function addPortals() {
            path.removeEventListener("mouseout", mouseoutHandler);
            path.removeEventListener("click", clickHandler);
          });
+     	       document.getElementById("stopButton").innerHTML = "Stop Editing";
 	       generateMap();
 	       return;
        }
@@ -855,6 +854,7 @@ function eraser() {
 
       // Check if clickedPathsBlizzardsPortals array is empty
       if (clickedPathsBlizzardsPortals.length === 0) {
+	document.getElementById("stopButton").innerHTML = "Stop Editing";
         return;
       }
     }
