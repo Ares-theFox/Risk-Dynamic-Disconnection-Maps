@@ -139,7 +139,7 @@ window.onload = function() {
 };
 
 // Define global variables
-	console.log("asdfasdf")
+	console.log("ddddddddddddddddddddddddddddddddd")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -455,18 +455,20 @@ tableData.forEach(row => {
   }
 });
 
-// Create a distance matrix with dimensions equal to the number of nodes
-let dist = new Array(index);
-for (let i = 0; i < index; i++) {
-  dist[i] = new Array(index);
-  for (let j = 0; j < index; j++) {
-    if (i === j) {
-      dist[i][j] = 0;
-    } else {
-      dist[i][j] = Infinity;
-    }
+// Create a mapping of node names to indices
+let nodeToIndex = {};
+let index = 0;
+tableData.forEach(row => {
+  if (row['A'] && !nodeToIndex.hasOwnProperty(row['A'])) {
+    nodeToIndex[row['A']] = index++;
   }
-}
+  let neighbors = row['B'] ? row['B'].split(',') : [];
+  neighbors.forEach(neighbor => {
+    if (!nodeToIndex.hasOwnProperty(neighbor)) {
+      nodeToIndex[neighbor] = index++;
+    }
+  });
+});
 
 // Populate the distance matrix with the distances between directly connected nodes
 tableData.forEach(row => {
@@ -494,9 +496,16 @@ for (let k = 0; k < index; k++) {
 let allNodesConnected = true;
 for (let i = 0; i < index; i++) {
   for (let j = i + 1; j < index; j++) {
-    if (dist[i][j] === Infinity) {
-      allNodesConnected = false;
-      break;
+    // Get the node names corresponding to indices i and j
+    let node1 = Object.keys(nodeToIndex).find(key => nodeToIndex[key] === i);
+    let node2 = Object.keys(nodeToIndex).find(key => nodeToIndex[key] === j);
+    // Check if either node is in the blizzardArray
+    if (!blizzardArray.includes(node1) && !blizzardArray.includes(node2)) {
+      // Check if the distance between the nodes is Infinity
+      if (dist[i][j] === Infinity) {
+        allNodesConnected = false;
+        break;
+      }
     }
   }
 }
