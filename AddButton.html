@@ -139,7 +139,7 @@ window.onload = function() {
 };
 
 // Define global variables
-	console.log("UUUUUUUUUUUUUUUUGGGGGGGGGGGGGGGGHHHHHHHHHH")
+	console.log("asdfasdf")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -445,12 +445,14 @@ tableData.forEach(row => {
   if (row['A'] && !nodeToIndex.hasOwnProperty(row['A'])) {
     nodeToIndex[row['A']] = index++;
   }
-  let neighbors = row['B'] ? row['B'].split(',') : [];
-  neighbors.forEach(neighbor => {
-    if (!nodeToIndex.hasOwnProperty(neighbor)) {
-      nodeToIndex[neighbor] = index++;
-    }
-  });
+  if (row['B']) {
+    let neighbors = row['B'].split(',');
+    neighbors.forEach(neighbor => {
+      if (!nodeToIndex.hasOwnProperty(neighbor)) {
+        nodeToIndex[neighbor] = index++;
+      }
+    });
+  }
 });
 
 // Create a distance matrix with dimensions equal to the number of nodes
