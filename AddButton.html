@@ -33,8 +33,9 @@
   <button id="eraserButton" onclick="eraser()">Eraser</button>
   <button id="stopButton" onclick="button_StopEditing()">Stop Editing</button>
   <label for="fontSizeInput">Font Size:</label>
-  <input type="number" id="fontSizeInput" name="fontSizeInput" value="30">
+  <input type="number" id="fontSizeInput" name="fontSizeInput" value="30" min="1" max="100">
   <button id="resetButton">Reset Map</button>
+  <button id="mapDirectoryButton">Map Directory</button>
 </div>
 <script>
   document.getElementById("resetButton").addEventListener("click", function () {
@@ -118,6 +119,19 @@ window.onload = function() {
 	background-color: black;
 	color: white;
 	}
+
+	#mapDirectoryButton {
+	position: absolute;
+	right: 0;
+	top: 50%;
+	transform: translateY(-50%);
+	background-color: white;
+	color: black;
+	}
+
+	#mapDirectoryButton:hover {
+	background-color: grey;
+	}
 	</style>
 	  
     <img
@@ -131,7 +145,7 @@ window.onload = function() {
 	  
 <script>
 // Define global variables
-	console.log("Grateful")
+	console.log("Opportunity")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -217,6 +231,12 @@ window.onload = function() {
 	  }
 	);
 	
+	// Map directory button
+	var mapDirectoryButton = document.getElementById("mapDirectoryButton");
+	mapDirectoryButton.addEventListener("click", function () {
+	  window.location.href = "https://ares-thefox.github.io/Risk-Dynamic-Disconnection-Maps";
+	});
+	
 // End of global variables
 </script>
 
@@ -249,6 +269,7 @@ window.onload = function() {
 <script>
 // Stop editing
 function stopEditing() {
+	document.getElementById("stopButton").innerHTML = "Stop Editing";
 	return;
 }
 </script>
@@ -343,7 +364,11 @@ function generateMap() {
 
   // Set font size of indirect connections
   var fontSizeInput = document.getElementById("fontSizeInput");
-  var fontSize = fontSizeInput.value ? parseInt(fontSizeInput.value) : 30;
+  fontSizeInput.addEventListener("input", function () {
+    if (this.value > 100) {
+      this.value = 100;
+    }
+  });
   fontSizeInput.addEventListener("input", function() {
     debouncedGenerateMap();
   });
@@ -437,6 +462,7 @@ const debouncedGenerateMap = debounce(generateMap, 500);
 <script>
 function addBlizzards() {
   let shouldReturn = false;
+  document.getElementById("stopButton").innerHTML = "Stop Adding Blizzards";
 
   const blizzardButtonClick = function () {
     shouldReturn = true;
@@ -541,6 +567,7 @@ function addBlizzards() {
     // Change stroke color to white and stroke width to 2
     this.style.setProperty("stroke", "white", "important");
     this.style.setProperty("stroke-width", "2", "important");
+    this.removeEventListener("mouseout", mouseoutHandler);
 	    
     // Check if size of blizzardArray is greater than or equal to totalBlizzards
     if (blizzardArray.length >= totalBlizzards) {
@@ -571,6 +598,7 @@ function addBlizzards() {
 <script>
 function addPortals() {
   let shouldReturn = false;
+  document.getElementById("stopButton").innerHTML = "Stop Adding Portals";
 
   const blizzardButtonClick = function () {
     shouldReturn = true;
@@ -615,8 +643,10 @@ function addPortals() {
       return;
     }
     // Reset stroke color and width to original values
+    if (!clickedPathsBlizzardsPortals.includes(this.id)) {
     this.style.setProperty("stroke", this.getAttribute("data-stroke"), "important");
     this.style.setProperty("stroke-width", this.getAttribute("data-stroke-width"), "important");
+    }
   };
   const clickHandler = function () {
     if (shouldReturn) {
@@ -725,6 +755,7 @@ function eraser() {
     return;
   }
   let shouldReturn = false;
+  document.getElementById("stopButton").innerHTML = "Stop Erasing";
 
   const blizzardButtonClick = function () {
     shouldReturn = true;
