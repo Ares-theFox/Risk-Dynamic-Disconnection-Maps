@@ -438,7 +438,10 @@ function generateMap() {
 	// Decide which image to display based on the maximum value in column O
 	baseImage.src = baseURL + colorLegend + maxO + ".png";
 
+console.log('Checking if map is disconnected using Floyd-Warshall algorithm');
+
 // Create a mapping of node names to indices
+console.log('Creating mapping of node names to indices');
 let nodeToIndex = {};
 let index = 0;
 tableData.forEach(row => {
@@ -452,8 +455,10 @@ tableData.forEach(row => {
     }
   });
 });
+console.log('nodeToIndex:', nodeToIndex);
 
 // Create a distance matrix with dimensions equal to the number of nodes
+console.log('Creating distance matrix');
 let dist = new Array(index);
 for (let i = 0; i < index; i++) {
   dist[i] = new Array(index);
@@ -467,6 +472,7 @@ for (let i = 0; i < index; i++) {
 }
 
 // Populate the distance matrix with the distances between directly connected nodes
+console.log('Populating distance matrix with distances between directly connected nodes');
 tableData.forEach(row => {
   let x = nodeToIndex[row['A']];
   let neighbors = row['B'] ? row['B'].split(',') : [];
@@ -476,8 +482,11 @@ tableData.forEach(row => {
     dist[y][x] = 1;
   });
 });
+console.log('dist matrix after populating with direct connections:');
+console.log(dist);
 
 // Run the Floyd-Warshall algorithm
+console.log('Running Floyd-Warshall algorithm');
 for (let k = 0; k < index; k++) {
   for (let i = 0; i < index; i++) {
     for (let j = 0; j < index; j++) {
@@ -487,8 +496,11 @@ for (let k = 0; k < index; k++) {
     }
   }
 }
+console.log('dist matrix after running Floyd-Warshall algorithm:');
+console.log(dist);
 
 // Check if there are any pairs of nodes that are not connected
+console.log('Checking if there are any pairs of nodes that are not connected');
 let allNodesConnected = true;
 for (let i = 0; i < index; i++) {
   for (let j = i + 1; j < index; j++) {
@@ -498,6 +510,7 @@ for (let i = 0; i < index; i++) {
     }
   }
 }
+console.log('allNodesConnected:', allNodesConnected);
 
 // Update invalid text
 var invalidText = document.getElementById("invalidText");
@@ -512,6 +525,7 @@ if (!allNodesConnected) {
 } else {
   invalidText.textContent = "";
 }
+
 
 
 }
