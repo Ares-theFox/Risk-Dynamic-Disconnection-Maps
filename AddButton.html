@@ -367,6 +367,8 @@ function generateMap() {
   fontSizeInput.addEventListener("input", function () {
     if (this.value > 100) {
       this.value = 100;
+    } else if (this.value < 1) {
+      this.value = 1;
     }
   });
   fontSizeInput.addEventListener("input", function() {
@@ -413,7 +415,7 @@ function generateMap() {
 	  text.setAttribute("pointer-events", "none");
           text.setAttribute("text-anchor", "middle");
           text.setAttribute("alignment-baseline", "middle");
-          text.setAttribute("font-size", fontSize);
+          text.setAttribute("font-size", fontSizeInput.value);
           text.setAttribute("font-weight", "bold");
 	  if (tableData[i]["O"] >= 11) {
 	    text.setAttribute("fill", "white");
