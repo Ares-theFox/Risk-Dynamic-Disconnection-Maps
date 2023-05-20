@@ -26,7 +26,7 @@
     <header>
 	Jules Verne Dynamic Disconnection Map 
 	<img src="" />
-        <span id="invalidText" style="color: red; font-style: italic;"></span>
+        <span id="invalidText" style="color: red; font-style: italic; font-size: 20px;"></span>
     </header>
 <div>
   <button id="blizzardButton" onclick="button_AddBlizzards()">Add Blizzards</button>
@@ -142,7 +142,7 @@ window.onload = function() {
 	  
 <script>
 // Define global variables
-	console.log("Breathe")
+	console.log("Pray")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -276,14 +276,17 @@ function stopEditing() {
 function generateMap() {
   // Update buttons
   updateButtonText();
-  // Update invalid check
+  // Update invalid text
   	var invalidText = document.getElementById("invalidText");
-	  if (
-	    (blizzardArray.length > 0 && blizzardArray.length < totalBlizzards) ||
-	    (portalArray.length > 0 && portalArray.length < totalPortals)
-	  ) {
-	    // Set the text content of the invalidText element to "! Invalid Generation!"
-	    invalidText.textContent = "! Invalid Generation !";
+	  if (blizzardArray.length > 0 && blizzardArray.length < totalBlizzards && portalArray.length > 0 && portalArray.length < totalPortals) {
+	    // Set the text content of the invalidText element to "Invalid Generation: Not enough blizzards and portals"
+	    invalidText.textContent = "Invalid Generation: Not enough blizzards and portals";
+	  } else if (blizzardArray.length > 0 && blizzardArray.length < totalBlizzards) {
+	    // Set the text content of the invalidText element to "Invalid Generation: Not enough blizzards"
+	    invalidText.textContent = "Invalid Generation: Not enough blizzards";
+	  } else if (portalArray.length > 0 && portalArray.length < totalPortals) {
+	    // Set the text content of the invalidText element to "Invalid Generation: Not enough portals"
+	    invalidText.textContent = "Invalid Generation: Not enough portals";
 	  } else {
 	    // Set the text content of the invalidText element to blank
 	    invalidText.textContent = "";
