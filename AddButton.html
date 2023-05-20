@@ -139,7 +139,7 @@ window.onload = function() {
 };
 
 // Define global variables
-	console.log("NearlyThere")
+	console.log("Added")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -261,45 +261,6 @@ window.onload = function() {
 function stopEditing() {
 	document.getElementById("stopButton").innerHTML = "Stop Editing";
 	return;
-}
-
-// Test for invalid generation	
-function testInvalid(tableData) {
-  // Create an adjacency list representation of the graph
-  let graph = {};
-  tableData.forEach(row => {
-    let node = row['A'];
-    let neighbors = row['B'].split(',');
-    graph[node] = neighbors;
-  });
-
-  // Perform a depth-first search on the graph
-  let visited = new Set();
-  let stack = [Object.keys(graph)[0]];
-  while (stack.length > 0) {
-    let node = stack.pop();
-    if (!visited.has(node)) {
-      visited.add(node);
-      stack.push(...graph[node]);
-    }
-  }
-
-  // Check if all nodes were visited
-  let allNodesConnected = visited.size === Object.keys(graph).length;
-
-  // Update invalid text
-  var invalidText = document.getElementById("invalidText");
-  if (!allNodesConnected) {
-    invalidText.textContent = "Invalid Generation: Map is disconnected";
-  } else if (blizzardArray.length > 0 && blizzardArray.length < totalBlizzards && portalArray.length > 0 && portalArray.length < totalPortals) {
-    invalidText.textContent = "Invalid Generation: Not enough blizzards and portals";
-  } else if (blizzardArray.length > 0 && blizzardArray.length < totalBlizzards) {
-    invalidText.textContent = "Invalid Generation: Not enough blizzards";
-  } else if (portalArray.length > 0 && portalArray.length < totalPortals) {
-    invalidText.textContent = "Invalid Generation: Not enough portals";
-  } else {
-    invalidText.textContent = "";
-  }
 }
 	
 // Generate the map
@@ -476,7 +437,42 @@ function generateMap() {
 
 	// Decide which image to display based on the maximum value in column O
 	baseImage.src = baseURL + colorLegend + maxO + ".png";
-	testInvalid(tableData);
+
+	  // Create an adjacency list representation of the graph
+	  let graph = {};
+	  tableData.forEach(row => {
+	    let node = row['A'];
+	    let neighbors = row['B'] ? row['B'].split(',') : [];
+	    graph[node] = neighbors;
+	  });
+
+	  // Perform a depth-first search on the graph
+	  let visited = new Set();
+	  let stack = [Object.keys(graph)[0]];
+	  while (stack.length > 0) {
+	    let node = stack.pop();
+	    if (!visited.has(node)) {
+	      visited.add(node);
+	      stack.push(...graph[node]);
+	    }
+	  }
+
+	  // Check if all nodes were visited
+	  let allNodesConnected = visited.size === Object.keys(graph).length;
+
+	  // Update invalid text
+	  var invalidText = document.getElementById("invalidText");
+	  if (!allNodesConnected) {
+	    invalidText.textContent = "Invalid Generation: Map is disconnected";
+	  } else if (blizzardArray.length > 0 && blizzardArray.length < totalBlizzards && portalArray.length > 0 && portalArray.length < totalPortals) {
+	    invalidText.textContent = "Invalid Generation: Not enough blizzards and portals";
+	  } else if (blizzardArray.length > 0 && blizzardArray.length < totalBlizzards) {
+	    invalidText.textContent = "Invalid Generation: Not enough blizzards";
+	  } else if (portalArray.length > 0 && portalArray.length < totalPortals) {
+	    invalidText.textContent = "Invalid Generation: Not enough portals";
+	  } else {
+	    invalidText.textContent = "";
+	  }
 }
 	
 function debounce(func, wait) {
