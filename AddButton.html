@@ -121,7 +121,6 @@ window.onload = function() {
 	}
 
 	#mapDirectoryButton {
-	float: right;
 	background-color: white;
 	color: black;
 	}
@@ -142,7 +141,7 @@ window.onload = function() {
 	  
 <script>
 // Define global variables
-	console.log("Serenity")
+	console.log("Relax")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -563,9 +562,9 @@ function addBlizzards() {
     // Change the fill of the clicked path to transparent
     this.style.setProperty("fill", "transparent", "important");
 
-    // Change stroke color to white and stroke width to 2
+    // Change stroke color and stroke width
     this.style.setProperty("stroke", "white", "important");
-    this.style.setProperty("stroke-width", "2", "important");
+    this.style.setProperty("stroke-width", "1", "important");
     this.removeEventListener("mouseout", mouseoutHandler);
 	    
     // Check if size of blizzardArray is greater than or equal to totalBlizzards
@@ -796,18 +795,21 @@ function eraser() {
   };
   const mouseoutHandler = function () {
     if (shouldReturn) {
-      document.getElementById("eraserButton").innerHTML = "Eraser";
       return;
     }
     // Reset stroke color and width to original values
     if (clickedPathsBlizzardsPortals.includes(this.id)) {
-      this.style.setProperty("stroke", this.getAttribute("data-stroke"), "important");
-      this.style.setProperty("stroke-width", this.getAttribute("data-stroke-width"), "important");
+      if (blizzardArray.includes(this.id)) {
+        this.style.setProperty("stroke", "white", "important");
+        this.style.setProperty("stroke-width", "1", "important");
+      } else {
+        this.style.setProperty("stroke", this.getAttribute("data-stroke"), "important");
+        this.style.setProperty("stroke-width", this.getAttribute("data-stroke-width"), "important");
+      }
     }
   };
   const clickHandler = function () {
     if (shouldReturn) {
-      document.getElementById("eraserButton").innerHTML = "Eraser";
       return;
     }
     // Check if path is in clickedPathsBlizzardsPortals array
