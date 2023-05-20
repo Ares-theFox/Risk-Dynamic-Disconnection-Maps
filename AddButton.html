@@ -139,7 +139,7 @@ window.onload = function() {
 };
 
 // Define global variables
-	console.log("justleave")
+	console.log("UUUUUUUUUUUUUUUUGGGGGGGGGGGGGGGGHHHHHHHHHH")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -438,52 +438,81 @@ function generateMap() {
 	// Decide which image to display based on the maximum value in column O
 	baseImage.src = baseURL + colorLegend + maxO + ".png";
 
-// Initialize nodeToIndex and indexToNode
+// Create a mapping of node names to indices
 let nodeToIndex = {};
-let indexToNode = [];
 let index = 0;
-for (let i = 0; i < tableData.length; i++) {
-    let nodeName = tableData[i]['A'];
-    if (nodeName !== '') {
-        nodeToIndex[nodeName] = index;
-        indexToNode.push(nodeName);
-        index++;
+tableData.forEach(row => {
+  if (row['A'] && !nodeToIndex.hasOwnProperty(row['A'])) {
+    nodeToIndex[row['A']] = index++;
+  }
+  let neighbors = row['B'] ? row['B'].split(',') : [];
+  neighbors.forEach(neighbor => {
+    if (!nodeToIndex.hasOwnProperty(neighbor)) {
+      nodeToIndex[neighbor] = index++;
     }
+  });
+});
+
+// Create a distance matrix with dimensions equal to the number of nodes
+let dist = new Array(index);
+for (let i = 0; i < index; i++) {
+  dist[i] = new Array(index);
+  for (let j = 0; j < index; j++) {
+    if (i === j) {
+      dist[i][j] = 0;
+    } else {
+      dist[i][j] = Infinity;
+    }
+  }
 }
 
-// Initialize dist matrix
-let size = indexToNode.length;
-let dist = [];
-for (let i = 0; i < size; i++) {
-    dist[i] = new Array(size).fill(Infinity);
-    dist[i][i] = 0;
+// Populate the distance matrix with the distances between directly connected nodes
+tableData.forEach(row => {
+  let x = nodeToIndex[row['A']];
+  let neighbors = row['B'] ? row['B'].split(',') : [];
+  neighbors.forEach(neighbor => {
+    let y = nodeToIndex[neighbor];
+    dist[x][y] = 1;
+    dist[y][x] = 1;
+  });
+});
+
+// Run the Floyd-Warshall algorithm
+for (let k = 0; k < index; k++) {
+  for (let i = 0; i < index; i++) {
+    for (let j = 0; j < index; j++) {
+      if (dist[i][k] + dist[k][j] < dist[i][j]) {
+        dist[i][j] = dist[i][k] + dist[k][j];
+      }
+    }
+  }
 }
 
-// Populate dist matrix with data from tableData
-for (let i = 0; i < tableData.length; i++) {
-    let row = tableData[i];
-    let nodeName = row['A'];
-    if (nodeName !== '') {
-        let nodeIndex = nodeToIndex[nodeName];
-        let neighbors = row['B'].split(',');
-        for (let j = 0; j < neighbors.length; j++) {
-            let neighborName = neighbors[j];
-            let neighborIndex = nodeToIndex[neighborName];
-            dist[nodeIndex][neighborIndex] = 1;
-        }
+// Check if there are any pairs of nodes that are not connected
+let allNodesConnected = true;
+for (let i = 0; i < index; i++) {
+  for (let j = i + 1; j < index; j++) {
+    if (dist[i][j] === Infinity) {
+      allNodesConnected = false;
+      break;
     }
+  }
 }
 
-// Run Floyd-Warshall algorithm
-for (let k = 0; k < size; k++) {
-    for (let i = 0; i < size; i++) {
-        for (let j = 0; j < size; j++) {
-            if (dist[i][k] + dist[k][j] < dist[i][j]) {
-                dist[i][j] = dist[i][k] + dist[k][j];
-            }
-        }
-    }
+// Update invalid text
+var invalidText = document.getElementById("invalidText");
+if (!allNodesConnected) {
+  invalidText.textContent = "Invalid Generation: Map is disconnected";
+} else if (blizzardArray.length > 0 && blizzardArray.length < totalBlizzards && portalArray.length > 0 && portalArray.length < totalPortals) {
+  invalidText.textContent = "Invalid Generation: Not enough blizzards and portals";
+} else if (blizzardArray.length > 0 && blizzardArray.length < totalBlizzards) {
+  invalidText.textContent = "Invalid Generation: Not enough blizzards";
+} else if (portalArray.length > 0 && portalArray.length < totalPortals) {
+  invalidText.textContent = "Invalid Generation: Not enough portals";
+} else {
+  invalidText.textContent = "";
 }
+
 }
 	
 function debounce(func, wait) {
