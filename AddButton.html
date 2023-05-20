@@ -139,7 +139,7 @@ window.onload = function() {
 };
 
 // Define global variables
-	console.log("Pizza")
+	console.log("Thirsty")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -438,42 +438,91 @@ function generateMap() {
 	// Decide which image to display based on the maximum value in column O
 	baseImage.src = baseURL + colorLegend + maxO + ".png";
 
-	  // Create an adjacency list representation of the graph
-	  let graph = {};
-	  tableData.forEach(row => {
-	    let node = row['A'];
-	    let neighbors = row['B'] ? row['B'].split(',') : [];
-	    graph[node] = neighbors;
-	  });
+// Define a class for the union-find data structure
+class UnionFind {
+  constructor(n) {
+    this.parent = new Array(n);
+    this.rank = new Array(n);
+    for (let i = 0; i < n; i++) {
+      this.parent[i] = i;
+      this.rank[i] = 0;
+    }
+  }
 
-	  // Perform a depth-first search on the graph
-	  let visited = new Set();
-	  let startNode = tableData[0]['A'];
-	  let stack = [startNode];
-	  while (stack.length > 0) {
-	    let node = stack.pop();
-	    if (!visited.has(node)) {
-	      visited.add(node);
-	      stack.push(...graph[node]);
-	    }
-	  }
+  find(x) {
+    if (this.parent[x] !== x) {
+      this.parent[x] = this.find(this.parent[x]);
+    }
+    return this.parent[x];
+  }
 
-	  // Check if all nodes were visited
-	  let allNodesConnected = visited.size === Object.keys(graph).length;
+  union(x, y) {
+    let rootX = this.find(x);
+    let rootY = this.find(y);
+    if (rootX === rootY) return;
+    if (this.rank[rootX] > this.rank[rootY]) {
+      this.parent[rootY] = rootX;
+    } else if (this.rank[rootX] < this.rank[rootY]) {
+      this.parent[rootX] = rootY;
+    } else {
+      this.parent[rootY] = rootX;
+      this.rank[rootX]++;
+    }
+  }
+}
 
-	  // Update invalid text
-	  var invalidText = document.getElementById("invalidText");
-	  if (!allNodesConnected) {
-	    invalidText.textContent = "Invalid Generation: Map is disconnected";
-	  } else if (blizzardArray.length > 0 && blizzardArray.length < totalBlizzards && portalArray.length > 0 && portalArray.length < totalPortals) {
-	    invalidText.textContent = "Invalid Generation: Not enough blizzards and portals";
-	  } else if (blizzardArray.length > 0 && blizzardArray.length < totalBlizzards) {
-	    invalidText.textContent = "Invalid Generation: Not enough blizzards";
-	  } else if (portalArray.length > 0 && portalArray.length < totalPortals) {
-	    invalidText.textContent = "Invalid Generation: Not enough portals";
-	  } else {
-	    invalidText.textContent = "";
-	  }
+// Create a mapping of node names to indices
+let nodeToIndex = {};
+let index = 0;
+tableData.forEach(row => {
+  if (!nodeToIndex.hasOwnProperty(row['A'])) {
+    nodeToIndex[row['A']] = index++;
+  }
+  let neighbors = row['B'] ? row['B'].split(',') : [];
+  neighbors.forEach(neighbor => {
+    if (!nodeToIndex.hasOwnProperty(neighbor)) {
+      nodeToIndex[neighbor] = index++;
+    }
+  });
+});
+
+// Create a union-find data structure with one element for each node
+let uf = new UnionFind(index);
+
+// Iterate over tableData and union the nodes
+tableData.forEach(row => {
+  let x = nodeToIndex[row['A']];
+  let neighbors = row['B'] ? row['B'].split(',') : [];
+  neighbors.forEach(neighbor => {
+    let y = nodeToIndex[neighbor];
+    uf.union(x, y);
+  });
+});
+
+// Check if all nodes are in the same connected component
+let allNodesConnected = true;
+let firstNodeParent = uf.find(0);
+for (let i = 1; i < index; i++) {
+  if (uf.find(i) !== firstNodeParent) {
+    allNodesConnected = false;
+    break;
+  }
+}
+
+// Update invalid text
+var invalidText = document.getElementById("invalidText");
+if (!allNodesConnected) {
+  invalidText.textContent = "Invalid Generation: Map is disconnected";
+} else if (blizzardArray.length > 0 && blizzardArray.length < totalBlizzards && portalArray.length > 0 && portalArray.length < totalPortals) {
+  invalidText.textContent = "Invalid Generation: Not enough blizzards and portals";
+} else if (blizzardArray.length > 0 && blizzardArray.length < totalBlizzards) {
+  invalidText.textContent = "Invalid Generation: Not enough blizzards";
+} else if (portalArray.length > 0 && portalArray.length < totalPortals) {
+  invalidText.textContent = "Invalid Generation: Not enough portals";
+} else {
+  invalidText.textContent = "";
+}	
+
 }
 	
 function debounce(func, wait) {
