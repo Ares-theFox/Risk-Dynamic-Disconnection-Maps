@@ -139,7 +139,7 @@ window.onload = function() {
 };
 
 // Define global variables
-	console.log("Added")
+	console.log("Pizza")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -448,7 +448,8 @@ function generateMap() {
 
 	  // Perform a depth-first search on the graph
 	  let visited = new Set();
-	  let stack = [Object.keys(graph)[0]];
+	  let startNode = tableData[0]['A'];
+	  let stack = [startNode];
 	  while (stack.length > 0) {
 	    let node = stack.pop();
 	    if (!visited.has(node)) {
