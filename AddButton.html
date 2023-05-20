@@ -455,21 +455,6 @@ tableData.forEach(row => {
   }
 });
 
-// Create a mapping of node names to indices
-let nodeToIndex = {};
-let index = 0;
-tableData.forEach(row => {
-  if (row['A'] && !nodeToIndex.hasOwnProperty(row['A'])) {
-    nodeToIndex[row['A']] = index++;
-  }
-  let neighbors = row['B'] ? row['B'].split(',') : [];
-  neighbors.forEach(neighbor => {
-    if (!nodeToIndex.hasOwnProperty(neighbor)) {
-      nodeToIndex[neighbor] = index++;
-    }
-  });
-});
-
 // Populate the distance matrix with the distances between directly connected nodes
 tableData.forEach(row => {
   let x = nodeToIndex[row['A']];
