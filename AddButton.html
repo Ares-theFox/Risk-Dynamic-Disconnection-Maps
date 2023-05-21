@@ -141,7 +141,7 @@ window.onload = function() {
 };
 
 // Define global variables
-	console.log("56666666")
+	console.log("2222222222222")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -732,6 +732,67 @@ function addBlizzards() {
     path.addEventListener("click", clickHandler);
   });
 }
+	
+function addBlizzards_pathID(pathID) {
+  // Find the path element with the specified pathID
+  let path = Array.from(paths).find((path) => path.getAttribute("id") === pathID);
+
+  // Create a clipPath element and set its id
+  var clipPath = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "clipPath"
+  );
+  clipPath.setAttribute("id", "clip-" + pathID);
+
+  // Clone the clicked path and append it to the clipPath
+  var clonedPath = path.cloneNode(true);
+  clipPath.appendChild(clonedPath);
+
+  // Append the clipPath to the defs element
+  var defs =
+    svgElement.querySelector("defs") ||
+    svgElement.insertBefore(
+      document.createElementNS("http://www.w3.org/2000/svg", "defs"),
+      svgElement.firstChild
+    );
+  defs.appendChild(clipPath);
+
+  // Create an image element and set its attributes
+  var image = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "image"
+  );
+  image.setAttributeNS(
+    "http://www.w3.org/1999/xlink",
+    "href",
+    BlizzardPattern
+  );
+  image.setAttribute("width", "100%");
+  image.setAttribute("height", "100%");
+  image.setAttribute("clip-path", "url(#clip-" + pathID + ")");
+  image.setAttribute("pointer-events", "none");
+
+  // Append the image to the SVG
+  svgElement.appendChild(image);
+
+  // Move the image behind the path element
+  svgElement.insertBefore(image, svgElement.firstChild);
+
+  // Add clicked path to arrays; push to history
+  blizzardArray.push(pathID);
+  clickedPathsBlizzardsPortals.push(pathID);
+  
+  // Change the fill of the clicked path to transparent
+  path.style.setProperty("fill", "transparent", "important");
+
+  // Change stroke color and stroke width
+  path.style.setProperty("stroke", "white", "important");
+  path.style.setProperty("stroke-width", "1", "important");
+
+   // Execute generateMap function
+   generateMap();
+   return;
+}
 
 function addPortals() {
   let shouldReturn = false;
@@ -1085,9 +1146,9 @@ function undo() {
       }
 	  generateMap();
     } else if (lastAction.type === 'eraseBlizzard') {
-	  addBlizzards(lastAction.pathId);
+	  addBlizzards_pathID(lastAction.pathId);
     } else if (lastAction.type === 'erasePortal') {
-	  addPortals(lastAction.pathId);
+	  addPortals_pathID(lastAction.pathId);
     }
   }
 }
