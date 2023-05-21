@@ -31,64 +31,56 @@
     </header>
 <div>
   <button id="zoomInButton"><i class="fas fa-search-plus"></i></button>
-  <div style="display: inline-block; width: 200px;">
-    <button id="blizzardButton" onclick="button_AddBlizzards()">Add Blizzards</button>
-  </div>
-  <div style="display: inline-block; width: 200px;">
-    <button id="eraserButton" onclick="eraser()">Eraser</button>
-  </div>
+  <button id="blizzardButton" onclick="button_AddBlizzards()">Add Blizzards</button>
+  <button id="eraserButton" onclick="eraser()">Eraser</button>
   <label for="fontSizeInput">Font Size:</label>
   <input type="number" id="fontSizeInput" name="fontSizeInput" value="30" min="1" max="100">
-  <div style="display: inline-block; width: 200px;">
-    <button id="stopButton" onclick="button_StopEditing()">Stop Editing</button>
-  </div>
+  <button id="stopButton" onclick="button_StopEditing()">Stop Editing</button>
 </div>
 <div>
   <button id="zoomOutButton"><i class="fas fa-search-minus"></i></button>
-  <div style="display: inline-block; width: 200px;">
-    <button id="portalButton" onclick="button_AddPortals()">Add Portals</button>
-  </div>
-  <div style="display: inline-block; width: 200px;">
-    <button id="undoButton" onclick="button_Undo()">Undo</button>
-  </div>
-  <div style="display: inline-block; width: 200px;">
-    <button id="resetButton">Reset Map</button>
-  </div>
-  <a href="<URL>" target="_blank">
-    <div style="display: inline-block; width: 200px;">
-      <button id="mapDirectoryButton">Map Directory</button>
-    </div>
+  <button id="portalButton" onclick="button_AddPortals()">Add Portals</button>
+  <button id="undoButton" onclick="button_Undo()">Undo</button>
+  <button id="resetButton">Reset Map</button>
+  <a href="https://ares-thefox.github.io/Risk-Dynamic-Disconnection-Maps" target="_blank">
+    <button id="mapDirectoryButton">Map Directory</button>
   </a>
 </div>
 	<style>
 	/* Add some basic styles to the button */
 	button {
-	  font-size: 16px;
-	  padding: 8px 16px;
-	  border: none;
-	  cursor: pointer;
+	font-size: 16px;
+	padding: 8px 16px;
+	border: none;
+	cursor: pointer;
 	}
-		
+
 	#blizzardButton {
-	  background-color: white;
-	  color: black;
+	width: 170px;
+	text-align: center;
+	background-color: white;
+	color: black;
 	}
 
 	#blizzardButton:hover {
-	  background-color: grey;
+	background-color: grey;
 	}
 
 	#portalButton {
-	  background-color: aqua;
-	  color: black;
+	width: 170px;
+	text-align: center;
+	background-color: aqua;
+	color: black;
 	}
 
 	#portalButton:hover {
-	  background-color: navy;
-	  color: white;
+	background-color: navy;
+	color: white;
 	}
 
 	#eraserButton {
+	width: 90px;
+	text-align: center;
 	background-color: #dd9d90;
 	color: black;
 	}
@@ -107,6 +99,8 @@
 	}
 		
 	#undoButton {
+	width: 90px;
+	text-align: center;
 	background-color: #d8482e;
 	color: black;
 	}
