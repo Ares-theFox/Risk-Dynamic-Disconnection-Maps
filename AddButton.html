@@ -141,7 +141,7 @@ window.onload = function() {
 };
 
 // Define global variables
-	console.log("finished")
+	console.log("undo it!")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -1058,6 +1058,12 @@ function undo() {
       if (clipPath) {
         clipPath.remove();
       }
+
+      // Remove the id of the undone path from the clickedPathsBlizzardsPortals array
+      let index = clickedPathsBlizzardsPortals.indexOf(lastAction.pathId);
+      if (index !== -1) {
+        clickedPathsBlizzardsPortals.splice(index, 1);
+      }
     } else if (lastAction.type === 'addPortal') {
       // Remove the last portal from the portalArray
       portalArray.pop();
@@ -1071,6 +1077,12 @@ function undo() {
           image.remove();
         }
       });
+
+      // Remove the id of the undone path from the clickedPathsBlizzardsPortals array
+      let index = clickedPathsBlizzardsPortals.indexOf(lastAction.pathId);
+      if (index !== -1) {
+        clickedPathsBlizzardsPortals.splice(index, 1);
+      }
     } else if (lastAction.type === 'eraseBlizzard') {
       // Add the erased blizzard back to the blizzardArray
       blizzardArray.push(lastAction.pathId);
@@ -1112,6 +1124,9 @@ function undo() {
 
 	  // Move the image behind all other elements in SVG except for base map image element
 	  svgElement.insertBefore(image, svgElement.querySelector("#map").nextSibling);
+
+      // Add the id of the undone path back to the clickedPathsBlizzardsPortals array
+      clickedPathsBlizzardsPortals.push(lastAction.pathId);
     } else if (lastAction.type === 'erasePortal') {
 	  // Add erased portal back to portalArray
 	  portalArray.push(lastAction.pathId);
@@ -1168,6 +1183,9 @@ function undo() {
 	    "rotate(" + angle + " " + cx + " " + cy + ")"
 	  );
 	});
+
+    // Add the id of the undone path back to the clickedPathsBlizzardsPortals array
+    clickedPathsBlizzardsPortals.push(lastAction.pathId);
     }
 
     generateMap();
