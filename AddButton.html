@@ -141,7 +141,7 @@ window.onload = function() {
 };
 
 // Define global variables
-	console.log("2222222222222")
+	console.log("is this the end?")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -778,16 +778,31 @@ function addBlizzards_pathID(pathID) {
   // Move the image behind the path element
   svgElement.insertBefore(image, svgElement.firstChild);
 
-  // Add clicked path to arrays; push to history
-  blizzardArray.push(pathID);
-  clickedPathsBlizzardsPortals.push(pathID);
+   // Add clicked path to arrays; push to history
+   blizzardArray.push(pathID);
+   clickedPathsBlizzardsPortals.push(pathID);
   
-  // Change the fill of the clicked path to transparent
-  path.style.setProperty("fill", "transparent", "important");
+   // Change the fill of the clicked path to transparent
+   path.style.setProperty("fill", "transparent", "important");
 
-  // Change stroke color and stroke width
-  path.style.setProperty("stroke", "white", "important");
-  path.style.setProperty("stroke-width", "1", "important");
+   // Change stroke color and stroke width
+   path.style.setProperty("stroke", "white", "important");
+   path.style.setProperty("stroke-width", "1", "important");
+
+   // Add mouseout event listener back to path
+   const mouseoutHandler = function () {
+     if (!clickedPathsBlizzardsPortals.includes(this.id)) {
+       // Reset stroke color and width according to the color darktionary
+       let value = tableData.find(row => row['A'] === this.id)['O'];
+       if (value >= 12) {
+         value = 12;
+       }
+       let border_color = colorDarktionary[value];
+       this.style.setProperty("stroke", border_color, "important");
+       this.style.setProperty("stroke-width", "2", "important");
+     }
+   };
+   path.addEventListener("mouseout", mouseoutHandler);
 
    // Execute generateMap function
    generateMap();
@@ -1070,6 +1085,70 @@ function eraser() {
   });
 }
 
+function addPortals_pathID(pathID) {
+  // Find the path element with the specified pathID
+  let path = Array.from(paths).find((path) => path.getAttribute("id") === pathID);
+
+  // Create an image element and set its attributes
+  var image = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "image"
+  );
+  image.setAttributeNS(
+    "http://www.w3.org/1999/xlink",
+    "href",
+    "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/portal.png"
+  );
+
+  // Set a custom attribute to store the id of the clicked path
+  image.setAttribute("data-path-id", pathID);
+
+  // Store the value of pathID in a variable
+  var clickedPathId = pathID;
+
+  // Find matching row in CSV data
+  var csvRow = csvData.find(function (row) {
+    return row["Range"] === clickedPathId;
+  });
+
+  // Get coordinates from CSV data
+  var x = csvRow["Pixel Pair 1"];
+  var y = csvRow["Pixel Pair 2"];
+
+  // Set pointer-events attribute of the image element to none
+  image.setAttribute("pointer-events", "none");
+
+  // Append the image to the SVG
+  svgElement.appendChild(image);
+
+  // Add an event listener to the image element to update its x and y attributes after it has been loaded
+  image.addEventListener("load", function () {
+    // Get the bounding box of the image element
+    var bbox = image.getBBox();
+
+    // Update the x and y attributes of the image element to center it over the clicked area
+    image.setAttribute("x", x - bbox.width / 2);
+    image.setAttribute("y", y - bbox.height / 2);
+
+    // Rotate the image a random number of degrees between 0 and 359 around its center point
+    var angle = Math.floor(Math.random() * 360);
+    var cx = x;
+    var cy = y;
+    image.setAttribute(
+      "transform",
+      "rotate(" + angle + " " + cx + " " + cy + ")"
+    );
+  });
+
+   // Add clicked path to arrays; push to history
+   portalArray.push(pathID);
+   clickedPathsBlizzardsPortals.push(pathID);
+
+   // Execute generateMap function
+   generateMap();
+   return;
+}
+	
 // Update button text on page load
 updateButtonText();
 
