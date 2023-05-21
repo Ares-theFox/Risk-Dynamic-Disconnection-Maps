@@ -31,13 +31,16 @@
     </header>
 <div>
   <button id="zoomInButton"><i class="fas fa-search-plus"></i></button>
-  <button id="zoomOutButton"><i class="fas fa-search-minus"></i></button>
   <button id="blizzardButton" onclick="button_AddBlizzards()">Add Blizzards</button>
-  <button id="portalButton" onclick="button_AddPortals()">Add Portals</button>
   <button id="eraserButton" onclick="eraser()">Eraser</button>
-  <button id="stopButton" onclick="button_StopEditing()">Stop Editing</button>
   <label for="fontSizeInput">Font Size:</label>
   <input type="number" id="fontSizeInput" name="fontSizeInput" value="30" min="1" max="100">
+  <button id="stopButton" onclick="button_StopEditing()">Stop Editing</button>
+</div>
+<div>
+  <button id="zoomOutButton"><i class="fas fa-search-minus"></i></button>
+  <button id="portalButton" onclick="button_AddPortals()">Add Portals</button>
+  <button id="undoButton" onclick="button_Undo()">Undo</button>
   <button id="resetButton">Reset Map</button>
   <a href="https://ares-thefox.github.io/Risk-Dynamic-Disconnection-Maps" target="_blank">
     <button id="mapDirectoryButton">Map Directory</button>
@@ -81,12 +84,21 @@
 	}
 		
 	#stopButton {
-	background-color: #4caf50;
+	background-color: white;
 	color: white;
 	}
 
 	#stopButton:hover {
-	background-color: #3e8e41;
+	background-color: white;
+	}
+		
+	#undoButton {
+	background-color: #d8482e;
+	color: black;
+	}
+
+	#undoButton:hover {
+	background-color: #c13e27;
 	}
 
 	#resetButton {
@@ -158,7 +170,7 @@ window.onload = function() {
 };
 
 // Define global variables
-console.log("edit button")
+console.log("stranding")
 
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
@@ -290,6 +302,13 @@ console.log("edit button")
 // Stop editing
 function stopEditing() {
 	document.getElementById("stopButton").innerHTML = "Stop Editing";
+	// Set the regular background color to white
+	document.getElementById("stopButton").style.backgroundColor = "white";
+	// Set the hover background color to white
+	var styleElement = document.createElement("style");
+	styleElement.id = "stopButtonHoverStyle";
+	styleElement.textContent = "#stopButton:hover { background-color: white !important; }";
+	document.head.appendChild(styleElement);
 	return;
 }
 	
@@ -665,6 +684,13 @@ const debouncedGenerateMap = debounce(generateMap, 500);
 function addBlizzards() {
   let shouldReturn = false;
   document.getElementById("stopButton").innerHTML = "Stop Adding Blizzards";
+	// Set the regular background color to green
+	document.getElementById("stopButton").style.backgroundColor = "#4caf50";
+	// Set the hover background color to dark green
+	var styleElement = document.createElement("style");
+	styleElement.id = "stopButtonHoverStyle";
+	styleElement.textContent = "#stopButton:hover { background-color: #3e8e41 !important; }";
+	document.head.appendChild(styleElement);
 
   const blizzardButtonClick = function () {
     shouldReturn = true;
@@ -783,6 +809,14 @@ function addBlizzards() {
         path.removeEventListener("click", clickHandler);
       });
       document.getElementById("stopButton").innerHTML = "Stop Editing";
+	// Set the regular background color to white
+	document.getElementById("stopButton").style.backgroundColor = "white";
+	// Set the hover background color to white
+	var styleElement = document.createElement("style");
+	styleElement.id = "stopButtonHoverStyle";
+	styleElement.textContent = "#stopButton:hover { background-color: white !important; }";
+	document.head.appendChild(styleElement);
+
       generateMap();
       return;
     }
@@ -864,6 +898,13 @@ function addBlizzards_pathID(pathID) {
 function addPortals() {
   let shouldReturn = false;
   document.getElementById("stopButton").innerHTML = "Stop Adding Portals";
+	// Set the regular background color to green
+	document.getElementById("stopButton").style.backgroundColor = "#4caf50";
+	// Set the hover background color to dark green
+	var styleElement = document.createElement("style");
+	styleElement.id = "stopButtonHoverStyle";
+	styleElement.textContent = "#stopButton:hover { background-color: #3e8e41 !important; }";
+	document.head.appendChild(styleElement);
 
   const blizzardButtonClick = function () {
     shouldReturn = true;
@@ -985,6 +1026,14 @@ function addPortals() {
            path.removeEventListener("click", clickHandler);
          });
      	       document.getElementById("stopButton").innerHTML = "Stop Editing";
+		// Set the regular background color to white
+		document.getElementById("stopButton").style.backgroundColor = "white";
+		// Set the hover background color to white
+		var styleElement = document.createElement("style");
+		styleElement.id = "stopButtonHoverStyle";
+		styleElement.textContent = "#stopButton:hover { background-color: white !important; }";
+		document.head.appendChild(styleElement);
+
 	       generateMap();
 	       return;
        }
@@ -1005,6 +1054,10 @@ function addPortals() {
 function button_StopEditing() {
   stopEditing();
 }
+
+function button_Undo() {
+  undo();
+}
 	
 function button_AddBlizzards() {
   addBlizzards();
@@ -1021,6 +1074,13 @@ function eraser() {
   }
   let shouldReturn = false;
   document.getElementById("stopButton").innerHTML = "Stop Erasing";
+	// Set the regular background color to green
+	document.getElementById("stopButton").style.backgroundColor = "#4caf50";
+	// Set the hover background color to dark green
+	var styleElement = document.createElement("style");
+	styleElement.id = "stopButtonHoverStyle";
+	styleElement.textContent = "#stopButton:hover { background-color: #3e8e41 !important; }";
+	document.head.appendChild(styleElement);
 
   const blizzardButtonClick = function () {
     shouldReturn = true;
@@ -1124,6 +1184,13 @@ function eraser() {
       // Check if clickedPathsBlizzardsPortals array is empty
       if (clickedPathsBlizzardsPortals.length === 0) {
 	document.getElementById("stopButton").innerHTML = "Stop Editing";
+	// Set the regular background color to white
+	document.getElementById("stopButton").style.backgroundColor = "white";
+	// Set the hover background color to white
+	var styleElement = document.createElement("style");
+	styleElement.id = "stopButtonHoverStyle";
+	styleElement.textContent = "#stopButton:hover { background-color: white !important; }";
+	document.head.appendChild(styleElement);
         return;
       }
     }
