@@ -131,8 +131,12 @@ var images = [
   "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox9.png",
   "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox10.png",
   "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox11.png",
-  "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox12.png",
+  "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox12.png"
 ];
+
+// Preload the blizzard pattern
+var blizzardPatternImage = new Image();
+blizzardPatternImage.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20blizzard%20pattern.png";
 
 window.onload = function() {
   var img = document.querySelector("header img");
@@ -141,14 +145,15 @@ window.onload = function() {
 };
 
 // Define global variables
-	console.log("baby shark doo doo")
+console.log("baby owl")
+
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
 	var IndirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20Indirect%20Connection%20Locations%20CSV.csv"
 	var SVG = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20Paths.svg"
-	var BlizzardPattern = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20blizzard%20pattern.png"
-	// Remember to change the img src and the alt title!!!!!!!!
+	var BlizzardPattern = blizzardPatternImage.src;
+	// Remember to change the img src, blizzard pattern, and the alt title!!!!!!!!
 
 	var totalBlizzards = 3
 	var totalPortals = 5
