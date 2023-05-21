@@ -141,7 +141,7 @@ window.onload = function() {
 };
 
 // Define global variables
-	console.log("arewethereyet")
+	console.log("AI is smart but stupid")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -626,11 +626,11 @@ function addBlizzards() {
     if (shouldReturn) {
       return;
     }
-    // Check if path is NOT in clickedPathsBlizzardsPortals array
-    if (!clickedPathsBlizzardsPortals.includes(this.id)) {
+    // Stroke stuff
       // Store original stroke color and width in custom attributes
       this.setAttribute("data-stroke", this.style.stroke);
       this.setAttribute("data-stroke-width", this.style.strokeWidth);
+    if (!clickedPathsBlizzardsPortals.includes(this.id)) {
       // Change stroke color to white and stroke width to 3
       this.style.setProperty("stroke", "white", "important");
       this.style.setProperty("stroke-width", "3", "important");
@@ -762,10 +762,10 @@ function addPortals() {
       return;
     }
     // Check if path is NOT in clickedPathsBlizzardsPortals array
-    if (!clickedPathsBlizzardsPortals.includes(this.id)) {
       // Store original stroke color and width in custom attributes
       this.setAttribute("data-stroke", this.style.stroke);
       this.setAttribute("data-stroke-width", this.style.strokeWidth);
+    if (!clickedPathsBlizzardsPortals.includes(this.id)) {
       // Change stroke color to white and stroke width to 3
       this.style.setProperty("stroke", "white", "important");
       this.style.setProperty("stroke-width", "3", "important");
@@ -910,14 +910,11 @@ function eraser() {
     if (shouldReturn) {
       return;
     }
-    // Check if path is in clickedPathsBlizzardsPortals array
-    if (clickedPathsBlizzardsPortals.includes(this.id)) {
-      // Check if data-stroke and data-stroke-width attributes already exist
-      if (!this.hasAttribute("data-stroke") && !this.hasAttribute("data-stroke-width")) {
+    // Stroke stuff
         // Store original stroke color and width in custom attributes
         this.setAttribute("data-stroke", this.style.stroke);
         this.setAttribute("data-stroke-width", this.style.strokeWidth);
-      }
+    if (clickedPathsBlizzardsPortals.includes(this.id)) {
       // Change stroke color to #ff1111 and stroke width to 4
       this.style.setProperty("stroke", "#ff1111", "important");
       this.style.setProperty("stroke-width", "4", "important");
