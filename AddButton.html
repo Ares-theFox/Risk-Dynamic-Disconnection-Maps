@@ -141,7 +141,7 @@ window.onload = function() {
 };
 
 // Define global variables
-	console.log("grateful")
+	console.log("finished")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -694,10 +694,11 @@ function addBlizzards() {
 	// Move the image behind the path element
 	svgElement.insertBefore(image, svgElement.firstChild);
 	    
-    // Add clicked path to blizzardArray and clickedPathsBlizzardsPortals array
+    // Add clicked path to arrays; push to history
     blizzardArray.push(this.id);
     clickedPathsBlizzardsPortals.push(this.id);
-
+    history.push({ type: 'addBlizzard', pathId: this.id });
+	    
     // Change the fill of the clicked path to transparent
     this.style.setProperty("fill", "transparent", "important");
 
@@ -842,9 +843,10 @@ function addPortals() {
         );
       });
 
-      // Add clicked path to portalArray and clickedPathsBlizzardsPortals array
+      // Add clicked path to arrays; push to history
       portalArray.push(this.id);
       clickedPathsBlizzardsPortals.push(this.id);
+      history.push({ type: 'addPortal', pathId: this.id });
 
        // Check if size of blizzardArray is greater than or equal to totalBlizzards
        if (portalArray.length >= totalPortals) {
@@ -957,8 +959,9 @@ function eraser() {
 
       // Check if path is in blizzardArray
       if (blizzardArray.includes(this.id)) {
-        // Remove clicked path from blizzardArray
+        // Remove clicked path from blizzardArray; push to history
         blizzardArray = blizzardArray.filter((path) => path !== this.id);
+	history.push({ type: 'eraseBlizzard', pathId: this.id });
 
         // Remove blizzard fill from clicked path
         var clipPathId = "blizzard-clip-" + this.id;
@@ -970,8 +973,9 @@ function eraser() {
 
       // Check if path is in portalArray
       if (portalArray.includes(this.id)) {
-        // Remove clicked path from portalArray
+        // Remove clicked path from portalArray; push to history
         portalArray = portalArray.filter((path) => path !== this.id);
+	history.push({ type: 'erasePortal', pathId: this.id });
 
         // Store the value of this.id in a variable
         var clickedPathId = this.id;
@@ -1023,6 +1027,151 @@ function updateButtonText() {
     } else {
         document.getElementById("portalButton").innerHTML = "Add Portals (" + (totalPortals - portalArray.length) + " left)";
     }
+}
+
+// Create an array to store the history of actions
+let history = [];
+
+// Add an event listener for the keydown event to the document object
+document.addEventListener('keydown', function(event) {
+  // Check if the ctrlKey property is true and if the key property is equal to 'z'
+  if (event.ctrlKey && event.key === 'z') {
+    // Call the undo function
+    undo();
+  }
+});
+
+function undo() {
+  // Check if the history array is not empty
+  if (history.length > 0) {
+    // Get the last action from the history array
+    let lastAction = history.pop();
+
+    // Check the type of the last action
+    if (lastAction.type === 'addBlizzard') {
+      // Remove the last blizzard from the blizzardArray
+      blizzardArray.pop();
+
+      // Remove the last blizzard fill from the map
+      let clipPathId = 'blizzard-clip-' + lastAction.pathId;
+      let clipPath = document.getElementById(clipPathId);
+      if (clipPath) {
+        clipPath.remove();
+      }
+    } else if (lastAction.type === 'addPortal') {
+      // Remove the last portal from the portalArray
+      portalArray.pop();
+
+      // Remove the last portal image from the map
+      let images = svgElement.querySelectorAll('image');
+      images.forEach(function(image) {
+        // Check if the data-path-id attribute of the image matches the id of the last portal
+        if (image.getAttribute('data-path-id') === lastAction.pathId) {
+          // Remove the image
+          image.remove();
+        }
+      });
+    } else if (lastAction.type === 'eraseBlizzard') {
+      // Add the erased blizzard back to the blizzardArray
+      blizzardArray.push(lastAction.pathId);
+
+      // Add a blizzard fill back to the erased path
+      let path = svgElement.querySelector('#' + CSS.escape(lastAction.pathId));
+
+      // Create a clipPath element and set its id
+      let clipPath = document.createElementNS('http://www.w3.org/2000/svg', 'clipPath');
+      clipPath.setAttribute('id', 'blizzard-clip-' + lastAction.pathId);
+
+      // Clone the clicked path and append it to the clipPath
+      let clonedPath = path.cloneNode(true);
+      clipPath.appendChild(clonedPath);
+
+      // Append the clipPath to the defs element
+      let defs =
+        svgElement.querySelector('defs') ||
+        svgElement.insertBefore(
+          document.createElementNS('http://www.w3.org/2000/svg', 'defs'),
+          svgElement.firstChild
+        );
+      defs.appendChild(clipPath);
+
+      // Create an image element and set its attributes
+      let image = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+      image.setAttributeNS(
+        'http://www.w3.org/1999/xlink',
+        'href',
+        BlizzardPattern
+      );
+      image.setAttribute('width', '100%');
+      image.setAttribute('height', '100%');
+      image.setAttribute('clip-path', 'url(#blizzard-clip-' + lastAction.pathId + ')');
+	  image.setAttribute("pointer-events", "none");
+
+	  // Append the image to the SVG
+	  svgElement.appendChild(image);
+
+	  // Move the image behind all other elements in SVG except for base map image element
+	  svgElement.insertBefore(image, svgElement.querySelector("#map").nextSibling);
+    } else if (lastAction.type === 'erasePortal') {
+	  // Add erased portal back to portalArray
+	  portalArray.push(lastAction.pathId);
+
+	  // Add portal image back to erased path
+
+	  // Create an image element and set its attributes
+	  var image = document.createElementNS(
+	    "http://www.w3.org/2000/svg",
+	    "image"
+	  );
+	  image.setAttributeNS(
+	    "http://www.w3.org/1999/xlink",
+	    "href",
+	    "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/portal.png"
+	  );
+
+	  // Set a custom attribute to store the id of clicked path
+	  image.setAttribute("data-path-id", lastAction.pathId);
+
+	  // Store value of pathId in variable
+	  var pathId = lastAction.pathId;
+
+	  // Find matching row in CSV data
+	  var csvRow = csvData.find(function (row) {
+	    return row["Range"] === pathId;
+	  });
+
+	// Get coordinates from CSV data
+	var x = csvRow["Pixel Pair 1"];
+	var y = csvRow["Pixel Pair 2"];
+
+	// Set pointer-events attribute of image element to none
+	image.setAttribute("pointer-events", "none");
+
+	// Append image to SVG
+	svgElement.appendChild(image);
+
+	// Add event listener to image element to update its x and y attributes after it has been loaded
+	image.addEventListener("load", function() {
+	  // Get bounding box of image element
+	  var bbox = image.getBBox();
+
+	  // Update x and y attributes of image element to center it over clicked area
+	  image.setAttribute("x", x - bbox.width / 2);
+	  image.setAttribute("y", y - bbox.height / 2);
+
+	  // Rotate image random number of degrees between 0 and 359 around its center point
+	  var angle = Math.floor(Math.random() * 360);
+	  var cx = x;
+	  var cy = y;
+	  image.setAttribute(
+	    "transform",
+	    "rotate(" + angle + " " + cx + " " + cy + ")"
+	  );
+	});
+    }
+
+    generateMap();
+  }
 }
 </script>
 </body>
