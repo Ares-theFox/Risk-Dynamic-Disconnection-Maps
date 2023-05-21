@@ -36,7 +36,9 @@
   <label for="fontSizeInput">Font Size:</label>
   <input type="number" id="fontSizeInput" name="fontSizeInput" value="30" min="1" max="100">
   <button id="resetButton">Reset Map</button>
-  <button id="mapDirectoryButton">Map Directory</button>
+  <a href="https://ares-thefox.github.io/Risk-Dynamic-Disconnection-Maps" target="_blank">
+    <button id="mapDirectoryButton">Map Directory</button>
+  </a>
 </div>
 	<style>
 	/* Add some basic styles to the button */
@@ -139,7 +141,7 @@ window.onload = function() {
 };
 
 // Define global variables
-	console.log("thisisthelasttime")
+	console.log("almostdone!")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -158,7 +160,6 @@ window.onload = function() {
 	// Define connections tableData
 	let tableData;
 	let tableDataClone;
-	let tableDataCloneCopy;
 	Papa.parse(
 	  DirectConnections,
 	  {
@@ -225,12 +226,6 @@ window.onload = function() {
 	    }
 	  }
 	);
-	
-	// Map directory button
-	var mapDirectoryButton = document.getElementById("mapDirectoryButton");
-	mapDirectoryButton.addEventListener("click", function () {
-	  window.location.href = "https://ares-thefox.github.io/Risk-Dynamic-Disconnection-Maps";
-	});
 	
 // End of global variables
 
@@ -507,30 +502,10 @@ for (let i = 0; i < index; i++) {
   }
 }
 
-// Reset tableDataCloneCopy to its original state
-tableDataCloneCopy = JSON.parse(JSON.stringify(tableDataClone));
-
-// Add everything contained in the portal array to tableDataCloneCopy
-// Iterate over tableDataCloneCopy
-tableDataCloneCopy.forEach((row) => {
-  // Check if value in column A matches a value in portalArray
-  if (portalArray.includes(row["A"])) {
-    // Add contents of portalArray to column B
-    row["B"] = [
-      ...new Set([
-        ...(row["B"] ? row["B"].split(",") : []),
-        ...portalArray,
-      ]),
-    ]
-      .filter((value) => value !== row["A"])
-      .join(",");
-  }
-});
-
-// Create a mapping of node names to indices for tableDataCloneCopy
+// Create a mapping of node names to indices for tableDataClone
 let nodeToIndexClone = {};
 let indexClone = 0;
-tableDataCloneCopy.forEach(row => {
+tableDataClone.forEach(row => {
   if (row['A'] && !nodeToIndexClone.hasOwnProperty(row['A'])) {
     nodeToIndexClone[row['A']] = indexClone++;
   }
@@ -542,7 +517,7 @@ tableDataCloneCopy.forEach(row => {
   });
 });
 
-// Create a distance matrix with dimensions equal to the number of nodes for tableDataCloneCopy
+// Create a distance matrix with dimensions equal to the number of nodes for tableDataClone
 let distClone = new Array(indexClone);
 for (let i = 0; i < indexClone; i++) {
   distClone[i] = new Array(indexClone);
@@ -556,7 +531,7 @@ for (let i = 0; i < indexClone; i++) {
 }
 
 // Populate the distance matrix with the distances between directly connected nodes for tableDataCloneCopy
-tableDataCloneCopy.forEach(row => {
+tableDataClone.forEach(row => {
   let x = nodeToIndexClone[row['A']];
   let neighbors = row['B'] ? row['B'].split(',') : [];
   neighbors.forEach(neighbor => {
