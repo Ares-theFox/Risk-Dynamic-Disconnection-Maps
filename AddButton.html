@@ -158,7 +158,7 @@ window.onload = function() {
 };
 
 // Define global variables
-console.log("zoom")
+console.log("edit button")
 
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
@@ -232,7 +232,20 @@ console.log("zoom")
 	
 	// Define csvData as a global variable
 	var csvData;
+	
+	// Define a counter variable to keep track of the number of requests that have completed
+	var requestsCompleted = 0;
+	
+	// Define a function to call when a request has completed
+	function onRequestComplete() {
+	  requestsCompleted++;
+	  if (requestsCompleted === 2) {
+	    // Both requests have completed, so call the generateMap function
+	    generateMap();
+	  }
+	}
 
+	// Load the CSV data
 	Papa.parse(
 	  IndirectConnections,
 	  {
@@ -241,35 +254,38 @@ console.log("zoom")
 	    complete: function (results) {
 	      // Assign the parsed data to the global csvData variable
 	      csvData = results.data;
+	      // Call the onRequestComplete function to indicate that this request has completed
+	      onRequestComplete();
 	    }
 	  }
 	);
 	
 // End of global variables
 
-  // Load SVG
-  let paths;
-  let svgElement;
-  var xhr = new XMLHttpRequest();
-  xhr.open(
-    "GET",
-    SVG
-  );
-  xhr.onload = function () {
-    if (xhr.status === 200) {
-      var svg = xhr.responseText;
-      var rangeElement = document.getElementById("range");
-      rangeElement.innerHTML = svg;
-      svgElement = rangeElement.querySelector("svg");
-      paths = svgElement.querySelectorAll("path");
-      paths.forEach(function (path) {
-        path.setAttribute("fill", "transparent");
-        path.setAttribute("stroke-opacity", "0");
-      });
-    generateMap();
-    }
-  };
-  xhr.send();
+	// Load the SVG
+	let paths;
+	let svgElement;
+	var xhr = new XMLHttpRequest();
+	xhr.open(
+	  "GET",
+	  SVG
+	);
+	xhr.onload = function () {
+	  if (xhr.status === 200) {
+	    var svg = xhr.responseText;
+	    var rangeElement = document.getElementById("range");
+	    rangeElement.innerHTML = svg;
+	    svgElement = rangeElement.querySelector("svg");
+	    paths = svgElement.querySelectorAll("path");
+	    paths.forEach(function (path) {
+	      path.setAttribute("fill", "transparent");
+	      path.setAttribute("stroke-opacity", "0");
+	    });
+	    // Call the onRequestComplete function to indicate that this request has completed
+	    onRequestComplete();
+	  }
+	};
+	xhr.send();
 
 // Stop editing
 function stopEditing() {
