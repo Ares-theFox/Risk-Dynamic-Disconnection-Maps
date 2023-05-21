@@ -139,7 +139,7 @@ window.onload = function() {
 };
 
 // Define global variables
-	console.log("ffffffffffffffffffffffff")
+	console.log("pleaseletthisbethelastedit")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -158,6 +158,7 @@ window.onload = function() {
 	// Define connections tableData
 	let tableData;
 	let tableDataClone;
+	let tableDataCloneCopy;
 	Papa.parse(
 	  DirectConnections,
 	  {
@@ -179,7 +180,7 @@ window.onload = function() {
 	    },
 	  }
 	);
-
+	
 	// Define color dictionaries 
 	const colorDictionary = {
 	  1: "#eb3337",
@@ -506,16 +507,108 @@ for (let i = 0; i < index; i++) {
   }
 }
 
+// Add everything contained in the portal array to tableDataCloneCopy
+// Iterate over tableDataCloneCopy
+tableDataCloneCopy.forEach((row) => {
+  // Check if value in column A matches a value in portalArray
+  if (portalArray.includes(row["A"])) {
+    // Add contents of portalArray to column B
+    row["B"] = [
+      ...new Set([
+        ...(row["B"] ? row["B"].split(",") : []),
+        ...portalArray,
+      ]),
+    ]
+      .filter((value) => value !== row["A"])
+      .join(",");
+  }
+});
+
+// Create a mapping of node names to indices for tableDataCloneCopy
+let nodeToIndexClone = {};
+let indexClone = 0;
+tableDataCloneCopy.forEach(row => {
+  if (row['A'] && !nodeToIndexClone.hasOwnProperty(row['A'])) {
+    nodeToIndexClone[row['A']] = indexClone++;
+  }
+  let neighbors = row['B'] ? row['B'].split(',') : [];
+  neighbors.forEach(neighbor => {
+    if (!nodeToIndexClone.hasOwnProperty(neighbor)) {
+      nodeToIndexClone[neighbor] = indexClone++;
+    }
+  });
+});
+
+// Create a distance matrix with dimensions equal to the number of nodes for tableDataCloneCopy
+let distClone = new Array(indexClone);
+for (let i = 0; i < indexClone; i++) {
+  distClone[i] = new Array(indexClone);
+  for (let j = 0; j < indexClone; j++) {
+    if (i === j) {
+      distClone[i][j] = 0;
+    } else {
+      distClone[i][j] = Infinity;
+    }
+  }
+}
+
+// Reset tableDataCloneCopy to its original state
+tableDataCloneCopy = JSON.parse(JSON.stringify(tableDataClone));
+
+// Add everything contained in the portal array to tableDataCloneCopy
+// Iterate over tableDataCloneCopy
+tableDataCloneCopy.forEach((row) => {
+  // Check if value in column A matches a value in portalArray
+  if (portalArray.includes(row["A"])) {
+    // Add contents of portalArray to column B
+    row["B"] = [
+      ...new Set([
+        ...(row["B"] ? row["B"].split(",") : []),
+        ...portalArray,
+      ]),
+    ]
+      .filter((value) => value !== row["A"])
+      .join(",");
+  }
+});
+
+// Run the Floyd-Warshall algorithm for tableDataCloneCopy
+for (let k = 0; k < indexClone; k++) {
+  for (let i = 0; i < indexClone; i++) {
+    for (let j = 0; j < indexClone; j++) {
+      if (distClone[i][k] + distClone[k][j] < distClone[i][j]) {
+        distClone[i][j] = distClone[i][k] + distClone[k][j];
+      }
+    }
+  }
+}
+
+// Check if any pair of portal nodes are within 2 travel distance of each other
+let portalsTooClose = false;
+for (let i = 0; i < portalArray.length; i++) {
+  for (let j = i + 1; j < portalArray.length; j++) {
+    // Get the node names corresponding to indices i and j
+    let node1 = portalArray[i];
+    let node2 = portalArray[j];
+    // Get the indices corresponding to the node names
+    let x = nodeToIndexClone[node1];
+    let y = nodeToIndexClone[node2];
+    // Check if the distance between the nodes is less than or equal to 2
+    if (distClone[x][y] <= 2) {
+      portalsTooClose = true;
+      break;
+    }
+  }
+}
+
 // Update invalid text
 var invalidText = document.getElementById("invalidText");
-if (!allNodesConnected) {
+if (!allNodesConnected && portalsTooClose) {
+  invalidText.textContent = "Invalid Generation: Map disconnected; Portals too close";
+} else if (!allNodesConnected) {
   invalidText.textContent = "Invalid Generation: Map is disconnected";
-} else if (blizzardArray.length > 0 && blizzardArray.length < totalBlizzards && portalArray.length > 0 && portalArray.length < totalPortals) {
-  invalidText.textContent = "Invalid Generation: Not enough blizzards and portals";
-} else if (blizzardArray.length > 0 && blizzardArray.length < totalBlizzards) {
-  invalidText.textContent = "Invalid Generation: Not enough blizzards";
-} else if (portalArray.length > 0 && portalArray.length < totalPortals) {
-  invalidText.textContent = "Invalid Generation: Not enough portals";
+} else if (portalsTooClose) {
+  invalidText.textContent = "Invalid Generation: Portals are too close";
 } else {
   invalidText.textContent = "";
 }
