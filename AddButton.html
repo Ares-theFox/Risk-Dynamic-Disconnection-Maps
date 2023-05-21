@@ -141,7 +141,7 @@ window.onload = function() {
 };
 
 // Define global variables
-	console.log("pain")
+	console.log("grateful")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -931,7 +931,7 @@ function eraser() {
 	    if (blizzardArray.includes(this.id)) {
 	      // Change stroke color to white and stroke width to 3
 	      this.style.setProperty("stroke", "white", "important");
-	      this.style.setProperty("stroke-width", "2", "important");
+	      this.style.setProperty("stroke-width", "1", "important");
 	    } else if (portalArray.includes(this.id)) {
 	      // Reset stroke color and width according to the color darktionary
 	      let value = tableData.find(row => row['A'] === this.id)['O'];
