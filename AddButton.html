@@ -141,7 +141,7 @@ window.onload = function() {
 };
 
 // Define global variables
-	console.log("AI is smart but stupid")
+	console.log("pain")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -621,28 +621,31 @@ function addBlizzards() {
     // Return early from the function
     return;
   }
-  // Define mouseover, mouseout, and click event handlers
-  const mouseoverHandler = function () {
-    if (shouldReturn) {
-      return;
-    }
-    // Stroke stuff
-      // Store original stroke color and width in custom attributes
-      this.setAttribute("data-stroke", this.style.stroke);
-      this.setAttribute("data-stroke-width", this.style.strokeWidth);
-    if (!clickedPathsBlizzardsPortals.includes(this.id)) {
-      // Change stroke color to white and stroke width to 3
-      this.style.setProperty("stroke", "white", "important");
-      this.style.setProperty("stroke-width", "3", "important");
-    }
-  };
+	// Define mouseover, mouseout, and click event handlers
+	const mouseoverHandler = function () {
+	  if (shouldReturn) {
+	    return;
+	  }
+	  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
+	    // Change stroke color to white and stroke width to 3
+	    this.style.setProperty("stroke", "white", "important");
+	    this.style.setProperty("stroke-width", "3", "important");
+	  }
+	};
 	const mouseoutHandler = function () {
 	  if (shouldReturn) {
 	    return;
 	  }
-	  // Reset stroke color and width to original values
-	  this.style.setProperty("stroke", this.getAttribute("data-stroke"), "important");
-	  this.style.setProperty("stroke-width", this.getAttribute("data-stroke-width"), "important");
+	  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
+	    // Reset stroke color and width according to the color darktionary
+	    let value = tableData.find(row => row['A'] === this.id)['O'];
+	    if (value >= 12) {
+	      value = 12;
+	    }
+	    let border_color = colorDarktionary[value];
+	    this.style.setProperty("stroke", border_color, "important");
+	    this.style.setProperty("stroke-width", "2", "important");
+	  }
 	};
   const clickHandler = function () {
     if (shouldReturn) {
@@ -756,28 +759,31 @@ function addPortals() {
     // Return early from the function
     return;
   }
-  // Define mouseover, mouseout, and click event handlers
-  const mouseoverHandler = function () {
-    if (shouldReturn) {
-      return;
-    }
-    // Check if path is NOT in clickedPathsBlizzardsPortals array
-      // Store original stroke color and width in custom attributes
-      this.setAttribute("data-stroke", this.style.stroke);
-      this.setAttribute("data-stroke-width", this.style.strokeWidth);
-    if (!clickedPathsBlizzardsPortals.includes(this.id)) {
-      // Change stroke color to white and stroke width to 3
-      this.style.setProperty("stroke", "white", "important");
-      this.style.setProperty("stroke-width", "3", "important");
-    }
-  };
+	// Define mouseover, mouseout, and click event handlers
+	const mouseoverHandler = function () {
+	  if (shouldReturn) {
+	    return;
+	  }
+	  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
+	    // Change stroke color to white and stroke width to 3
+	    this.style.setProperty("stroke", "white", "important");
+	    this.style.setProperty("stroke-width", "3", "important");
+	  }
+	};
 	const mouseoutHandler = function () {
 	  if (shouldReturn) {
 	    return;
 	  }
-	  // Reset stroke color and width to original values
-	  this.style.setProperty("stroke", this.getAttribute("data-stroke"), "important");
-	  this.style.setProperty("stroke-width", this.getAttribute("data-stroke-width"), "important");
+	  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
+	    // Reset stroke color and width according to the color darktionary
+	    let value = tableData.find(row => row['A'] === this.id)['O'];
+	    if (value >= 12) {
+	      value = 12;
+	    }
+	    let border_color = colorDarktionary[value];
+	    this.style.setProperty("stroke", border_color, "important");
+	    this.style.setProperty("stroke-width", "2", "important");
+	  }
 	};
   const clickHandler = function () {
     if (shouldReturn) {
@@ -905,28 +911,38 @@ function eraser() {
   document.getElementById("eraserButton").addEventListener("click", eraserButtonClick);
   document.getElementById("stopButton").addEventListener("click", stopButtonClick);
 
-  // Define mouseover, mouseout, and click event handlers
-  const mouseoverHandler = function () {
-    if (shouldReturn) {
-      return;
-    }
-    // Stroke stuff
-        // Store original stroke color and width in custom attributes
-        this.setAttribute("data-stroke", this.style.stroke);
-        this.setAttribute("data-stroke-width", this.style.strokeWidth);
-    if (clickedPathsBlizzardsPortals.includes(this.id)) {
-      // Change stroke color to #ff1111 and stroke width to 4
-      this.style.setProperty("stroke", "#ff1111", "important");
-      this.style.setProperty("stroke-width", "4", "important");
-    }
-  };
+	// Define mouseover, mouseout, and click event handlers
+	const mouseoverHandler = function () {
+	  if (shouldReturn) {
+	    return;
+	  }
+	  if (clickedPathsBlizzardsPortals.includes(this.id)) {
+	    // Change stroke color to #ff1111 and stroke width to 4
+	    this.style.setProperty("stroke", "#ff1111", "important");
+	    this.style.setProperty("stroke-width", "4", "important");
+	  }
+	};
+
 	const mouseoutHandler = function () {
 	  if (shouldReturn) {
 	    return;
 	  }
-	  // Reset stroke color and width to original values
-	  this.style.setProperty("stroke", this.getAttribute("data-stroke"), "important");
-	  this.style.setProperty("stroke-width", this.getAttribute("data-stroke-width"), "important");
+	  if (clickedPathsBlizzardsPortals.includes(this.id)) {
+	    if (blizzardArray.includes(this.id)) {
+	      // Change stroke color to white and stroke width to 3
+	      this.style.setProperty("stroke", "white", "important");
+	      this.style.setProperty("stroke-width", "3", "important");
+	    } else if (portalArray.includes(this.id)) {
+	      // Reset stroke color and width according to the color darktionary
+	      let value = tableData.find(row => row['A'] === this.id)['O'];
+	      if (value >= 12) {
+		value = 12;
+	      }
+	      let border_color = colorDarktionary[value];
+	      this.style.setProperty("stroke", border_color, "important");
+	      this.style.setProperty("stroke-width", "2", "important");
+	    }
+	  }
 	};
   const clickHandler = function () {
     if (shouldReturn) {
