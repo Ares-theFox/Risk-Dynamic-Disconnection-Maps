@@ -141,7 +141,7 @@ window.onload = function() {
 };
 
 // Define global variables
-	console.log("is this the end?")
+	console.log("baby shark doo doo")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -581,7 +581,6 @@ if (!allNodesConnected && portalsTooClose) {
 } else {
   invalidText.textContent = "";
 }
-
 }
 	
 function debounce(func, wait) {
@@ -705,7 +704,6 @@ function addBlizzards() {
     // Change stroke color and stroke width
     this.style.setProperty("stroke", "white", "important");
     this.style.setProperty("stroke-width", "1", "important");
-    this.removeEventListener("mouseout", mouseoutHandler);
 	    
     // Check if size of blizzardArray is greater than or equal to totalBlizzards
     if (blizzardArray.length >= totalBlizzards) {
@@ -778,31 +776,16 @@ function addBlizzards_pathID(pathID) {
   // Move the image behind the path element
   svgElement.insertBefore(image, svgElement.firstChild);
 
-   // Add clicked path to arrays; push to history
-   blizzardArray.push(pathID);
-   clickedPathsBlizzardsPortals.push(pathID);
+  // Add clicked path to arrays; push to history
+  blizzardArray.push(pathID);
+  clickedPathsBlizzardsPortals.push(pathID);
   
-   // Change the fill of the clicked path to transparent
-   path.style.setProperty("fill", "transparent", "important");
+  // Change the fill of the clicked path to transparent
+  path.style.setProperty("fill", "transparent", "important");
 
-   // Change stroke color and stroke width
-   path.style.setProperty("stroke", "white", "important");
-   path.style.setProperty("stroke-width", "1", "important");
-
-   // Add mouseout event listener back to path
-   const mouseoutHandler = function () {
-     if (!clickedPathsBlizzardsPortals.includes(this.id)) {
-       // Reset stroke color and width according to the color darktionary
-       let value = tableData.find(row => row['A'] === this.id)['O'];
-       if (value >= 12) {
-         value = 12;
-       }
-       let border_color = colorDarktionary[value];
-       this.style.setProperty("stroke", border_color, "important");
-       this.style.setProperty("stroke-width", "2", "important");
-     }
-   };
-   path.addEventListener("mouseout", mouseoutHandler);
+  // Change stroke color and stroke width
+  path.style.setProperty("stroke", "white", "important");
+  path.style.setProperty("stroke-width", "1", "important");
 
    // Execute generateMap function
    generateMap();
