@@ -139,7 +139,7 @@ window.onload = function() {
 };
 
 // Define global variables
-	console.log("pleaseletthisbethelastedit")
+	console.log("thisisthelasttime")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -507,6 +507,9 @@ for (let i = 0; i < index; i++) {
   }
 }
 
+// Reset tableDataCloneCopy to its original state
+tableDataCloneCopy = JSON.parse(JSON.stringify(tableDataClone));
+
 // Add everything contained in the portal array to tableDataCloneCopy
 // Iterate over tableDataCloneCopy
 tableDataCloneCopy.forEach((row) => {
@@ -552,24 +555,15 @@ for (let i = 0; i < indexClone; i++) {
   }
 }
 
-// Reset tableDataCloneCopy to its original state
-tableDataCloneCopy = JSON.parse(JSON.stringify(tableDataClone));
-
-// Add everything contained in the portal array to tableDataCloneCopy
-// Iterate over tableDataCloneCopy
-tableDataCloneCopy.forEach((row) => {
-  // Check if value in column A matches a value in portalArray
-  if (portalArray.includes(row["A"])) {
-    // Add contents of portalArray to column B
-    row["B"] = [
-      ...new Set([
-        ...(row["B"] ? row["B"].split(",") : []),
-        ...portalArray,
-      ]),
-    ]
-      .filter((value) => value !== row["A"])
-      .join(",");
-  }
+// Populate the distance matrix with the distances between directly connected nodes for tableDataCloneCopy
+tableDataCloneCopy.forEach(row => {
+  let x = nodeToIndexClone[row['A']];
+  let neighbors = row['B'] ? row['B'].split(',') : [];
+  neighbors.forEach(neighbor => {
+    let y = nodeToIndexClone[neighbor];
+    distClone[x][y] = 1;
+    distClone[y][x] = 1;
+  });
 });
 
 // Run the Floyd-Warshall algorithm for tableDataCloneCopy
