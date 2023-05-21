@@ -141,7 +141,7 @@ window.onload = function() {
 };
 
 // Define global variables
-	console.log("almostdone!")
+	console.log("willilive?")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -636,14 +636,20 @@ function addBlizzards() {
       this.style.setProperty("stroke-width", "3", "important");
     }
   };
-  const mouseoutHandler = function () {
-    if (shouldReturn) {
-      return;
-    }
-    // Reset stroke color and width to original values
-    this.style.setProperty("stroke", this.getAttribute("data-stroke"), "important");
-    this.style.setProperty("stroke-width", this.getAttribute("data-stroke-width"), "important");
-  };
+	const mouseoutHandler = function () {
+	  if (shouldReturn) {
+	    return;
+	  }
+	  // Check if path is NOT in clickedPathsBlizzardsPortals array
+	  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
+	    // Store current stroke color and width in custom attributes
+	    this.setAttribute("data-stroke", this.style.stroke);
+	    this.setAttribute("data-stroke-width", this.style.strokeWidth);
+	    // Reset stroke color and width to original values
+	    this.style.setProperty("stroke", this.getAttribute("data-stroke"), "important");
+	    this.style.setProperty("stroke-width", this.getAttribute("data-stroke-width"), "important");
+	  }
+	};
   const clickHandler = function () {
     if (shouldReturn) {
       return;
@@ -771,16 +777,20 @@ function addPortals() {
       this.style.setProperty("stroke-width", "3", "important");
     }
   };
-  const mouseoutHandler = function () {
-    if (shouldReturn) {
-      return;
-    }
-    // Reset stroke color and width to original values
-    if (!clickedPathsBlizzardsPortals.includes(this.id)) {
-    this.style.setProperty("stroke", this.getAttribute("data-stroke"), "important");
-    this.style.setProperty("stroke-width", this.getAttribute("data-stroke-width"), "important");
-    }
-  };
+	const mouseoutHandler = function () {
+	  if (shouldReturn) {
+	    return;
+	  }
+	  // Check if path is NOT in clickedPathsBlizzardsPortals array
+	  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
+	    // Store current stroke color and width in custom attributes
+	    this.setAttribute("data-stroke", this.style.stroke);
+	    this.setAttribute("data-stroke-width", this.style.strokeWidth);
+	    // Reset stroke color and width to original values
+	    this.style.setProperty("stroke", this.getAttribute("data-stroke"), "important");
+	    this.style.setProperty("stroke-width", this.getAttribute("data-stroke-width"), "important");
+	  }
+	};
   const clickHandler = function () {
     if (shouldReturn) {
       return;
@@ -925,21 +935,20 @@ function eraser() {
       this.style.setProperty("stroke-width", "4", "important");
     }
   };
-  const mouseoutHandler = function () {
-    if (shouldReturn) {
-      return;
-    }
-    // Reset stroke color and width to original values
-    if (clickedPathsBlizzardsPortals.includes(this.id)) {
-      if (blizzardArray.includes(this.id)) {
-        this.style.setProperty("stroke", "white", "important");
-        this.style.setProperty("stroke-width", "1", "important");
-      } else {
-        this.style.setProperty("stroke", this.getAttribute("data-stroke"), "important");
-        this.style.setProperty("stroke-width", this.getAttribute("data-stroke-width"), "important");
-      }
-    }
-  };
+	const mouseoutHandler = function () {
+	  if (shouldReturn) {
+	    return;
+	  }
+	  // Check if path is NOT in clickedPathsBlizzardsPortals array
+	  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
+	    // Store current stroke color and width in custom attributes
+	    this.setAttribute("data-stroke", this.style.stroke);
+	    this.setAttribute("data-stroke-width", this.style.strokeWidth);
+	    // Reset stroke color and width to original values
+	    this.style.setProperty("stroke", this.getAttribute("data-stroke"), "important");
+	    this.style.setProperty("stroke-width", this.getAttribute("data-stroke-width"), "important");
+	  }
+	};
   const clickHandler = function () {
     if (shouldReturn) {
       return;
