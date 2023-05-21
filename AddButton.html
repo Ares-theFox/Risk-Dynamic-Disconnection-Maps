@@ -931,7 +931,7 @@ function eraser() {
 	    if (blizzardArray.includes(this.id)) {
 	      // Change stroke color to white and stroke width to 3
 	      this.style.setProperty("stroke", "white", "important");
-	      this.style.setProperty("stroke-width", "3", "important");
+	      this.style.setProperty("stroke-width", "2", "important");
 	    } else if (portalArray.includes(this.id)) {
 	      // Reset stroke color and width according to the color darktionary
 	      let value = tableData.find(row => row['A'] === this.id)['O'];
