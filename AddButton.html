@@ -141,7 +141,7 @@ window.onload = function() {
 };
 
 // Define global variables
-	console.log("fffffffffffff")
+	console.log("asdfasdfasdfasdf")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -594,143 +594,206 @@ function debounce(func, wait) {
 
 const debouncedGenerateMap = debounce(generateMap, 500);
 
-function addBlizzards() {
-  let shouldReturn = false;
-  document.getElementById("stopButton").innerHTML = "Stop Adding Blizzards";
+function addBlizzards(pathId) {
+  // Check if pathId is defined
+  if (pathId) {
+    // Find the path element with the specified id
+    var path = svgElement.querySelector("#" + CSS.escape(pathId));
+    // Check if the path element exists and if it is NOT in the clickedPathsBlizzardsPortals array
+    if (path && !clickedPathsBlizzardsPortals.includes(path.id)) {
+      // Add a blizzard to the specified path
+      // Create a clipPath element and set its id
+      var clipPath = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "clipPath"
+      );
+      clipPath.setAttribute("id", "clip-" + path.id);
 
-  const blizzardButtonClick = function () {
-    shouldReturn = true;
-  };
-  const portalButtonClick = function () {
-    shouldReturn = true;
-  };
-  const eraserButtonClick = function () {
-    shouldReturn = true;
-  };
-  const stopButtonClick = function () {
-    shouldReturn = true;
-  };
-	
-  document.getElementById("blizzardButton").addEventListener("click", blizzardButtonClick);
-  document.getElementById("portalButton").addEventListener("click", portalButtonClick);
-  document.getElementById("eraserButton").addEventListener("click", eraserButtonClick);
-  document.getElementById("stopButton").addEventListener("click", stopButtonClick);
+      // Clone the clicked path and append it to the clipPath
+      var clonedPath = path.cloneNode(true);
+      clipPath.appendChild(clonedPath);
 
-  // Check if size of blizzardArray is greater than or equal to totalBlizzards
-  if (blizzardArray.length >= totalBlizzards) {
-    // Return early from the function
-    return;
-  }
-	// Define mouseover, mouseout, and click event handlers
-	const mouseoverHandler = function () {
-	  if (shouldReturn) {
-	    return;
-	  }
-	  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
-	    // Change stroke color to white and stroke width to 3
-	    this.style.setProperty("stroke", "white", "important");
-	    this.style.setProperty("stroke-width", "3", "important");
-	  }
-	};
-	const mouseoutHandler = function () {
-	  if (shouldReturn) {
-	    return;
-	  }
-	  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
-	    // Reset stroke color and width according to the color darktionary
-	    let value = tableData.find(row => row['A'] === this.id)['O'];
-	    if (value >= 12) {
-	      value = 12;
-	    }
-	    let border_color = colorDarktionary[value];
-	    this.style.setProperty("stroke", border_color, "important");
-	    this.style.setProperty("stroke-width", "2", "important");
-	  }
-	};
-  const clickHandler = function () {
-    if (shouldReturn) {
-      return;
-    }
-    // Check if path is NOT in clickedPathsBlizzardsPortals array
-    if (!clickedPathsBlizzardsPortals.includes(this.id)) {
-	// Create a clipPath element and set its id
-	var clipPath = document.createElementNS(
-	  "http://www.w3.org/2000/svg",
-	  "clipPath"
-	);
-	clipPath.setAttribute("id", "clip-" + this.id);
+      // Append the clipPath to the defs element
+      var defs =
+        svgElement.querySelector("defs") ||
+        svgElement.insertBefore(
+          document.createElementNS("http://www.w3.org/2000/svg", "defs"),
+          svgElement.firstChild
+        );
+      defs.appendChild(clipPath);
 
-	// Clone the clicked path and append it to the clipPath
-	var clonedPath = this.cloneNode(true);
-	clipPath.appendChild(clonedPath);
+      // Create an image element and set its attributes
+      var image = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "image"
+      );
+      image.setAttributeNS(
+        "http://www.w3.org/1999/xlink",
+        "href",
+        BlizzardPattern
+      );
+      image.setAttribute("width", "100%");
+      image.setAttribute("height", "100%");
+      image.setAttribute("clip-path", "url(#clip-" + path.id + ")");
+      image.setAttribute("pointer-events", "none");
 
-	// Append the clipPath to the defs element
-	var defs =
-	  svgElement.querySelector("defs") ||
-	  svgElement.insertBefore(
-	    document.createElementNS("http://www.w3.org/2000/svg", "defs"),
-	    svgElement.firstChild
-	  );
-	defs.appendChild(clipPath);
+      // Append the image to the SVG
+      svgElement.appendChild(image);
 
-	// Create an image element and set its attributes
-	var image = document.createElementNS(
-	  "http://www.w3.org/2000/svg",
-	  "image"
-	);
-	image.setAttributeNS(
-	  "http://www.w3.org/1999/xlink",
-	  "href",
-	  BlizzardPattern
-	);
-	image.setAttribute("width", "100%");
-	image.setAttribute("height", "100%");
-	image.setAttribute("clip-path", "url(#clip-" + this.id + ")");
-	image.setAttribute("pointer-events", "none");
-
-	// Append the image to the SVG
-	svgElement.appendChild(image);
-
-	// Move the image behind the path element
-	svgElement.insertBefore(image, svgElement.firstChild);
+      // Move the image behind the path element
+      svgElement.insertBefore(image, svgElement.firstChild);
 	    
     // Add clicked path to arrays; push to history
-    blizzardArray.push(this.id);
-    clickedPathsBlizzardsPortals.push(this.id);
-    history.push({ type: 'addBlizzard', pathId: this.id });
+    blizzardArray.push(path.id);
+    clickedPathsBlizzardsPortals.push(path.id);
+    history.push({ type: 'addBlizzard', pathId: path.id });
 	    
     // Change the fill of the clicked path to transparent
-    this.style.setProperty("fill", "transparent", "important");
+    path.style.setProperty("fill", "transparent", "important");
 
     // Change stroke color and stroke width
-    this.style.setProperty("stroke", "white", "important");
-    this.style.setProperty("stroke-width", "1", "important");
-    this.removeEventListener("mouseout", mouseoutHandler);
-	    
+    path.style.setProperty("stroke", "white", "important");
+    path.style.setProperty("stroke-width", "1", "important");
+    }
+  } else {
+    let shouldReturn = false;
+    document.getElementById("stopButton").innerHTML = "Stop Adding Blizzards";
+
+    const blizzardButtonClick = function () {
+      shouldReturn = true;
+    };
+    const portalButtonClick = function () {
+      shouldReturn = true;
+    };
+    const eraserButtonClick = function () {
+      shouldReturn = true;
+    };
+    const stopButtonClick = function () {
+      shouldReturn = true;
+    };
+	
+    document.getElementById("blizzardButton").addEventListener("click", blizzardButtonClick);
+    document.getElementById("portalButton").addEventListener("click", portalButtonClick);
+    document.getElementById("eraserButton").addEventListener("click", eraserButtonClick);
+    document.getElementById("stopButton").addEventListener("click", stopButtonClick);
+
     // Check if size of blizzardArray is greater than or equal to totalBlizzards
     if (blizzardArray.length >= totalBlizzards) {
-      // Remove existing event listeners from elements in paths array
-      paths.forEach(function (path) {
-        path.removeEventListener("mouseover", mouseoverHandler);
-        path.removeEventListener("mouseout", mouseoutHandler);
-        path.removeEventListener("click", clickHandler);
-      });
-      document.getElementById("stopButton").innerHTML = "Stop Editing";
-      generateMap();
+      // Return early from the function
       return;
     }
+    // Define mouseover, mouseout, and click event handlers
+    const mouseoverHandler = function () {
+      if (shouldReturn) {
+        return;
+      }
+      if (!clickedPathsBlizzardsPortals.includes(this.id)) {
+        // Change stroke color to white and stroke width to 3
+        this.style.setProperty("stroke", "white", "important");
+        this.style.setProperty("stroke-width", "3", "important");
+      }
+    };
+    const mouseoutHandler = function () {
+      if (shouldReturn) {
+        return;
+      }
+      if (!clickedPathsBlizzardsPortals.includes(this.id)) {
+        // Reset stroke color and width according to the color darktionary
+        let value = tableData.find(row => row['A'] === this.id)['O'];
+        if (value >= 12) {
+          value = 12;
+        }
+        let border_color = colorDarktionary[value];
+        this.style.setProperty("stroke", border_color, "important");
+        this.style.setProperty("stroke-width", "2", "important");
+      }
+    };
+    const clickHandler = function () {
+      if (shouldReturn) {
+        return;
+      }
+      // Check if path is NOT in clickedPathsBlizzardsPortals array
+      if (!clickedPathsBlizzardsPortals.includes(this.id)) {
+        // Add a blizzard to the clicked path
+        // Create a clipPath element and set its id
+        var clipPath = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "clipPath"
+        );
+        clipPath.setAttribute("id", "clip-" + this.id);
 
-    // Execute generateMap function
-    generateMap();
-    }
+        // Clone the clicked path and append it to the clipPath
+        var clonedPath = this.cloneNode(true);
+        clipPath.appendChild(clonedPath);
+
+        // Append the clipPath to the defs element
+        var defs =
+          svgElement.querySelector("defs") ||
+          svgElement.insertBefore(
+            document.createElementNS("http://www.w3.org/2000/svg", "defs"),
+            svgElement.firstChild
+          );
+        defs.appendChild(clipPath);
+
+        // Create an image element and set its attributes
+        var image = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "image"
+        );
+        image.setAttributeNS(
+          "http://www.w3.org/1999/xlink",
+          "href",
+          BlizzardPattern
+        );
+        image.setAttribute("width", "100%");
+        image.setAttribute("height", "100%");
+        image.setAttribute("clip-path", "url(#clip-" + this.id + ")");
+        image.setAttribute("pointer-events", "none");
+
+        // Append the image to the SVG
+        svgElement.appendChild(image);
+
+        // Move the image behind the path element
+        svgElement.insertBefore(image, svgElement.firstChild);
+	    
+        // Add clicked path to arrays; push to history
+        blizzardArray.push(this.id);
+        clickedPathsBlizzardsPortals.push(this.id);
+        history.push({ type: 'addBlizzard', pathId: this.id });
+	    
+        // Change the fill of the clicked path to transparent
+        this.style.setProperty("fill", "transparent", "important");
+
+        // Change stroke color and stroke width
+        this.style.setProperty("stroke", "white", "important");
+        this.style.setProperty("stroke-width", "1", "important");
+        this.removeEventListener("mouseout", mouseoutHandler);
+	    
+        // Check if size of blizzardArray is greater than or equal to totalBlizzards
+        if (blizzardArray.length >= totalBlizzards) {
+          // Remove existing event listeners from elements in paths array
+          paths.forEach(function (path) {
+            path.removeEventListener("mouseover", mouseoverHandler);
+            path.removeEventListener("mouseout", mouseoutHandler);
+            path.removeEventListener("click", clickHandler);
+          });
+          document.getElementById("stopButton").innerHTML = "Stop Editing";
+          generateMap();
+          return;
+        }
+
+        // Execute generateMap function
+        generateMap();
+      }
     };
 
-  // Add event listeners to elements in paths array
-  paths.forEach(function (path) {
-    path.addEventListener("mouseover", mouseoverHandler);
-    path.addEventListener("mouseout", mouseoutHandler);
-    path.addEventListener("click", clickHandler);
-  });
+    // Add event listeners to elements in paths array
+    paths.forEach(function (path) {
+      path.addEventListener("mouseover", mouseoverHandler);
+      path.addEventListener("mouseout", mouseoutHandler);
+      path.addEventListener("click", clickHandler);
+    });
+  }
 }
 
 function addPortals() {
