@@ -31,19 +31,33 @@
     </header>
 <div>
   <button id="zoomInButton"><i class="fas fa-search-plus"></i></button>
-  <button id="blizzardButton" onclick="button_AddBlizzards()">Add Blizzards</button>
-  <button id="eraserButton" onclick="eraser()">Eraser</button>
+  <div style="display: inline-block; width: 200px;">
+    <button id="blizzardButton" onclick="button_AddBlizzards()">Add Blizzards</button>
+  </div>
+  <div style="display: inline-block; width: 200px;">
+    <button id="eraserButton" onclick="eraser()">Eraser</button>
+  </div>
   <label for="fontSizeInput">Font Size:</label>
   <input type="number" id="fontSizeInput" name="fontSizeInput" value="30" min="1" max="100">
-  <button id="stopButton" onclick="button_StopEditing()">Stop Editing</button>
+  <div style="display: inline-block; width: 200px;">
+    <button id="stopButton" onclick="button_StopEditing()">Stop Editing</button>
+  </div>
 </div>
 <div>
   <button id="zoomOutButton"><i class="fas fa-search-minus"></i></button>
-  <button id="portalButton" onclick="button_AddPortals()">Add Portals</button>
-  <button id="undoButton" onclick="button_Undo()">Undo</button>
-  <button id="resetButton">Reset Map</button>
-  <a href="https://ares-thefox.github.io/Risk-Dynamic-Disconnection-Maps" target="_blank">
-    <button id="mapDirectoryButton">Map Directory</button>
+  <div style="display: inline-block; width: 200px;">
+    <button id="portalButton" onclick="button_AddPortals()">Add Portals</button>
+  </div>
+  <div style="display: inline-block; width: 200px;">
+    <button id="undoButton" onclick="button_Undo()">Undo</button>
+  </div>
+  <div style="display: inline-block; width: 200px;">
+    <button id="resetButton">Reset Map</button>
+  </div>
+  <a href="<URL>" target="_blank">
+    <div style="display: inline-block; width: 200px;">
+      <button id="mapDirectoryButton">Map Directory</button>
+    </div>
   </a>
 </div>
 	<style>
@@ -119,6 +133,14 @@
 	#mapDirectoryButton:hover {
 	background-color: grey;
 	}
+		
+	#zoomInButton:hover {
+	background-color: #ababab;
+	}
+		
+	#zoomOutButton:hover {
+	background-color: #ababab;
+	}
 	</style>
 	  
     <img
@@ -170,7 +192,7 @@ window.onload = function() {
 };
 
 // Define global variables
-console.log("stranding")
+console.log("dearth")
 
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
