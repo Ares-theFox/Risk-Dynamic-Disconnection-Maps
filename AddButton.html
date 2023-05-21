@@ -29,6 +29,8 @@
         <span id="invalidText" style="color: red; font-style: italic; font-size: 20px;"></span>
     </header>
 <div>
+  <button id="zoomInButton">Zoom In</button>
+  <button id="zoomOutButton">Zoom Out</button>
   <button id="blizzardButton" onclick="button_AddBlizzards()">Add Blizzards</button>
   <button id="portalButton" onclick="button_AddPortals()">Add Portals</button>
   <button id="eraserButton" onclick="eraser()">Eraser</button>
@@ -115,6 +117,16 @@
 	  
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
 <script>
+  let zoom = 1;
+  document.getElementById("zoomInButton").addEventListener("click", function () {
+    zoom += 0.1;
+    document.body.style.zoom = zoom;
+  });
+  document.getElementById("zoomOutButton").addEventListener("click", function () {
+    zoom -= 0.1;
+    document.body.style.zoom = zoom;
+  });
+	
   document.getElementById("resetButton").addEventListener("click", function () {
     location.reload();
   });
@@ -145,7 +157,7 @@ window.onload = function() {
 };
 
 // Define global variables
-console.log("bonus logic")
+console.log("zoom")
 
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
