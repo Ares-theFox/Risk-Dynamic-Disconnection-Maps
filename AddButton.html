@@ -145,7 +145,7 @@ window.onload = function() {
 };
 
 // Define global variables
-console.log("baby owl")
+console.log("bonus logic")
 
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
@@ -575,17 +575,52 @@ for (let i = 0; i < portalArray.length; i++) {
   }
 }
 
-// Update invalid text
-var invalidText = document.getElementById("invalidText");
-if (!allNodesConnected && portalsTooClose) {
-  invalidText.textContent = "Invalid Generation: Map disconnected; Portals too close";
-} else if (!allNodesConnected) {
-  invalidText.textContent = "Invalid Generation: Map is disconnected";
-} else if (portalsTooClose) {
-  invalidText.textContent = "Invalid Generation: Portals are too close";
-} else {
-  invalidText.textContent = "";
-}
+  // Check for too-small continents
+  let continentCounts = {};
+  tableData.forEach(row => {
+    if (row['A'] && row['C']) {
+      if (!continentCounts.hasOwnProperty(row['C'])) {
+        continentCounts[row['C']] = 0;
+      }
+      continentCounts[row['C']]++;
+    }
+  });
+  let blizzardContinentCounts = {};
+  blizzardArray.forEach(path => {
+    let row = tableData.find(row => row['A'] === path);
+    if (row && row['C']) {
+      if (!blizzardContinentCounts.hasOwnProperty(row['C'])) {
+        blizzardContinentCounts[row['C']] = 0;
+      }
+      blizzardContinentCounts[row['C']]++;
+    }
+  });
+  let continentTooSmall = false;
+  for (let continent in continentCounts) {
+    if (blizzardContinentCounts.hasOwnProperty(continent) && blizzardContinentCounts[continent] >= continentCounts[continent] - 1) {
+      continentTooSmall = true;
+      break;
+    }
+  }
+  // Update invalid text
+  var invalidText = document.getElementById("invalidText");
+  if (!allNodesConnected && portalsTooClose && continentTooSmall) {
+    invalidText.textContent = "Invalid Generation: Map disconnected; Portals too close; Continent too small";
+  } else if (!allNodesConnected && portalsTooClose) {
+    invalidText.textContent = "Invalid Generation: Map disconnected; Portals too close";
+  } else if (!allNodesConnected && continentTooSmall) {
+    invalidText.textContent = "Invalid Generation: Map disconnected; Continent too small";
+  } else if (portalsTooClose && continentTooSmall) {
+    invalidText.textContent = "Invalid Generation: Portals too close; Continent too small";
+  } else if (!allNodesConnected) {
+    invalidText.textContent = "Invalid Generation: Map is disconnected";
+  } else if (portalsTooClose) {
+    invalidText.textContent = "Invalid Generation: Portals are too close";
+  } else if (continentTooSmall) {
+    invalidText.textContent = "Invalid Generation: Continent too small";
+  } else {
+    invalidText.textContent = "";
+  }
 }
 	
 function debounce(func, wait) {
