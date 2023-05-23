@@ -1,0 +1,20 @@
+A,B,C
+Andean_States,"Brazil,The_Guianas,Eastern_Australia",South America
+Brazil,"Andean_States,The_Guianas,North_Africa",South America
+British_Isles,"Scandinavia,Mainland_Europe",Europe
+Canada,"Greenland,USA,Russia",North America
+Central_Africa,"North_Africa,South_Africa,Middle_East",Africa
+Central_America,"USA,The_Guianas",North America
+China,"Russia,Middle_East,South_East_Asia,Mainland_Europe",Asia
+Eastern_Australia,"Western_Australia,Andean_States,South_East_Asia",Australia
+Greenland,"Canada,Scandinavia",North America
+Mainland_Europe,"British_Isles,Scandinavia,Russia,China,Middle_East,North_Africa",Europe
+Middle_East,"Mainland_Europe,China,South_East_Asia,North_Africa,Central_Africa",Asia
+North_Africa,"Middle_East,Central_Africa,Brazil,Mainland_Europe",Africa
+Russia,"China,Mainland_Europe,Scandinavia,Canada",Asia
+Scandinavia,"Greenland,British_Isles,Mainland_Europe,Russia",Europe
+South_Africa,"Central_Africa,Western_Australia",Africa
+South_East_Asia,"Western_Australia,Eastern_Australia,China,Middle_East",Asia
+The_Guianas,"Central_America,Brazil,Andean_States",South America
+USA,"Canada,Central_America",North America
+Western_Australia,"Eastern_Australia,South_East_Asia,South_Africa",Australia

@@ -1,0 +1,43 @@
+A,B,C
+Alabama,"Tennessee,Mississippi,Georgia,Florida",Southeast
+Arizona,"New_Mexico,Utah,Nevada,California",Southwest
+Arkansas,"Louisiana,Texas,Tennessee,Missouri,Oklahoma",Southeast
+California,"Oregon,Nevada,Arizona",Pacific Coast
+Central_New_England,"North_New_England,South_New_England,New_York",New England
+Colorado,"Wyoming,Nebraska,Kansas,Oklahoma,New_Mexico",Rocky Mountains
+Florida,"Georgia,Alabama,Mississippi",Southeast
+Georgia,"Alabama,South_Carolina,Florida",Southeast
+Idaho,"Montana,Washington,Oregon,Nevada,Utah",Rocky Mountains
+Illinois,"Indiana,Wisconsin,Kentucky,Missouri",Midwest
+Indiana,"Illinois,Michigan,Ohio,Kentucky",Midwest
+Iowa,"Minnesota,Missouri,South_Dakota,Nebraska",Heartland
+Kansas,"Nebraska,Missouri,Oklahoma,Colorado",Heartland
+Kentucky,"Illinois,Indiana,Ohio,West_Virginia,Tennessee",Appalachian Highlands
+Louisiana,"Mississippi,Arkansas,Texas",Southeast
+Michigan,"Ohio,Indiana,Wisconsin",Midwest
+Minnesota,"Wisconsin,Iowa,South_Dakota,North_Dakota",Heartland
+Mississippi,"Alabama,Florida,Tennessee,Louisiana",Southeast
+Missouri,"Arkansas,Illinois,Iowa,Nebraska,Kansas,Oklahoma",Heartland
+Montana,"North_Dakota,South_Dakota,Wyoming,Idaho,Washington",Rocky Mountains
+Nebraska,"Wyoming,South_Dakota,Iowa,Missouri,Kansas,Colorado",Heartland
+Nevada,"Oregon,Idaho,Utah,Arizona,California",Rocky Mountains
+New_Mexico,"Colorado,Oklahoma,Texas,Arizona",Southwest
+New_York,"Central_New_England,South_New_England,Southern_Mid-Atlantic_States",Mid-Atlantic
+North_Carolina,"Virginia,South_Carolina,South_New_England",Appalachian Highlands
+North_Dakota,"South_Dakota,Minnesota,Montana",Heartland
+North_New_England,Central_New_England,New England
+Ohio,"West_Virginia,Kentucky,Indiana,Michigan,Southern_Mid-Atlantic_States",Midwest
+Oklahoma,"Missouri,Kansas,Arkansas,Texas,New_Mexico,Colorado",Southwest
+Oregon,"Washington,Idaho,California,Nevada",Pacific Coast
+South_Carolina,"Georgia,North_Carolina",Southeast
+South_Dakota,"Minnesota,North_Dakota,Montana,Wyoming,Nebraska,Iowa",Heartland
+South_New_England,"Central_New_England,New_York,North_Carolina",New England
+Southern_Mid-Atlantic_States,"New_York,Ohio,West_Virginia,Virginia",Mid-Atlantic
+Tennessee,"Kentucky,Arkansas,Mississippi,Alabama",Appalachian Highlands
+Texas,"Louisiana,Arkansas,Oklahoma,New_Mexico",Southwest
+Utah,"Idaho,Nevada,Arizona",Rocky Mountains
+Virginia,"North_Carolina,West_Virginia,Southern_Mid-Atlantic_States",Appalachian Highlands
+Washington,"Montana,Idaho,Oregon",Pacific Coast
+West_Virginia,"Virginia,Kentucky,Southern_Mid-Atlantic_States,Ohio",Appalachian Highlands
+Wisconsin,"Illinois,Michigan,Minnesota",Midwest
+Wyoming,"South_Dakota,Montana,Nebraska,Colorado",Rocky Mountains

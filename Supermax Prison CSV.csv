@@ -1,0 +1,43 @@
+A,B,C
+Supermax1,Supermax7,Solitary Confinment
+Supermax2,Supermax7,Solitary Confinment
+Supermax3,Supermax7,Solitary Confinment
+Supermax4,Supermax7,Solitary Confinment
+Supermax5,Supermax7,Solitary Confinment
+Supermax6,Supermax7,Solitary Confinment
+Supermax7,"Supermax1,Supermax2,Supermax3,Supermax4,Supermax5,Supermax6,Supermax41",Solitary Confinment
+Supermax8,Supermax10,High Security
+Supermax9,Supermax10,High Security
+Supermax10,"Supermax8,Supermax9,Supermax11,Supermax12",High Security
+Supermax11,Supermax10,High Security
+Supermax12,"Supermax10,Supermax36",High Security
+Supermax13,"Supermax16,Supermax17",Low Security
+Supermax14,Supermax16,Low Security
+Supermax15,"Supermax16,Supermax17",Low Security
+Supermax16,"Supermax13,Supermax14,Supermax15,Supermax17",Low Security
+Supermax17,"Supermax13,Supermax15,Supermax16,Supermax37",Low Security
+Supermax18,Supermax22,Death Row
+Supermax19,Supermax22,Death Row
+Supermax20,Supermax22,Death Row
+Supermax21,Supermax22,Death Row
+Supermax22,"Supermax18,Supermax19,Supermax20,Supermax21,Supermax23",Death Row
+Supermax23,"Supermax22,Supermax38",Death Row
+Supermax24,"Supermax29,Supermax39",Max Security
+Supermax25,Supermax29,Max Security
+Supermax26,Supermax29,Max Security
+Supermax27,Supermax29,Max Security
+Supermax28,Supermax29,Max Security
+Supermax29,"Supermax24,Supermax25,Supermax26,Supermax27,Supermax28",Max Security
+Supermax30,"Supermax31,Supermax35",General Population
+Supermax31,"Supermax40,Supermax30,Supermax34,Supermax35",General Population
+Supermax32,Supermax35,General Population
+Supermax33,Supermax35,General Population
+Supermax34,"Supermax31,Supermax35",General Population
+Supermax35,"Supermax30,Supermax31,Supermax32,Supermax33,Supermax34",General Population
+Supermax36,"Supermax12,Supermax41,Supermax42,Supermax37",Admin
+Supermax37,"Supermax17,Supermax36,Supermax38,Supermax42",Admin
+Supermax38,"Supermax23,Supermax37,Supermax39,Supermax42",Admin
+Supermax39,"Supermax24,Supermax38,Supermax40,Supermax42",Admin
+Supermax40,"Supermax31,Supermax39,Supermax41,Supermax42",Admin
+Supermax41,"Supermax7,Supermax36,Supermax40,Supermax42",Admin
+Supermax42,"Supermax36,Supermax37,Supermax38,Supermax39,Supermax40,Supermax41",Admin
