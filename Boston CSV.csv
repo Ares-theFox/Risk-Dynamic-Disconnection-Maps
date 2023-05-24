@@ -1,0 +1,43 @@
+A,B,C
+Boston1,"Boston2,Boston3,Boston5,Boston7",West Roxbury
+Boston2,"Boston1,Boston3,Boston4,Boston7,Boston9,Boston13",West Roxbury
+Boston3,"Boston1,Boston2,Boston4",West Roxbury
+Boston4,"Boston2,Boston3,Boston13,Boston14,Boston20",West Roxbury
+Boston5,"Boston1,Boston6,Boston7,Boston8",Jamaica Plain
+Boston6,"Boston5,Boston8,Boston10,Boston39",Jamaica Plain
+Boston7,"Boston1,Boston2,Boston5,Boston8,Boston9",Jamaica Plain
+Boston8,"Boston5,Boston6,Boston7,Boston9,Boston10",Jamaica Plain
+Boston9,"Boston2,Boston7,Boston8,Boston10,Boston12,Boston13,Boston14,Boston15",Roxbury
+Boston10,"Boston6,Boston8,Boston9,Boston11,Boston12,Boston39",Roxbury
+Boston11,"Boston10,Boston12,Boston16,Boston39,Boston42",Roxbury
+Boston12,"Boston9,Boston10,Boston11,Boston15,Boston16",Roxbury
+Boston13,"Boston2,Boston4,Boston9,Boston14",Dorchester
+Boston14,"Boston4,Boston9,Boston13,Boston15,Boston19,Boston20",Dorchester
+Boston15,"Boston9,Boston12,Boston14,Boston16,Boston17,Boston18,Boston19",Dorchester
+Boston16,"Boston11,Boston12,Boston15,Boston17,Boston26,Boston42",Dorchester
+Boston17,"Boston15,Boston16,Boston18,Boston26",Dorchester
+Boston18,"Boston15,Boston17,Boston19,Boston20,Boston22",Dorchester
+Boston19,"Boston14,Boston15,Boston18,Boston20",Dorchester
+Boston20,"Boston4,Boston14,Boston18,Boston19",Dorchester
+Boston21,"Boston22,Boston27",Harbor Islands
+Boston22,"Boston21,Boston23,Boston18",Harbor Islands
+Boston23,"Boston22,Boston24",Harbor Islands
+Boston24,"Boston23,Boston25",Harbor Islands
+Boston25,Boston24,Harbor Islands
+Boston26,"Boston16,Boston17,Boston27,Boston28,Boston34,Boston42,Boston29",Waterfront
+Boston27,"Boston21,Boston26,Boston28,Boston29",Waterfront
+Boston28,"Boston26,Boston27,Boston29",Waterfront
+Boston29,"Boston26,Boston27,Boston28,Boston32,Boston34",Waterfront
+Boston30,Boston31,East Boston
+Boston31,"Boston30,Boston32,Boston34",East Boston
+Boston32,"Boston29,Boston31",East Boston
+Boston33,"Boston34,Boston41,Boston42",Downtown
+Boston34,"Boston26,Boston29,Boston31,Boston33,Boston36,Boston42",Downtown
+Boston35,Boston36,Charlestown
+Boston36,"Boston34,Boston35",Charlestown
+Boston37,Boston38,Allston Brighton
+Boston38,"Boston37,Boston40",Allston Brighton
+Boston39,"Boston6,Boston10,Boston11,Boston40,Boston42",The Fens
+Boston40,"Boston38,Boston39,Boston41,Boston42",The Fens
+Boston41,"Boston33,Boston40,Boston42",The Fens
+Boston42,"Boston11,Boston16,Boston26,Boston33,Boston34,Boston39,Boston40,Boston41",The Fens
