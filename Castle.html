@@ -54,6 +54,11 @@
 	border: none;
 	cursor: pointer;
 	}
+		
+	#overlay {
+	position: absolute;
+	z-index: 2;
+	}
 
 	#blizzardButton {
 	width: 180px;
@@ -145,7 +150,7 @@
       alt="Castle"
     />
     <div id="range"></div>
-	  
+	  <img id="overlay" src="https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Castle_seaport.png" alt="Overlay" />
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
 <script>
   let zoom = 1;
@@ -188,7 +193,7 @@ window.onload = function() {
 };
 
 // Define global variables
-console.log("dearth")
+console.log("intermittent")
 
 	// Define map-specific items
 	var colorLegend = "Castle%20"
