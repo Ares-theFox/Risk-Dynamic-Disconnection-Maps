@@ -44,6 +44,13 @@
   <button id="resetButton">Reset Map</button>
   <a href="https://ares-thefox.github.io/Risk-Dynamic-Disconnection-Maps" target="_blank">
     <button id="mapDirectoryButton">Map Directory</button>
+	<label for="menu">Select:</label>
+	<select id="menu" name="menu">
+	  <option value="standard">Standard</option>
+	  <option value="betweenness">Betweenness</option>
+	  <option value="closeness">Closeness</option>
+	  <option value="eigenvector">Eigenvector</option>
+	</select>
   </a>
 </div>
 	<style>
@@ -188,7 +195,7 @@ window.onload = function() {
 };
 
 // Define global variables
-console.log("dearth")
+console.log("newmenu")
 
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
