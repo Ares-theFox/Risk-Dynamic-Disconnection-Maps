@@ -194,7 +194,7 @@ window.onload = function() {
 };
 
 // Define global variables
-console.log("hi")
+console.log("hello")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -393,7 +393,7 @@ function calculateRescaledCentralityMeasures(tableData) {
     let rescaledEigenvectorCentrality = {};
     let minEigenvectorCentrality = Math.min(...Object.values(eigenvectorCentrality._numberValues));
     let maxEigenvectorCentrality = Math.max(...Object.values(eigenvectorCentrality._numberValues));
-    for (let key in EigenvectorCentrality) {
+    for (let key in eigenvectorCentrality) {
         rescaledEigenvectorCentrality[key] = Math.round((eigenvectorCentrality._numberValues[key] - minEigenvectorCentrality) / (maxEigenvectorCentrality - minEigenvectorCentrality) * 100);
     }
 
