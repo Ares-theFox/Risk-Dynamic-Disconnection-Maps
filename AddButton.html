@@ -194,7 +194,7 @@ window.onload = function() {
 };
 
 // Define global variables
-console.log("sadge")
+console.log("asdfasdf")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -380,7 +380,8 @@ function calculateRescaledCentralityMeasures(tableData) {
     // Calculate betweenness centrality and closeness centrality
     let betweennessCentrality = jsnx.betweennessCentrality(G);
     let eigenvectorCentrality = jsnx.eigenvectorCentrality(G);
-
+console.log(betweennessCentrality);
+console.log(eigenvectorCentrality);
     // Rescale the centrality values to a range of 0 to 100
     let rescaledBetweennessCentrality = {};
     let minBetweennessCentrality = Math.min(...Object.values(betweennessCentrality._numberValues));
@@ -505,8 +506,6 @@ console.log(rescaledBetweennessCentrality);
 console.log(rescaledEigenvectorCentrality);
 console.log(territory);
 console.log(tableData);
-console.log(betweennessCentrality);
-console.log(eigenvectorCentrality);
 	    console.log(`Territory: ${territory}, Betweenness Centrality: ${logged_betweennessCentrality}, Eigenvector Centrality: ${logged_eigenvectorCentrality}`);
 	}
 
