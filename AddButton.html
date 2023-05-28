@@ -194,7 +194,7 @@ window.onload = function() {
 };
 
 // Define global variables
-console.log("hello")
+console.log("miss")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -501,9 +501,9 @@ function generateMap() {
 	// Log the rescaled betweenness centrality and closeness centrality values for each territory
 	for (let i = 0; i < tableData.length; i++) {
 	    let territory = tableData[i]['A'];
-	    let betweennessCentrality = rescaledBetweennessCentrality[territory];
-	    let eigenvectorCentrality = rescaledEigenvectorCentrality[territory];
-	    console.log(`Territory: ${territory}, Betweenness Centrality: ${betweennessCentrality}, Eigenvector Centrality: ${eigenvectorCentrality}`);
+	    let logged_betweennessCentrality = rescaledBetweennessCentrality[territory];
+	    let logged_eigenvectorCentrality = rescaledEigenvectorCentrality[territory];
+	    console.log(`Territory: ${territory}, Betweenness Centrality: ${logged_betweennessCentrality}, Eigenvector Centrality: ${logged_eigenvectorCentrality}`);
 	}
 
   // Set font size of indirect connections
