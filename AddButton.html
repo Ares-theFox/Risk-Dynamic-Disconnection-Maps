@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
+    <script src="https://unpkg.com/jsnetworkx"></script>
     <title>Jules Verne's Mysterious Island</title>
     <style>
       #map,
@@ -152,8 +154,6 @@
       alt="Jules Verne"
     />
     <div id="range"></div>
-	  
-    <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
 <script>
   let zoom = 1;
   document.getElementById("zoomInButton").addEventListener("click", function () {
