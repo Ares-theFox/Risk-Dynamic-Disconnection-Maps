@@ -194,7 +194,7 @@ window.onload = function() {
 };
 
 // Define global variables
-console.log("rachel")
+console.log("hi")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -385,16 +385,16 @@ function calculateRescaledCentralityMeasures(tableData) {
 	
     // Rescale the centrality values to a range of 0 to 100
     let rescaledBetweennessCentrality = {};
-    let minBetweennessCentrality = Math.min(...Object.values(betweennessCentrality));
-    let maxBetweennessCentrality = Math.max(...Object.values(betweennessCentrality));
+    let minBetweennessCentrality = Math.min(...Object.values(betweennessCentrality._numberValues));
+    let maxBetweennessCentrality = Math.max(...Object.values(betweennessCentrality._numberValues));
     for (let key in betweennessCentrality) {
-        rescaledBetweennessCentrality[key] = Math.round((betweennessCentrality[key] - minBetweennessCentrality) / (maxBetweennessCentrality - minBetweennessCentrality) * 100);
+        rescaledBetweennessCentrality[key] = Math.round((betweennessCentrality._numberValues[key] - minBetweennessCentrality) / (maxBetweennessCentrality - minBetweennessCentrality) * 100);
     }
     let rescaledEigenvectorCentrality = {};
-    let minEigenvectorCentrality = Math.min(...Object.values(eigenvectorCentrality));
-    let maxEigenvectorCentrality = Math.max(...Object.values(eigenvectorCentrality));
+    let minEigenvectorCentrality = Math.min(...Object.values(eigenvectorCentrality._numberValues));
+    let maxEigenvectorCentrality = Math.max(...Object.values(eigenvectorCentrality._numberValues));
     for (let key in EigenvectorCentrality) {
-        rescaledEigenvectorCentrality[key] = Math.round((eigenvectorCentrality[key] - minEigenvectorCentrality) / (maxEigenvectorCentrality - minEigenvectorCentrality) * 100);
+        rescaledEigenvectorCentrality[key] = Math.round((eigenvectorCentrality._numberValues[key] - minEigenvectorCentrality) / (maxEigenvectorCentrality - minEigenvectorCentrality) * 100);
     }
 
     return [rescaledBetweennessCentrality, rescaledEigenvectorCentrality];
