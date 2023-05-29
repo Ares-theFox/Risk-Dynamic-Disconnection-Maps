@@ -3,7 +3,7 @@
   <head>
     <script src="jsnetworkx.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("123123132132132132")</script>
+	  <script>console.log("999999999999999")</script>
     <title>Jules Verne's Mysterious Island</title>
     <style>
       #map,
@@ -339,7 +339,15 @@ window.onload = function() {
 	9: "#5f5f5f",
 	10: "#377a46",
 	11: "#460055",
-	12: "#161616"
+	12: "#161616",
+	13: "#161616",
+	14: "#161616",
+	15: "#161616",
+	16: "#161616",
+	17: "#161616",
+	18: "#161616",
+	19: "#161616",
+	20: "#161616"
 	};
 
 	var standard_colorDarktionary = {
@@ -354,7 +362,15 @@ window.onload = function() {
 	9: "#303030",
 	10: "#1c3d23",
 	11: "#23002b",
-	12: "#000000"
+	12: "#000000",
+	13: "#000000",
+	14: "#000000",
+	15: "#000000",
+	16: "#000000",
+	17: "#000000",
+	18: "#000000",
+	19: "#000000",
+	20: "#000000"
 	};
 	
 	// Define csvData as a global variable
@@ -634,10 +650,7 @@ function generateMap() {
     for (var i = 0; i < tableData.length; i++) {
       if (tableData[i]["A"] === pathId) {
         // Color in the map
-        var value = tableData[i][column];
-        if (value >= 12) {
-          value = 12;
-        }
+        var dataValue = tableData[i][column];
         if (menu.value === "standard" && value !== 0) {
           var color = currentColorDictionary[value];
           var border_color = currentColorDarktionary[value];
