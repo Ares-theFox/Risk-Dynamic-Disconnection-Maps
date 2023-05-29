@@ -194,7 +194,7 @@ window.onload = function() {
 };
 
 // Define global variables
-console.log("22222222222222")
+console.log("3434343434341")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -395,14 +395,13 @@ console.log("eigenvectorCentrality:", eigenvectorCentrality);
     for (let key in eigenvectorCentrality) {
         rescaledEigenvectorCentrality[key] = Math.round((eigenvectorCentrality._numberValues[key] - minEigenvectorCentrality) / (maxEigenvectorCentrality - minEigenvectorCentrality) * 100);
     }
-
-    return [rescaledBetweennessCentrality, rescaledEigenvectorCentrality];
 	console.log("minBetweennessCentrality:", minBetweennessCentrality)
 	console.log("maxBetweennessCentrality:", maxBetweennessCentrality)
 	console.log("minEigenvectorCentrality:", minEigenvectorCentrality)
 	console.log("maxEigenvectorCentrality:", maxEigenvectorCentrality)
 	console.log("rescaledBetweennessCentrality:", rescaledBetweennessCentrality)
 	console.log("rescaledEigenvectorCentrality:", rescaledEigenvectorCentrality)
+    return [rescaledBetweennessCentrality, rescaledEigenvectorCentrality];
 }
 
 // Generate the map
@@ -508,7 +507,6 @@ function generateMap() {
 	    let territory = tableData[i]['A'];
 	    let logged_betweennessCentrality = rescaledBetweennessCentrality[territory];
 	    let logged_eigenvectorCentrality = rescaledEigenvectorCentrality[territory];
-
 console.log(territory);
 console.log(tableData);
 	    console.log(`Territory: ${territory}, Betweenness Centrality: ${logged_betweennessCentrality}, Eigenvector Centrality: ${logged_eigenvectorCentrality}`);
