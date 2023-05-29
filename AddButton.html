@@ -3,7 +3,7 @@
   <head>
     <script src="jsnetworkx.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("ughhhhh")</script>
+	  <script>console.log("WEIRDMISTAKES")</script>
     <title>Jules Verne's Mysterious Island</title>
     <style>
       #map,
@@ -234,47 +234,6 @@ window.onload = function() {
 	    },
 	  }
 	);
-
-	// Define a function that calculates the RGB values for a given value
-	function calculateRGB(value) {
-	  var red, green, blue;
-	  if (value < 50) {
-	    // Map values from 0 to 50 to colors from red to yellow
-	    red = 255;
-	    green = Math.round((value / 50) * 255);
-	    blue = 0;
-	  } else {
-	    // Map values from 50 to 100 to colors from yellow to lime green
-	    red = Math.round(((100 - value) / 50) * 255);
-	    green = 255;
-	    blue = 0;
-	  }
-	  return [red, green, blue];
-	}
-
-	// Define a function that creates a dynamic color dictionary for the given option
-	function createColorDictionary(option) {
-	  var colorDictionary = {};
-	  for (var i = 0; i <= 100; i++) {
-	    var [red, green, blue] = calculateRGB(i);
-	    colorDictionary[i] = `rgb(${red}, ${green}, ${blue})`;
-	  }
-	  return colorDictionary;
-	}
-
-	// Define a function that creates a dynamic dark color dictionary for the given option
-	function createColorDarktionary(option) {
-	  var colorDarktionary = {};
-	  for (var i = 0; i <= 100; i++) {
-	    var color = colorDictionary[i];
-	    var [red, green, blue] = color.match(/\d+/g).map(Number);
-	    red = Math.round((red + 0) / 2);
-	    green = Math.round((green + 0) / 2);
-	    blue = Math.round((blue + 0) / 2);
-	    colorDarktionary[i] = `rgb(${red}, ${green}, ${blue})`;
-	  }
-	  return colorDarktionary;
-	}
 	
 	// Get the drop-down menu element
 	var menu = document.getElementById("menu");
@@ -603,12 +562,6 @@ function generateMap() {
 	    tableData[i]['E'] = rescaledEigenvectorCentrality[territory];
 	}
 
-	// Log the rescaled betweenness centrality and closeness centrality values for each territory
-	for (let i = 0; i < tableData.length; i++) {
-	    let territory = tableData[i]['A'];
-	    let logged_betweennessCentrality = rescaledBetweennessCentrality[territory];
-	    let logged_eigenvectorCentrality = rescaledEigenvectorCentrality[territory];
-
   // Set font size of indirect connections
   var fontSizeInput = document.getElementById("fontSizeInput");
   fontSizeInput.addEventListener("input", function () {
@@ -650,60 +603,74 @@ function generateMap() {
     for (var i = 0; i < tableData.length; i++) {
       if (tableData[i]["A"] === pathId) {
         // Color in the map
-        var value = tableData[i]["O"];
-        if (value >= 12) {
-          value = 12;
-        }
-        if (value !== 0) {
-          var color = colorDictionary[value];
-          var border_color = colorDarktionary[value];
+        var value = tableData[i][column];
+        if (menu.value === "standard" && value !== 0) {
+          var color = currentColorDictionary[value];
+          var border_color = currentColorDarktionary[value];
+          path.style.setProperty("fill", color, "important");
+          path.setAttribute("stroke-opacity", "100");
+          path.style.setProperty("stroke", border_color, "important");
+          path.style.setProperty("stroke-width", "2", "important");
+        } else if (menu.value !== "standard") {
+          var color = currentColorDictionary[value];
+          var border_color = currentColorDarktionary[value];
           path.style.setProperty("fill", color, "important");
           path.setAttribute("stroke-opacity", "100");
           path.style.setProperty("stroke", border_color, "important");
           path.style.setProperty("stroke-width", "2", "important");
         }
 
-        // Add text to the specified location from CSV data
-        value = tableData[i]["P"];
-        if (value !== 0) {
-          // Find matching row in CSV data
-          var csvRow = csvData.find(function (row) {
-            return row["Range"] === pathId;
-          });
+	// Find matching row in CSV data
+	var csvRow = csvData.find(function (row) {
+	  return row["Range"] === pathId;
+	});
 
-          // Get coordinates from CSV data
-          var x = csvRow["Pixel Pair 1"];
-          var y = csvRow["Pixel Pair 2"];
+	// Get coordinates from CSV data
+	var x = csvRow["Pixel Pair 1"];
+	var y = csvRow["Pixel Pair 2"];
 
-          var text = document.createElementNS(
-            "http://www.w3.org/2000/svg",
-            "text"
-          );
-          text.setAttribute("x", x);
-          text.setAttribute("y", y);
-	  text.setAttribute("pointer-events", "none");
-          text.setAttribute("text-anchor", "middle");
-          text.setAttribute("alignment-baseline", "middle");
-          text.setAttribute("font-size", fontSizeInput.value);
-          text.setAttribute("font-weight", "bold");
+	var text = document.createElementNS(
+	  "http://www.w3.org/2000/svg",
+	  "text"
+	);
+	text.setAttribute("x", x);
+	text.setAttribute("y", y);
+	text.setAttribute("pointer-events", "none");
+	text.setAttribute("text-anchor", "middle");
+	text.setAttribute("alignment-baseline", "middle");
+	text.setAttribute("font-size", fontSizeInput.value);
+	text.setAttribute("font-weight", "bold");
+
+	// Set fill color based on drop-down menu option
+	if (menu.value === "standard") {
 	  if (tableData[i]["O"] >= 11) {
 	    text.setAttribute("fill", "white");
 	  } else {
 	    text.setAttribute("fill", "black");
 	  }
-          text.textContent = value;
+	} else {
+	  text.setAttribute("fill", "black");
+	}
 
-          // Adjust x and y coordinates to position midpoint of text at specified coordinates
-          var bbox = text.getBBox();
-          text.setAttribute("x", x - bbox.width / 2);
-          text.setAttribute("y", y - bbox.height / 2);
+	// Set text content based on drop-down menu option
+	if (menu.value === "standard") {
+	  text.textContent = tableData[i]["P"];
+	} else if (menu.value === "betweenness") {
+	  text.textContent = Math.round(tableData[i]["D"] * 10) / 10;
+	} else if (menu.value === "eigenvector") {
+	  text.textContent = Math.round(tableData[i]["E"] * 10) / 10;
+	}
 
-          svgElement.appendChild(text);
-        }
-        break;
-      }
-    }
-  });
+	// Adjust x and y coordinates to position midpoint of text at specified coordinates
+	var bbox = text.getBBox();
+	text.setAttribute("x", x - bbox.width / 2);
+	text.setAttribute("y", y - bbox.height / 2);
+
+	svgElement.appendChild(text);
+	break;
+	}
+	}
+	});
 
 	// Find the maximum value in column O
 	var maxO = Math.max(...tableData.map((row) => row["O"]));
