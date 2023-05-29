@@ -3,7 +3,7 @@
   <head>
     <script src="jsnetworkx.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("999999999999999")</script>
+	  <script>console.log("memday")</script>
     <title>Jules Verne's Mysterious Island</title>
     <style>
       #map,
@@ -651,73 +651,92 @@ function generateMap() {
       if (tableData[i]["A"] === pathId) {
         // Color in the map
         var dataValue = tableData[i][column];
-        if (menu.value === "standard" && value !== 0) {
-          var color = currentColorDictionary[value];
-          var border_color = currentColorDarktionary[value];
+        if (menu.value !== "standard") {
+          var color = currentColorDictionary[dataValue];
+          var border_color = currentColorDarktionary[dataValue];
           path.style.setProperty("fill", color, "important");
           path.setAttribute("stroke-opacity", "100");
           path.style.setProperty("stroke", border_color, "important");
           path.style.setProperty("stroke-width", "2", "important");
-        } else if (menu.value !== "standard") {
-          var color = currentColorDictionary[value];
-          var border_color = currentColorDarktionary[value];
+        } else if (dataValue !== 0) {
+          var color = currentColorDictionary[dataValue];
+          var border_color = currentColorDarktionary[dataValue];
           path.style.setProperty("fill", color, "important");
           path.setAttribute("stroke-opacity", "100");
           path.style.setProperty("stroke", border_color, "important");
           path.style.setProperty("stroke-width", "2", "important");
         }
 
-	// Find matching row in CSV data
-	var csvRow = csvData.find(function (row) {
-	  return row["Range"] === pathId;
-	});
+        // Add text to the specified location from CSV data
+        if (menu.value !== "standard") {
+          // Find matching row in CSV data
+          var csvRow = csvData.find(function (row) {
+            return row["Range"] === pathId;
+          });
 
-	// Get coordinates from CSV data
-	var x = csvRow["Pixel Pair 1"];
-	var y = csvRow["Pixel Pair 2"];
+          // Get coordinates from CSV data
+          var x = csvRow["Pixel Pair 1"];
+          var y = csvRow["Pixel Pair 2"];
 
-	var text = document.createElementNS(
-	  "http://www.w3.org/2000/svg",
-	  "text"
-	);
-	text.setAttribute("x", x);
-	text.setAttribute("y", y);
-	text.setAttribute("pointer-events", "none");
-	text.setAttribute("text-anchor", "middle");
-	text.setAttribute("alignment-baseline", "middle");
-	text.setAttribute("font-size", fontSizeInput.value);
-	text.setAttribute("font-weight", "bold");
+          var text = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "text"
+          );
+          text.setAttribute("x", x);
+          text.setAttribute("y", y);
+	  text.setAttribute("pointer-events", "none");
+          text.setAttribute("text-anchor", "middle");
+          text.setAttribute("alignment-baseline", "middle");
+          text.setAttribute("font-size", fontSizeInput.value);
+          text.setAttribute("font-weight", "bold");
+	  text.setAttribute("fill", "black");
+          text.textContent = dataValue;
 
-	// Set fill color based on drop-down menu option
-	if (menu.value === "standard") {
-	  if (tableData[i]["O"] >= 11) {
+          // Adjust x and y coordinates to position midpoint of text at specified coordinates
+          var bbox = text.getBBox();
+          text.setAttribute("x", x - bbox.width / 2);
+          text.setAttribute("y", y - bbox.height / 2);
+
+          svgElement.appendChild(text);
+        } else if (dataValue !== 0) {
+          // Find matching row in CSV data
+          var csvRow = csvData.find(function (row) {
+            return row["Range"] === pathId;
+          });
+
+          // Get coordinates from CSV data
+          var x = csvRow["Pixel Pair 1"];
+          var y = csvRow["Pixel Pair 2"];
+
+          var text = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "text"
+          );
+          text.setAttribute("x", x);
+          text.setAttribute("y", y);
+	  text.setAttribute("pointer-events", "none");
+          text.setAttribute("text-anchor", "middle");
+          text.setAttribute("alignment-baseline", "middle");
+          text.setAttribute("font-size", fontSizeInput.value);
+          text.setAttribute("font-weight", "bold");
+	  if (dataValue >= 11) {
 	    text.setAttribute("fill", "white");
 	  } else {
 	    text.setAttribute("fill", "black");
 	  }
-	} else {
-	  text.setAttribute("fill", "black");
-	}
+          text.textContent = dataValue;
 
-	// Set text content based on drop-down menu option
-	if (menu.value === "standard") {
-	  text.textContent = tableData[i]["P"];
-	} else if (menu.value === "betweenness") {
-	  text.textContent = Math.round(tableData[i]["D"] * 10) / 10;
-	} else if (menu.value === "eigenvector") {
-	  text.textContent = Math.round(tableData[i]["E"] * 10) / 10;
-	}
+          // Adjust x and y coordinates to position midpoint of text at specified coordinates
+          var bbox = text.getBBox();
+          text.setAttribute("x", x - bbox.width / 2);
+          text.setAttribute("y", y - bbox.height / 2);
 
-	// Adjust x and y coordinates to position midpoint of text at specified coordinates
-	var bbox = text.getBBox();
-	text.setAttribute("x", x - bbox.width / 2);
-	text.setAttribute("y", y - bbox.height / 2);
-
-	svgElement.appendChild(text);
-	break;
+          svgElement.appendChild(text);
 	}
-	}
-	});
+        break;
+      }
+    }
+  });
 
 	// Find the maximum value in column O
 	var maxO = Math.max(...tableData.map((row) => row["O"]));
