@@ -3,7 +3,7 @@
   <head>
     <script src="jsnetworkx.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("socloooooooooooooooose")</script>
+	  <script>console.log("bettercolor")</script>
     <title>Jules Verne's Mysterious Island</title>
     <style>
       #map,
@@ -346,11 +346,11 @@ window.onload = function() {
 		12: "#000000"
 	    };
 	  } else if (menuValue === "betweenness") {
-	    colorDictionary = createColorDictionary("betweenness");
-	    colorDarktionary = createColorDarktionary("betweenness");
+	    colorDictionary = createColorDictionary("rescaledBetweennessCentrality");
+	    colorDarktionary = createColorDarktionary("rescaledBetweennessCentrality");
 	  } else if (menuValue === "eigenvector") {
-	    colorDictionary = createColorDictionary("eigenvector");
-	    colorDarktionary = createColorDarktionary("eigenvector");
+	    colorDictionary = createColorDictionary("rescaledEigenvectorCentrality");
+	    colorDarktionary = createColorDarktionary("rescaledEigenvectorCentrality");
 	  }
 		generateMap();
 	});
