@@ -3,7 +3,7 @@
   <head>
     <script src="jsnetworkx.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("bettercolor")</script>
+	  <script>console.log("pleaseworknowilyjavascript")</script>
     <title>Jules Verne's Mysterious Island</title>
     <style>
       #map,
@@ -279,8 +279,55 @@ window.onload = function() {
 	// Get the drop-down menu element
 	var menu = document.getElementById("menu");
 
+	// Define a function that calculates the RGB values for a given value
+	function calculateRGB(value) {
+	  var red, green, blue;
+	  if (value < 50) {
+	    // Map values from 0 to 50 to colors from red to yellow
+	    red = 255;
+	    green = Math.round((value / 50) * 255);
+	    blue = 0;
+	  } else {
+	    // Map values from 50 to 100 to colors from yellow to lime green
+	    red = Math.round(((100 - value) / 50) * 255);
+	    green = 255;
+	    blue = 0;
+	  }
+	  return [red, green, blue];
+	}
+
+	// Define a function that creates a dynamic color dictionary
+	function createColorDictionary() {
+	  var colorDictionary = {};
+	  for (var i = 0; i <= 100; i++) {
+	    var [red, green, blue] = calculateRGB(i);
+	    colorDictionary[i] = `rgb(${red}, ${green}, ${blue})`;
+	  }
+	  return colorDictionary;
+	}
+
+	// Define a function that creates a dynamic dark color dictionary
+	function createColorDarktionary(colorDictionary) {
+	  var colorDarktionary = {};
+	  for (var i = 0; i <= 100; i++) {
+	    var color = colorDictionary[i];
+	    var [red, green, blue] = color.match(/\d+/g).map(Number);
+	    red = Math.round((red + 0) / 2);
+	    green = Math.round((green + 0) / 2);
+	    blue = Math.round((blue + 0) / 2);
+	    colorDarktionary[i] = `rgb(${red}, ${green}, ${blue})`;
+	  }
+	  return colorDarktionary;
+	}
+
+	// Create the betweenness and eigenvector color dictionaries
+	var betweenness_colorDictionary = createColorDictionary();
+	var betweenness_colorDarktionary = createColorDarktionary(betweenness_colorDictionary);
+	var eigenvector_colorDictionary = createColorDictionary();
+	var eigenvector_colorDarktionary = createColorDarktionary(eigenvector_colorDictionary);
+	
 	// Define default color dictionaries
-	var colorDictionary = {
+	var standard_colorDictionary = {
 	1: "#eb3337",
 	2: "#fd8238",
 	3: "#fdf12c",
@@ -295,7 +342,7 @@ window.onload = function() {
 	12: "#161616"
 	};
 
-	var colorDarktionary = {
+	var standard_colorDarktionary = {
 	1: "#761a1c",
 	2: "#7f411c",
 	3: "#7f7916",
@@ -310,51 +357,6 @@ window.onload = function() {
 	12: "#000000"
 	};
 	
-	// Add an event listener to the drop-down menu
-	menu.addEventListener("change", function () {
-	  // Get the value of the drop-down menu
-	  var menuValue = this.value;
-
-	  // Set the color dictionaries based on the value of the drop-down menu
-	  if (menuValue === "standard") {
-	    colorDictionary = {
-		  1: "#eb3337",
-		  2: "#fd8238",
-		  3: "#fdf12c",
-		  4: "#2ed14f",
-		  5: "#2ca9f1",
-		  6: "#4a51cc",
-		  7: "#b948ba",
-		  8: "#8b2c32",
-		  9: "#5f5f5f",
-		 10: "#377a46",
-		 11: "#460055",
-		 12: "#161616"
-	    };
-	    colorDarktionary = {
-		 1: "#761a1c",
-		 2: "#7f411c",
-		 3: "#7f7916",
-		 4: "#176928",
-		 5: "#165579",
-		 6: "#252966",
-		 7: "#5d245d",
-		 8: "#461619",
-		 9: "#303030",
-		10: "#1c3d23",
-		11: "#23002b",
-		12: "#000000"
-	    };
-	  } else if (menuValue === "betweenness") {
-	    colorDictionary = createColorDictionary("rescaledBetweennessCentrality");
-	    colorDarktionary = createColorDarktionary("rescaledBetweennessCentrality");
-	  } else if (menuValue === "eigenvector") {
-	    colorDictionary = createColorDictionary("rescaledEigenvectorCentrality");
-	    colorDarktionary = createColorDarktionary("rescaledEigenvectorCentrality");
-	  }
-		generateMap();
-	});
-
 	// Define csvData as a global variable
 	var csvData;
 	
@@ -606,19 +608,48 @@ function generateMap() {
     debouncedGenerateMap();
   });
 
+  var currentColorDictionary;
+  var currentColorDarktionary;
+  if (menu.value === "standard") {
+    currentColorDictionary = standard_colorDictionary;
+    currentColorDarktionary = standard_colorDarktionary;
+  } else if (menu.value === "betweenness") {
+    currentColorDictionary = betweenness_colorDictionary;
+    currentColorDarktionary = betweenness_colorDarktionary;
+  } else if (menu.value === "eigenvector") {
+    currentColorDictionary = eigenvector_colorDictionary;
+    currentColorDarktionary = eigenvector_colorDarktionary;
+  }
+
+  var column;
+  if (menu.value === "standard") {
+    column = "O";
+  } else if (menu.value === "betweenness") {
+    column = "D";
+  } else if (menu.value === "eigenvector") {
+    column = "E";
+  }
+
   // Color in the map and add indirect connections
   paths.forEach(function (path) {
     var pathId = path.getAttribute("id");
     for (var i = 0; i < tableData.length; i++) {
       if (tableData[i]["A"] === pathId) {
         // Color in the map
-        var value = tableData[i]["O"];
+        var value = tableData[i][column];
         if (value >= 12) {
           value = 12;
         }
-        if (value !== 0) {
-          var color = colorDictionary[value];
-          var border_color = colorDarktionary[value];
+        if (menu.value === "standard" && value !== 0) {
+          var color = currentColorDictionary[value];
+          var border_color = currentColorDarktionary[value];
+          path.style.setProperty("fill", color, "important");
+          path.setAttribute("stroke-opacity", "100");
+          path.style.setProperty("stroke", border_color, "important");
+          path.style.setProperty("stroke-width", "2", "important");
+        } else if (menu.value !== "standard") {
+          var color = currentColorDictionary[value];
+          var border_color = currentColorDarktionary[value];
           path.style.setProperty("fill", color, "important");
           path.setAttribute("stroke-opacity", "100");
           path.style.setProperty("stroke", border_color, "important");
