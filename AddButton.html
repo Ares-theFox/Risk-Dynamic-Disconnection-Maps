@@ -4,7 +4,7 @@
     <script src="jsnetworkx.js"></script>
     <script src="colorDictionaries.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("workaaaaaaaaaaaaaaaaaaaaaaaaa")</script>
+	  <script>console.log("8898989")</script>
     <title>Jules Verne's Mysterious Island</title>
     <style>
       #map,
@@ -511,7 +511,7 @@ function generateMap() {
       if (tableData[i]["A"] === pathId) {
         // Color in the map
         var value = Math.round(tableData[i][column]);
-	var Ovalue = tableData[i][O];
+	var Ovalue = tableData[i]["O"];
         if (menu.value === "standard" && Ovalue !== 0) {
           var color = currentColorDictionary[value];
           var border_color = currentColorDarktionary[value];
