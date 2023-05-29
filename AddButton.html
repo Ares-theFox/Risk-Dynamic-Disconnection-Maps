@@ -3,7 +3,7 @@
   <head>
     <script src="jsnetworkx.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("pleaseworknowilyjavascript")</script>
+	  <script>console.log("123123132132132132")</script>
     <title>Jules Verne's Mysterious Island</title>
     <style>
       #map,
@@ -592,8 +592,6 @@ function generateMap() {
 	    let territory = tableData[i]['A'];
 	    let logged_betweennessCentrality = rescaledBetweennessCentrality[territory];
 	    let logged_eigenvectorCentrality = rescaledEigenvectorCentrality[territory];
-	    console.log(`Territory: ${territory}, Betweenness Centrality: ${logged_betweennessCentrality}, Eigenvector Centrality: ${logged_eigenvectorCentrality}`);
-	}
 
   // Set font size of indirect connections
   var fontSizeInput = document.getElementById("fontSizeInput");
@@ -656,47 +654,58 @@ function generateMap() {
           path.style.setProperty("stroke-width", "2", "important");
         }
 
-        // Add text to the specified location from CSV data
-        value = tableData[i]["P"];
-        if (value !== 0) {
-          // Find matching row in CSV data
-          var csvRow = csvData.find(function (row) {
-            return row["Range"] === pathId;
-          });
+	// Find matching row in CSV data
+	var csvRow = csvData.find(function (row) {
+	  return row["Range"] === pathId;
+	});
 
-          // Get coordinates from CSV data
-          var x = csvRow["Pixel Pair 1"];
-          var y = csvRow["Pixel Pair 2"];
+	// Get coordinates from CSV data
+	var x = csvRow["Pixel Pair 1"];
+	var y = csvRow["Pixel Pair 2"];
 
-          var text = document.createElementNS(
-            "http://www.w3.org/2000/svg",
-            "text"
-          );
-          text.setAttribute("x", x);
-          text.setAttribute("y", y);
-	  text.setAttribute("pointer-events", "none");
-          text.setAttribute("text-anchor", "middle");
-          text.setAttribute("alignment-baseline", "middle");
-          text.setAttribute("font-size", fontSizeInput.value);
-          text.setAttribute("font-weight", "bold");
+	var text = document.createElementNS(
+	  "http://www.w3.org/2000/svg",
+	  "text"
+	);
+	text.setAttribute("x", x);
+	text.setAttribute("y", y);
+	text.setAttribute("pointer-events", "none");
+	text.setAttribute("text-anchor", "middle");
+	text.setAttribute("alignment-baseline", "middle");
+	text.setAttribute("font-size", fontSizeInput.value);
+	text.setAttribute("font-weight", "bold");
+
+	// Set fill color based on drop-down menu option
+	if (menu.value === "standard") {
 	  if (tableData[i]["O"] >= 11) {
 	    text.setAttribute("fill", "white");
 	  } else {
 	    text.setAttribute("fill", "black");
 	  }
-          text.textContent = value;
+	} else {
+	  text.setAttribute("fill", "black");
+	}
 
-          // Adjust x and y coordinates to position midpoint of text at specified coordinates
-          var bbox = text.getBBox();
-          text.setAttribute("x", x - bbox.width / 2);
-          text.setAttribute("y", y - bbox.height / 2);
+	// Set text content based on drop-down menu option
+	if (menu.value === "standard") {
+	  text.textContent = tableData[i]["P"];
+	} else if (menu.value === "betweenness") {
+	  text.textContent = Math.round(tableData[i]["D"] * 10) / 10;
+	} else if (menu.value === "eigenvector") {
+	  text.textContent = Math.round(tableData[i]["E"] * 10) / 10;
+	}
 
-          svgElement.appendChild(text);
-        }
-        break;
-      }
-    }
-  });
+	// Adjust x and y coordinates to position midpoint of text at specified coordinates
+	var bbox = text.getBBox();
+	text.setAttribute("x", x - bbox.width / 2);
+	text.setAttribute("y", y - bbox.height / 2);
+
+	svgElement.appendChild(text);
+	break;
+	}
+	}
+	});
+
 	// Find the maximum value in column O
 	var maxO = Math.max(...tableData.map((row) => row["O"]));
 
