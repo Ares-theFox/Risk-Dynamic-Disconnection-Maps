@@ -194,7 +194,7 @@ window.onload = function() {
 };
 
 // Define global variables
-console.log("redreredrerd")
+console.log("000000000000000000000000")
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20"
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
@@ -387,13 +387,13 @@ console.log("eigenvectorCentrality:", eigenvectorCentrality);
     let minBetweennessCentrality = Math.min(...Object.values(betweennessCentrality._numberValues));
     let maxBetweennessCentrality = Math.max(...Object.values(betweennessCentrality._numberValues));
     for (let key in betweennessCentrality._numberValues) {
-        rescaledBetweennessCentrality[key] = Math.round((betweennessCentrality._numberValues[key] - minBetweennessCentrality) / (maxBetweennessCentrality - minBetweennessCentrality) * 100);
+        rescaledBetweennessCentrality[territories[key]] = Math.round((betweennessCentrality._numberValues[key] - minBetweennessCentrality) / (maxBetweennessCentrality - minBetweennessCentrality) * 100);
     }
     let rescaledEigenvectorCentrality = {};
     let minEigenvectorCentrality = Math.min(...Object.values(eigenvectorCentrality._numberValues));
     let maxEigenvectorCentrality = Math.max(...Object.values(eigenvectorCentrality._numberValues));
     for (let key in eigenvectorCentrality._numberValues) {
-        rescaledEigenvectorCentrality[key] = Math.round((eigenvectorCentrality._numberValues[key] - minEigenvectorCentrality) / (maxEigenvectorCentrality - minEigenvectorCentrality) * 100);
+        rescaledEigenvectorCentrality[territories[key]] = Math.round((eigenvectorCentrality._numberValues[key] - minEigenvectorCentrality) / (maxEigenvectorCentrality - minEigenvectorCentrality) * 100);
     }
 	console.log("minBetweennessCentrality:", minBetweennessCentrality)
 	console.log("maxBetweennessCentrality:", maxBetweennessCentrality)
