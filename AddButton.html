@@ -4,7 +4,7 @@
     <script src="jsnetworkx.js"></script>
     <script src="colorDictionaries.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("asd5f46+5as4dfasdf")</script>
+	  <script>console.log("readdf")</script>
     <title>Jules Verne's Mysterious Island</title>
     <style>
       #map,
@@ -236,16 +236,18 @@ window.onload = function() {
 	  }
 	);
 	
-	// Get the drop-down menu element
-	var menu = document.getElementById("menu");
+	// Define global variables
+	menu = document.getElementById("menu");
+	currentColorDictionary = null;
+	currentColorDarktionary = null;
 
 	// Add an event listener to the menu element
 	menu.addEventListener("change", function() {
+	  updateCurrentColorDictionaries();
 	  generateMap();
 	});
 
-	  var currentColorDictionary;
-	  var currentColorDarktionary;
+	function updateCurrentColorDictionaries() {
 	  if (menu.value === "standard") {
 	    currentColorDictionary = standard_colorDictionary;
 	    currentColorDarktionary = standard_colorDarktionary;
@@ -256,6 +258,7 @@ window.onload = function() {
 	    currentColorDictionary = eigenvector_colorDictionary;
 	    currentColorDarktionary = eigenvector_colorDarktionary;
 	  }
+	}
 	
 	// Define csvData as a global variable
 	var csvData;
@@ -515,7 +518,7 @@ function generateMap() {
     for (var i = 0; i < tableData.length; i++) {
       if (tableData[i]["A"] === pathId) {
         // Color in the map
-        var value = tableData[i][column];
+        var value = Math.round(tableData[i][column]);
 	var Ovalue = tableData[i]["O"];
         if (menu.value === "standard" && Ovalue !== 0) {
           var color = currentColorDictionary[value];
