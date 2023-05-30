@@ -5,7 +5,7 @@
     <script src="colorDictionaries.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("expandedeig")</script>
+	  <script>console.log("new_rank_color_dict")</script>
     <title>Jules Verne's Mysterious Island</title>
     <style>
       #map,
@@ -213,6 +213,7 @@ window.onload = function() {
 
 	var totalBlizzards = 3
 	var totalPortals = 5
+	var totalTerritories = 42
 
 	// Get the select menu container element
 	var selectMenuContainer = document.getElementById("selectMenuContainer");
@@ -308,21 +309,56 @@ window.onload = function() {
 	  updateCurrentColorDictionaries();
 	});
 
+	// Set color dictionaries
+	var betweenness_bottomColor = '#ff0000'; // red
+	var betweenness_middleColor = '#ffff00'; // yellow
+	var betweenness_topColor = '#00ff00'; // lime
+	var eigenvector_bottomColor = '#ff0000'; // red
+	var eigenvector_middleColor = '#ffff00'; // yellow
+	var eigenvector_topColor = '#00ff00'; // lime
+
 	function updateCurrentColorDictionaries() {
+	  // Set the column variable based on the selected menu value
+	  if (menu.value === "standard") {
+	    column = "O";
+	  } else if (menu.value === "betweenness") {
+	    column = "D";
+	  } else if (menu.value === "eigenvector") {
+	    column = "E";
+	  }
+
+	  // Calculate the number of values in your dataset
+	  var numValues = totalTerritories - blizzardArray.length;
+
+	  // Create scales that interpolate between the specified colors
+	  var betweenness_colorScale = d3.scaleLinear()
+	    .domain([0, numValues / 2, numValues])
+	    .range([betweenness_bottomColor, betweenness_middleColor, betweenness_topColor]);
+	  var eigenvector_colorScale = d3.scaleLinear()
+	    .domain([0, numValues / 2, numValues])
+	    .range([eigenvector_bottomColor, eigenvector_middleColor, eigenvector_topColor]);
+
+	  // Update the betweenness and eigenvector color dictionaries with the calculated colors
+	  new_betweenness_colorDictionary = {};
+	  new_eigenvector_colorDictionary = {};
+	  tableData.forEach(function(d, i) {
+	    var value = Math.round(d[column]);
+	    new_betweenness_colorDictionary[value] = betweenness_colorScale(i);
+	    new_eigenvector_colorDictionary[value] = eigenvector_colorScale(i);
+	  });
+
+	  // Update currentColorDictionary to use the updated color dictionaries
 	  if (menu.value === "standard") {
 	    currentColorDictionary = standard_colorDictionary;
 	    currentColorDarktionary = standard_colorDarktionary;
-	    column = "O"; // Update the value of column
 	  } else if (menu.value === "betweenness") {
-	    currentColorDictionary = betweenness_colorDictionary;
+	    currentColorDictionary = new_betweenness_colorDictionary;
 	    currentColorDarktionary = betweenness_colorDarktionary;
-	    column = "D"; // Update the value of column
 	  } else if (menu.value === "eigenvector") {
-	    currentColorDictionary = eigenvector_colorDictionary;
+	    currentColorDictionary = new_eigenvector_colorDictionary;
 	    currentColorDarktionary = eigenvector_colorDarktionary;
-	    column = "E"; // Update the value of column
 	  }
-		generateMap()
+	 generateMap()
 	}
 	
 	// Define a counter variable to keep track of the number of requests that have completed
@@ -459,7 +495,7 @@ function calculateRescaledCentralityMeasures(tableData) {
 
 // Generate the map
 function generateMap() {
-  // Update buttons
+  // Update buttons & color dict
   updateButtonText();
   // Reset tableData to its original values
   tableData = JSON.parse(JSON.stringify(tableDataClone));
@@ -986,12 +1022,12 @@ function addBlizzards() {
 	styleElement.textContent = "#stopButton:hover { background-color: white !important; }";
 	document.head.appendChild(styleElement);
 
-      generateMap();
+      updateCurrentColorDictionaries();
       return;
     }
 
     // Execute generateMap function
-    generateMap();
+    updateCurrentColorDictionaries();
     }
     };
 
@@ -1060,7 +1096,7 @@ function addBlizzards_pathID(pathID) {
   path.style.setProperty("stroke-width", "1", "important");
 
    // Execute generateMap function
-   generateMap();
+   updateCurrentColorDictionaries();
    return;
 }
 
@@ -1201,12 +1237,12 @@ function addPortals() {
 		styleElement.textContent = "#stopButton:hover { background-color: white !important; }";
 		document.head.appendChild(styleElement);
 
-	       generateMap();
+	       updateCurrentColorDictionaries();
 	       return;
        }
 
        // Execute generateMap function
-       generateMap();
+       updateCurrentColorDictionaries();
     }
   };
 
@@ -1346,7 +1382,7 @@ function eraser() {
       }
 
       // Call generateMap function
-      generateMap();
+      updateCurrentColorDictionaries();
 
       // Check if clickedPathsBlizzardsPortals array is empty
       if (clickedPathsBlizzardsPortals.length === 0) {
@@ -1431,7 +1467,7 @@ function addPortals_pathID(pathID) {
    clickedPathsBlizzardsPortals.push(pathID);
 
    // Execute generateMap function
-   generateMap();
+   updateCurrentColorDictionaries();
    return;
 }
 	
@@ -1489,7 +1525,7 @@ function undo() {
       if (index !== -1) {
         clickedPathsBlizzardsPortals.splice(index, 1);
       }
-	  generateMap();
+	  updateCurrentColorDictionaries();
     } else if (lastAction.type === 'addPortal') {
       // Remove the last portal from the portalArray
       portalArray.pop();
@@ -1509,7 +1545,7 @@ function undo() {
       if (index !== -1) {
         clickedPathsBlizzardsPortals.splice(index, 1);
       }
-	  generateMap();
+	  updateCurrentColorDictionaries();
     } else if (lastAction.type === 'eraseBlizzard') {
 	  addBlizzards_pathID(lastAction.pathId);
     } else if (lastAction.type === 'erasePortal') {
