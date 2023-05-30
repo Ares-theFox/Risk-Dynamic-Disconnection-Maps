@@ -5,7 +5,7 @@
     <script src="colorDictionaries.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("endofcode?")</script>
+	  <script>console.log("expandedeig")</script>
     <title>Jules Verne's Mysterious Island</title>
     <style>
       #map,
@@ -439,7 +439,7 @@ function calculateRescaledCentralityMeasures(tableData) {
 
     // Calculate betweenness centrality and closeness centrality
     let betweennessCentrality = jsnx.betweennessCentrality(G);
-    let eigenvectorCentrality = jsnx.eigenvectorCentrality(G);
+    let eigenvectorCentrality = jsnx.eigenvectorCentrality(G, {maxIter: 200});
 	
     // Rescale the centrality values to a range of 0 to 100
     let rescaledBetweennessCentrality = {};
