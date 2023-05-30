@@ -4,7 +4,7 @@
     <script src="jsnetworkx.js"></script>
     <script src="colorDictionaries.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("early")</script>
+	  <script>console.log("dfsadfsdfsadf")</script>
     <title>Jules Verne's Mysterious Island</title>
     <style>
       #map,
@@ -49,12 +49,14 @@
   <a href="https://ares-thefox.github.io/Risk-Dynamic-Disconnection-Maps" target="blank">
     <button id="mapDirectoryButton">Map Directory</button>
   </a>
-  <label for="menu">Select:</label>
-  <select id="menu" name="menu">
-    <option value="standard">Direct Connections</option>
-    <option value="betweenness">Betweenness</option>
-    <option value="eigenvector">Eigenvector</option>
-  </select>
+  <div id="selectMenuContainer" style="display: inline-block;">
+    <label for="menu">Select:</label>
+    <select id="menu" name="menu">
+      <option value="standard">Direct Connections</option>
+      <option value="betweenness">Betweenness</option>
+      <option value="eigenvector">Eigenvector</option>
+    </select>
+  </div>
 </div>
 	<style>
 	/* Add some basic styles to the button */
@@ -206,7 +208,47 @@ window.onload = function() {
 
 	var totalBlizzards = 3
 	var totalPortals = 5
-	
+
+	  // Get the select menu container element
+	  var selectMenuContainer = document.getElementById("selectMenuContainer");
+
+	  // Hide the select menu container by default
+	  selectMenuContainer.style.display = "none";
+
+	  // Define a sequence of button presses
+	  var sequence = [
+	    { button: "blizzardButton", count: totalBlizzards },
+	    { button: "portalButton", count: totalPortals },
+	    { button: "eraserButton", count: 1 },
+	    { button: "undoButton", count: 1 },
+	    { button: "stopButton", count: 1 }
+	  ];
+
+	  // Keep track of the current position in the sequence
+	  var sequenceIndex = 0;
+	  var sequenceCount = 0;
+
+	  // Add event listeners to the buttons
+	  sequence.forEach(function (item) {
+	    var button = document.getElementById(item.button);
+	    button.addEventListener("click", function () {
+	      if (item.button === sequence[sequenceIndex].button) {
+		sequenceCount++;
+		if (sequenceCount === item.count) {
+		  sequenceIndex++;
+		  sequenceCount = 0;
+		}
+	      } else {
+		sequenceIndex = 0;
+		sequenceCount = 0;
+	      }
+
+	      if (sequenceIndex === sequence.length) {
+		selectMenuContainer.style.display = "";
+	      }
+	    });
+	  });
+
 	let blizzardArray = []
 	let portalArray = []
 	let clickedPathsBlizzardsPortals = []
@@ -240,28 +282,29 @@ window.onload = function() {
 	menu = document.getElementById("menu");
 	currentColorDictionary = null;
 	currentColorDarktionary = null;
+	column = null;
 
 	// Add an event listener to the menu element
 	menu.addEventListener("change", function() {
 	  updateCurrentColorDictionaries();
-	  generateMap();
 	});
 
 	function updateCurrentColorDictionaries() {
 	  if (menu.value === "standard") {
 	    currentColorDictionary = standard_colorDictionary;
 	    currentColorDarktionary = standard_colorDarktionary;
+	    column = "O"; // Update the value of column
 	  } else if (menu.value === "betweenness") {
 	    currentColorDictionary = betweenness_colorDictionary;
 	    currentColorDarktionary = betweenness_colorDarktionary;
+	    column = "D"; // Update the value of column
 	  } else if (menu.value === "eigenvector") {
 	    currentColorDictionary = eigenvector_colorDictionary;
 	    currentColorDarktionary = eigenvector_colorDarktionary;
+	    column = "E"; // Update the value of column
 	  }
+		generateMap()
 	}
-	
-	// Define csvData as a global variable
-	var csvData;
 	
 	// Define a counter variable to keep track of the number of requests that have completed
 	var requestsCompleted = 0;
@@ -272,10 +315,12 @@ window.onload = function() {
 	  if (requestsCompleted === 2) {
 	    // Both requests have completed, so call the generateMap function
 	    updateCurrentColorDictionaries();
-	    generateMap();
 	  }
 	}
-
+	
+	// Define csvData as a global variable
+	var csvData;
+	
 	// Load the CSV data
 	Papa.parse(
 	  IndirectConnections,
@@ -503,15 +548,6 @@ function generateMap() {
   fontSizeInput.addEventListener("input", function() {
     debouncedGenerateMap();
   });
-
-  var column;
-  if (menu.value === "standard") {
-    column = "O";
-  } else if (menu.value === "betweenness") {
-    column = "D";
-  } else if (menu.value === "eigenvector") {
-    column = "E";
-  }
 
   // Color in the map and add indirect connections
   paths.forEach(function (path) {
