@@ -4,7 +4,7 @@
     <script src="jsnetworkx.js"></script>
     <script src="colorDictionaries.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("asdfasdf")</script>
+	  <script>console.log("endofcode?")</script>
     <title>Jules Verne's Mysterious Island</title>
     <style>
       #map,
@@ -903,7 +903,7 @@ function addBlizzards() {
 	  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
 	    // Reset stroke color and width according to the color darktionary
 	    let value = tableData.find(row => row['A'] === this.id)[column];
-		  console.log(value)
+	    value = Math.round(value);
 	    let border_color = currentColorDarktionary[value];
 	    this.style.setProperty("stroke", border_color, "important");
 	    this.style.setProperty("stroke-width", "2", "important");
@@ -1115,6 +1115,7 @@ function addPortals() {
 	  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
 	    // Reset stroke color and width according to the color darktionary
 	    let value = tableData.find(row => row['A'] === this.id)[column];
+	    value = Math.round(value);
 	    let border_color = currentColorDarktionary[value];
 	    this.style.setProperty("stroke", border_color, "important");
 	    this.style.setProperty("stroke-width", "2", "important");
