@@ -4,7 +4,7 @@
     <script src="jsnetworkx.js"></script>
     <script src="colorDictionaries.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("dfsadfsdfsadf")</script>
+	  <script>console.log("I think we're done now")</script>
     <title>Jules Verne's Mysterious Island</title>
     <style>
       #map,
@@ -46,9 +46,7 @@
   <button id="portalButton" onclick="button_AddPortals()">Add Portals</button>
   <button id="undoButton" onclick="button_Undo()">Undo</button>
   <button id="resetButton">Reset Map</button>
-  <a href="https://ares-thefox.github.io/Risk-Dynamic-Disconnection-Maps" target="blank">
-    <button id="mapDirectoryButton">Map Directory</button>
-  </a>
+  <button id="mapDirectoryButton">Map Directory</button>
   <div id="selectMenuContainer" style="display: inline-block;">
     <label for="menu">Select:</label>
     <select id="menu" name="menu">
@@ -58,6 +56,7 @@
     </select>
   </div>
 </div>
+
 	<style>
 	/* Add some basic styles to the button */
 	button {
@@ -171,6 +170,11 @@
   document.getElementById("resetButton").addEventListener("click", function () {
     location.reload();
   });
+	
+  // Add an event listener to the Map Directory button
+  document.getElementById("mapDirectoryButton").addEventListener("click", function () {
+    window.open("https://ares-thefox.github.io/Risk-Dynamic-Disconnection-Maps", "_blank");
+  });
 
 var images = [
   "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox1.PNG",
@@ -209,29 +213,37 @@ window.onload = function() {
 	var totalBlizzards = 3
 	var totalPortals = 5
 
-	  // Get the select menu container element
-	  var selectMenuContainer = document.getElementById("selectMenuContainer");
+	// Get the select menu container element
+	var selectMenuContainer = document.getElementById("selectMenuContainer");
 
-	  // Hide the select menu container by default
-	  selectMenuContainer.style.display = "none";
+	// Hide the select menu container by default
+	selectMenuContainer.style.display = "none";
 
-	  // Define a sequence of button presses
-	  var sequence = [
-	    { button: "blizzardButton", count: totalBlizzards },
-	    { button: "portalButton", count: totalPortals },
-	    { button: "eraserButton", count: 1 },
-	    { button: "undoButton", count: 1 },
-	    { button: "stopButton", count: 1 }
-	  ];
+	// Define a sequence of button presses
+	var sequence = [
+	  { button: "blizzardButton", count: totalBlizzards },
+	  { button: "portalButton", count: totalPortals },
+	  { button: "eraserButton", count: 1 },
+	  { button: "undoButton", count: 1 },
+	  { button: "stopButton", count: 1 }
+	];
 
-	  // Keep track of the current position in the sequence
-	  var sequenceIndex = 0;
-	  var sequenceCount = 0;
+	// Keep track of the current position in the sequence
+	var sequenceIndex = 0;
+	var sequenceCount = 0;
 
-	  // Add event listeners to the buttons
-	  sequence.forEach(function (item) {
-	    var button = document.getElementById(item.button);
-	    button.addEventListener("click", function () {
+	// Add a flag to keep track of whether the sequence has been completed or not
+	var sequenceCompleted = false;
+
+	// Add event listeners to the buttons
+	sequence.forEach(function (item) {
+	  var button = document.getElementById(item.button);
+	  var clickHandler = function () {
+	    // Check if the sequence has been completed
+	    if (sequenceCompleted) {
+	      // If it has, remove the event listener for this button
+	      button.removeEventListener("click", clickHandler);
+	    } else {
 	      if (item.button === sequence[sequenceIndex].button) {
 		sequenceCount++;
 		if (sequenceCount === item.count) {
@@ -245,9 +257,15 @@ window.onload = function() {
 
 	      if (sequenceIndex === sequence.length) {
 		selectMenuContainer.style.display = "";
+		// Set the flag to true once the sequence is completed
+		sequenceCompleted = true;
 	      }
-	    });
-	  });
+	    }
+	  };
+
+	  // Add the click event listener with the clickHandler function
+	  button.addEventListener("click", clickHandler);
+	});
 
 	let blizzardArray = []
 	let portalArray = []
@@ -884,10 +902,7 @@ function addBlizzards() {
 	  }
 	  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
 	    // Reset stroke color and width according to the color darktionary
-	    let value = tableData.find(row => row['A'] === this.id)['O'];
-	    if (value >= 12) {
-	      value = 12;
-	    }
+	    let value = tableData.find(row => row['A'] === this.id)[column];
 	    let border_color = currentColorDarktionary[value];
 	    this.style.setProperty("stroke", border_color, "important");
 	    this.style.setProperty("stroke-width", "2", "important");
@@ -1098,10 +1113,7 @@ function addPortals() {
 	  }
 	  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
 	    // Reset stroke color and width according to the color darktionary
-	    let value = tableData.find(row => row['A'] === this.id)['O'];
-	    if (value >= 12) {
-	      value = 12;
-	    }
+	    let value = tableData.find(row => row['A'] === this.id)[column];
 	    let border_color = currentColorDarktionary[value];
 	    this.style.setProperty("stroke", border_color, "important");
 	    this.style.setProperty("stroke-width", "2", "important");
