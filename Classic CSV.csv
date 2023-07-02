@@ -1,0 +1,43 @@
+A,B,C
+Alaska,"Northwest_Territory,Alberta,Kamchatka",North America
+Northwest_Territory,"Alaska,Greenland,Alberta,Ontario",North America
+Greenland,"Northwest_Territory,Ontario,Quebec,Iceland",North America
+Alberta,"Alaska,Northwest_Territory,Ontario,Western_United_States",North America
+Ontario,"Northwest_Territory,Greenland,Alberta,Quebec,Western_United_States,Eastern_United_States",North America
+Quebec,"Greenland,Ontario,Eastern_United_States",North America
+Western_United_States,"Alberta,Ontario,Eastern_United_States,Central_America",North America
+Eastern_United_States,"Ontario,Quebec,Western_United_States,Central_America",North America
+Central_America,"Western_United_States,Eastern_United_States,Venezuela",North America
+Venezuela,"Central_America,Peru,Brazil",South America
+Peru,"Venezuela,Brazil,Argentina",South America
+Brazil,"Venezuela,Peru,Argentina,North_Africa",South America
+Argentina,"Peru,Brazil",South America
+Iceland,"Greenland,Great_Britain,Scandinavia",Europe
+Great_Britain,"Iceland,Scandinavia,Northern_Europe,Western_Europe",Europe
+Scandinavia,"Iceland,Great_Britain,Ukraine,Northern_Europe",Europe
+Ukraine,"Scandinavia,Northern_Europe,Southern_Europe,Ural,Afghanistan,Middle_East",Europe
+Northern_Europe,"Great_Britain,Scandinavia,Ukraine,Western_Europe,Southern_Europe",Europe
+Western_Europe,"Great_Britain,Northern_Europe,Southern_Europe,North_Africa",Europe
+Southern_Europe,"Ukraine,Northern_Europe,Western_Europe,North_Africa,Egypt,Middle_East",Europe
+Egypt,"Southern_Europe,Middle_East,North_Africa,East_Africa",Africa
+North_Africa,"Brazil,Western_Europe,Southern_Europe,Egypt,East_Africa,Congo",Africa
+East_Africa,"Middle_East,Egypt,North_Africa,Congo,South_Africa,Madagascar",Africa
+Congo,"North_Africa,East_Africa,South_Africa",Africa
+South_Africa,"East_Africa,Congo,Madagascar",Africa
+Madagascar,"East_Africa,South_Africa",Africa
+Indonesia,"New_Guinea,Western_Australia,Siam",Australia
+New_Guinea,"Indonesia,Western_Australia,Eastern_Australia",Australia
+Western_Australia,"Indonesia,New_Guinea,Eastern_Australia",Australia
+Eastern_Australia,"New_Guinea,Western_Australia",Australia
+Kamchatka,"Alaska,Japan,Yakutsk,Irkutsk,Mongolia",Asia
+Japan,"Kamchatka,Mongolia",Asia
+Yakutsk,"Kamchatka,Irkutsk,Siberia",Asia
+Irkutsk,"Kamchatka,Yakutsk,Mongolia,Siberia",Asia
+Mongolia,"Kamchatka,Japan,Irkutsk,Siberia,China",Asia
+Siberia,"Yakutsk,Irkutsk,Mongolia,Ural,China",Asia
+Ural,"Ukraine,Siberia,China,Afghanistan",Asia
+China,"Mongolia,Siberia,Ural,Afghanistan,India,Siam",Asia
+Afghanistan,"Ukraine,Ural,China,Middle_East,India",Asia
+Middle_East,"Ukraine,Southern_Europe,Egypt,East_Africa,India,Afghanistan",Asia
+India,"China,Afghanistan,Middle_East,Siam",Asia
+Siam,"Indonesia,China,India",Asia
