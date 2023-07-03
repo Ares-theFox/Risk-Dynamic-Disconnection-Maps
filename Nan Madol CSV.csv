@@ -1,0 +1,43 @@
+A,B,C
+Nan1,"Nan2,Nan3,Nan17",Peinkitel
+Nan2,"Nan1,Nan4,Nan9",Peinkitel
+Nan3,"Nan1,Nan6",Peinkitel
+Nan4,"Nan2,Nan5",Peinkitel
+Nan5,"Nan4,Nan6,Nan7",Peinkitel
+Nan6,"Nan3,Nan5,Nan7,Nan15",Peinkitel
+Nan7,"Nan5,Nan6,Nan8",Peinkitel
+Nan8,"Nan7,Nan9",Peinkitel
+Nan9,"Nan2,Nan8,Nan10,Nan12",Peinkitel
+Nan10,"Nan9,Nan11",Peinkitel
+Nan11,"Nan10,Nan36,Nan41",Peinkitel
+Nan12,"Nan9,Nan13",Peinkitel
+Nan13,"Nan12,Nan14,Nan16",Dapahu
+Nan14,"Nan13,Nan15,Nan23",Dapahu
+Nan15,"Nan6,Nan14",Dapahu
+Nan16,"Nan13,Nan28,Nan29,Nan40",Dapahu
+Nan17,"Nan1,Nan18",Nan Dowas
+Nan18,"Nan17,Nan19",Nan Dowas
+Nan19,"Nan18,Nan20,Nan24",Nan Dowas
+Nan20,"Nan19,Nan21",Nan Dowas
+Nan21,"Nan20,Nan22",Nan Dowas
+Nan22,"Nan21,Nan23",Nan Dowas
+Nan23,"Nan14,Nan22",Nan Dowas
+Nan24,"Nan19,Nan25",Powe
+Nan25,"Nan24,Nan26",Powe
+Nan26,"Nan25,Nan27,Nan28",Powe
+Nan27,"Nan26,Nan29",Powe
+Nan28,"Nan16,Nan26",Dapahu
+Nan29,"Nan16,Nan27,Nan30",Powe
+Nan30,"Nan29,Nan31",Pahnwi
+Nan31,"Nan30,Nan32,Nan39",Pahnwi
+Nan32,"Nan31,Nan33",Pahnwi
+Nan33,"Nan32,Nan34",Pahnwi
+Nan34,"Nan33,Nan35,Nan37",Pah
+Nan35,"Nan34,Nan36",Pah
+Nan36,"Nan11,Nan35",Pah
+Nan37,"Nan34,Nan39",Pah
+Nan38,"Nan39,Nan42",Idedh
+Nan39,"Nan31,Nan37,Nan38,Nan40",Idedh
+Nan40,"Nan16,Nan39,Nan41",Idedh
+Nan41,"Nan11,Nan40,Nan42",Idedh
+Nan42,"Nan38,Nan41",Idedh
