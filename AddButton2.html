@@ -2,11 +2,10 @@
 <html>
   <head>
     <script src="jsnetworkx.js"></script>
-    <script src="colorDictionaries.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("newest123")</script>
-    <title>Jules Verne's Mysterious Island</title>
+	  <script>console.log("123")</script>
+    <title>TESTING PAGE #2</title>
     <style>
       #map,
       #range {
@@ -49,22 +48,11 @@
   <button id="resetButton">Reset Map</button>
   <button id="mapDirectoryButton">Map Directory</button>
   <div id="selectMenuContainer" style="display: inline-block;">
-    <label for="menu">Centrality:</label>
-    <select id="menu" name="menu">
+    <label for="centralityType">Centrality:</label>
+    <select id="centralityType" name="centralityType">
       <option value="standard">Direct Connections</option>
       <option value="betweenness">Betweenness</option>
       <option value="eigenvector">Eigenvector</option>
-    </select>
-    <label for="colorDict">Color scheme:</label>
-    <select id="colorDict" name="colorDict">
-      <option value="scaled">Scaled (0-100)</option>
-      <option value="ranked">Rank (smallest-largest)</option>
-    </select>
-    <label for="centralityDisplay">Display:</label>
-    <select id="centralityDisplay" name="colorDict">
-      <option value="scaled">Scaled (0-100)</option>
-      <option value="ranked">Ranked (smallest-largest)</option>
-      <option value="raw">No scaling</option>
     </select>
   </div>
 </div>
@@ -167,6 +155,8 @@
       alt="Jules Verne"
     />
     <div id="range"></div>
+	  
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
 <script>
   let zoom = 1;
   document.getElementById("zoomInButton").addEventListener("click", function () {
@@ -180,11 +170,6 @@
 	
   document.getElementById("resetButton").addEventListener("click", function () {
     location.reload();
-  });
-	
-  // Add an event listener to the Map Directory button
-  document.getElementById("mapDirectoryButton").addEventListener("click", function () {
-    window.open("https://ares-thefox.github.io/Risk-Dynamic-Disconnection-Maps", "_blank");
   });
 
 var images = [
@@ -213,17 +198,18 @@ window.onload = function() {
 };
 
 // Define global variables
+console.log("dearth")
+
 	// Define map-specific items
-	var colorLegend = "Jules%20Verne%20"
-	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20CSV.csv"
-	var IndirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20Indirect%20Connection%20Locations%20CSV.csv"
-	var SVG = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20Paths.svg"
+	var colorLegend = "Jules%20Verne%20";
+	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "CSV.csv";
+	var IndirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "Indirect%20Connection%20Locations%20CSV.csv";
+	var SVG = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "Paths.svg";
 	var BlizzardPattern = blizzardPatternImage.src;
 	// Remember to change the img src, blizzard pattern, and the alt title!!!!!!!!
 
 	var totalBlizzards = 3
 	var totalPortals = 5
-	var totalTerritories = 42
 
 	// Get the select menu container element
 	var selectMenuContainer = document.getElementById("selectMenuContainer");
@@ -234,10 +220,7 @@ window.onload = function() {
 	// Define a sequence of button presses
 	var sequence = [
 	  { button: "blizzardButton", count: totalBlizzards },
-	  { button: "portalButton", count: totalPortals },
-	  { button: "eraserButton", count: 1 },
-	  { button: "undoButton", count: 1 },
-	  { button: "stopButton", count: 1 }
+	  { button: "portalButton", count: totalPortals }
 	];
 
 	// Keep track of the current position in the sequence
@@ -308,90 +291,38 @@ window.onload = function() {
 	  }
 	);
 	
-	// Define global variables
-	menu = document.getElementById("menu");
-	colorDict = document.getElementById("colorDict");
-	centralityDisplay = document.getElementById("centralityDisplay");
-	currentColorDictionary = null;
-	currentColorDarktionary = null;
-	column = null;
-
-	// Add an event listener to the menu element
-	menu.addEventListener("change", function() {
-	  updateColumn();
-	});
+	// Define color dictionaries 
+	const colorDictionary = {
+	  1: "#eb3337",
+	  2: "#fd8238",
+	  3: "#fdf12c",
+	  4: "#2ed14f",
+	  5: "#2ca9f1",
+	  6: "#4a51cc",
+	  7: "#b948ba",
+	  8: "#8b2c32",
+	  9: "#5f5f5f",
+	 10: "#377a46",
+	 11: "#460055",
+	 12: "#161616"
+	};
+	const colorDarktionary = {
+	 1: "#761a1c",
+	 2: "#7f411c",
+	 3: "#7f7916",
+	 4: "#176928",
+	 5: "#165579",
+	 6: "#252966",
+	 7: "#5d245d",
+	 8: "#461619",
+	 9: "#303030",
+	10: "#1c3d23",
+	11: "#23002b",
+	12: "#000000"
+	};
 	
-	// Add an event listener to the colorDict element
-	colorDict.addEventListener("change", function() {
-	  updateColumn();
-	});
-
-	// Add an event listener to the centralityDisplay element
-	centralityDisplay.addEventListener("change", function() {
-	  generateMap();
-	});
-		
-	// Set color dictionaries
-	var dict_bottomColor = '#ff0000'; // red
-	var dict_middleColor = '#ffff00'; // yellow
-	var dict_topColor = '#00ff00'; // lime
-	var dark_bottomColor = '#800000'; // red
-	var dark_middleColor = '#808000'; // yellow
-	var dark_topColor = '#008000'; // lime
-
-	function updateCurrentColorDictionaries() {
-	  // Create scales that interpolate between the specified colors
-	  var numValues = totalTerritories - blizzardArray.length;
-	  var centralityDict_colorScale = d3.scaleLinear()
-	    .domain([0, numValues / 2, numValues])
-	    .range([dict_bottomColor, dict_middleColor, dict_topColor]);
-	  var centralityDark_colorScale = d3.scaleLinear()
-	    .domain([0, numValues / 2, numValues])
-	    .range([dark_bottomColor, dark_middleColor, dark_topColor]);
-
-	  // Update the betweenness and eigenvector color dictionaries with the calculated colors
-	  centrality_colorDictionary = {};
-	  centrality_colorDarktionary = {};
-	  tableData.forEach(function(d, i) {
-	    var value = d[column]
-	    centrality_colorDictionary[value] = centralityDict_colorScale(i);
-	    centrality_colorDarktionary[value] = centralityDark_colorScale(i);
-	  });
-
-	  // Update currentColorDictionary to use the updated color dictionaries
-	  if (menu.value === "standard") {
-	    currentColorDictionary = standard_colorDictionary;
-	    currentColorDarktionary = standard_colorDarktionary;
-	  } else if (menu.value !== "standard") {
-	    if (colorDict.value === "ranked") {
-	      currentColorDictionary = centrality_colorDictionary;
-	      currentColorDarktionary = centrality_colorDarktionary;
-	    } else if (colorDict.value === "scaled") {
-	      currentColorDictionary = betweenness_colorDictionary;
-	      currentColorDarktionary = betweenness_colorDarktionary;
-	    }
-	  }
-	 generateMap()
-	}
-	
-	function updateColumn() {
-	    if (menu.value === "standard") {
-		column = "O";
-	    } else if (menu.value === "betweenness") {
-		if (colorDict === "scaled") {
-		    column = "D";
-		} else if (colorDict === "ranked") {
-		    column = "H";
-		}
-	    } else if (menu.value === "eigenvector") {
-		if (colorDict === "scaled") {
-		    column = "E";
-		} else if (colorDict === "ranked") {
-		    column = "I";
-		}
-	    }
-	    updateCurrentColorDictionaries();
-	}
+	// Define csvData as a global variable
+	var csvData;
 	
 	// Define a counter variable to keep track of the number of requests that have completed
 	var requestsCompleted = 0;
@@ -401,13 +332,10 @@ window.onload = function() {
 	  requestsCompleted++;
 	  if (requestsCompleted === 2) {
 	    // Both requests have completed, so call the generateMap function
-	    updateColumn();
+	    generateMap();
 	  }
 	}
-	
-	// Define csvData as a global variable
-	var csvData;
-	
+
 	// Load the CSV data
 	Papa.parse(
 	  IndirectConnections,
@@ -422,6 +350,14 @@ window.onload = function() {
 	    }
 	  }
 	);
+
+	// Define global variables
+	centralityMenu = document.getElementById("centralityType");
+
+	// Add an event listener to the menu element
+	centralityMenu.addEventListener("change", function() {
+	  generateMap();
+	});
 	
 // End of global variables
 
@@ -464,7 +400,7 @@ function stopEditing() {
 }
 
 // Centrality
-function calculateRescaledCentralityMeasures(tableData) {
+function calculateCentrality(tableData) {
     // Create a list of unique territories
     let territories = [];
     for (let i = 0; i < tableData.length; i++) {
@@ -472,13 +408,11 @@ function calculateRescaledCentralityMeasures(tableData) {
             territories.push(tableData[i]['A']);
         }
     }
-
     // Create an empty adjacency matrix
     let adjacencyMatrix = [];
     for (let i = 0; i < territories.length; i++) {
         adjacencyMatrix.push(new Array(territories.length).fill(0));
     }
-
 	// Populate the adjacency matrix
 	for (let i = 0; i < tableData.length; i++) {
 	    if (tableData[i]['B'] !== undefined && tableData[i]['B'] !== '') {
@@ -494,7 +428,6 @@ function calculateRescaledCentralityMeasures(tableData) {
 		}
 	    }
 	}
-
     // Create a graph from the adjacency matrix
     let G = new jsnx.Graph();
     for (let i = 0; i < adjacencyMatrix.length; i++) {
@@ -504,33 +437,16 @@ function calculateRescaledCentralityMeasures(tableData) {
             }
         }
     }
-
     // Calculate betweenness centrality and closeness centrality
     let betweennessCentrality = jsnx.betweennessCentrality(G);
     let eigenvectorCentrality = jsnx.eigenvectorCentrality(G, {maxIter: 500});
 
     // Initialize values
-    let rescaledBetweennessCentrality = {};
     let betweennessCentralityValues = {};
     let betweennessRank = {};
-    let rescaledEigenvectorCentrality = {};
     let eigenvectorCentralityValues = {};	
     let eigenvectorRank = {};
-	
-    // Calculate min/max values
-    let minBetweennessCentrality = Math.min(...Object.values(betweennessCentrality._numberValues));
-    let maxBetweennessCentrality = Math.max(...Object.values(betweennessCentrality._numberValues));
-    let minEigenvectorCentrality = Math.min(...Object.values(eigenvectorCentrality._numberValues));
-    let maxEigenvectorCentrality = Math.max(...Object.values(eigenvectorCentrality._numberValues));
-	
-    // Rescale the centrality values to a range of 0 to 100
-    for (let key in betweennessCentrality._numberValues) {
-        rescaledBetweennessCentrality[territories[key]] = (betweennessCentrality._numberValues[key] - minBetweennessCentrality) / (maxBetweennessCentrality - minBetweennessCentrality) * 100;
-    }
-    for (let key in eigenvectorCentrality._numberValues) {
-        rescaledEigenvectorCentrality[territories[key]] = (eigenvectorCentrality._numberValues[key] - minEigenvectorCentrality) / (maxEigenvectorCentrality - minEigenvectorCentrality) * 100;
-    }
-	
+		
     // Get raw values
     for (let key in betweennessCentrality._numberValues) {
         betweennessCentralityValues[territories[key]] = betweennessCentrality._numberValues[key];
@@ -547,12 +463,46 @@ function calculateRescaledCentralityMeasures(tableData) {
         eigenvectorRank[key] = index + 1;
     });
 
-    return [rescaledBetweennessCentrality, rescaledEigenvectorCentrality, betweennessCentralityValues, eigenvectorCentralityValues, betweennessRank, eigenvectorRank];
+    return [betweennessCentralityValues, eigenvectorCentralityValues, betweennessRank, eigenvectorRank];
 }
 
+function betweennessColor(betweennessRank) {
+    // Count the number of unique values in betweennessRank
+    let uniqueValues = new Set(Object.values(betweennessRank)).size;
+
+    // Generate a color dictionary with uniqueValues number of colors
+    let betweenness_colorDictionary = {};
+    for (let i = 0; i < uniqueValues; i++) {
+        let r = Math.round(204 + (255 - 204) * (i / (uniqueValues - 1)));
+        let g = Math.round(0 + (255 - 0) * (i / (uniqueValues - 1)));
+        let b = 0;
+        let color = '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
+        betweenness_colorDictionary[i + 1] = color;
+    }
+
+    return betweenness_colorDictionary;
+}
+
+function eigenvectorColor(eigenvectorRank) {
+    // Count the number of unique values in eigenvectorRank
+    let uniqueValues = new Set(Object.values(eigenvectorRank)).size;
+
+    // Generate a color dictionary with uniqueValues number of colors
+    let eigenvector_colorDictionary = {};
+    for (let i = 0; i < uniqueValues; i++) {
+        let r = Math.round(204 + (255 - 204) * (i / (uniqueValues - 1)));
+        let g = Math.round(0 + (255 - 0) * (i / (uniqueValues - 1)));
+        let b = 0;
+        let color = '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
+        eigenvector_colorDictionary[i + 1] = color;
+    }
+
+    return eigenvector_colorDictionary;
+}
+	
 // Generate the map
 function generateMap() {
-  // Update buttons & color dict
+  // Update buttons
   updateButtonText();
   // Reset tableData to its original values
   tableData = JSON.parse(JSON.stringify(tableDataClone));
@@ -637,21 +587,21 @@ function generateMap() {
       row["P"] = 0;
     }
   });
-	
-	// Calculate rescaled betweenness centrality and closeness centrality
-	let [rescaledBetweennessCentrality, rescaledEigenvectorCentrality, betweennessCentralityValues, eigenvectorCentralityValues, betweennessRank, eigenvectorRank] = calculateRescaledCentralityMeasures(tableData);
 
-	// Populate columns D, E, and F with the rescaled betweenness centrality and closeness centrality values
+	// Calculate rescaled betweenness centrality and closeness centrality
+	let [betweennessCentralityValues, eigenvectorCentralityValues, betweennessRank, eigenvectorRank] = calculateCentrality(tableData);
+	let betweenness_ColorDictionary = betweennessColor(betweennessRank);
+	let eigenvector_ColorDictionary = eigenvectorColor(eigenvectorRank);
+
+	// Populate columns D, E, F, and G with the centrality values
 	for (let i = 0; i < tableData.length; i++) {
 	    let territory = tableData[i]['A'];
-	    tableData[i]['D'] = rescaledBetweennessCentrality[territory];
-	    tableData[i]['E'] = rescaledEigenvectorCentrality[territory];
-	    tableData[i]['F'] = betweennessCentralityValues[territory];
-	    tableData[i]['G'] = eigenvectorCentralityValues[territory];
-	    tableData[i]['H'] = betweennessRank[territory];
-	    tableData[i]['I'] = eigenvectorRank[territory];
+	    tableData[i]['D'] = betweennessCentralityValues[territory];
+	    tableData[i]['E'] = betweennessRank[territory];
+	    tableData[i]['F'] = eigenvectorCentralityValues[territory];
+	    tableData[i]['G'] = eigenvectorRank[territory];
 	}
-
+	
   // Set font size of indirect connections
   var fontSizeInput = document.getElementById("fontSizeInput");
   fontSizeInput.addEventListener("input", function () {
@@ -671,98 +621,77 @@ function generateMap() {
     for (var i = 0; i < tableData.length; i++) {
       if (tableData[i]["A"] === pathId) {
         // Color in the map
-        var value = Math.round(tableData[i][column]);
-	var Ovalue = tableData[i]["O"];
-        if (menu.value === "standard" && Ovalue !== 0) {
-          var color = currentColorDictionary[value];
-          var border_color = currentColorDarktionary[value];
-          path.style.setProperty("fill", color, "important");
-          path.setAttribute("stroke-opacity", "100");
-          path.style.setProperty("stroke", border_color, "important");
-          path.style.setProperty("stroke-width", "2", "important");
-        } else if (menu.value !== "standard" && Ovalue !== 0) {
-          var color = currentColorDictionary[value];
-          var border_color = currentColorDarktionary[value];
+        var value = tableData[i]["O"];
+	    var betweennessValue = tableData[i]["D"];
+	    var betweennessPosition = tableData[i]["E"];
+	    var eigenvectorValue = tableData[i]["F"];
+	    var eigenvectorPosition = tableData[i]["G"];
+        if (value >= 12) {
+          value = 12;
+        }
+        if (value !== 0) {
+	  if (centralityMenu.value === "standard") {
+	    var color = colorDictionary[value];
+	    var border_color = colorDarktionary[value];
+	  } else if (centralityMenu.value === "betweenness") {
+	    var color = betweenness_ColorDictionary[betweennessPosition];
+	    var border_color = betweenness_ColorDictionary[betweennessPosition];
+	  } else if (centralityMenu.value === "eigenvector") {
+	    var color = eigenvector_ColorDictionary[eigenvectorPosition];
+	    var border_color = eigenvector_ColorDictionary[eigenvectorPosition];
+	  }
           path.style.setProperty("fill", color, "important");
           path.setAttribute("stroke-opacity", "100");
           path.style.setProperty("stroke", border_color, "important");
           path.style.setProperty("stroke-width", "2", "important");
         }
 
-	// Find matching row in CSV data
-	var csvRow = csvData.find(function (row) {
-	  return row["Range"] === pathId;
-	});
+        // Add text to the specified location from CSV data
+        value = tableData[i]["P"];
+        if (value !== 0) {
+          // Find matching row in CSV data
+          var csvRow = csvData.find(function (row) {
+            return row["Range"] === pathId;
+          });
 
-	// Get coordinates from CSV data
-	var x = csvRow["Pixel Pair 1"];
-	var y = csvRow["Pixel Pair 2"];
+          // Get coordinates from CSV data
+          var x = csvRow["Pixel Pair 1"];
+          var y = csvRow["Pixel Pair 2"];
 
-	var text = document.createElementNS(
-	  "http://www.w3.org/2000/svg",
-	  "text"
-	);
-	text.setAttribute("x", x);
-	text.setAttribute("y", y);
-	text.setAttribute("pointer-events", "none");
-	text.setAttribute("text-anchor", "middle");
-	text.setAttribute("alignment-baseline", "middle");
-	text.setAttribute("font-size", fontSizeInput.value);
-	text.setAttribute("font-weight", "bold");
-
-	// Set fill color based on drop-down menu option
-	if (menu.value === "standard") {
-	  if (Ovalue >= 11) {
+          var text = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "text"
+          );
+          text.setAttribute("x", x);
+          text.setAttribute("y", y);
+	  text.setAttribute("pointer-events", "none");
+          text.setAttribute("text-anchor", "middle");
+          text.setAttribute("alignment-baseline", "middle");
+          text.setAttribute("font-size", fontSizeInput.value);
+          text.setAttribute("font-weight", "bold");
+	  if (tableData[i]["O"] >= 11) {
 	    text.setAttribute("fill", "white");
 	  } else {
 	    text.setAttribute("fill", "black");
 	  }
-	} else {
-	  text.setAttribute("fill", "black");
-	}
-
-	// Set text content based on drop-down menu option
-	if (menu.value === "standard" && Ovalue !== 0) {
-	  text.textContent = tableData[i]["P"];
-	} else if (menu.value === "betweenness" && Ovalue !== 0) {
-	  text.textContent = Math.round(tableData[i]["D"]);
-	} else if (menu.value === "eigenvector" && Ovalue !== 0) {
-	  text.textContent = Math.round(tableData[i]["E"]);
-	}
-	      
-	if (menu.value === "standard" && Ovalue !== 0) {
-	  text.textContent = tableData[i]["P"];
-	} else if (centralityDisplay.value === "scaled" && Ovalue !== 0) {
-	  if (menu.value === "betweenness") {
-	    text.textContent = Math.round(tableData[i]["D"]);
-	  } else if (menu.value === "eigenvector") {
-	    text.textContent = Math.round(tableData[i]["E"]);
+	  if (centralityMenu.value === "standard") {
+	    text.textContent = value;
+	  } else if (centralityMenu.value === "betweenness") {
+	    text.textContent = betweennessValue;
+	  } else if (centralityMenu.value === "eigenvector") {
+	    text.textContent = eigenvectorValue;
 	  }
-	} else if (centralityDisplay.value === "raw" && Ovalue !== 0) {
-	  if (menu.value === "betweenness") {
-	    text.textContent = Math.round(tableData[i]["F"] * 1000) / 10;
-	  } else if (menu.value === "eigenvector") {
-	    text.textContent = Math.round(tableData[i]["G"] * 1000) / 10;
-	  }
-	} else if (centralityDisplay.value === "ranked" && Ovalue !== 0) {
-	  if (menu.value === "betweenness") {
-	    text.textContent = tableData[i]["H"]
-	  } else if (menu.value === "eigenvector") {
-	    text.textContent = tableData[i]["I"]
-	  }
-	}
+          // Adjust x and y coordinates to position midpoint of text at specified coordinates
+          var bbox = text.getBBox();
+          text.setAttribute("x", x - bbox.width / 2);
+          text.setAttribute("y", y - bbox.height / 2);
 
-	// Adjust x and y coordinates to position midpoint of text at specified coordinates
-	var bbox = text.getBBox();
-	text.setAttribute("x", x - bbox.width / 2);
-	text.setAttribute("y", y - bbox.height / 2);
-
-	svgElement.appendChild(text);
-	break;
-	}
-	}
-	});
-
+          svgElement.appendChild(text);
+        }
+        break;
+      }
+    }
+  });
 	// Find the maximum value in column O
 	var maxO = Math.max(...tableData.map((row) => row["O"]));
 
@@ -1022,9 +951,11 @@ function addBlizzards() {
 	  }
 	  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
 	    // Reset stroke color and width according to the color darktionary
-	    let value = tableData.find(row => row['A'] === this.id)[column];
-	    value = Math.round(value);
-	    let border_color = currentColorDarktionary[value];
+	    let value = tableData.find(row => row['A'] === this.id)['O'];
+	    if (value >= 12) {
+	      value = 12;
+	    }
+	    let border_color = colorDarktionary[value];
 	    this.style.setProperty("stroke", border_color, "important");
 	    this.style.setProperty("stroke-width", "2", "important");
 	  }
@@ -1105,12 +1036,12 @@ function addBlizzards() {
 	styleElement.textContent = "#stopButton:hover { background-color: white !important; }";
 	document.head.appendChild(styleElement);
 
-      updateCurrentColorDictionaries();
+      generateMap();
       return;
     }
 
     // Execute generateMap function
-    updateCurrentColorDictionaries();
+    generateMap();
     }
     };
 
@@ -1179,7 +1110,7 @@ function addBlizzards_pathID(pathID) {
   path.style.setProperty("stroke-width", "1", "important");
 
    // Execute generateMap function
-   updateCurrentColorDictionaries();
+   generateMap();
    return;
 }
 
@@ -1234,9 +1165,11 @@ function addPortals() {
 	  }
 	  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
 	    // Reset stroke color and width according to the color darktionary
-	    let value = tableData.find(row => row['A'] === this.id)[column];
-	    value = Math.round(value);
-	    let border_color = currentColorDarktionary[value];
+	    let value = tableData.find(row => row['A'] === this.id)['O'];
+	    if (value >= 12) {
+	      value = 12;
+	    }
+	    let border_color = colorDarktionary[value];
 	    this.style.setProperty("stroke", border_color, "important");
 	    this.style.setProperty("stroke-width", "2", "important");
 	  }
@@ -1320,12 +1253,12 @@ function addPortals() {
 		styleElement.textContent = "#stopButton:hover { background-color: white !important; }";
 		document.head.appendChild(styleElement);
 
-	       updateCurrentColorDictionaries();
+	       generateMap();
 	       return;
        }
 
        // Execute generateMap function
-       updateCurrentColorDictionaries();
+       generateMap();
     }
   };
 
@@ -1409,9 +1342,11 @@ function eraser() {
 	      this.style.setProperty("stroke-width", "1", "important");
 	    } else if (portalArray.includes(this.id)) {
 	      // Reset stroke color and width according to the color darktionary
-	      let value = tableData.find(row => row['A'] === this.id)[column];
-	      value = Math.round(value);
-	      let border_color = currentColorDarktionary[value];
+	      let value = tableData.find(row => row['A'] === this.id)['O'];
+	      if (value >= 12) {
+		value = 12;
+	      }
+	      let border_color = colorDarktionary[value];
 	      this.style.setProperty("stroke", border_color, "important");
 	      this.style.setProperty("stroke-width", "2", "important");
 	    }
@@ -1463,7 +1398,7 @@ function eraser() {
       }
 
       // Call generateMap function
-      updateCurrentColorDictionaries();
+      generateMap();
 
       // Check if clickedPathsBlizzardsPortals array is empty
       if (clickedPathsBlizzardsPortals.length === 0) {
@@ -1548,7 +1483,7 @@ function addPortals_pathID(pathID) {
    clickedPathsBlizzardsPortals.push(pathID);
 
    // Execute generateMap function
-   updateCurrentColorDictionaries();
+   generateMap();
    return;
 }
 	
@@ -1606,7 +1541,7 @@ function undo() {
       if (index !== -1) {
         clickedPathsBlizzardsPortals.splice(index, 1);
       }
-	  updateCurrentColorDictionaries();
+	  generateMap();
     } else if (lastAction.type === 'addPortal') {
       // Remove the last portal from the portalArray
       portalArray.pop();
@@ -1626,7 +1561,7 @@ function undo() {
       if (index !== -1) {
         clickedPathsBlizzardsPortals.splice(index, 1);
       }
-	  updateCurrentColorDictionaries();
+	  generateMap();
     } else if (lastAction.type === 'eraseBlizzard') {
 	  addBlizzards_pathID(lastAction.pathId);
     } else if (lastAction.type === 'erasePortal') {
