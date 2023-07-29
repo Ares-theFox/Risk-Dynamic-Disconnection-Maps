@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <script src="jsnetworkx.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
+	  <script>console.log("86418468")</script>
     <title>Classic</title>
     <style>
       #map,
@@ -42,9 +46,15 @@
   <button id="portalButton" onclick="button_AddPortals()">Add Portals</button>
   <button id="undoButton" onclick="button_Undo()">Undo</button>
   <button id="resetButton">Reset Map</button>
-  <a href="https://ares-thefox.github.io/Risk-Dynamic-Disconnection-Maps" target="_blank">
-    <button id="mapDirectoryButton">Map Directory</button>
-  </a>
+  <button id="mapDirectoryButton">Map Directory</button>
+  <div id="selectMenuContainer" style="display: inline-block;">
+    <label for="centralityType">Centrality:</label>
+    <select id="centralityType" name="centralityType">
+      <option value="standard">Direct Connections</option>
+      <option value="betweenness">Betweenness</option>
+      <option value="eigenvector">Eigenvector</option>
+    </select>
+  </div>
 </div>
 	<style>
 	/* Add some basic styles to the button */
@@ -188,19 +198,68 @@ window.onload = function() {
 };
 
 // Define global variables
-console.log("dearth")
-
 	// Define map-specific items
-	var colorLegend = "Classic%20"
-	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Classic%20CSV.csv"
-	var IndirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Classic%20Indirect%20Connection%20Locations%20CSV.csv"
-	var SVG = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Classic%20Paths.svg"
+	var colorLegend = "Classic%20";
+	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "CSV.csv";
+	var IndirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "Indirect%20Connection%20Locations%20CSV.csv";
+	var SVG = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "Paths.svg";
 	var BlizzardPattern = blizzardPatternImage.src;
 	// Remember to change the img src, blizzard pattern, and the alt title!!!!!!!!
 
 	var totalBlizzards = 3
 	var totalPortals = 5
-	
+
+	// Get the select menu container element
+	var selectMenuContainer = document.getElementById("selectMenuContainer");
+
+	// Hide the select menu container by default
+	selectMenuContainer.style.display = "none";
+
+	// Define a sequence of button presses
+	var sequence = [
+	  { button: "blizzardButton", count: totalBlizzards },
+	  { button: "portalButton", count: totalPortals }
+	];
+
+	// Keep track of the current position in the sequence
+	var sequenceIndex = 0;
+	var sequenceCount = 0;
+
+	// Add a flag to keep track of whether the sequence has been completed or not
+	var sequenceCompleted = false;
+
+	// Add event listeners to the buttons
+	sequence.forEach(function (item) {
+	  var button = document.getElementById(item.button);
+	  var clickHandler = function () {
+	    // Check if the sequence has been completed
+	    if (sequenceCompleted) {
+	      // If it has, remove the event listener for this button
+	      button.removeEventListener("click", clickHandler);
+	    } else {
+	      if (item.button === sequence[sequenceIndex].button) {
+		sequenceCount++;
+		if (sequenceCount === item.count) {
+		  sequenceIndex++;
+		  sequenceCount = 0;
+		}
+	      } else {
+		sequenceIndex = 0;
+		sequenceCount = 0;
+	      }
+
+	      if (sequenceIndex === sequence.length) {
+		selectMenuContainer.style.display = "";
+		// Set the flag to true once the sequence is completed
+		sequenceCompleted = true;
+	      }
+	    }
+	  };
+
+	  // Add the click event listener with the clickHandler function
+	  button.addEventListener("click", clickHandler);
+	});
+
 	let blizzardArray = []
 	let portalArray = []
 	let clickedPathsBlizzardsPortals = []
@@ -289,6 +348,14 @@ console.log("dearth")
 	    }
 	  }
 	);
+
+	// Define global variables
+	centralityMenu = document.getElementById("centralityType");
+
+	// Add an event listener to the menu element
+	centralityMenu.addEventListener("change", function() {
+	  generateMap();
+	});
 	
 // End of global variables
 
@@ -328,6 +395,115 @@ function stopEditing() {
 	styleElement.textContent = "#stopButton:hover { background-color: white !important; }";
 	document.head.appendChild(styleElement);
 	return;
+}
+
+// Centrality
+function calculateCentrality(tableData) {
+    // Create a list of unique territories
+    let territories = [];
+    for (let i = 0; i < tableData.length; i++) {
+        if (tableData[i]['B'] !== '' && !territories.includes(tableData[i]['A'])) {
+            territories.push(tableData[i]['A']);
+        }
+    }
+    // Create an empty adjacency matrix
+    let adjacencyMatrix = [];
+    for (let i = 0; i < territories.length; i++) {
+        adjacencyMatrix.push(new Array(territories.length).fill(0));
+    }
+	// Populate the adjacency matrix
+	for (let i = 0; i < tableData.length; i++) {
+	    if (tableData[i]['B'] !== undefined && tableData[i]['B'] !== '') {
+		let territory = tableData[i]['A'];
+		let connections = tableData[i]['B'].split(',');
+		for (let j = 0; j < connections.length; j++) {
+		    let connection = connections[j];
+		    if (connection !== '') {
+			let index1 = territories.indexOf(territory);
+			let index2 = territories.indexOf(connection);
+			adjacencyMatrix[index1][index2] = 1;
+		    }
+		}
+	    }
+	}
+    // Create a graph from the adjacency matrix
+    let G = new jsnx.Graph();
+    for (let i = 0; i < adjacencyMatrix.length; i++) {
+        for (let j = i + 1; j < adjacencyMatrix.length; j++) {
+            if (adjacencyMatrix[i][j] === 1) {
+                G.addEdge(i, j);
+            }
+        }
+    }
+    // Calculate betweenness centrality and closeness centrality
+    let betweennessCentrality = jsnx.betweennessCentrality(G);
+    let eigenvectorCentrality = jsnx.eigenvectorCentrality(G, {maxIter: 500});
+
+    // Initialize values
+    let betweennessCentralityValues = {};
+    let betweennessRank = {};
+    let eigenvectorCentralityValues = {};	
+    let eigenvectorRank = {};
+		
+    // Get raw values
+    for (let key in betweennessCentrality._numberValues) {
+        betweennessCentralityValues[territories[key]] = betweennessCentrality._numberValues[key];
+    }
+    for (let key in eigenvectorCentrality._numberValues) {
+        eigenvectorCentralityValues[territories[key]] = eigenvectorCentrality._numberValues[key];
+    }
+
+    // Calculate rank values
+    Object.entries(betweennessCentralityValues).sort((a, b) => a[1] - b[1]).forEach(([key, value], index) => {
+        betweennessRank[key] = index + 1;
+    });
+    Object.entries(eigenvectorCentralityValues).sort((a, b) => a[1] - b[1]).forEach(([key, value], index) => {
+        eigenvectorRank[key] = index + 1;
+    });
+
+    // Round the centrality values
+    for (let key in betweennessCentralityValues) {
+        betweennessCentralityValues[key] = Math.round(betweennessCentralityValues[key] * 1000) / 10;
+    }
+    for (let key in eigenvectorCentralityValues) {
+        eigenvectorCentralityValues[key] = Math.round(eigenvectorCentralityValues[key] * 1000) / 10;
+    }
+
+    return [betweennessCentralityValues, eigenvectorCentralityValues, betweennessRank, eigenvectorRank];
+}
+
+function betweennessColor(betweennessRank) {
+    // Count the number of unique values in betweennessRank
+    let uniqueValues = new Set(Object.values(betweennessRank)).size;
+
+    // Generate a color dictionary with uniqueValues number of colors
+    let betweenness_colorDictionary = {};
+    for (let i = 0; i < uniqueValues; i++) {
+        let r = Math.round(255 - (255 - 204) * (i / (uniqueValues - 1)));
+        let g = Math.round(255 - (255 - 0) * (i / (uniqueValues - 1)));
+        let b = 0;
+        let color = '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
+        betweenness_colorDictionary[i + 1] = color;
+    }
+
+    return betweenness_colorDictionary;
+}
+
+function eigenvectorColor(eigenvectorRank) {
+    // Count the number of unique values in eigenvectorRank
+    let uniqueValues = new Set(Object.values(eigenvectorRank)).size;
+
+    // Generate a color dictionary with uniqueValues number of colors
+    let eigenvector_colorDictionary = {};
+    for (let i = 0; i < uniqueValues; i++) {
+        let r = Math.round(255 - (255 - 204) * (i / (uniqueValues - 1)));
+        let g = Math.round(255 - (255 - 0) * (i / (uniqueValues - 1)));
+        let b = 0;
+        let color = '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
+        eigenvector_colorDictionary[i + 1] = color;
+    }
+
+    return eigenvector_colorDictionary;
 }
 	
 // Generate the map
@@ -418,6 +594,20 @@ function generateMap() {
     }
   });
 
+	// Calculate rescaled betweenness centrality and closeness centrality
+	let [betweennessCentralityValues, eigenvectorCentralityValues, betweennessRank, eigenvectorRank] = calculateCentrality(tableData);
+	let betweenness_ColorDictionary = betweennessColor(betweennessRank);
+	let eigenvector_ColorDictionary = eigenvectorColor(eigenvectorRank);
+
+	// Populate columns D, E, F, and G with the centrality values
+	for (let i = 0; i < tableData.length; i++) {
+	    let territory = tableData[i]['A'];
+	    tableData[i]['D'] = betweennessCentralityValues[territory];
+	    tableData[i]['E'] = betweennessRank[territory];
+	    tableData[i]['F'] = eigenvectorCentralityValues[territory];
+	    tableData[i]['G'] = eigenvectorRank[territory];
+	}
+	
   // Set font size of indirect connections
   var fontSizeInput = document.getElementById("fontSizeInput");
   fontSizeInput.addEventListener("input", function () {
@@ -438,12 +628,22 @@ function generateMap() {
       if (tableData[i]["A"] === pathId) {
         // Color in the map
         var value = tableData[i]["O"];
+	    var betweennessValue = tableData[i]["D"];
+	    var betweennessPosition = tableData[i]["E"];
+	    var eigenvectorValue = tableData[i]["F"];
+	    var eigenvectorPosition = tableData[i]["G"];
         if (value >= 12) {
           value = 12;
         }
         if (value !== 0) {
-          var color = colorDictionary[value];
-          var border_color = colorDarktionary[value];
+	    var border_color = colorDarktionary[value];
+	  if (centralityMenu.value === "standard") {
+	    var color = colorDictionary[value];
+	  } else if (centralityMenu.value === "betweenness") {
+	    var color = betweenness_ColorDictionary[betweennessPosition];
+	  } else if (centralityMenu.value === "eigenvector") {
+	    var color = eigenvector_ColorDictionary[eigenvectorPosition];
+	  }
           path.style.setProperty("fill", color, "important");
           path.setAttribute("stroke-opacity", "100");
           path.style.setProperty("stroke", border_color, "important");
@@ -478,8 +678,13 @@ function generateMap() {
 	  } else {
 	    text.setAttribute("fill", "black");
 	  }
-          text.textContent = value;
-
+	  if (centralityMenu.value === "standard") {
+	    text.textContent = value;
+	  } else if (centralityMenu.value === "betweenness") {
+	    text.textContent = betweennessValue;
+	  } else if (centralityMenu.value === "eigenvector") {
+	    text.textContent = eigenvectorValue;
+	  }
           // Adjust x and y coordinates to position midpoint of text at specified coordinates
           var bbox = text.getBBox();
           text.setAttribute("x", x - bbox.width / 2);
