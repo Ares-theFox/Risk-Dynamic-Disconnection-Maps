@@ -4,7 +4,7 @@
     <script src="jsnetworkx.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("123")</script>
+	  <script>console.log("testingpage")</script>
     <title>TESTING PAGE #2</title>
     <style>
       #map,
@@ -462,6 +462,14 @@ function calculateCentrality(tableData) {
     Object.entries(eigenvectorCentralityValues).sort((a, b) => a[1] - b[1]).forEach(([key, value], index) => {
         eigenvectorRank[key] = index + 1;
     });
+
+    // Round the centrality values
+    for (let key in betweennessCentralityValues) {
+        betweennessCentralityValues[key] = Math.round(betweennessCentralityValues[key] * 1000) / 10;
+    }
+    for (let key in eigenvectorCentralityValues) {
+        eigenvectorCentralityValues[key] = Math.round(eigenvectorCentralityValues[key] * 1000) / 10;
+    }
 
     return [betweennessCentralityValues, eigenvectorCentralityValues, betweennessRank, eigenvectorRank];
 }
