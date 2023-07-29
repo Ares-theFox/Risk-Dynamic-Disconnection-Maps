@@ -4,7 +4,7 @@
     <script src="jsnetworkx.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("testingpage")</script>
+	  <script>console.log("86418468")</script>
     <title>TESTING PAGE</title>
     <style>
       #map,
@@ -198,8 +198,6 @@ window.onload = function() {
 };
 
 // Define global variables
-console.log("dearth")
-
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20";
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "CSV.csv";
@@ -481,8 +479,8 @@ function betweennessColor(betweennessRank) {
     // Generate a color dictionary with uniqueValues number of colors
     let betweenness_colorDictionary = {};
     for (let i = 0; i < uniqueValues; i++) {
-        let r = Math.round(204 + (255 - 204) * (i / (uniqueValues - 1)));
-        let g = Math.round(0 + (255 - 0) * (i / (uniqueValues - 1)));
+        let r = Math.round(255 - (255 - 204) * (i / (uniqueValues - 1)));
+        let g = Math.round(255 - (255 - 0) * (i / (uniqueValues - 1)));
         let b = 0;
         let color = '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
         betweenness_colorDictionary[i + 1] = color;
@@ -498,8 +496,8 @@ function eigenvectorColor(eigenvectorRank) {
     // Generate a color dictionary with uniqueValues number of colors
     let eigenvector_colorDictionary = {};
     for (let i = 0; i < uniqueValues; i++) {
-        let r = Math.round(204 + (255 - 204) * (i / (uniqueValues - 1)));
-        let g = Math.round(0 + (255 - 0) * (i / (uniqueValues - 1)));
+        let r = Math.round(255 - (255 - 204) * (i / (uniqueValues - 1)));
+        let g = Math.round(255 - (255 - 0) * (i / (uniqueValues - 1)));
         let b = 0;
         let color = '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
         eigenvector_colorDictionary[i + 1] = color;
@@ -638,15 +636,13 @@ function generateMap() {
           value = 12;
         }
         if (value !== 0) {
+	    var border_color = colorDarktionary[value];
 	  if (centralityMenu.value === "standard") {
 	    var color = colorDictionary[value];
-	    var border_color = colorDarktionary[value];
 	  } else if (centralityMenu.value === "betweenness") {
 	    var color = betweenness_ColorDictionary[betweennessPosition];
-	    var border_color = betweenness_ColorDictionary[betweennessPosition];
 	  } else if (centralityMenu.value === "eigenvector") {
 	    var color = eigenvector_ColorDictionary[eigenvectorPosition];
-	    var border_color = eigenvector_ColorDictionary[eigenvectorPosition];
 	  }
           path.style.setProperty("fill", color, "important");
           path.setAttribute("stroke-opacity", "100");
