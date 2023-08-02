@@ -4,7 +4,7 @@
     <script src="jsnetworkx.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("123412341234")</script>
+	  <script>console.log("latest")</script>
     <title>TESTING PAGE</title>
     <style>
       #map,
@@ -1177,19 +1177,25 @@ function addEnemyTroop() {
   const enemyTroopButtonClick = function () {
     shouldReturn = true;
   };
+	
   document.getElementById("blizzardButton").addEventListener("click", blizzardButtonClick);
   document.getElementById("portalButton").addEventListener("click", portalButtonClick);
   document.getElementById("eraserButton").addEventListener("click", eraserButtonClick);
   document.getElementById("stopButton").addEventListener("click", stopButtonClick);
   document.getElementById("enemyTroopButton").addEventListener("click", enemyTroopButtonClick);
 
+  // Check if size of enemyTroopArray is greater than or equal to 999
+  if (enemyTroopArray.length >= 999) {
+    // Return early from the function
+    return;
+  }
 	// Define mouseover, mouseout, and click event handlers
 	const mouseoverHandler = function () {
 	  if (shouldReturn) {
 	    return;
 	  }
 	  if (!blizzardArray.includes(this.id) && !enemyTroopArray.includes(this.id)) {
-	    // Change stroke color to grey and stroke width to 3
+	    // Change stroke color to white and stroke width to 3
 	    this.style.setProperty("stroke", "#B9B9B9", "important");
 	    this.style.setProperty("stroke-width", "3", "important");
 	  }
@@ -1213,7 +1219,7 @@ function addEnemyTroop() {
     if (shouldReturn) {
       return;
     }
-    // Check if path is NOT in enemy and blizzard array
+    // Check if path is NOT in clickedPathsBlizzardsPortals array
     if (!blizzardArray.includes(this.id) && !enemyTroopArray.includes(this.id)) {
 	// Create a clipPath element and set its id
 	var clipPath = document.createElementNS(
@@ -1267,6 +1273,27 @@ function addEnemyTroop() {
     this.style.setProperty("stroke", "#B9B9B9", "important");
     this.style.setProperty("stroke-width", "1", "important");
 	    
+    // Check if size of enemyTroopArray is greater than or equal to 999
+    if (enemyTroopArray.length >= 999) {
+      // Remove existing event listeners from elements in paths array
+      paths.forEach(function (path) {
+        path.removeEventListener("mouseover", mouseoverHandler);
+        path.removeEventListener("mouseout", mouseoutHandler);
+        path.removeEventListener("click", clickHandler);
+      });
+      document.getElementById("stopButton").innerHTML = "Stop Editing";
+	// Set the regular background color to white
+	document.getElementById("stopButton").style.backgroundColor = "white";
+	// Set the hover background color to white
+	var styleElement = document.createElement("style");
+	styleElement.id = "stopButtonHoverStyle";
+	styleElement.textContent = "#stopButton:hover { background-color: white !important; }";
+	document.head.appendChild(styleElement);
+
+      generateMap();
+      return;
+    }
+
     // Execute generateMap function
     generateMap();
     }
