@@ -642,10 +642,10 @@ function generateMap() {
 	    var border_color = colorDarktionary[value];
 	  } else if (centralityMenu.value === "betweenness") {
 	    var color = betweenness_ColorDictionary[betweennessPosition];
-	    var border_color = betweenness_ColorDictionary[betweennessPosition];
+	    var border_color = colorDarktionary[value];
 	  } else if (centralityMenu.value === "eigenvector") {
 	    var color = eigenvector_ColorDictionary[eigenvectorPosition];
-	    var border_color = eigenvector_ColorDictionary[eigenvectorPosition];
+	    var border_color = colorDarktionary[value];
 	  }
           path.style.setProperty("fill", color, "important");
           path.setAttribute("stroke-opacity", "100");
