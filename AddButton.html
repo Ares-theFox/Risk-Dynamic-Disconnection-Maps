@@ -4,7 +4,7 @@
     <script src="jsnetworkx.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("asdfasdfsad")</script>
+	  <script>console.log("123412341234")</script>
     <title>TESTING PAGE</title>
     <style>
       #map,
@@ -512,7 +512,7 @@ function eigenvectorColor(eigenvectorRank) {
 
     return eigenvector_colorDictionary;
 }
-	
+console.log("Preparing the generate map function...")
 // Generate the map
 function generateMap() {
   // Update buttons
@@ -557,6 +557,7 @@ function generateMap() {
 	      .join(",");
 	  }
 	});
+console.log("Removing everything in the enemyTroopArray...")
   // Remove everything contained in the enemyTroopArray
 	// Find rows in table data where column A matches values in enemyTroopArray
 	const filteredRows = tableData.filter((row) => enemyTroopArray.includes(row["A"]));
@@ -931,7 +932,7 @@ function debounce(func, wait) {
 }
 
 const debouncedGenerateMap = debounce(generateMap, 500);
-
+console.log("Preparing the addBlizzards function...")
 function addBlizzards() {
   let shouldReturn = false;
   document.getElementById("stopButton").innerHTML = "Stop Adding Blizzards";
