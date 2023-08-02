@@ -4,7 +4,7 @@
     <script src="jsnetworkx.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("addingenemytroopplacements")</script>
+	  <script>console.log("workthistimeplease")</script>
     <title>TESTING PAGE</title>
     <style>
       #map,
@@ -559,13 +559,13 @@ function generateMap() {
 	});
   // Remove everything contained in the enemyTroopArray
 	// Find rows in table data where column A matches values in enemyTroopArray
-	const rows = tableData.filter((row) => enemyTroopArray.includes(row["A"]));
-
+	const filteredRows = tableData.filter((row) => enemyTroopArray.includes(row["A"]));
+	
 	// Remove everything in column B for those rows
-	rows.forEach((row) => {
+	filteredRows.forEach((row) => {
 	  row["B"] = "";
 	});
-
+	
 	// Remove all instances of values in enemyTroopArray from column B
 	tableData.forEach((row) => {
 	  if (row["B"]) {
@@ -577,6 +577,7 @@ function generateMap() {
 	    row["B"] = values.join(",");
 	  }
 	});
+
   // Recalculate columns L through P for all rows
   tableData.forEach((row) => {
     // Column M: vlookup col B values and add them + current value A and B
