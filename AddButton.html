@@ -4,7 +4,7 @@
     <script src="jsnetworkx.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("latest")</script>
+	  <script>console.log("testingpage")</script>
     <title>TESTING PAGE</title>
     <style>
       #map,
@@ -54,7 +54,6 @@
       <option value="betweenness">Betweenness</option>
       <option value="eigenvector">Eigenvector</option>
     </select>
-    <button id="enemyTroopButton" onclick="button_enemyTroopPlacement()">Add Opponent Pick</button>
   </div>
 </div>
 	<style>
@@ -192,10 +191,6 @@ var images = [
 var blizzardPatternImage = new Image();
 blizzardPatternImage.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20blizzard%20pattern.png";
 
-// Preload the fog pattern
-var fogPatternImage = new Image();
-fogPatternImage.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20fog%20pattern.png";
-
 window.onload = function() {
   var img = document.querySelector("header img");
   var randomIndex = Math.floor(Math.random() * images.length);
@@ -203,13 +198,14 @@ window.onload = function() {
 };
 
 // Define global variables
+console.log("dearth")
+
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20";
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "CSV.csv";
 	var IndirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "Indirect%20Connection%20Locations%20CSV.csv";
 	var SVG = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "Paths.svg";
 	var BlizzardPattern = blizzardPatternImage.src;
-	var FogPattern = fogPatternImage.src;
 	// Remember to change the img src, blizzard pattern, and the alt title!!!!!!!!
 
 	var totalBlizzards = 3
@@ -269,7 +265,6 @@ window.onload = function() {
 	let blizzardArray = []
 	let portalArray = []
 	let clickedPathsBlizzardsPortals = []
-	let enemyTroopArray = []
 	
 	// Define connections tableData
 	let tableData;
@@ -486,8 +481,8 @@ function betweennessColor(betweennessRank) {
     // Generate a color dictionary with uniqueValues number of colors
     let betweenness_colorDictionary = {};
     for (let i = 0; i < uniqueValues; i++) {
-        let r = Math.round(255 - (255 - 204) * (i / (uniqueValues - 1)));
-        let g = Math.round(255 - (255 - 0) * (i / (uniqueValues - 1)));
+        let r = Math.round(204 + (255 - 204) * (i / (uniqueValues - 1)));
+        let g = Math.round(0 + (255 - 0) * (i / (uniqueValues - 1)));
         let b = 0;
         let color = '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
         betweenness_colorDictionary[i + 1] = color;
@@ -503,8 +498,8 @@ function eigenvectorColor(eigenvectorRank) {
     // Generate a color dictionary with uniqueValues number of colors
     let eigenvector_colorDictionary = {};
     for (let i = 0; i < uniqueValues; i++) {
-        let r = Math.round(255 - (255 - 204) * (i / (uniqueValues - 1)));
-        let g = Math.round(255 - (255 - 0) * (i / (uniqueValues - 1)));
+        let r = Math.round(204 + (255 - 204) * (i / (uniqueValues - 1)));
+        let g = Math.round(0 + (255 - 0) * (i / (uniqueValues - 1)));
         let b = 0;
         let color = '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
         eigenvector_colorDictionary[i + 1] = color;
@@ -512,7 +507,7 @@ function eigenvectorColor(eigenvectorRank) {
 
     return eigenvector_colorDictionary;
 }
-console.log("Preparing the generate map function...")
+	
 // Generate the map
 function generateMap() {
   // Update buttons
@@ -557,28 +552,6 @@ function generateMap() {
 	      .join(",");
 	  }
 	});
-console.log("Removing everything in the enemyTroopArray...")
-  // Remove everything contained in the enemyTroopArray
-	// Find rows in table data where column A matches values in enemyTroopArray
-	const filteredRows = tableData.filter((row) => enemyTroopArray.includes(row["A"]));
-	
-	// Remove everything in column B for those rows
-	filteredRows.forEach((row) => {
-	  row["B"] = "";
-	});
-	
-	// Remove all instances of values in enemyTroopArray from column B
-	tableData.forEach((row) => {
-	  if (row["B"]) {
-	    // Split the value in column B into an array of values
-	    let values = row["B"].split(",");
-	    // Filter out any values that are included in the enemyTroopArray
-	    values = values.filter((value) => !enemyTroopArray.includes(value));
-	    // Join the remaining values back into a string and update the value in column B
-	    row["B"] = values.join(",");
-	  }
-	});
-
   // Recalculate columns L through P for all rows
   tableData.forEach((row) => {
     // Column M: vlookup col B values and add them + current value A and B
@@ -665,13 +638,15 @@ console.log("Removing everything in the enemyTroopArray...")
           value = 12;
         }
         if (value !== 0) {
-	    var border_color = colorDarktionary[value];
 	  if (centralityMenu.value === "standard") {
 	    var color = colorDictionary[value];
+	    var border_color = colorDarktionary[value];
 	  } else if (centralityMenu.value === "betweenness") {
 	    var color = betweenness_ColorDictionary[betweennessPosition];
+	    var border_color = betweenness_ColorDictionary[betweennessPosition];
 	  } else if (centralityMenu.value === "eigenvector") {
 	    var color = eigenvector_ColorDictionary[eigenvectorPosition];
+	    var border_color = eigenvector_ColorDictionary[eigenvectorPosition];
 	  }
           path.style.setProperty("fill", color, "important");
           path.setAttribute("stroke-opacity", "100");
@@ -932,7 +907,7 @@ function debounce(func, wait) {
 }
 
 const debouncedGenerateMap = debounce(generateMap, 500);
-console.log("Preparing the addBlizzards function...")
+
 function addBlizzards() {
   let shouldReturn = false;
   document.getElementById("stopButton").innerHTML = "Stop Adding Blizzards";
@@ -956,15 +931,11 @@ function addBlizzards() {
   const stopButtonClick = function () {
     shouldReturn = true;
   };
-  const enemyTroopButtonClick = function () {
-    shouldReturn = true;
-  };
 	
   document.getElementById("blizzardButton").addEventListener("click", blizzardButtonClick);
   document.getElementById("portalButton").addEventListener("click", portalButtonClick);
   document.getElementById("eraserButton").addEventListener("click", eraserButtonClick);
   document.getElementById("stopButton").addEventListener("click", stopButtonClick);
-  document.getElementById("enemyTroopButton").addEventListener("click", enemyTroopButtonClick);
 
   // Check if size of blizzardArray is greater than or equal to totalBlizzards
   if (blizzardArray.length >= totalBlizzards) {
@@ -976,7 +947,7 @@ function addBlizzards() {
 	  if (shouldReturn) {
 	    return;
 	  }
-	  if (!clickedPathsBlizzardsPortals.includes(this.id) && !enemyTroopArray.includes(this.id)) {
+	  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
 	    // Change stroke color to white and stroke width to 3
 	    this.style.setProperty("stroke", "white", "important");
 	    this.style.setProperty("stroke-width", "3", "important");
@@ -986,7 +957,7 @@ function addBlizzards() {
 	  if (shouldReturn) {
 	    return;
 	  }
-	  if (!clickedPathsBlizzardsPortals.includes(this.id) && !enemyTroopArray.includes(this.id)) {
+	  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
 	    // Reset stroke color and width according to the color darktionary
 	    let value = tableData.find(row => row['A'] === this.id)['O'];
 	    if (value >= 12) {
@@ -1002,7 +973,7 @@ function addBlizzards() {
       return;
     }
     // Check if path is NOT in clickedPathsBlizzardsPortals array
-    if (!clickedPathsBlizzardsPortals.includes(this.id) && !enemyTroopArray.includes(this.id)) {
+    if (!clickedPathsBlizzardsPortals.includes(this.id)) {
 	// Create a clipPath element and set its id
 	var clipPath = document.createElementNS(
 	  "http://www.w3.org/2000/svg",
@@ -1150,223 +1121,7 @@ function addBlizzards_pathID(pathID) {
    generateMap();
    return;
 }
-console.log("Loading addEnemyTroop function...")
-function addEnemyTroop() {
-  let shouldReturn = false;
-  document.getElementById("stopButton").innerHTML = "Stop Adding Opponent Picks";
-	// Set the regular background color to green
-	document.getElementById("stopButton").style.backgroundColor = "#4caf50";
-	// Set the hover background color to dark green
-	var styleElement = document.createElement("style");
-	styleElement.id = "stopButtonHoverStyle";
-	styleElement.textContent = "#stopButton:hover { background-color: #3e8e41 !important; }";
-	document.head.appendChild(styleElement);
 
-  const blizzardButtonClick = function () {
-    shouldReturn = true;
-  };
-  const portalButtonClick = function () {
-    shouldReturn = true;
-  };
-  const eraserButtonClick = function () {
-    shouldReturn = true;
-  };
-  const stopButtonClick = function () {
-    shouldReturn = true;
-  };
-  const enemyTroopButtonClick = function () {
-    shouldReturn = true;
-  };
-	
-  document.getElementById("blizzardButton").addEventListener("click", blizzardButtonClick);
-  document.getElementById("portalButton").addEventListener("click", portalButtonClick);
-  document.getElementById("eraserButton").addEventListener("click", eraserButtonClick);
-  document.getElementById("stopButton").addEventListener("click", stopButtonClick);
-  document.getElementById("enemyTroopButton").addEventListener("click", enemyTroopButtonClick);
-
-  // Check if size of enemyTroopArray is greater than or equal to 999
-  if (enemyTroopArray.length >= 999) {
-    // Return early from the function
-    return;
-  }
-	// Define mouseover, mouseout, and click event handlers
-	const mouseoverHandler = function () {
-	  if (shouldReturn) {
-	    return;
-	  }
-	  if (!blizzardArray.includes(this.id) && !enemyTroopArray.includes(this.id)) {
-	    // Change stroke color to white and stroke width to 3
-	    this.style.setProperty("stroke", "#B9B9B9", "important");
-	    this.style.setProperty("stroke-width", "3", "important");
-	  }
-	};
-	const mouseoutHandler = function () {
-	  if (shouldReturn) {
-	    return;
-	  }
-	  if (!blizzardArray.includes(this.id) && !enemyTroopArray.includes(this.id)) {
-	    // Reset stroke color and width according to the color darktionary
-	    let value = tableData.find(row => row['A'] === this.id)['O'];
-	    if (value >= 12) {
-	      value = 12;
-	    }
-	    let border_color = colorDarktionary[value];
-	    this.style.setProperty("stroke", border_color, "important");
-	    this.style.setProperty("stroke-width", "2", "important");
-	  }
-	};
-  const clickHandler = function () {
-    if (shouldReturn) {
-      return;
-    }
-    // Check if path is NOT in clickedPathsBlizzardsPortals array
-    if (!blizzardArray.includes(this.id) && !enemyTroopArray.includes(this.id)) {
-	// Create a clipPath element and set its id
-	var clipPath = document.createElementNS(
-	  "http://www.w3.org/2000/svg",
-	  "clipPath"
-	);
-	clipPath.setAttribute("id", "clip-" + this.id);
-
-	// Clone the clicked path and append it to the clipPath
-	var clonedPath = this.cloneNode(true);
-	clipPath.appendChild(clonedPath);
-
-	// Append the clipPath to the defs element
-	var defs =
-	  svgElement.querySelector("defs") ||
-	  svgElement.insertBefore(
-	    document.createElementNS("http://www.w3.org/2000/svg", "defs"),
-	    svgElement.firstChild
-	  );
-	defs.appendChild(clipPath);
-
-	// Create an image element and set its attributes
-	var image = document.createElementNS(
-	  "http://www.w3.org/2000/svg",
-	  "image"
-	);
-	image.setAttributeNS(
-	  "http://www.w3.org/1999/xlink",
-	  "href",
-	  FogPattern
-	);
-	image.setAttribute("width", "100%");
-	image.setAttribute("height", "100%");
-	image.setAttribute("clip-path", "url(#clip-" + this.id + ")");
-	image.setAttribute("pointer-events", "none");
-
-	// Append the image to the SVG
-	svgElement.appendChild(image);
-
-	// Move the image behind the path element
-	svgElement.insertBefore(image, svgElement.firstChild);
-	    
-    // Add clicked path to arrays; push to history
-    enemyTroopArray.push(this.id);
-    history.push({ type: 'addEnemyTroop', pathId: this.id });
-	    
-    // Change the fill of the clicked path to transparent
-    this.style.setProperty("fill", "transparent", "important");
-
-    // Change stroke color and stroke width
-    this.style.setProperty("stroke", "#B9B9B9", "important");
-    this.style.setProperty("stroke-width", "1", "important");
-	    
-    // Check if size of enemyTroopArray is greater than or equal to 999
-    if (enemyTroopArray.length >= 999) {
-      // Remove existing event listeners from elements in paths array
-      paths.forEach(function (path) {
-        path.removeEventListener("mouseover", mouseoverHandler);
-        path.removeEventListener("mouseout", mouseoutHandler);
-        path.removeEventListener("click", clickHandler);
-      });
-      document.getElementById("stopButton").innerHTML = "Stop Editing";
-	// Set the regular background color to white
-	document.getElementById("stopButton").style.backgroundColor = "white";
-	// Set the hover background color to white
-	var styleElement = document.createElement("style");
-	styleElement.id = "stopButtonHoverStyle";
-	styleElement.textContent = "#stopButton:hover { background-color: white !important; }";
-	document.head.appendChild(styleElement);
-
-      generateMap();
-      return;
-    }
-
-    // Execute generateMap function
-    generateMap();
-    }
-    };
-
-  // Add event listeners to elements in paths array
-  paths.forEach(function (path) {
-    path.addEventListener("mouseover", mouseoverHandler);
-    path.addEventListener("mouseout", mouseoutHandler);
-    path.addEventListener("click", clickHandler);
-  });
-}
-console.log("Loading addEnemyTroop_pathID function...")
-function addEnemyTroop_pathID(pathID) {
-  // Find the path element with the specified pathID
-  let path = Array.from(paths).find((path) => path.getAttribute("id") === pathID);
-
-  // Create a clipPath element and set its id
-  var clipPath = document.createElementNS(
-    "http://www.w3.org/2000/svg",
-    "clipPath"
-  );
-  clipPath.setAttribute("id", "clip-" + pathID);
-
-  // Clone the clicked path and append it to the clipPath
-  var clonedPath = path.cloneNode(true);
-  clipPath.appendChild(clonedPath);
-
-  // Append the clipPath to the defs element
-  var defs =
-    svgElement.querySelector("defs") ||
-    svgElement.insertBefore(
-      document.createElementNS("http://www.w3.org/2000/svg", "defs"),
-      svgElement.firstChild
-    );
-  defs.appendChild(clipPath);
-
-  // Create an image element and set its attributes
-  var image = document.createElementNS(
-    "http://www.w3.org/2000/svg",
-    "image"
-  );
-  image.setAttributeNS(
-    "http://www.w3.org/1999/xlink",
-    "href",
-    FogPattern
-  );
-  image.setAttribute("width", "100%");
-  image.setAttribute("height", "100%");
-  image.setAttribute("clip-path", "url(#clip-" + pathID + ")");
-  image.setAttribute("pointer-events", "none");
-
-  // Append the image to the SVG
-  svgElement.appendChild(image);
-
-  // Move the image behind the path element
-  svgElement.insertBefore(image, svgElement.firstChild);
-
-  // Add clicked path to arrays; push to history
-  enemyTroopArray.push(pathID);
-  
-  // Change the fill of the clicked path to transparent
-  path.style.setProperty("fill", "transparent", "important");
-
-  // Change stroke color and stroke width
-  path.style.setProperty("stroke", "#B9B9B9", "important");
-  path.style.setProperty("stroke-width", "1", "important");
-
-   // Execute generateMap function
-   generateMap();
-   return;
-}
-	
 function addPortals() {
   let shouldReturn = false;
   document.getElementById("stopButton").innerHTML = "Stop Adding Portals";
@@ -1390,15 +1145,11 @@ function addPortals() {
   const stopButtonClick = function () {
     shouldReturn = true;
   };
-  const enemyTroopButtonClick = function () {
-    shouldReturn = true;
-  };
 	
   document.getElementById("blizzardButton").addEventListener("click", blizzardButtonClick);
   document.getElementById("portalButton").addEventListener("click", portalButtonClick);
   document.getElementById("eraserButton").addEventListener("click", eraserButtonClick);
   document.getElementById("stopButton").addEventListener("click", stopButtonClick);
-  document.getElementById("enemyTroopButton").addEventListener("click", enemyTroopButtonClick);
 
   // Check if size of portalArray is greater than or equal to totalPortals
   if (portalArray.length >= totalPortals) {
@@ -1420,11 +1171,7 @@ function addPortals() {
 	  if (shouldReturn) {
 	    return;
 	  }
-	  if (clickedPathsBlizzardsPortals.includes(this.id) || enemyTroopArray.includes(this.id)) {
-		  if (enemyTroopArray.includes(this.id)) {
-	    this.style.setProperty("stroke", "#B9B9B9", "important");
-	    this.style.setProperty("stroke-width", "1", "important");
-		  } else if (clickedPathsBlizzardsPortals.includes(this.id)) {
+	  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
 	    // Reset stroke color and width according to the color darktionary
 	    let value = tableData.find(row => row['A'] === this.id)['O'];
 	    if (value >= 12) {
@@ -1433,7 +1180,7 @@ function addPortals() {
 	    let border_color = colorDarktionary[value];
 	    this.style.setProperty("stroke", border_color, "important");
 	    this.style.setProperty("stroke-width", "2", "important");
-		  }
+	  }
 	};
   const clickHandler = function () {
     if (shouldReturn) {
@@ -1546,14 +1293,10 @@ function button_AddBlizzards() {
 function button_AddPortals() {
   addPortals();
 }
-
-function button_enemyTroopPlacement() {
-  addEnemyTroop();
-}
-console.log("Loading eraser function...")
+	
 function eraser() {
-  // Immediately return if the size of the clickedPathsBlizzardsPortals array and enemy troop placement arrays are empty
-  if (clickedPathsBlizzardsPortals.length === 0 && enemyTroopArray.length === 0) {
+  // Immediately return if the size of the clickedPathsBlizzardsPortals array is empty
+  if (clickedPathsBlizzardsPortals.length === 0) {
     return;
   }
   let shouldReturn = false;
@@ -1578,22 +1321,18 @@ function eraser() {
   const stopButtonClick = function () {
     shouldReturn = true;
   };
-  const enemyTroopButtonClick = function () {
-    shouldReturn = true;
-  };
 	
   document.getElementById("blizzardButton").addEventListener("click", blizzardButtonClick);
   document.getElementById("portalButton").addEventListener("click", portalButtonClick);
   document.getElementById("eraserButton").addEventListener("click", eraserButtonClick);
   document.getElementById("stopButton").addEventListener("click", stopButtonClick);
-  document.getElementById("enemyTroopButton").addEventListener("click", enemyTroopButtonClick);
 
 	// Define mouseover, mouseout, and click event handlers
 	const mouseoverHandler = function () {
 	  if (shouldReturn) {
 	    return;
 	  }
-	  if (clickedPathsBlizzardsPortals.includes(this.id) || enemyTroopArray.includes(this.id)) {
+	  if (clickedPathsBlizzardsPortals.includes(this.id)) {
 	    // Change stroke color to #ff1111 and stroke width to 4
 	    this.style.setProperty("stroke", "#ff1111", "important");
 	    this.style.setProperty("stroke-width", "4", "important");
@@ -1604,14 +1343,10 @@ function eraser() {
 	  if (shouldReturn) {
 	    return;
 	  }
-	  if (clickedPathsBlizzardsPortals.includes(this.id) || enemyTroopArray.includes(this.id)) {
+	  if (clickedPathsBlizzardsPortals.includes(this.id)) {
 	    if (blizzardArray.includes(this.id)) {
 	      // Change stroke color to white and stroke width to 3
 	      this.style.setProperty("stroke", "white", "important");
-	      this.style.setProperty("stroke-width", "1", "important");
-	    } else if (enemyTroopArray.includes(this.id)) {
-	      // Change stroke color and width 
-	      this.style.setProperty("stroke", "#B9B9B9", "important");
 	      this.style.setProperty("stroke-width", "1", "important");
 	    } else if (portalArray.includes(this.id)) {
 	      // Reset stroke color and width according to the color darktionary
@@ -1630,18 +1365,12 @@ function eraser() {
       return;
     }
     // Check if path is in clickedPathsBlizzardsPortals array
-    if (clickedPathsBlizzardsPortals.includes(this.id) || enemyTroopArray.includes(this.id)) {
+    if (clickedPathsBlizzardsPortals.includes(this.id)) {
       // Remove clicked path from clickedPathsBlizzardsPortals array
-	    if (clickedPathsBlizzardsPortals.includes(this.id)) {
       clickedPathsBlizzardsPortals = clickedPathsBlizzardsPortals.filter(
         (path) => path !== this.id
       );
-	    } else if (enemyTroopArray.includes(this.id)) {
-      enemyTroopArray = enemyTroopArray.filter(
-        (path) => path !== this.id
-      );
-	    }
-		    
+
       // Check if path is in blizzardArray
       if (blizzardArray.includes(this.id)) {
         // Remove clicked path from blizzardArray; push to history
@@ -1656,20 +1385,6 @@ function eraser() {
         }
       }
 
-      // Check if path is in enemyTroopArray
-      if (enemyTroopArray.includes(this.id)) {
-        // Remove clicked path from enemyTroopArray; push to history
-        enemyTroopArray = enemyTroopArray.filter((path) => path !== this.id);
-	history.push({ type: 'eraseEnemyTroop', pathId: this.id });
-
-        // Remove fog fill from clicked path
-        var clipPathId = "fog-clip-" + this.id;
-        var clipPath = document.getElementById(clipPathId);
-        if (clipPath) {
-          clipPath.remove();
-        }
-      }
-	    
       // Check if path is in portalArray
       if (portalArray.includes(this.id)) {
         // Remove clicked path from portalArray; push to history
@@ -1694,7 +1409,7 @@ function eraser() {
       generateMap();
 
       // Check if clickedPathsBlizzardsPortals array is empty
-      if (clickedPathsBlizzardsPortals.length === 0 && enemyTroopArray.length === 0) {
+      if (clickedPathsBlizzardsPortals.length === 0) {
 	document.getElementById("stopButton").innerHTML = "Stop Editing";
 	// Set the regular background color to white
 	document.getElementById("stopButton").style.backgroundColor = "white";
@@ -1835,25 +1550,6 @@ function undo() {
         clickedPathsBlizzardsPortals.splice(index, 1);
       }
 	  generateMap();
-
-    } else if (lastAction.type === 'addEnemyTroop') {
-      // Remove the last blizzard from the enemyTroopArray
-      enemyTroopArray.pop();
-
-      // Remove the last blizzard fill from the map
-      let clipPathId = 'fog-clip-' + lastAction.pathId;
-      let clipPath = document.getElementById(clipPathId);
-      if (clipPath) {
-        clipPath.remove();
-      }
-
-      // Remove the id of the undone path from the enemyTroopArray
-      let index = enemyTroopArray.indexOf(lastAction.pathId);
-      if (index !== -1) {
-        enemyTroopArray.splice(index, 1);
-      }
-	  generateMap();
-  
     } else if (lastAction.type === 'addPortal') {
       // Remove the last portal from the portalArray
       portalArray.pop();
@@ -1878,8 +1574,6 @@ function undo() {
 	  addBlizzards_pathID(lastAction.pathId);
     } else if (lastAction.type === 'erasePortal') {
 	  addPortals_pathID(lastAction.pathId);
-    } else if (lastAction.type === 'eraseEnemyTroop') {
-	  addEnemyTroop_pathID(lastAction.pathId);
     }
   }
 }
