@@ -4,7 +4,7 @@
     <script src="jsnetworkx.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("testingpage")</script>
+	  <script>console.log("asdfasdfasdf")</script>
     <title>TESTING PAGE</title>
     <style>
       #map,
@@ -54,6 +54,7 @@
       <option value="betweenness">Betweenness</option>
       <option value="eigenvector">Eigenvector</option>
     </select>
+    <button id="addEnemyTroopButton" onclick="button_AddEnemyTroop()">Add Opponent Pick</button>
   </div>
 </div>
 	<style>
@@ -191,6 +192,10 @@ var images = [
 var blizzardPatternImage = new Image();
 blizzardPatternImage.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20blizzard%20pattern.png";
 
+// Preload the blizzard pattern
+var blizzardPatternImage = new Image();
+blizzardPatternImage.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20fog%20pattern.png";
+
 window.onload = function() {
   var img = document.querySelector("header img");
   var randomIndex = Math.floor(Math.random() * images.length);
@@ -198,7 +203,6 @@ window.onload = function() {
 };
 
 // Define global variables
-console.log("dearth")
 
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20";
