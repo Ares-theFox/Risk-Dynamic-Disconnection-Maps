@@ -4,7 +4,7 @@
     <script src="jsnetworkx.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("testingpage")</script>
+	  <script>console.log("asdfasdf")</script>
     <title>TESTING PAGE #2</title>
     <style>
       #map,
@@ -198,7 +198,6 @@ window.onload = function() {
 };
 
 // Define global variables
-console.log("dearth")
 
 	// Define map-specific items
 	var colorLegend = "Jules%20Verne%20";
@@ -968,53 +967,96 @@ function addBlizzards() {
 	    this.style.setProperty("stroke-width", "2", "important");
 	  }
 	};
-  const clickHandler = function () {
-    if (shouldReturn) {
-      return;
-    }
-    // Check if path is NOT in clickedPathsBlizzardsPortals array
-    if (!clickedPathsBlizzardsPortals.includes(this.id)) {
-	// Create a clipPath element and set its id
-	var clipPath = document.createElementNS(
-	  "http://www.w3.org/2000/svg",
-	  "clipPath"
-	);
-	clipPath.setAttribute("id", "clip-" + this.id);
+const clickHandler = function () {
+  if (shouldReturn) {
+    return;
+  }
+  // Check if path is NOT in clickedPathsBlizzardsPortals array
+  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
+    // Create a clipPath element and set its id
+    var clipPath = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "clipPath"
+    );
+    clipPath.setAttribute("id", "clip-" + this.id);
 
-	// Clone the clicked path and append it to the clipPath
-	var clonedPath = this.cloneNode(true);
-	clipPath.appendChild(clonedPath);
+    // Clone the clicked path and append it to the clipPath
+    var clonedPath = this.cloneNode(true);
+    clipPath.appendChild(clonedPath);
 
-	// Append the clipPath to the defs element
-	var defs =
-	  svgElement.querySelector("defs") ||
-	  svgElement.insertBefore(
-	    document.createElementNS("http://www.w3.org/2000/svg", "defs"),
-	    svgElement.firstChild
-	  );
-	defs.appendChild(clipPath);
+    // Append the clipPath to the defs element
+    var defs =
+      svgElement.querySelector("defs") ||
+      svgElement.insertBefore(
+        document.createElementNS("http://www.w3.org/2000/svg", "defs"),
+        svgElement.firstChild
+      );
+    defs.appendChild(clipPath);
+
+    // Create an image element and set its attributes
+    var image = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "image"
+    );
+    image.setAttributeNS(
+      "http://www.w3.org/1999/xlink",
+      "href",
+      BlizzardPattern
+    );
+    image.setAttribute("width", "100%");
+    image.setAttribute("height", "100%");
+    image.setAttribute("clip-path", "url(#clip-" + this.id + ")");
+    image.setAttribute("pointer-events", "none");
+
+    // Append the image to the SVG
+    svgElement.appendChild(image);
+
+    // Move the image behind the path element
+    svgElement.insertBefore(image, svgElement.firstChild);
 
 	// Create an image element and set its attributes
-	var image = document.createElementNS(
+	var snowflakeImage = document.createElementNS(
 	  "http://www.w3.org/2000/svg",
 	  "image"
 	);
-	image.setAttributeNS(
+	snowflakeImage.setAttributeNS(
 	  "http://www.w3.org/1999/xlink",
 	  "href",
-	  BlizzardPattern
+	  "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/snowflake.png"
 	);
-	image.setAttribute("width", "100%");
-	image.setAttribute("height", "100%");
-	image.setAttribute("clip-path", "url(#clip-" + this.id + ")");
-	image.setAttribute("pointer-events", "none");
 
-	// Append the image to the SVG
-	svgElement.appendChild(image);
+	// Set a custom attribute to store the id of the clicked path
+	snowflakeImage.setAttribute("data-path-id", this.id);
 
-	// Move the image behind the path element
-	svgElement.insertBefore(image, svgElement.firstChild);
-	    
+	// Store the value of this.id in a variable
+	var pathId = this.id;
+
+	// Find matching row in CSV data
+	var csvRow = csvData.find(function (row) {
+	  return row["Range"] === pathId;
+	});
+
+      // Get coordinates from CSV data
+      var x = csvRow["Pixel Pair 1"];
+      var y = csvRow["Pixel Pair 2"];
+
+      // Set pointer-events attribute of the snowflakeImage element to none
+      snowflakeImage.setAttribute("pointer-events", "none");
+
+      // Append the snowflakeImage to the SVG
+      svgElement.appendChild(snowflakeImage);
+
+      // Add an event listener to the snowflakeImage element to update its x and y attributes after it has been loaded
+      snowflakeImage.addEventListener("load", function() {
+        // Get the bounding box of the snowflakeImage element
+        var bbox = snowflakeImage.getBBox();
+
+        // Update the x and y attributes of the snowflakeImage element to center it over the clicked area
+        snowflakeImage.setAttribute("x", x - bbox.width / 2);
+        snowflakeImage.setAttribute("y", y - bbox.height / 2);
+      });
+  }
+};
     // Add clicked path to arrays; push to history
     blizzardArray.push(this.id);
     clickedPathsBlizzardsPortals.push(this.id);
@@ -1065,46 +1107,88 @@ function addBlizzards_pathID(pathID) {
   // Find the path element with the specified pathID
   let path = Array.from(paths).find((path) => path.getAttribute("id") === pathID);
 
-  // Create a clipPath element and set its id
-  var clipPath = document.createElementNS(
-    "http://www.w3.org/2000/svg",
-    "clipPath"
+// Create a clipPath element and set its id
+var clipPath = document.createElementNS(
+  "http://www.w3.org/2000/svg",
+  "clipPath"
+);
+clipPath.setAttribute("id", "clip-" + pathID);
+
+// Clone the clicked path and append it to the clipPath
+var clonedPath = path.cloneNode(true);
+clipPath.appendChild(clonedPath);
+
+// Append the clipPath to the defs element
+var defs =
+  svgElement.querySelector("defs") ||
+  svgElement.insertBefore(
+    document.createElementNS("http://www.w3.org/2000/svg", "defs"),
+    svgElement.firstChild
   );
-  clipPath.setAttribute("id", "clip-" + pathID);
+defs.appendChild(clipPath);
 
-  // Clone the clicked path and append it to the clipPath
-  var clonedPath = path.cloneNode(true);
-  clipPath.appendChild(clonedPath);
+// Create an image element and set its attributes
+var blizzardImage = document.createElementNS(
+  "http://www.w3.org/2000/svg",
+  "image"
+);
+blizzardImage.setAttributeNS(
+  "http://www.w3.org/1999/xlink",
+  "href",
+  BlizzardPattern
+);
+blizzardImage.setAttribute("width", "100%");
+blizzardImage.setAttribute("height", "100%");
+blizzardImage.setAttribute("clip-path", "url(#clip-" + pathID + ")");
+blizzardImage.setAttribute("pointer-events", "none");
 
-  // Append the clipPath to the defs element
-  var defs =
-    svgElement.querySelector("defs") ||
-    svgElement.insertBefore(
-      document.createElementNS("http://www.w3.org/2000/svg", "defs"),
-      svgElement.firstChild
-    );
-  defs.appendChild(clipPath);
+// Append the blizzardImage to the SVG
+svgElement.appendChild(blizzardImage);
 
-  // Create an image element and set its attributes
-  var image = document.createElementNS(
-    "http://www.w3.org/2000/svg",
-    "image"
-  );
-  image.setAttributeNS(
-    "http://www.w3.org/1999/xlink",
-    "href",
-    BlizzardPattern
-  );
-  image.setAttribute("width", "100%");
-  image.setAttribute("height", "100%");
-  image.setAttribute("clip-path", "url(#clip-" + pathID + ")");
-  image.setAttribute("pointer-events", "none");
+// Move the blizzardImage behind the path element
+svgElement.insertBefore(blizzardImage, svgElement.firstChild);
 
-  // Append the image to the SVG
-  svgElement.appendChild(image);
+// Create an image element and set its attributes
+var snowflakeImage = document.createElementNS(
+  "http://www.w3.org/2000/svg",
+  "image"
+);
+snowflakeImage.setAttributeNS(
+  "http://www.w3.org/1999/xlink",
+  "href",
+  "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/snowflake.png"
+);
 
-  // Move the image behind the path element
-  svgElement.insertBefore(image, svgElement.firstChild);
+// Set a custom attribute to store the id of the clicked path
+snowflakeImage.setAttribute("data-path-id", pathID);
+
+// Store the value of pathID in a variable
+var clickedPathId = pathID;
+
+// Find matching row in CSV data
+var csvRow = csvData.find(function (row) {
+  return row["Range"] === clickedPathId;
+});
+
+// Get coordinates from CSV data
+var x = csvRow["Pixel Pair 1"];
+var y = csvRow["Pixel Pair 2"];
+
+// Set pointer-events attribute of the snowflakeImage element to none
+snowflakeImage.setAttribute("pointer-events", "none");
+
+// Append the snowflakeImage to the SVG
+svgElement.appendChild(snowflakeImage);
+
+// Add an event listener to the portalImage element to update its x and y attributes after it has been loaded
+snowflakeImage.addEventListener("load", function () {
+  // Get the bounding box of the portalImage element
+  var bbox = snowflakeImage.getBBox();
+
+  // Update the x and y attributes of the snowflakeImage element to center it over the clicked area
+  snowflakeImage.setAttribute("x", x - bbox.width / 2);
+  snowflakeImage.setAttribute("y", y - bbox.height / 2);
+});
 
   // Add clicked path to arrays; push to history
   blizzardArray.push(pathID);
@@ -1278,6 +1362,70 @@ function addPortals() {
   });
 }
 
+function addPortals_pathID(pathID) {
+  // Find the path element with the specified pathID
+  let path = Array.from(paths).find((path) => path.getAttribute("id") === pathID);
+
+  // Create an image element and set its attributes
+  var image = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "image"
+  );
+  image.setAttributeNS(
+    "http://www.w3.org/1999/xlink",
+    "href",
+    "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/portal.png"
+  );
+
+  // Set a custom attribute to store the id of the clicked path
+  image.setAttribute("data-path-id", pathID);
+
+  // Store the value of pathID in a variable
+  var clickedPathId = pathID;
+
+  // Find matching row in CSV data
+  var csvRow = csvData.find(function (row) {
+    return row["Range"] === clickedPathId;
+  });
+
+  // Get coordinates from CSV data
+  var x = csvRow["Pixel Pair 1"];
+  var y = csvRow["Pixel Pair 2"];
+
+  // Set pointer-events attribute of the image element to none
+  image.setAttribute("pointer-events", "none");
+
+  // Append the image to the SVG
+  svgElement.appendChild(image);
+
+  // Add an event listener to the image element to update its x and y attributes after it has been loaded
+  image.addEventListener("load", function () {
+    // Get the bounding box of the image element
+    var bbox = image.getBBox();
+
+    // Update the x and y attributes of the image element to center it over the clicked area
+    image.setAttribute("x", x - bbox.width / 2);
+    image.setAttribute("y", y - bbox.height / 2);
+
+    // Rotate the image a random number of degrees between 0 and 359 around its center point
+    var angle = Math.floor(Math.random() * 360);
+    var cx = x;
+    var cy = y;
+    image.setAttribute(
+      "transform",
+      "rotate(" + angle + " " + cx + " " + cy + ")"
+    );
+  });
+
+   // Add clicked path to arrays; push to history
+   portalArray.push(pathID);
+   clickedPathsBlizzardsPortals.push(pathID);
+
+   // Execute generateMap function
+   generateMap();
+   return;
+}
+	
 function button_StopEditing() {
   stopEditing();
 }
@@ -1383,6 +1531,17 @@ function eraser() {
         if (clipPath) {
           clipPath.remove();
         }
+
+        // Remove snowflake image overlay from clicked path
+        var images = svgElement.querySelectorAll("image");
+        images.forEach(function (image) {
+          // Check if the data-path-id attribute of the image matches the id of the clicked path
+          if (image.getAttribute("data-path-id") === clickedPathId) {
+            // Remove the image
+            image.remove();
+          }
+        });
+	      
       }
 
       // Check if path is in portalArray
@@ -1431,70 +1590,6 @@ function eraser() {
   });
 }
 
-function addPortals_pathID(pathID) {
-  // Find the path element with the specified pathID
-  let path = Array.from(paths).find((path) => path.getAttribute("id") === pathID);
-
-  // Create an image element and set its attributes
-  var image = document.createElementNS(
-    "http://www.w3.org/2000/svg",
-    "image"
-  );
-  image.setAttributeNS(
-    "http://www.w3.org/1999/xlink",
-    "href",
-    "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/portal.png"
-  );
-
-  // Set a custom attribute to store the id of the clicked path
-  image.setAttribute("data-path-id", pathID);
-
-  // Store the value of pathID in a variable
-  var clickedPathId = pathID;
-
-  // Find matching row in CSV data
-  var csvRow = csvData.find(function (row) {
-    return row["Range"] === clickedPathId;
-  });
-
-  // Get coordinates from CSV data
-  var x = csvRow["Pixel Pair 1"];
-  var y = csvRow["Pixel Pair 2"];
-
-  // Set pointer-events attribute of the image element to none
-  image.setAttribute("pointer-events", "none");
-
-  // Append the image to the SVG
-  svgElement.appendChild(image);
-
-  // Add an event listener to the image element to update its x and y attributes after it has been loaded
-  image.addEventListener("load", function () {
-    // Get the bounding box of the image element
-    var bbox = image.getBBox();
-
-    // Update the x and y attributes of the image element to center it over the clicked area
-    image.setAttribute("x", x - bbox.width / 2);
-    image.setAttribute("y", y - bbox.height / 2);
-
-    // Rotate the image a random number of degrees between 0 and 359 around its center point
-    var angle = Math.floor(Math.random() * 360);
-    var cx = x;
-    var cy = y;
-    image.setAttribute(
-      "transform",
-      "rotate(" + angle + " " + cx + " " + cy + ")"
-    );
-  });
-
-   // Add clicked path to arrays; push to history
-   portalArray.push(pathID);
-   clickedPathsBlizzardsPortals.push(pathID);
-
-   // Execute generateMap function
-   generateMap();
-   return;
-}
-	
 // Update button text on page load
 updateButtonText();
 
@@ -1544,6 +1639,16 @@ function undo() {
         clipPath.remove();
       }
 
+      // Remove the last snowflake image from the map
+      let images = svgElement.querySelectorAll('image');
+      images.forEach(function(image) {
+        // Check if the data-path-id attribute of the image matches the id of the last portal
+        if (image.getAttribute('data-path-id') === lastAction.pathId) {
+          // Remove the image
+          image.remove();
+        }
+      });
+	    
       // Remove the id of the undone path from the clickedPathsBlizzardsPortals array
       let index = clickedPathsBlizzardsPortals.indexOf(lastAction.pathId);
       if (index !== -1) {
