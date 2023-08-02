@@ -4,7 +4,7 @@
     <script src="jsnetworkx.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("workthistimeplease")</script>
+	  <script>console.log("asdfasdfsad")</script>
     <title>TESTING PAGE</title>
     <style>
       #map,
@@ -1149,7 +1149,7 @@ function addBlizzards_pathID(pathID) {
    generateMap();
    return;
 }
-
+console.log("Loading addEnemyTroop function...")
 function addEnemyTroop() {
   let shouldReturn = false;
   document.getElementById("stopButton").innerHTML = "Stop Adding Opponent Picks";
@@ -1278,7 +1278,7 @@ function addEnemyTroop() {
     path.addEventListener("click", clickHandler);
   });
 }
-	
+console.log("Loading addEnemyTroop_pathID function...")
 function addEnemyTroop_pathID(pathID) {
   // Find the path element with the specified pathID
   let path = Array.from(paths).find((path) => path.getAttribute("id") === pathID);
@@ -1522,7 +1522,7 @@ function button_AddPortals() {
 function button_enemyTroopPlacement() {
   addEnemyTroop();
 }
-	
+console.log("Loading eraser function...")
 function eraser() {
   // Immediately return if the size of the clickedPathsBlizzardsPortals array and enemy troop placement arrays are empty
   if (clickedPathsBlizzardsPortals.length === 0 && enemyTroopArray.length === 0) {
