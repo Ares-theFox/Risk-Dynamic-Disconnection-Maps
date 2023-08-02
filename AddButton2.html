@@ -1523,6 +1523,9 @@ function eraser() {
         blizzardArray = blizzardArray.filter((path) => path !== this.id);
 	history.push({ type: 'eraseBlizzard', pathId: this.id });
 
+        // Store the value of this.id in a variable
+        var clickedPathId = this.id;
+
         // Remove blizzard fill from clicked path
         var clipPathId = "blizzard-clip-" + this.id;
         var clipPath = document.getElementById(clipPathId);
