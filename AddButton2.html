@@ -1,11 +1,24 @@
 <!DOCTYPE html>
 <html>
   <head>
+	  <script>
+		console.log("1234")
+		  mapName = "Jules Verne"
+		  var totalBlizzards = 3
+		  var totalPortals = 5
+		document.title = mapName;
+		map20Name = mapName.replace(/ /g, "%20")
+		document.querySelector("header").innerHTML = mapName + " Dynamic Disconnection Map";
+		document.querySelector("#map").src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + map20Name + ".PNG";
+		document.querySelector("#map").alt = mapName;
+		var blizzardPatternImage = new Image();
+		blizzardPatternImage.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + map20Name + "%20blizzard%20pattern2.png";
+		var colorLegend = map20Name + "%20";
+	  </script>
     <script src="jsnetworkx.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("1234")</script>
-    <title>TESTING PAGE #2</title>
+    <title></title>
     <style>
       #map,
       #range {
@@ -28,11 +41,11 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   </head>
   <body>
-    <header>
-	Jules Verne Dynamic Disconnection Map 
-	<img src="" />
-        <span id="invalidText" style="color: red; font-style: italic; font-size: 20px;"></span>
-    </header>
+	<header>
+	  <span></span>
+	  <img src="" />
+	  <span id="invalidText" style="color: red; font-style: italic; font-size: 20px;"></span>
+	</header>
 <div>
   <button id="zoomInButton"><i class="fas fa-search-plus"></i></button>
   <button id="blizzardButton" onclick="button_AddBlizzards()">Add Blizzards</button>
@@ -149,14 +162,9 @@
 	}
 	</style>
 	  
-    <img
-      id="map"
-      src="https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne.PNG"
-      alt="Jules Verne"
-    />
+    <img id="map" />
     <div id="range"></div>
 	  
-    <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
 <script>
   let zoom = 1;
   document.getElementById("zoomInButton").addEventListener("click", function () {
@@ -187,10 +195,6 @@ var images = [
   "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox12.png"
 ];
 
-// Preload the blizzard pattern
-var blizzardPatternImage = new Image();
-blizzardPatternImage.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20blizzard%20pattern2.png";
-
 window.onload = function() {
   var img = document.querySelector("header img");
   var randomIndex = Math.floor(Math.random() * images.length);
@@ -200,15 +204,11 @@ window.onload = function() {
 // Define global variables
 
 	// Define map-specific items
-	var colorLegend = "Jules%20Verne%20";
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "CSV.csv";
 	var IndirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "Indirect%20Connection%20Locations%20CSV.csv";
 	var SVG = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "Paths.svg";
 	var BlizzardPattern = blizzardPatternImage.src;
 	// Remember to change the img src, blizzard pattern, and the alt title!!!!!!!!
-
-	var totalBlizzards = 3
-	var totalPortals = 5
 
 	// Get the select menu container element
 	var selectMenuContainer = document.getElementById("selectMenuContainer");
