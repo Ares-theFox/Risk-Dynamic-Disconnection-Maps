@@ -5,7 +5,7 @@
   </head>
   <body>
     <!-- Load the content of the master HTML file -->
-    <iframe src="master_html_file.html" style="border: none;"></iframe>
+    <iframe id="masterFrame" src="master_html_file.html" style="border: none;"></iframe>
 
     <script>
       // Set the map name and blizzards/portals
@@ -14,18 +14,21 @@
       totalPortals = 5;
 
       // Log for fidelity
-      console.log("version 12341234")
+      console.log("version afswasefasdf")
       console.log("Loading map " + mapName)
 	    
       // Set the title of the page based on the value of the mapName variable
       document.title = mapName;
 
       // Set the text content of the header element
-      document.getElementById('header').textContent = mapName + ' Dynamic Disconnection Map';
+      var masterFrame = document.getElementById('masterFrame');
+      var masterDocument = masterFrame.contentWindow.document;
+      var headerElement = masterDocument.getElementById('header');
+      headerElement.textContent = mapName + ' Dynamic Disconnection Map';
 
       // Set the src and alt attributes of the map image
       var map20Name = mapName.replace(/ /g, '%20');
-      var mapImage = document.getElementById('map');
+      var mapImage = masterDocument.getElementById('map');
       mapImage.src = 'https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/' + map20Name + '.png';
       mapImage.alt = mapName;
 
