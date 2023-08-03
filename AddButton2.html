@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Boston</title>
+    <script>
+      // Set the map name and blizzards/portals
+      var mapName = 'Boston';
+      totalBlizzards = 3;
+      totalPortals = 5;
+
+      // Log for fidelity
+      console.log("Loading map " + mapName)
+	    
+      // Set the title of the page based on the content of the title element
+      document.title = document.querySelector('mapName').textContent;
+
+      // Set the text content of the header element
+      document.getElementById('header').textContent = mapName + ' Dynamic Disconnection Map';
+
+      // Set the src and alt attributes of the map image
+      var map20Name = mapName.replace(/ /g, '%20');
+      var mapImage = document.getElementById('map');
+      mapImage.src = 'https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/' + map20Name + '.png';
+      mapImage.alt = cityName;
+
+      // Set the src attribute of the blizzard pattern image
+      blizzardPatternImage.src = 'https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/' + map20Name + '%20blizzard%20pattern.png';
+
+      // Set the value of the colorLegend variable
+      colorLegend = map20Name + '%20';
+
+    </script>
+  </head>
+  <body>
+    <!-- Load the content of the master HTML file -->
+    <iframe src="master_html_file.html" style="border: none;"></iframe>
+  </body>
+</html>
