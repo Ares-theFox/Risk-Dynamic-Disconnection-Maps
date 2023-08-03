@@ -4,8 +4,8 @@
     <title>Boston</title>
   </head>
   <body>
-    <!-- Load the content of the master HTML file -->
-    <iframe id="masterFrame" src="master_html_file.html" style="border: none;"></iframe>
+    <!-- Create a div element to hold the content of the master HTML file -->
+    <div id="masterContent"></div>
 
     <script>
       // Set the map name and blizzards/portals
@@ -14,30 +14,38 @@
       totalPortals = 5;
 
       // Log for fidelity
-      console.log("version afswasefasdf")
+      console.log("version 1234")
       console.log("Loading map " + mapName)
 	    
       // Set the title of the page based on the value of the mapName variable
       document.title = mapName;
 
-      // Set the text content of the header element
-      var masterFrame = document.getElementById('masterFrame');
-      var masterDocument = masterFrame.contentWindow.document;
-      var headerElement = masterDocument.getElementById('header');
-      headerElement.textContent = mapName + ' Dynamic Disconnection Map';
+      // Load the content of the master HTML file using AJAX
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          // Insert the content of the master HTML file into the div element
+          document.getElementById('masterContent').innerHTML = this.responseText;
 
-      // Set the src and alt attributes of the map image
-      var map20Name = mapName.replace(/ /g, '%20');
-      var mapImage = masterDocument.getElementById('map');
-      mapImage.src = 'https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/' + map20Name + '.png';
-      mapImage.alt = mapName;
+          // Set the text content of the header element
+          var headerElement = document.getElementById('header');
+          headerElement.textContent = mapName + ' Dynamic Disconnection Map';
 
-      // Set the src attribute of the blizzard pattern image
-      blizzardPatternImage.src = 'https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/' + map20Name + '%20blizzard%20pattern.png';
+          // Set the src and alt attributes of the map image
+          var map20Name = mapName.replace(/ /g, '%20');
+          var mapImage = document.getElementById('map');
+          mapImage.src = 'https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/' + map20Name + '.png';
+          mapImage.alt = mapName;
 
-      // Set the value of the colorLegend variable
-      colorLegend = map20Name + '%20';
+          // Set the src attribute of the blizzard pattern image
+          blizzardPatternImage.src = 'https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/' + map20Name + '%20blizzard%20pattern.png';
 
+          // Set the value of the colorLegend variable
+          colorLegend = map20Name + '%20';
+        }
+      };
+      xhr.open("GET", "master_html_file.html", true);
+      xhr.send();
     </script>
   </body>
 </html>
