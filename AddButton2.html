@@ -4,7 +4,7 @@
     <script src="jsnetworkx.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("2134123")</script>
+	  <script>console.log("lsadjfsdf")</script>
     <title>TESTING PAGE</title>
     <style>
       #map,
@@ -54,7 +54,7 @@
       <option value="betweenness">Betweenness</option>
       <option value="eigenvector">Eigenvector</option>
     </select>
-    <button id="addEnemyTroopButton" onclick="button_AddEnemyTroop()">Add Opponent Pick</button>
+    <button id="uncapBlizzards" onclick="button_UncapBlizzards()">Uncap Blizzards</button>
   </div>
 </div>
 	<style>
@@ -1437,6 +1437,15 @@ function button_AddBlizzards() {
   addBlizzards();
 }
 
+function button_UncapBlizzards() {
+  UncapBlizzards();
+}
+
+function UncapBlizzards() {
+   totalBlizzards = 99;
+   generateMap();
+}
+	
 function button_AddPortals() {
   addPortals();
 }
