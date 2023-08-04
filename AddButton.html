@@ -416,44 +416,44 @@ function stopEditing() {
 
 // Centrality
 function calculateCentrality(tableData) {
-    // Create a list of unique territories
-    let territories = [];
-    for (let i = 0; i < tableData.length; i++) {
-        if (tableData[i]['B'] !== '' && !territories.includes(tableData[i]['A'])) {
-            territories.push(tableData[i]['A']);
-        }
-    }
-    // Create an empty adjacency matrix
-    let adjacencyMatrix = [];
-    for (let i = 0; i < territories.length; i++) {
-        adjacencyMatrix.push(new Array(territories.length).fill(0));
-    }
-	// Populate the adjacency matrix
-	for (let i = 0; i < tableData.length; i++) {
-	    if (tableData[i]['B'] !== undefined && tableData[i]['B'] !== '') {
-		let territory = tableData[i]['A'];
-		let connections = tableData[i]['B'].split(',');
-		for (let j = 0; j < connections.length; j++) {
-		    let connection = connections[j];
-		    if (connection !== '') {
-			let index1 = territories.indexOf(territory);
-			let index2 = territories.indexOf(connection);
-			adjacencyMatrix[index1][index2] = 1;
-		    }
-		}
-	    }
-	}
-    // Create a graph from the adjacency matrix
-    let G = new jsnx.Graph();
-    for (let i = 0; i < adjacencyMatrix.length; i++) {
-        for (let j = i + 1; j < adjacencyMatrix.length; j++) {
-            if (adjacencyMatrix[i][j] === 1) {
-                G.addEdge(i, j);
-            }
-        }
-    }
-    // Calculate betweenness centrality and closeness centrality
-    let betweennessCentrality = jsnx.betweennessCentrality(G);
+    // Create a list of unique territories
+    let territories = [];
+    for (let i = 0; i < tableData.length; i++) {
+        if (tableData[i]['B'] !== '' && !territories.includes(tableData[i]['A'])) {
+            territories.push(tableData[i]['A']);
+        }
+    }
+    // Create an empty adjacency matrix
+    let adjacencyMatrix = [];
+    for (let i = 0; i < territories.length; i++) {
+        adjacencyMatrix.push(new Array(territories.length).fill(0));
+    }
+    // Populate the adjacency matrix
+    for (let i = 0; i < tableData.length; i++) {
+        if (tableData[i]['B'] !== undefined && tableData[i]['B'] !== '') {
+            let territory = tableData[i]['A'];
+            let connections = tableData[i]['B'].split(',');
+            for (let j = 0; j < connections.length; j++) {
+                let connection = connections[j];
+                if (connection !== '') {
+                    let index1 = territories.indexOf(territory);
+                    let index2 = territories.indexOf(connection);
+                    adjacencyMatrix[index1][index2] = 1;
+                }
+            }
+        }
+    }
+    // Create a graph from the adjacency matrix
+    let G = new jsnx.Graph();
+    for (let i = 0; i < adjacencyMatrix.length; i++) {
+        for (let j = i + 1; j < adjacencyMatrix.length; j++) {
+            if (adjacencyMatrix[i][j] === 1) {
+                G.addEdge(i, j);
+            }
+        }
+    }
+    // Calculate betweenness centrality and closeness centrality
+    let betweennessCentrality = jsnx.betweennessCentrality(G);
     let eigenvectorCentrality = jsnx.eigenvectorCentrality(G, {maxIter: 500});
 
     // Initialize values
@@ -471,17 +471,22 @@ function calculateCentrality(tableData) {
     }
 
     // Calculate rank values
-    Object.entries(betweennessCentralityValues).sort((a, b) => a[1] - b[1]).forEach(([key, value], index) => {
-        betweennessRank[key] = index + 1;
-    });
-    Object.entries(eigenvectorCentralityValues).sort((a, b) => a[1] - b[1]).forEach(([key, value], index) => {
-        eigenvectorRank[key] = index + 1;
-    });
+    let uniqueBetweennessValues = [...new Set(Object.values(betweennessCentralityValues))].sort((a, b) => a - b);
+    let uniqueEigenvectorValues = [...new Set(Object.values(eigenvectorCentralityValues))].sort((a, b) => a - b);
+
+    for (let key in betweennessCentralityValues) {
+        betweennessRank[key] = uniqueBetweennessValues.indexOf(betweennessCentralityValues[key]) + 1;
+    }
+    
+    for (let key in eigenvectorCentralityValues) {
+        eigenvectorRank[key] = uniqueEigenvectorValues.indexOf(eigenvectorCentralityValues[key]) + 1;
+    }
 
     // Round the centrality values
     for (let key in betweennessCentralityValues) {
         betweennessCentralityValues[key] = Math.round(betweennessCentralityValues[key] * 1000) / 10;
     }
+    
     for (let key in eigenvectorCentralityValues) {
         eigenvectorCentralityValues[key] = Math.round(eigenvectorCentralityValues[key] * 1000) / 10;
     }
