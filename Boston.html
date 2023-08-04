@@ -4,7 +4,7 @@
     <script src="jsnetworkx.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("86418468")</script>
+	  <script>console.log("asdfasdf")</script>
     <title>Boston</title>
     <style>
       #map,
@@ -171,6 +171,15 @@
   document.getElementById("resetButton").addEventListener("click", function () {
     location.reload();
   });
+
+// Get the button element
+var mapDirectoryButton = document.getElementById("mapDirectoryButton");
+
+// Add an event listener to the button that listens for the "click" event
+mapDirectoryButton.addEventListener("click", function() {
+  // Open the URL in a new tab when the button is clicked
+  window.open("https://ares-thefox.github.io/Risk-Dynamic-Disconnection-Maps/", "_blank");
+});
 
 var images = [
   "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox1.PNG",
