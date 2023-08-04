@@ -4,7 +4,7 @@
     <script src="jsnetworkx.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("asdf")</script>
+	  <script>console.log("1234123")</script>
     <title>TESTING PAGE #2</title>
     <style>
       #map,
@@ -493,8 +493,8 @@ function betweennessColor(betweennessRank) {
     // Generate a color dictionary with uniqueValues number of colors
     let betweenness_colorDictionary = {};
     for (let i = 0; i < uniqueValues; i++) {
-        let r = Math.round(255 - (255 - 204) * (i / (uniqueValues - 1)));
-        let g = Math.round(255 - (255 - 0) * (i / (uniqueValues - 1)));
+        let r = 255;
+        let g = Math.round((255 - 0) * (i / (uniqueValues - 1)));
         let b = 0;
         let color = '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
         betweenness_colorDictionary[i + 1] = color;
@@ -510,8 +510,8 @@ function eigenvectorColor(eigenvectorRank) {
     // Generate a color dictionary with uniqueValues number of colors
     let eigenvector_colorDictionary = {};
     for (let i = 0; i < uniqueValues; i++) {
-        let r = Math.round(255 - (255 - 204) * (i / (uniqueValues - 1)));
-        let g = Math.round(255 - (255 - 0) * (i / (uniqueValues - 1)));
+        let r = 255;
+        let g = Math.round((255 - 0) * (i / (uniqueValues - 1)));
         let b = 0;
         let color = '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
         eigenvector_colorDictionary[i + 1] = color;
