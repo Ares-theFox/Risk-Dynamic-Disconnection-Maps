@@ -173,6 +173,15 @@
     location.reload();
   });
 
+// Get the button element
+var mapDirectoryButton = document.getElementById("mapDirectoryButton");
+
+// Add an event listener to the button that listens for the "click" event
+mapDirectoryButton.addEventListener("click", function() {
+  // Open the URL in a new tab when the button is clicked
+  window.open("https://ares-thefox.github.io/Risk-Dynamic-Disconnection-Maps/", "_blank");
+});
+
 var images = [
   "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox1.PNG",
   "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox2.png",
