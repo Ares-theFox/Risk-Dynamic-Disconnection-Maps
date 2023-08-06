@@ -4,7 +4,7 @@
     <script src="jsnetworkx.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("343124215")</script>
+	  <script>console.log("16898489")</script>
     <title>TESTING PAGE #2</title>
     <style>
       #map,
@@ -208,10 +208,10 @@ window.onload = function() {
 
 // Define global variables
 	// Define map-specific items
-	var colorLegend = "Supermax%20Prison%20";
-	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "CSV.csv";
-	var IndirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "Indirect%20Connection%20Locations%20CSV.csv";
-	var SVG = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "Paths.svg";
+	var colorLegend = "Supermax%20Prison";
+	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "%20CSV.csv";
+	var IndirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "%20Indirect%20Connection%20Locations%20CSV.csv";
+	var SVG = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "%20Paths.svg";
 	var BlizzardPattern = blizzardPatternImage.src;
 	// Remember to change the img src, blizzard pattern, and the alt title!!!!!!!!
 
@@ -503,6 +503,23 @@ function betweennessColor(betweennessRank) {
     return betweenness_colorDictionary;
 }
 
+function betweenness_borderColor(betweennessRank) {
+    // Count the number of unique values in betweennessRank
+    let uniqueValues = new Set(Object.values(betweennessRank)).size;
+
+    // Generate a color dictionary with uniqueValues number of colors
+    let betweenness_border_colorDictionary = {};
+    for (let i = 0; i < uniqueValues; i++) {
+        let r = Math.round(128 - (128 - 102) * (i / (uniqueValues - 1)));
+        let g = Math.round(128 - (128 - 0) * (i / (uniqueValues - 1)));
+        let b = 0;
+        let color = '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
+        betweenness_border_colorDictionary[i + 1] = color;
+    }
+
+    return betweenness_border_colorDictionary;
+}
+
 function eigenvectorColor(eigenvectorRank) {
     // Count the number of unique values in eigenvectorRank
     let uniqueValues = new Set(Object.values(eigenvectorRank)).size;
@@ -518,6 +535,23 @@ function eigenvectorColor(eigenvectorRank) {
     }
 
     return eigenvector_colorDictionary;
+}
+
+function eigenvector_borderColor(eigenvectorRank) {
+    // Count the number of unique values in eigenvectorRank
+    let uniqueValues = new Set(Object.values(eigenvectorRank)).size;
+
+    // Generate a color dictionary with uniqueValues number of colors
+    let eigenvector_border_colorDictionary = {};
+    for (let i = 0; i < uniqueValues; i++) {
+        let r = Math.round(128 - (128 - 102) * (i / (uniqueValues - 1)));
+        let g = Math.round(128 - (128 - 0) * (i / (uniqueValues - 1)));
+        let b = 0;
+        let color = '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
+        eigenvector_border_colorDictionary[i + 1] = color;
+    }
+
+    return eigenvector_border_colorDictionary;
 }
 	
 // Generate the map
@@ -612,6 +646,8 @@ function generateMap() {
 	let [betweennessCentralityValues, eigenvectorCentralityValues, betweennessRank, eigenvectorRank] = calculateCentrality(tableData);
 	let betweenness_ColorDictionary = betweennessColor(betweennessRank);
 	let eigenvector_ColorDictionary = eigenvectorColor(eigenvectorRank);
+	let betweenness_border_ColorDictionary = betweenness_borderColor(betweennessRank);
+	let eigenvector_border_ColorDictionary = eigenvector_borderColor(eigenvectorRank);
 
 	// Populate columns D, E, F, and G with the centrality values
 	for (let i = 0; i < tableData.length; i++) {
@@ -650,13 +686,15 @@ function generateMap() {
           value = 12;
         }
         if (value !== 0) {
-	    var border_color = colorDarktionary[value];
 	  if (centralityMenu.value === "standard") {
 	    var color = colorDictionary[value];
+	    var border_color = colorDarktionary[value];
 	  } else if (centralityMenu.value === "betweenness") {
 	    var color = betweenness_ColorDictionary[betweennessPosition];
+	    var border_color = betweenness_border_ColorDictionary[betweennessPosition];
 	  } else if (centralityMenu.value === "eigenvector") {
 	    var color = eigenvector_ColorDictionary[eigenvectorPosition];
+	    var border_color = eigenvector_border_ColorDictionary[eigenvectorPosition];
 	  }
           path.style.setProperty("fill", color, "important");
           path.setAttribute("stroke-opacity", "100");
@@ -722,8 +760,12 @@ function generateMap() {
 	var baseURL = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/";
 
 	// Decide which image to display based on the maximum value in column O
-	baseImage.src = baseURL + colorLegend + maxO + ".png";
-
+	if (maxO < 3) {
+	    baseImage.src = baseURL + colorLegend + ".png";
+	} else {
+	    baseImage.src = baseURL + colorLegend + "%20" + maxO + ".png";
+	}
+	
 // Create a mapping of node names to indices
 let nodeToIndex = {};
 let index = 0;
