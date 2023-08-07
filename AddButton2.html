@@ -4,7 +4,7 @@
     <script src="jsnetworkx.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("12341234")</script>
+	  <script>console.log("1919191991")</script>
     <title>TESTING PAGE #2</title>
     <style>
       #map,
@@ -54,6 +54,7 @@
       <option value="betweenness">Betweenness</option>
       <option value="eigenvector">Eigenvector</option>
       <option value="closeness">Closeness</option>
+      <option value="laplacian">Laplacian</option>
     </select>
   </div>
 </div>
@@ -540,15 +541,87 @@ function calculateCentrality(tableData) {
 		eigenvectorCentralityValues[key]=Math.round(eigenvectorCentralityValues[key]*1000)/10;
 	}
 
-    return [betweennessCentralityValues, eigenvectorCentralityValues, closenessCentralityValues, betweennessRank, eigenvectorRank, closenessRank];
+    // Calculate the Laplacian centrality of each node
+    let laplacianMatrix = [];
+    for (let i = 0; i < adjacencyMatrix.length; i++) {
+        laplacianMatrix[i] = [];
+        for (let j = 0; j < adjacencyMatrix.length; j++) {
+            if (i === j) {
+                laplacianMatrix[i][j] = G.degree(i);
+            } else if (adjacencyMatrix[i][j]) {
+                laplacianMatrix[i][j] = -1;
+            } else {
+                laplacianMatrix[i][j] = 0;
+            }
+        }
+    }
+    let laplacianEnergy = numeric.eigs(laplacianMatrix).lambda.reduce((a, b) => a + b * b, 0);
+    let laplacianCentralityValues = {};
+    let laplacianRank = {};
+    for (let i = 0; i < territories.length; i++) {
+        let H = new jsnx.Graph(G);
+        H.removeNode(i);
+        let laplacianMatrixH = [];
+        for (let j = 0; j < adjacencyMatrix.length - 1; j++) {
+            laplacianMatrixH[j] = [];
+            for (let k = 0; k < adjacencyMatrix.length - 1; k++) {
+                if (j === k) {
+                    laplacianMatrixH[j][k] = H.degree(j < i ? j : j + 1);
+                } else if (adjacencyMatrix[j < i ? j : j + 1][k < i ? k : k + 1]) {
+                    laplacianMatrixH[j][k] = -1;
+                } else {
+                    laplacianMatrixH[j][k] = 0;
+                }
+            }
+        }
+        let laplacianEnergyH = numeric.eigs(laplacianMatrixH).lambda.reduce((a, b) => a + b * b, 0);
+        laplacianCentralityValues[territories[i]] = laplacianEnergy - laplacianEnergyH;
+    }
+    let uniqueLaplacianValues = [...new Set(Object.values(laplacianCentralityValues))].sort((a, b) => a - b);
+    for (let key in laplacianCentralityValues) {
+        laplacianRank[key] = uniqueLaplacianValues.indexOf(laplacianCentralityValues[key]) + 1;
+    }
+
+	for (let key in laplacianCentralityValues) {
+	    laplacianCentralityValues[key] = Math.round(laplacianCentralityValues[key] * 1000) / 10;
+	}
+	
+    return [betweennessCentralityValues, eigenvectorCentralityValues, closenessCentralityValues, betweennessRank, eigenvectorRank, closenessRank, laplacianCentralityValues, laplacianRank];
 }
 
+function laplacianColor(laplacianRank) {
+    // Count the number of unique values in laplacianRank
+    let uniqueValues = new Set(Object.values(laplacianRank)).size;
 
+    // Generate a color dictionary with uniqueValues number of colors
+    let laplacian_colorDictionary = {};
+    for (let i = 0; i < uniqueValues; i++) {
+        let r = Math.round(255 - (255 - 204) * (i / (uniqueValues - 1)));
+        let g = Math.round(255 - (255 - 0) * (i / (uniqueValues - 1)));
+        let b = 0;
+        let color = '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
+        laplacian_colorDictionary[i + 1] = color;
+    }
 
+    return laplacian_colorDictionary;
+}
 
+function laplacian_borderColor(laplacianRank) {
+    // Count the number of unique values in laplacianRank
+    let uniqueValues = new Set(Object.values(laplacianRank)).size;
 
+    // Generate a color dictionary with uniqueValues number of colors
+    let laplacian_border_colorDictionary = {};
+    for (let i = 0; i < uniqueValues; i++) {
+        let r = Math.round(128 - (128 - 102) * (i / (uniqueValues - 1)));
+        let g = Math.round(128 - (128 - 0) * (i / (uniqueValues - 1)));
+        let b = 0;
+        let color = '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
+        laplacian_border_colorDictionary[i + 1] = color;
+    }
 
-	
+    return laplacian_border_colorDictionary;
+}
 
 function closenessColor(closenessRank) {
     // Count the number of unique values in closenessRank
@@ -741,10 +814,12 @@ function generateMap() {
   });
 
 	// Calculate rescaled betweenness centrality and closeness centrality
-	let [betweennessCentralityValues, eigenvectorCentralityValues, closenessCentralityValues, betweennessRank, eigenvectorRank, closenessRank] = calculateCentrality(tableData);
+	let [betweennessCentralityValues, eigenvectorCentralityValues, closenessCentralityValues, betweennessRank, eigenvectorRank, closenessRank, laplacianCentralityValues, laplacianRank] = calculateCentrality(tableData);
 	let betweenness_ColorDictionary = betweennessColor(betweennessRank);
 	let eigenvector_ColorDictionary = eigenvectorColor(eigenvectorRank);
 	let closeness_ColorDictionary = closenessColor(eigenvectorRank);
+	let laplacian_ColorDictionary = laplacianColor(laplacianRank);
+	let laplacian_border_ColorDictionary = laplacian_borderColor(laplacianRank);
 	let betweenness_border_ColorDictionary = betweenness_borderColor(betweennessRank);
 	let eigenvector_border_ColorDictionary = eigenvector_borderColor(eigenvectorRank);
 	let closeness_border_ColorDictionary = closeness_borderColor(eigenvectorRank);
@@ -758,6 +833,8 @@ function generateMap() {
 	    tableData[i]['G'] = eigenvectorRank[territory];
 	    tableData[i]['H'] = closenessCentralityValues[territory];
 	    tableData[i]['I'] = closenessRank[territory];
+	    tableData[i]['J'] = laplacianCentralityValues[territory];
+	    tableData[i]['K'] = laplacianRank[territory];
 	}
 	
   // Set font size of indirect connections
@@ -786,6 +863,8 @@ function generateMap() {
 	    var eigenvectorPosition = tableData[i]["G"];
 	    var closenessValue = tableData[i]["H"];
 	    var closenessPosition = tableData[i]["I"];
+	    var laplacianValue = tableData[i]["J"];
+	    var laplacianPosition = tableData[i]["K"];
         if (value >= 12) {
           value = 12;
         }
@@ -802,6 +881,9 @@ function generateMap() {
 	  } else if (centralityMenu.value === "closeness") {
 	    var color = closeness_ColorDictionary[closenessPosition];
 	    var border_color = closeness_border_ColorDictionary[closenessPosition];
+	  } else if (centralityMenu.value === "laplacian") {
+	    var color = laplacian_ColorDictionary[laplacianPosition];
+	    var border_color = laplacian_border_ColorDictionary[laplacianPosition];
 	  }
           path.style.setProperty("fill", color, "important");
           path.setAttribute("stroke-opacity", "100");
