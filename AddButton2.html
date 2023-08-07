@@ -4,8 +4,7 @@
     <script src="jsnetworkx.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-    <script src="https://cdn.jsdelivr.net/npm/graphology-metrics@2"></script>
-	  <script>console.log("00000")</script>
+	  <script>console.log("2fdf33f2f3")</script>
     <title>TESTING PAGE #2</title>
     <style>
       #map,
@@ -428,13 +427,11 @@ function calculateCentrality(tableData) {
             territories.push(filteredData[i]['A']);
         }
     }
-
     // Create an empty adjacency matrix
     let adjacencyMatrix = [];
     for (let i = 0; i < territories.length; i++) {
         adjacencyMatrix.push(new Array(territories.length).fill(0));
     }
-
     // Populate the adjacency matrix
     for (let i = 0; i < filteredData.length; i++) {
         if (filteredData[i]['B'] !== undefined && filteredData[i]['B'] !== '') {
@@ -451,89 +448,106 @@ function calculateCentrality(tableData) {
         }
     }
 
-	// Create a graph from the adjacency matrix
-	let graph = new graphology.Graph();
-	for (let i = 0; i < territories.length; i++) {
-	    if (typeof territories[i] === 'string' && territories[i] !== '') {
-	        graph.addNode(territories[i]);
-	    }
-	}
-
+    // Calculate the shortest paths between all pairs of nodes using the Floyd-Warshall algorithm
+    let dist = [];
     for (let i = 0; i < adjacencyMatrix.length; i++) {
+        dist[i] = [];
         for (let j = 0; j < adjacencyMatrix.length; j++) {
-            if (adjacencyMatrix[i][j] === 1) {
-                graph.addEdge(territories[i], territories[j]);
+            if (i === j) {
+                dist[i][j] = 0;
+            } else if (adjacencyMatrix[i][j]) {
+                dist[i][j] = adjacencyMatrix[i][j];
+            } else {
+                dist[i][j] = Infinity;
+            }
+        }
+    }
+    for (let k = 0; k < adjacencyMatrix.length; k++) {
+        for (let i = 0; i < adjacencyMatrix.length; i++) {
+            for (let j = 0; j < adjacencyMatrix.length; j++) {
+                if (dist[i][k] + dist[k][j] < dist[i][j]) {
+                    dist[i][j] = dist[i][k] + dist[k][j];
+                }
             }
         }
     }
 
-	// Calculate closeness centrality using graphology-metrics
-	let closenessCentralityValues = graphologyMetrics.closeness(graph);
-	let closenessRank = {};
-
-	// Calculate rank values
-	let uniqueClosenessValues = [...new Set(Object.values(closenessCentralityValues))].sort((a, b) => a - b);
-
-	for (let key in closenessCentralityValues) {
-	    closenessRank[key] = uniqueClosenessValues.indexOf(closenessCentralityValues[key]) + 1;
+    // Calculate the closeness centrality of each node
+	let closenessCentralityValues= {};
+	let closenessRank= {};
+	
+	for(let i=0;i<territories.length;i++){
+		let sumOfDistances=0;
+		for(let j=0;j<territories.length;j++){
+			sumOfDistances+=dist[i][j];
+		}
+		closenessCentralityValues[territories[i]]=(1/sumOfDistances);
+	}
+	
+	let uniqueClosenessValues=[...new Set(Object.values(closenessCentralityValues))].sort((a,b) => a-b);
+	
+	for(let key in closenessCentralityValues){
+		closenessRank[key]=uniqueClosenessValues.indexOf(closenessCentralityValues[key])+1;
+	}
+	
+	for(let key in closenessCentralityValues){
+		closenessCentralityValues[key]=Math.round(closenessCentralityValues[key]*1000)/10;
 	}
 
-	// Round the centrality values
-	for (let key in closenessCentralityValues) {
-	    closenessCentralityValues[key] = Math.round(closenessCentralityValues[key] * 1000) / 10;
-	}
+    // Create a graph from the adjacency matrix
+    let G = new jsnx.Graph();
+    for (let i = 0; i < adjacencyMatrix.length; i++) {
+        for (let j = i + 1; j < adjacencyMatrix.length; j++) {
+            if (adjacencyMatrix[i][j] === 1) {
+                G.addEdge(i, j);
+            }
+        }
+    }
 
-	// Create a graph from the adjacency matrix using jsnx
-	let G = new jsnx.Graph();
-	for (let i = 0; i < adjacencyMatrix.length; i++) {
-	    for (let j = i + 1; j < adjacencyMatrix.length; j++) {
-	        if (adjacencyMatrix[i][j] === 1) {
-	            G.addEdge(i, j);
-	        }
-	    }
-	}
-
-	// Calculate betweenness centrality and eigenvector centrality using jsnx
-	let betweennessCentrality = jsnx.betweennessCentrality(G);
-	let eigenvectorCentrality = jsnx.eigenvectorCentrality(G, {maxIter: 500});
-
-	// Initialize values
-	let betweennessCentralityValues = {};
-	let betweennessRank = {};
-	let eigenvectorCentralityValues = {};	
-	let eigenvectorRank = {};
+    // Calculate betweenness centrality and eigenvector centrality
+	let betweennessCentrality=jsnx.betweennessCentrality(G);
+	let eigenvectorCentrality=jsnx.eigenvectorCentrality(G,{maxIter:500});
+	
+	let betweennessCentralityValues={};
+	let betweennessRank={};
+	let eigenvectorCentralityValues={};	
+	let eigenvectorRank={};
 		
-	// Get raw values
-	for (let key in betweennessCentrality._numberValues) {
-	    betweennessCentralityValues[territories[key]] = betweennessCentrality._numberValues[key];
-	}
-	for (let key in eigenvectorCentrality._numberValues) {
-	    eigenvectorCentralityValues[territories[key]] = eigenvectorCentrality._numberValues[key];
-	}
-
-	// Calculate rank values
-	let uniqueBetweennessValues = [...new Set(Object.values(betweennessCentralityValues))].sort((a, b) => a - b);
-	let uniqueEigenvectorValues = [...new Set(Object.values(eigenvectorCentralityValues))].sort((a, b) => a - b);
-
-	for (let key in betweennessCentralityValues) {
-	    betweennessRank[key] = uniqueBetweennessValues.indexOf(betweennessCentralityValues[key]) + 1;
+	for(let key in betweennessCentrality._numberValues){
+		betweennessCentralityValues[territories[key]]=betweennessCentrality._numberValues[key];
 	}
 	
-	for (let key in eigenvectorCentralityValues) {
-	    eigenvectorRank[key] = uniqueEigenvectorValues.indexOf(eigenvectorCentralityValues[key]) + 1;
-	}
-
-	// Round the centrality values
-	for (let key in betweennessCentralityValues) {
-	    betweennessCentralityValues[key] = Math.round(betweennessCentralityValues[key] * 1000) / 10;
+	for(let key in eigenvectorCentrality._numberValues){
+		eigenvectorCentralityValues[territories[key]]=eigenvectorCentrality._numberValues[key];
 	}
 	
-	for (let key in eigenvectorCentralityValues) {
-	    eigenvectorCentralityValues[key] = Math.round(eigenvectorCentralityValues[key] * 1000) / 10;
+	let uniqueBetweennessValues=[...new Set(Object.values(betweennessCentralityValues))].sort((a,b) => a-b);
+	let uniqueEigenvectorValues=[...new Set(Object.values(eigenvectorCentralityValues))].sort((a,b) => a-b);
+	
+	for(let key in betweennessCentralityValues){
+		betweennessRank[key]=uniqueBetweennessValues.indexOf(betweennessCentralityValues[key])+1;
+	}
+	
+	for(let key in eigenvectorCentralityValues){
+		eigenvectorRank[key]=uniqueEigenvectorValues.indexOf(eigenvectorCentralityValues[key])+1;
+	}
+	
+	for(let key in betweennessCentralityValues){
+		betweennessCentralityValues[key]=Math.round(betweennessCentralityValues[key]*1000)/10;
+	}
+	
+	for(let key in eigenvectorCentralityValues){
+		eigenvectorCentralityValues[key]=Math.round(eigenvectorCentralityValues[key]*1000)/10;
 	}
 
-    return [betweennessCentralityValues, closenessCentralityValues, eigenvectorCentralityValues, betweennessRank, closenessRank, eigenvectorRank];
+    return [betweennessCentralityValues, eigenvectorCentralityValues, closenessCentralityValues, betweennessRank, eigenvectorRank, closenessRank];
 }
+
+
+
+
+
+	
 
 function closenessColor(closenessRank) {
     // Count the number of unique values in closenessRank
