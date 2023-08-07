@@ -4,7 +4,7 @@
     <script src="jsnetworkx.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("1958195195")</script>
+	  <script>console.log("12341234")</script>
     <title>TESTING PAGE #2</title>
     <style>
       #map,
@@ -29,7 +29,7 @@
   </head>
   <body>
     <header>
-	Testing Page #2 
+	Supermax Prison Dynamic Disconnection Map 
 	<img src="" />
         <span id="invalidText" style="color: red; font-style: italic; font-size: 20px;"></span>
     </header>
@@ -52,11 +52,8 @@
     <select id="centralityType" name="centralityType">
       <option value="standard">Direct Connections</option>
       <option value="betweenness">Betweenness</option>
-      <option value="betweennessVitality">Betweenness Vitality</option>
       <option value="eigenvector">Eigenvector</option>
-      <option value="eigenvectorVitality">Eigenvector Vitality</option>
       <option value="closeness">Closeness</option>
-      <option value="closenessVitality">Closeness Vitality</option>
     </select>
   </div>
 </div>
@@ -155,8 +152,8 @@
 	  
     <img
       id="map"
-      src="https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States.png"
-      alt="United States"
+      src="https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Supermax%20Prison.png"
+      alt="Supermax Prison"
     />
     <div id="range"></div>
 	  
@@ -202,7 +199,7 @@ var images = [
 
 // Preload the blizzard pattern
 var blizzardPatternImage = new Image();
-blizzardPatternImage.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20blizzard%20pattern.png";
+blizzardPatternImage.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Supermax%20Prison%20blizzard%20pattern.png";
 
 window.onload = function() {
   var img = document.querySelector("header img");
@@ -212,7 +209,7 @@ window.onload = function() {
 
 // Define global variables
 	// Define map-specific items
-	var colorLegend = "United%20States";
+	var colorLegend = "Supermax%20Prison";
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "%20CSV.csv";
 	var IndirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "%20Indirect%20Connection%20Locations%20CSV.csv";
 	var SVG = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "%20Paths.svg";
@@ -546,99 +543,113 @@ function calculateCentrality(tableData) {
     return [betweennessCentralityValues, eigenvectorCentralityValues, closenessCentralityValues, betweennessRank, eigenvectorRank, closenessRank];
 }
 
-function calculateVitality(betweennessCentralityValues, eigenvectorCentralityValues, closenessCentralityValues) {
-    // Calculate the vitality scores for each centrality metric
-    let betweennessVitality = {};
-    let eigenvectorVitality = {};
-    let closenessVitality = {};
 
-    for (let territory in betweennessCentralityValues) {
-        // Calculate the change in betweenness centrality when the territory is deleted
-        let originalBetweenness = betweennessCentralityValues[territory];
-        delete betweennessCentralityValues[territory];
-        let newBetweenness = calculateCentrality(tableData)[0][territory];
-        betweennessVitality[territory] = originalBetweenness - newBetweenness;
 
-        // Calculate the change in eigenvector centrality when the territory is deleted
-        let originalEigenvector = eigenvectorCentralityValues[territory];
-        delete eigenvectorCentralityValues[territory];
-        let newEigenvector = calculateCentrality(tableData)[1][territory];
-        eigenvectorVitality[territory] = originalEigenvector - newEigenvector;
 
-        // Calculate the change in closeness centrality when the territory is deleted
-        let originalCloseness = closenessCentralityValues[territory];
-        delete closenessCentralityValues[territory];
-        let newCloseness = calculateCentrality(tableData)[2][territory];
-        closenessVitality[territory] = originalCloseness - newCloseness;
-    }
 
-    // Calculate the rank of each territory based on their vitality scores for each centrality metric
-    let betweennessVitalityRank = {};
-    let eigenvectorVitalityRank = {};
-    let closenessVitalityRank = {};
 
-    for (let territory in betweennessVitality) {
-        betweennessVitalityRank[territory] = 1;
-        for (let otherTerritory in betweennessVitality) {
-            if (betweennessVitality[otherTerritory] > betweennessVitality[territory]) {
-                betweennessVitalityRank[territory]++;
-            }
-        }
-    }
+	
 
-    for (let territory in eigenvectorVitality) {
-        eigenvectorVitalityRank[territory] = 1;
-        for (let otherTerritory in eigenvectorVitality) {
-            if (eigenvectorVitality[otherTerritory] > eigenvectorVitality[territory]) {
-                eigenvectorVitalityRank[territory]++;
-            }
-        }
-    }
-
-    for (let territory in closenessVitality) {
-        closenessVitalityRank[territory] = 1;
-        for (let otherTerritory in closenessVitality) {
-            if (closenessVitality[otherTerritory] > closenessVitality[territory]) {
-                closenessVitalityRank[territory]++;
-            }
-        }
-    }
-
-    return [betweennessVitality, eigenvectorVitality, closenessVitality, betweennessVitalityRank, eigenvectorVitalityRank, closenessVitalityRank];
-}
-
-function generateColorDictionary(rank) {
-    // Count the number of unique values in rank
-    let uniqueValues = new Set(Object.values(rank)).size;
+function closenessColor(closenessRank) {
+    // Count the number of unique values in closenessRank
+    let uniqueValues = new Set(Object.values(closenessRank)).size;
 
     // Generate a color dictionary with uniqueValues number of colors
-    let colorDictionary = {};
+    let closeness_colorDictionary = {};
     for (let i = 0; i < uniqueValues; i++) {
         let r = Math.round(255 - (255 - 204) * (i / (uniqueValues - 1)));
         let g = Math.round(255 - (255 - 0) * (i / (uniqueValues - 1)));
         let b = 0;
         let color = '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
-        colorDictionary[i + 1] = color;
+        closeness_colorDictionary[i + 1] = color;
     }
 
-    return colorDictionary;
+    return closeness_colorDictionary;
 }
 
-function generateBorderColorDictionary(rank) {
-    // Count the number of unique values in rank
-    let uniqueValues = new Set(Object.values(rank)).size;
+function closeness_borderColor(closenessRank) {
+    // Count the number of unique values in closenessRank
+    let uniqueValues = new Set(Object.values(closenessRank)).size;
 
     // Generate a color dictionary with uniqueValues number of colors
-    let borderColorDictionary = {};
+    let closeness_border_colorDictionary = {};
     for (let i = 0; i < uniqueValues; i++) {
         let r = Math.round(128 - (128 - 102) * (i / (uniqueValues - 1)));
         let g = Math.round(128 - (128 - 0) * (i / (uniqueValues - 1)));
         let b = 0;
         let color = '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
-        borderColorDictionary[i + 1] = color;
+        closeness_border_colorDictionary[i + 1] = color;
     }
 
-    return borderColorDictionary;
+    return closeness_border_colorDictionary;
+}
+
+function betweennessColor(betweennessRank) {
+    // Count the number of unique values in betweennessRank
+    let uniqueValues = new Set(Object.values(betweennessRank)).size;
+
+    // Generate a color dictionary with uniqueValues number of colors
+    let betweenness_colorDictionary = {};
+    for (let i = 0; i < uniqueValues; i++) {
+        let r = Math.round(255 - (255 - 204) * (i / (uniqueValues - 1)));
+        let g = Math.round(255 - (255 - 0) * (i / (uniqueValues - 1)));
+        let b = 0;
+        let color = '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
+        betweenness_colorDictionary[i + 1] = color;
+    }
+
+    return betweenness_colorDictionary;
+}
+
+function betweenness_borderColor(betweennessRank) {
+    // Count the number of unique values in betweennessRank
+    let uniqueValues = new Set(Object.values(betweennessRank)).size;
+
+    // Generate a color dictionary with uniqueValues number of colors
+    let betweenness_border_colorDictionary = {};
+    for (let i = 0; i < uniqueValues; i++) {
+        let r = Math.round(128 - (128 - 102) * (i / (uniqueValues - 1)));
+        let g = Math.round(128 - (128 - 0) * (i / (uniqueValues - 1)));
+        let b = 0;
+        let color = '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
+        betweenness_border_colorDictionary[i + 1] = color;
+    }
+
+    return betweenness_border_colorDictionary;
+}
+
+function eigenvectorColor(eigenvectorRank) {
+    // Count the number of unique values in eigenvectorRank
+    let uniqueValues = new Set(Object.values(eigenvectorRank)).size;
+
+    // Generate a color dictionary with uniqueValues number of colors
+    let eigenvector_colorDictionary = {};
+    for (let i = 0; i < uniqueValues; i++) {
+        let r = Math.round(255 - (255 - 204) * (i / (uniqueValues - 1)));
+        let g = Math.round(255 - (255 - 0) * (i / (uniqueValues - 1)));
+        let b = 0;
+        let color = '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
+        eigenvector_colorDictionary[i + 1] = color;
+    }
+
+    return eigenvector_colorDictionary;
+}
+
+function eigenvector_borderColor(eigenvectorRank) {
+    // Count the number of unique values in eigenvectorRank
+    let uniqueValues = new Set(Object.values(eigenvectorRank)).size;
+
+    // Generate a color dictionary with uniqueValues number of colors
+    let eigenvector_border_colorDictionary = {};
+    for (let i = 0; i < uniqueValues; i++) {
+        let r = Math.round(128 - (128 - 102) * (i / (uniqueValues - 1)));
+        let g = Math.round(128 - (128 - 0) * (i / (uniqueValues - 1)));
+        let b = 0;
+        let color = '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
+        eigenvector_border_colorDictionary[i + 1] = color;
+    }
+
+    return eigenvector_border_colorDictionary;
 }
 	
 // Generate the map
@@ -687,8 +698,8 @@ function generateMap() {
 	});
   // Recalculate columns L through P for all rows
   tableData.forEach((row) => {
-    // Column C: vlookup col B values and add them + current value A and B
-    row["C"] = ""; // initialize column C to blank
+    // Column M: vlookup col B values and add them + current value A and B
+    row["M"] = ""; // initialize column M to blank
     if (row["B"] && row["B"].trim() !== "") {
       // check if column B is not empty or undefined
       const searchValues = row["B"].split(",");
@@ -702,65 +713,51 @@ function generateMap() {
           }
         }
       }
-      row["C"] = [row["A"], row["B"], ...searchResults].join(",");
+      row["M"] = [row["A"], row["B"], ...searchResults].join(",");
     }
 
-    // Column D: Remove duplicate values from column C
-    row["D"] = [...new Set(row["C"].split(","))]
+    // Column N: Remove duplicate values from column M
+    row["N"] = [...new Set(row["M"].split(","))]
       .filter((value) => value !== row["A"])
       .join(",");
 	  
-    // Column E: Count how many comma-separated values are in column B
+    // Column O: Count how many comma-separated values are in column B
     if (row["B"] && row["B"].trim() !== "") {
       // check if column B is not empty or undefined
       const values = row["B"].split(",");
-      row["E"] = values.length;
+      row["O"] = values.length;
     } else {
-      row["E"] = 0;
+      row["O"] = 0;
     }
 
-    // Column F: Count how many comma-separated values are in column D (unless it's empty, then set it to 0)
-    if (row["D"] && row["D"].trim() !== "") {
-      // check if column D is not empty or undefined
-      const values = row["D"].split(",");
-      row["F"] = values.length;
+    // Column P: Count how many comma-separated values are in column N (unless it's empty, then set it to 0)
+    if (row["N"] && row["N"].trim() !== "") {
+      // check if column N is not empty or undefined
+      const values = row["N"].split(",");
+      row["P"] = values.length;
     } else {
-      row["F"] = 0;
+      row["P"] = 0;
     }
   });
 
 	// Calculate rescaled betweenness centrality and closeness centrality
 	let [betweennessCentralityValues, eigenvectorCentralityValues, closenessCentralityValues, betweennessRank, eigenvectorRank, closenessRank] = calculateCentrality(tableData);
-	let betweenness_ColorDictionary = generateBorderColorDictionary(betweennessRank);
-	let eigenvector_ColorDictionary = generateBorderColorDictionary(eigenvectorRank);
-	let closeness_ColorDictionary = generateBorderColorDictionary(eigenvectorRank);
-	let betweenness_border_ColorDictionary = generateBorderColorDictionary(betweennessRank);
-	let eigenvector_border_ColorDictionary = generateBorderColorDictionary(eigenvectorRank);
-	let closeness_border_ColorDictionary = generateBorderColorDictionary(eigenvectorRank);
-
-	let [betweennessVitality, eigenvectorVitality, closenessVitality, betweennessVitalityRank, eigenvectorVitalityRank, closenessVitalityRank] = calculateVitality(betweennessCentralityValues, eigenvectorCentralityValues, closenessCentralityValues)
-	let betweennessVitality_ColorDictionary = generateBorderColorDictionary(betweennessVitalityRank);
-	let eigenvectorVitality_ColorDictionary = generateBorderColorDictionary(eigenvectorVitalityRank);
-	let closenessVitality_ColorDictionary = generateBorderColorDictionary(eigenvectorVitalityRank);
-	let betweennessVitality_border_ColorDictionary = generateBorderColorDictionary(betweennessVitalityRank);
-	let eigenvectorVitality_border_ColorDictionary = generateBorderColorDictionary(eigenvectorVitalityRank);
-	let closenessVitality_border_ColorDictionary = generateBorderColorDictionary(eigenvectorVitalityRank);
+	let betweenness_ColorDictionary = betweennessColor(betweennessRank);
+	let eigenvector_ColorDictionary = eigenvectorColor(eigenvectorRank);
+	let closeness_ColorDictionary = closenessColor(eigenvectorRank);
+	let betweenness_border_ColorDictionary = betweenness_borderColor(betweennessRank);
+	let eigenvector_border_ColorDictionary = eigenvector_borderColor(eigenvectorRank);
+	let closeness_border_ColorDictionary = closeness_borderColor(eigenvectorRank);
 
 	// Populate columns D, E, F, and G with the centrality values
 	for (let i = 0; i < tableData.length; i++) {
 	    let territory = tableData[i]['A'];
-	    tableData[i]['G'] = betweennessCentralityValues[territory];
-	    tableData[i]['H'] = betweennessRank[territory];
-	    tableData[i]['I'] = eigenvectorCentralityValues[territory];
-	    tableData[i]['J'] = eigenvectorRank[territory];
-	    tableData[i]['K'] = closenessCentralityValues[territory];
-	    tableData[i]['L'] = closenessRank[territory];
-	    tableData[i]['M'] = betweennessVitality[territory];
-	    tableData[i]['N'] = betweennessVitalityRank[territory];
-	    tableData[i]['O'] = eigenvectorVitality[territory];
-	    tableData[i]['P'] = eigenvectorVitalityRank[territory];
-	    tableData[i]['Q'] = closenessVitality[territory];
-	    tableData[i]['R'] = closenessVitalityRank[territory];
+	    tableData[i]['D'] = betweennessCentralityValues[territory];
+	    tableData[i]['E'] = betweennessRank[territory];
+	    tableData[i]['F'] = eigenvectorCentralityValues[territory];
+	    tableData[i]['G'] = eigenvectorRank[territory];
+	    tableData[i]['H'] = closenessCentralityValues[territory];
+	    tableData[i]['I'] = closenessRank[territory];
 	}
 	
   // Set font size of indirect connections
@@ -782,19 +779,13 @@ function generateMap() {
     for (var i = 0; i < tableData.length; i++) {
       if (tableData[i]["A"] === pathId) {
         // Color in the map
-        var value = tableData[i]["E"];
-	    var betweennessValue = tableData[i]["G"];
-	    var betweennessPosition = tableData[i]["H"];
-	    var eigenvectorValue = tableData[i]["I"];
-	    var eigenvectorPosition = tableData[i]["J"];
-	    var closenessValue = tableData[i]["K"];
-	    var closenessPosition = tableData[i]["L"];
-	    var betweennessVitalityValue = tableData[i]["M"];
-	    var betweennessVitalityPosition = tableData[i]["N"];
-	    var eigenvectorVitalityValue = tableData[i]["O"];
-	    var eigenvectorVitalityPosition = tableData[i]["P"];
-	    var closenessVitalityValue = tableData[i]["Q"];
-	    var closenessVitalityPosition = tableData[i]["R"];
+        var value = tableData[i]["O"];
+	    var betweennessValue = tableData[i]["D"];
+	    var betweennessPosition = tableData[i]["E"];
+	    var eigenvectorValue = tableData[i]["F"];
+	    var eigenvectorPosition = tableData[i]["G"];
+	    var closenessValue = tableData[i]["H"];
+	    var closenessPosition = tableData[i]["I"];
         if (value >= 12) {
           value = 12;
         }
@@ -811,15 +802,6 @@ function generateMap() {
 	  } else if (centralityMenu.value === "closeness") {
 	    var color = closeness_ColorDictionary[closenessPosition];
 	    var border_color = closeness_border_ColorDictionary[closenessPosition];
-	  } else if (centralityMenu.value === "betweennessVitality") {
-	    var color = betweennessVitality_ColorDictionary[betweennessVitalityPosition];
-	    var border_color = betweennessVitality_border_ColorDictionary[betweennessVitalityPosition];
-	  } else if (centralityMenu.value === "eigenvectorVitality") {
-	    var color = eigenvectorVitality_ColorDictionary[eigenvectorVitalityPosition];
-	    var border_color = eigenvectorVitality_border_ColorDictionary[eigenvectorVitalityPosition];
-	  } else if (centralityMenu.value === "closenessVitality") {
-	    var color = closenessVitality_ColorDictionary[closenessVitalityPosition];
-	    var border_color = closenessVitality_border_ColorDictionary[closenessVitalityPosition];
 	  }
           path.style.setProperty("fill", color, "important");
           path.setAttribute("stroke-opacity", "100");
@@ -828,7 +810,7 @@ function generateMap() {
         }
 
         // Add text to the specified location from CSV data
-        value = tableData[i]["F"];
+        value = tableData[i]["P"];
         if (value !== 0) {
           // Find matching row in CSV data
           var csvRow = csvData.find(function (row) {
@@ -850,7 +832,7 @@ function generateMap() {
           text.setAttribute("alignment-baseline", "middle");
           text.setAttribute("font-size", fontSizeInput.value);
           text.setAttribute("font-weight", "bold");
-	  if (tableData[i]["E"] >= 11) {
+	  if (tableData[i]["O"] >= 11) {
 	    text.setAttribute("fill", "white");
 	  } else {
 	    text.setAttribute("fill", "black");
@@ -863,12 +845,6 @@ function generateMap() {
 	    text.textContent = eigenvectorValue;
 	  } else if (centralityMenu.value === "closeness") {
 	    text.textContent = closenessValue;
-	  } else if (centralityMenu.value === "betweennessVitality") {
-	    text.textContent = betweennessVitalityValue;
-	  } else if (centralityMenu.value === "eigenvectorVitality") {
-	    text.textContent = eigenvectorVitalityValue;
-	  } else if (centralityMenu.value === "closenessVitality") {
-	    text.textContent = closenessVitalityValue;
 	  }
           // Adjust x and y coordinates to position midpoint of text at specified coordinates
           var bbox = text.getBBox();
@@ -881,22 +857,22 @@ function generateMap() {
       }
     }
   });
-	// Find the maximum value in column E
-	var maxE = Math.max(...tableData.map((row) => row["E"]));
+	// Find the maximum value in column O
+	var maxO = Math.max(...tableData.map((row) => row["O"]));
 
-	// Ensure that maxE is never greater than 12
-	if (maxE > 12) {
-	  maxE = 12;
+	// Ensure that maxO is never greater than 12
+	if (maxO > 12) {
+	  maxO = 12;
 	}
 	// Get the base image element & define base URL
 	var baseImage = document.getElementById("map");
 	var baseURL = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/";
 
-	// Decide which image to display based on the maximum value in column E
-	if (maxE < 3) {
+	// Decide which image to display based on the maximum value in column O
+	if (maxO < 3) {
 	    baseImage.src = baseURL + colorLegend + ".png";
 	} else {
-	    baseImage.src = baseURL + colorLegend + "%20" + maxE + ".png";
+	    baseImage.src = baseURL + colorLegend + "%20" + maxO + ".png";
 	}
 	
 // Create a mapping of node names to indices
