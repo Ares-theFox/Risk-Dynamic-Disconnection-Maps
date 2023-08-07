@@ -1189,7 +1189,7 @@ function addBlizzards() {
 	  }
 	  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
 	    // Reset stroke color and width according to the color darktionary
-	    let value = tableData.find(row => row['A'] === this.id)['O'];
+	    let value = tableData.find(row => row['A'] === this.id)['E'];
 	    if (value >= 12) {
 	      value = 12;
 	    }
@@ -1403,7 +1403,7 @@ function addPortals() {
 	  }
 	  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
 	    // Reset stroke color and width according to the color darktionary
-	    let value = tableData.find(row => row['A'] === this.id)['O'];
+	    let value = tableData.find(row => row['A'] === this.id)['E'];
 	    if (value >= 12) {
 	      value = 12;
 	    }
@@ -1580,7 +1580,7 @@ function eraser() {
 	      this.style.setProperty("stroke-width", "1", "important");
 	    } else if (portalArray.includes(this.id)) {
 	      // Reset stroke color and width according to the color darktionary
-	      let value = tableData.find(row => row['A'] === this.id)['O'];
+	      let value = tableData.find(row => row['A'] === this.id)['E'];
 	      if (value >= 12) {
 		value = 12;
 	      }
