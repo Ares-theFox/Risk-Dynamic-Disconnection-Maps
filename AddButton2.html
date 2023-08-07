@@ -5,7 +5,7 @@
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/9.4.4/math.min.js"></script>
-	  <script>console.log("1511511511151")</script>
+	  <script>console.log("151222000000000000")</script>
     <title>TESTING PAGE #2</title>
     <style>
       #map,
@@ -154,8 +154,8 @@
 	  
     <img
       id="map"
-      src="https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne.png"
-      alt="Jules Verne"
+      src="https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Boston.png"
+      alt="Boston"
     />
     <div id="range"></div>
 	  
@@ -201,7 +201,7 @@ var images = [
 
 // Preload the blizzard pattern
 var blizzardPatternImage = new Image();
-blizzardPatternImage.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20blizzard%20pattern.png";
+blizzardPatternImage.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Boston%20blizzard%20pattern.png";
 
 window.onload = function() {
   var img = document.querySelector("header img");
@@ -211,7 +211,7 @@ window.onload = function() {
 
 // Define global variables
 	// Define map-specific items
-	var colorLegend = "Jules%20Verne";
+	var colorLegend = "Boston";
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "%20CSV.csv";
 	var IndirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "%20Indirect%20Connection%20Locations%20CSV.csv";
 	var SVG = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "%20Paths.svg";
@@ -409,6 +409,9 @@ function stopEditing() {
 	return;
 }
 
+
+
+	
 // Centrality
 function calculateCentrality(tableData) {
     // Filter the input data
@@ -589,7 +592,69 @@ function calculateCentrality(tableData) {
 	
     return [betweennessCentralityValues, eigenvectorCentralityValues, closenessCentralityValues, betweennessRank, eigenvectorRank, closenessRank, laplacianCentralityValues, laplacianRank];
 }
+	
+// Define a global variable to store the cached results
+let cachedCentralityResults = null;
 
+// Define a function to check if the table data has changed
+function haveTableDataChanged(tableData) {
+    // Check if the cached results are null
+    if (cachedCentralityResults === null) {
+        return true;
+    }
+
+    // Check if the number of rows has changed
+    if (tableData.length !== cachedCentralityResults.tableData.length) {
+        return true;
+    }
+
+    // Check if any part of the table data has changed
+    for (let i = 0; i < tableData.length; i++) {
+        for (let key in tableData[i]) {
+            if (tableData[i][key] !== cachedCentralityResults.tableData[i][key]) {
+                return true;
+            }
+        }
+    }
+
+    // The table data has not changed
+    return false;
+}
+
+// Define a function to calculate the centrality values and cache the results
+function calculateCentralityCache(tableData, calculateCentrality) {
+    // Check if the table data has changed
+    if (haveTableDataChanged(tableData)) {
+        // The table data has changed, so recalculate the centrality values
+        let [betweennessCentralityValues, eigenvectorCentralityValues, closenessCentralityValues, betweennessRank, eigenvectorRank, closenessRank, laplacianCentralityValues, laplacianRank] = calculateCentrality(tableData);
+
+        // Store the results in the cache
+        cachedCentralityResults = {
+            tableData: tableData,
+            betweennessCentralityValues: betweennessCentralityValues,
+            eigenvectorCentralityValues: eigenvectorCentralityValues,
+            closenessCentralityValues: closenessCentralityValues,
+            betweennessRank: betweennessRank,
+            eigenvectorRank: eigenvectorRank,
+            closenessRank: closenessRank,
+            laplacianCentralityValues: laplacianCentralityValues,
+            laplacianRank: laplacianRank
+        };
+    }
+
+    // Return the cached results
+    return [
+        cachedCentralityResults.betweennessCentralityValues,
+        cachedCentralityResults.eigenvectorCentralityValues,
+        cachedCentralityResults.closenessCentralityValues,
+        cachedCentralityResults.betweennessRank,
+        cachedCentralityResults.eigenvectorRank,
+        cachedCentralityResults.closenessRank,
+        cachedCentralityResults.laplacianCentralityValues,
+        cachedCentralityResults.laplacianRank
+    ];
+}
+	
 function laplacianColor(laplacianRank) {
     // Count the number of unique values in laplacianRank
     let uniqueValues = new Set(Object.values(laplacianRank)).size;
@@ -815,7 +880,7 @@ function generateMap() {
   });
 
 	// Calculate rescaled betweenness centrality and closeness centrality
-	let [betweennessCentralityValues, eigenvectorCentralityValues, closenessCentralityValues, betweennessRank, eigenvectorRank, closenessRank, laplacianCentralityValues, laplacianRank] = calculateCentrality(tableData);
+	let [betweennessCentralityValues, eigenvectorCentralityValues, closenessCentralityValues, betweennessRank, eigenvectorRank, closenessRank, laplacianCentralityValues, laplacianRank] = calculateCentralityCache(tableData, calculateCentrality);
 	let betweenness_ColorDictionary = betweennessColor(betweennessRank);
 	let eigenvector_ColorDictionary = eigenvectorColor(eigenvectorRank);
 	let closeness_ColorDictionary = closenessColor(eigenvectorRank);
@@ -825,7 +890,7 @@ function generateMap() {
 	let eigenvector_border_ColorDictionary = eigenvector_borderColor(eigenvectorRank);
 	let closeness_border_ColorDictionary = closeness_borderColor(eigenvectorRank);
 
-	// Populate columns D, E, F, and G with the centrality values
+	// Populate columns with the centrality values
 	for (let i = 0; i < tableData.length; i++) {
 	    let territory = tableData[i]['A'];
 	    tableData[i]['D'] = betweennessCentralityValues[territory];
