@@ -5,7 +5,7 @@
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/9.4.4/math.min.js"></script>
-	  <script>console.log("15011511")</script>
+	  <script>console.log("989819")</script>
     <title>TESTING PAGE #2</title>
     <style>
       #map,
@@ -584,7 +584,7 @@ function calculateCentrality(tableData) {
     }
 
 	for (let key in laplacianCentralityValues) {
-	    laplacianCentralityValues[key] = Math.round(laplacianCentralityValues[key] * 1000) / 10;
+	    laplacianCentralityValues[key] = Math.round(laplacianCentralityValues[key] * 1) / 10;
 	}
 	
     return [betweennessCentralityValues, eigenvectorCentralityValues, closenessCentralityValues, betweennessRank, eigenvectorRank, closenessRank, laplacianCentralityValues, laplacianRank];
