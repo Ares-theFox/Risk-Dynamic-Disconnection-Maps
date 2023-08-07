@@ -4,8 +4,8 @@
     <script src="jsnetworkx.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>
-	  <script>console.log("232323")</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/9.4.4/math.min.js"></script>
+	  <script>console.log("asdfasdf")</script>
     <title>TESTING PAGE #2</title>
     <style>
       #map,
@@ -556,7 +556,7 @@ function calculateCentrality(tableData) {
             }
         }
     }
-    let laplacianEnergy = numeric.eigs(laplacianMatrix).lambda.reduce((a, b) => a + b * b, 0);
+    let laplacianEnergy = math.eigs(laplacianMatrix).values.reduce((a, b) => a + b * b, 0);
     let laplacianCentralityValues = {};
     let laplacianRank = {};
     for (let i = 0; i < territories.length; i++) {
@@ -575,7 +575,7 @@ function calculateCentrality(tableData) {
                 }
             }
         }
-        let laplacianEnergyH = numeric.eigs(laplacianMatrixH).lambda.reduce((a, b) => a + b * b, 0);
+        let laplacianEnergyH = math.eigs(laplacianMatrixH).values.reduce((a, b) => a + b * b, 0);
         laplacianCentralityValues[territories[i]] = laplacianEnergy - laplacianEnergyH;
     }
     let uniqueLaplacianValues = [...new Set(Object.values(laplacianCentralityValues))].sort((a, b) => a - b);
