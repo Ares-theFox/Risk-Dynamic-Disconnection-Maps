@@ -928,6 +928,8 @@ function generateMap() {
 	    text.textContent = eigenvectorValue;
 	  } else if (centralityMenu.value === "closeness") {
 	    text.textContent = closenessValue;
+	  } else if (centralityMenu.value === "laplacian") {
+	    text.textContent = laplacianValue;
 	  }
           // Adjust x and y coordinates to position midpoint of text at specified coordinates
           var bbox = text.getBBox();
