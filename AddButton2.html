@@ -5,7 +5,7 @@
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
     <script src="https://unpkg.com/cytoscape@3/dist/cytoscape.min.js"></script>
-	  <script>console.log("22222")</script>
+	  <script>console.log("aaaaaaaa")</script>
     <title>TESTING PAGE #2</title>
     <style>
       #map,
@@ -438,12 +438,19 @@ function calculateCentrality(tableData) {
         }
     }
 
-    // Create a graph from the adjacency matrix
-    let elements = [];
-		console.log("elements1: ", elements)
-    for (let i = 0; i < territories.length; i++) {
-        elements.push({ data: { id: territories[i] } });
-    }
+	// Create a graph from the adjacency matrix
+	let elements = [];
+	for (let i = 0; i < territories.length; i++) {
+	    elements.push({ data: { id: territories[i] } });
+	}
+	
+	// Check for invalid IDs
+	for (let i = 0; i < elements.length; i++) {
+	    if (elements[i].data.id === '') {
+	        console.log('Invalid ID for element at index', i);
+	    }
+	}
+
     for (let i = 0; i < adjacencyMatrix.length; i++) {
         for (let j = 0; j < adjacencyMatrix.length; j++) {
             if (adjacencyMatrix[i][j] === 1) {
@@ -451,7 +458,6 @@ function calculateCentrality(tableData) {
             }
         }
     }
-		console.log("elements2: ", elements)
     let cy = cytoscape({
         headless: true,
         elements: elements
