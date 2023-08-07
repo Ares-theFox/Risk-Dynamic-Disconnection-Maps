@@ -5,7 +5,7 @@
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/9.4.4/math.min.js"></script>
-	  <script>console.log("151222000000000000")</script>
+	  <script>console.log("11111111111111")</script>
     <title>TESTING PAGE #2</title>
     <style>
       #map,
@@ -877,7 +877,6 @@ function generateMap() {
   });
 
 	// Calculate rescaled betweenness centrality and closeness centrality
-	if (centralityMenu.value !== "standard") {
 		let [betweennessCentralityValues, eigenvectorCentralityValues, closenessCentralityValues, betweennessRank, eigenvectorRank, closenessRank, laplacianCentralityValues, laplacianRank] = calculateCentralityCache(tableData, calculateCentrality);
 		let betweenness_ColorDictionary = betweennessColor(betweennessRank);
 		let eigenvector_ColorDictionary = eigenvectorColor(eigenvectorRank);
@@ -887,7 +886,6 @@ function generateMap() {
 		let betweenness_border_ColorDictionary = betweenness_borderColor(betweennessRank);
 		let eigenvector_border_ColorDictionary = eigenvector_borderColor(eigenvectorRank);
 		let closeness_border_ColorDictionary = closeness_borderColor(eigenvectorRank);
-	}
 
 	// Populate columns with the centrality values
 	for (let i = 0; i < tableData.length; i++) {
@@ -924,7 +922,6 @@ function generateMap() {
       if (tableData[i]["A"] === pathId) {
         // Color in the map
         var value = tableData[i]["O"];
-	  if (centralityMenu.value !== "standard") {
 	    var betweennessValue = tableData[i]["D"];
 	    var betweennessPosition = tableData[i]["E"];
 	    var eigenvectorValue = tableData[i]["F"];
@@ -933,7 +930,6 @@ function generateMap() {
 	    var closenessPosition = tableData[i]["I"];
 	    var laplacianValue = tableData[i]["J"];
 	    var laplacianPosition = tableData[i]["K"];
-	  }
         if (value >= 12) {
           value = 12;
         }
