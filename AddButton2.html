@@ -568,6 +568,9 @@ function calculateCentrality(tableData) {
         disconnectionPotentialRank[territory] = uniqueDisconnectionPotentialValues.indexOf(disconnectionPotentialValues[territory]) + 1;
     }
 
+	for(let key in disconnectionPotentialValues){
+	    disconnectionPotentialValues[key]=Math.round(disconnectionPotentialValues[key]*10)/10;
+	}
     return [betweennessCentralityValues, eigenvectorCentralityValues, closenessCentralityValues, betweennessRank, eigenvectorRank, closenessRank, disconnectionPotentialValues, disconnectionPotentialRank];
 }
 
