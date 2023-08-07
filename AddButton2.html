@@ -5,7 +5,7 @@
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
     <script src="https://unpkg.com/cytoscape@3/dist/cytoscape.min.js"></script>
-	  <script>console.log("000000000000")</script>
+	  <script>console.log("234234")</script>
     <title>TESTING PAGE #2</title>
     <style>
       #map,
@@ -453,6 +453,8 @@ function calculateCentrality(tableData) {
             }
         }
     }
+		let components = cy.elements().components();
+		console.log('Connected components:', components);
     let cy = cytoscape({
         headless: true,
         elements: elements
