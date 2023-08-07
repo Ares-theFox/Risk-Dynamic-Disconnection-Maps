@@ -4,7 +4,7 @@
     <script src="jsnetworkx.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("0890890")</script>
+	  <script>console.log("11111")</script>
     <title>TESTING PAGE #2</title>
     <style>
       #map,
@@ -741,11 +741,13 @@ function generateMap() {
   });
 
 	// Calculate rescaled betweenness centrality and closeness centrality
-	let [betweennessCentralityValues, eigenvectorCentralityValues, betweennessRank, eigenvectorRank] = calculateCentrality(tableData);
+	let [betweennessCentralityValues, eigenvectorCentralityValues, closenessCentralityValues, betweennessRank, eigenvectorRank, closenessRank] = calculateCentrality(tableData);
 	let betweenness_ColorDictionary = betweennessColor(betweennessRank);
 	let eigenvector_ColorDictionary = eigenvectorColor(eigenvectorRank);
+	let closeness_ColorDictionary = closenessColor(eigenvectorRank);
 	let betweenness_border_ColorDictionary = betweenness_borderColor(betweennessRank);
 	let eigenvector_border_ColorDictionary = eigenvector_borderColor(eigenvectorRank);
+	let closeness_border_ColorDictionary = closeness_borderColor(eigenvectorRank);
 
 	// Populate columns D, E, F, and G with the centrality values
 	for (let i = 0; i < tableData.length; i++) {
