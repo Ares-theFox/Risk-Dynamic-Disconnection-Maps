@@ -4,7 +4,7 @@
     <script src="jsnetworkx.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("16898489")</script>
+	  <script>console.log("092932193901")</script>
     <title>TESTING PAGE #2</title>
     <style>
       #map,
@@ -53,6 +53,7 @@
       <option value="standard">Direct Connections</option>
       <option value="betweenness">Betweenness</option>
       <option value="eigenvector">Eigenvector</option>
+      <option value="closeness">Closeness</option>
     </select>
   </div>
 </div>
@@ -406,7 +407,6 @@ function stopEditing() {
 	return;
 }
 
-// Centrality
 function calculateCentrality(tableData) {
     // Create a list of unique territories
     let territories = [];
@@ -435,55 +435,97 @@ function calculateCentrality(tableData) {
             }
         }
     }
+
     // Create a graph from the adjacency matrix
-    let G = new jsnx.Graph();
+    let elements = [];
+    for (let i = 0; i < territories.length; i++) {
+        elements.push({ data: { id: territories[i] } });
+    }
     for (let i = 0; i < adjacencyMatrix.length; i++) {
-        for (let j = i + 1; j < adjacencyMatrix.length; j++) {
+        for (let j = 0; j < adjacencyMatrix.length; j++) {
             if (adjacencyMatrix[i][j] === 1) {
-                G.addEdge(i, j);
+                elements.push({ data: { id: territories[i] + '-' + territories[j], source: territories[i], target: territories[j] } });
             }
         }
     }
-    // Calculate betweenness centrality and closeness centrality
-    let betweennessCentrality = jsnx.betweennessCentrality(G);
-    let eigenvectorCentrality = jsnx.eigenvectorCentrality(G, {maxIter: 500});
+    let cy = cytoscape({
+        headless: true,
+        elements: elements
+    });
 
-    // Initialize values
+    // Calculate betweenness centrality, closeness centrality, and eigenvector centrality
     let betweennessCentralityValues = {};
     let betweennessRank = {};
-    let eigenvectorCentralityValues = {};	
+    let closenessCentralityValues = {};
+    let closenessRank = {};
+    let eigenvectorCentralityValues = {};
     let eigenvectorRank = {};
-		
-    // Get raw values
-    for (let key in betweennessCentrality._numberValues) {
-        betweennessCentralityValues[territories[key]] = betweennessCentrality._numberValues[key];
-    }
-    for (let key in eigenvectorCentrality._numberValues) {
-        eigenvectorCentralityValues[territories[key]] = eigenvectorCentrality._numberValues[key];
-    }
+
+    cy.elements().betweennessCentrality().betweenness('#id').forEach(function(value, node) {
+        betweennessCentralityValues[node.id()] = value;
+    });
+    
+    cy.elements().closenessCentrality().closeness('#id').forEach(function(value, node) {
+        closenessCentralityValues[node.id()] = value;
+    });
+
+    cy.elements().eigenvectorCentrality().eigenvector('#id').forEach(function(value, node) {
+        eigenvectorCentralityValues[node.id()] = value;
+    });
 
     // Calculate rank values
     let uniqueBetweennessValues = [...new Set(Object.values(betweennessCentralityValues))].sort((a, b) => a - b);
+    let uniqueClosenessValues = [...new Set(Object.values(closenessCentralityValues))].sort((a, b) => a - b);
     let uniqueEigenvectorValues = [...new Set(Object.values(eigenvectorCentralityValues))].sort((a, b) => a - b);
 
     for (let key in betweennessCentralityValues) {
         betweennessRank[key] = uniqueBetweennessValues.indexOf(betweennessCentralityValues[key]) + 1;
-    }
-    
-    for (let key in eigenvectorCentralityValues) {
+        closenessRank[key] = uniqueClosenessValues.indexOf(closenessCentralityValues[key]) + 1;
         eigenvectorRank[key] = uniqueEigenvectorValues.indexOf(eigenvectorCentralityValues[key]) + 1;
     }
 
     // Round the centrality values
     for (let key in betweennessCentralityValues) {
         betweennessCentralityValues[key] = Math.round(betweennessCentralityValues[key] * 1000) / 10;
-    }
-    
-    for (let key in eigenvectorCentralityValues) {
+        closenessCentralityValues[key] = Math.round(closenessCentralityValues[key] * 1000) / 10;
         eigenvectorCentralityValues[key] = Math.round(eigenvectorCentralityValues[key] * 1000) / 10;
     }
 
-    return [betweennessCentralityValues, eigenvectorCentralityValues, betweennessRank, eigenvectorRank];
+    return [betweennessCentralityValues, closenessCentralityValues, eigenvectorCentralityValues, betweennessRank, closenessRank, eigenvectorRank];
+}
+
+function closenessColor(closenessRank) {
+    // Count the number of unique values in closenessRank
+    let uniqueValues = new Set(Object.values(closenessRank)).size;
+
+    // Generate a color dictionary with uniqueValues number of colors
+    let closeness_colorDictionary = {};
+    for (let i = 0; i < uniqueValues; i++) {
+        let r = Math.round(255 - (255 - 204) * (i / (uniqueValues - 1)));
+        let g = Math.round(255 - (255 - 0) * (i / (uniqueValues - 1)));
+        let b = 0;
+        let color = '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
+        closeness_colorDictionary[i + 1] = color;
+    }
+
+    return closeness_colorDictionary;
+}
+
+function closeness_borderColor(closenessRank) {
+    // Count the number of unique values in closenessRank
+    let uniqueValues = new Set(Object.values(closenessRank)).size;
+
+    // Generate a color dictionary with uniqueValues number of colors
+    let closeness_border_colorDictionary = {};
+    for (let i = 0; i < uniqueValues; i++) {
+        let r = Math.round(128 - (128 - 102) * (i / (uniqueValues - 1)));
+        let g = Math.round(128 - (128 - 0) * (i / (uniqueValues - 1)));
+        let b = 0;
+        let color = '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
+        closeness_border_colorDictionary[i + 1] = color;
+    }
+
+    return closeness_border_colorDictionary;
 }
 
 function betweennessColor(betweennessRank) {
@@ -656,6 +698,8 @@ function generateMap() {
 	    tableData[i]['E'] = betweennessRank[territory];
 	    tableData[i]['F'] = eigenvectorCentralityValues[territory];
 	    tableData[i]['G'] = eigenvectorRank[territory];
+	    tableData[i]['H'] = closenessCentralityValues[territory];
+	    tableData[i]['I'] = closenessRank[territory];
 	}
 	
   // Set font size of indirect connections
@@ -682,6 +726,8 @@ function generateMap() {
 	    var betweennessPosition = tableData[i]["E"];
 	    var eigenvectorValue = tableData[i]["F"];
 	    var eigenvectorPosition = tableData[i]["G"];
+	    var closenessValue = tableData[i]["H"];
+	    var closenessPosition = tableData[i]["I"];
         if (value >= 12) {
           value = 12;
         }
@@ -695,6 +741,9 @@ function generateMap() {
 	  } else if (centralityMenu.value === "eigenvector") {
 	    var color = eigenvector_ColorDictionary[eigenvectorPosition];
 	    var border_color = eigenvector_border_ColorDictionary[eigenvectorPosition];
+	  } else if (centralityMenu.value === "closeness") {
+	    var color = closeness_ColorDictionary[closenessPosition];
+	    var border_color = closeness_border_ColorDictionary[closenessPosition];
 	  }
           path.style.setProperty("fill", color, "important");
           path.setAttribute("stroke-opacity", "100");
@@ -736,6 +785,8 @@ function generateMap() {
 	    text.textContent = betweennessValue;
 	  } else if (centralityMenu.value === "eigenvector") {
 	    text.textContent = eigenvectorValue;
+	  } else if (centralityMenu.value === "closeness") {
+	    text.textContent = closenessValue;
 	  }
           // Adjust x and y coordinates to position midpoint of text at specified coordinates
           var bbox = text.getBBox();
