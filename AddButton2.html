@@ -154,8 +154,8 @@
 	  
     <img
       id="map"
-      src="https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Boston.png"
-      alt="Boston"
+      src="https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States.png"
+      alt="United States"
     />
     <div id="range"></div>
 	  
@@ -201,7 +201,7 @@ var images = [
 
 // Preload the blizzard pattern
 var blizzardPatternImage = new Image();
-blizzardPatternImage.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Boston%20blizzard%20pattern.png";
+blizzardPatternImage.src = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20blizzard%20pattern.png";
 
 window.onload = function() {
   var img = document.querySelector("header img");
@@ -211,7 +211,7 @@ window.onload = function() {
 
 // Define global variables
 	// Define map-specific items
-	var colorLegend = "Boston";
+	var colorLegend = "United%20States";
 	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "%20CSV.csv";
 	var IndirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "%20Indirect%20Connection%20Locations%20CSV.csv";
 	var SVG = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "%20Paths.svg";
@@ -409,9 +409,6 @@ function stopEditing() {
 	return;
 }
 
-
-
-	
 // Centrality
 function calculateCentrality(tableData) {
     // Filter the input data
@@ -880,27 +877,31 @@ function generateMap() {
   });
 
 	// Calculate rescaled betweenness centrality and closeness centrality
-	let [betweennessCentralityValues, eigenvectorCentralityValues, closenessCentralityValues, betweennessRank, eigenvectorRank, closenessRank, laplacianCentralityValues, laplacianRank] = calculateCentralityCache(tableData, calculateCentrality);
-	let betweenness_ColorDictionary = betweennessColor(betweennessRank);
-	let eigenvector_ColorDictionary = eigenvectorColor(eigenvectorRank);
-	let closeness_ColorDictionary = closenessColor(eigenvectorRank);
-	let laplacian_ColorDictionary = laplacianColor(laplacianRank);
-	let laplacian_border_ColorDictionary = laplacian_borderColor(laplacianRank);
-	let betweenness_border_ColorDictionary = betweenness_borderColor(betweennessRank);
-	let eigenvector_border_ColorDictionary = eigenvector_borderColor(eigenvectorRank);
-	let closeness_border_ColorDictionary = closeness_borderColor(eigenvectorRank);
+	if (centralityMenu.value !== "standard") {
+		let [betweennessCentralityValues, eigenvectorCentralityValues, closenessCentralityValues, betweennessRank, eigenvectorRank, closenessRank, laplacianCentralityValues, laplacianRank] = calculateCentralityCache(tableData, calculateCentrality);
+		let betweenness_ColorDictionary = betweennessColor(betweennessRank);
+		let eigenvector_ColorDictionary = eigenvectorColor(eigenvectorRank);
+		let closeness_ColorDictionary = closenessColor(eigenvectorRank);
+		let laplacian_ColorDictionary = laplacianColor(laplacianRank);
+		let laplacian_border_ColorDictionary = laplacian_borderColor(laplacianRank);
+		let betweenness_border_ColorDictionary = betweenness_borderColor(betweennessRank);
+		let eigenvector_border_ColorDictionary = eigenvector_borderColor(eigenvectorRank);
+		let closeness_border_ColorDictionary = closeness_borderColor(eigenvectorRank);
+	}
 
 	// Populate columns with the centrality values
 	for (let i = 0; i < tableData.length; i++) {
 	    let territory = tableData[i]['A'];
-	    tableData[i]['D'] = betweennessCentralityValues[territory];
-	    tableData[i]['E'] = betweennessRank[territory];
-	    tableData[i]['F'] = eigenvectorCentralityValues[territory];
-	    tableData[i]['G'] = eigenvectorRank[territory];
-	    tableData[i]['H'] = closenessCentralityValues[territory];
-	    tableData[i]['I'] = closenessRank[territory];
-	    tableData[i]['J'] = laplacianCentralityValues[territory];
-	    tableData[i]['K'] = laplacianRank[territory];
+		if (centralityMenu.value !== "standard") {
+		    tableData[i]['D'] = betweennessCentralityValues[territory];
+		    tableData[i]['E'] = betweennessRank[territory];
+		    tableData[i]['F'] = eigenvectorCentralityValues[territory];
+		    tableData[i]['G'] = eigenvectorRank[territory];
+		    tableData[i]['H'] = closenessCentralityValues[territory];
+		    tableData[i]['I'] = closenessRank[territory];
+		    tableData[i]['J'] = laplacianCentralityValues[territory];
+		    tableData[i]['K'] = laplacianRank[territory];
+		}
 	}
 	
   // Set font size of indirect connections
@@ -923,6 +924,7 @@ function generateMap() {
       if (tableData[i]["A"] === pathId) {
         // Color in the map
         var value = tableData[i]["O"];
+	  if (centralityMenu.value !== "standard") {
 	    var betweennessValue = tableData[i]["D"];
 	    var betweennessPosition = tableData[i]["E"];
 	    var eigenvectorValue = tableData[i]["F"];
@@ -931,6 +933,7 @@ function generateMap() {
 	    var closenessPosition = tableData[i]["I"];
 	    var laplacianValue = tableData[i]["J"];
 	    var laplacianPosition = tableData[i]["K"];
+	  }
         if (value >= 12) {
           value = 12;
         }
