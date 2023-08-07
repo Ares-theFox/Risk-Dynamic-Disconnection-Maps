@@ -4,7 +4,7 @@
     <script src="jsnetworkx.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("232323")</script>
+	  <script>console.log("808088080")</script>
     <title>TESTING PAGE #2</title>
     <style>
       #map,
@@ -754,10 +754,10 @@ function generateMap() {
 	      .join(",");
 	  }
 	});
-  // Recalculate columns L through P for all rows
+  // Calculate new columns
   tableData.forEach((row) => {
-    // Column M: vlookup col B values and add them + current value A and B
-    row["M"] = ""; // initialize column M to blank
+    // Column C: vlookup col B values and add them + current value A and B
+    row["C"] = ""; // initialize column C to blank
     if (row["B"] && row["B"].trim() !== "") {
       // check if column B is not empty or undefined
       const searchValues = row["B"].split(",");
@@ -771,30 +771,30 @@ function generateMap() {
           }
         }
       }
-      row["M"] = [row["A"], row["B"], ...searchResults].join(",");
+      row["C"] = [row["A"], row["B"], ...searchResults].join(",");
     }
 
-    // Column N: Remove duplicate values from column M
-    row["N"] = [...new Set(row["M"].split(","))]
+    // Column D: Remove duplicate values from column C
+    row["D"] = [...new Set(row["C"].split(","))]
       .filter((value) => value !== row["A"])
       .join(",");
 	  
-    // Column O: Count how many comma-separated values are in column B
+    // Column E: Count how many comma-separated values are in column B
     if (row["B"] && row["B"].trim() !== "") {
       // check if column B is not empty or undefined
       const values = row["B"].split(",");
-      row["O"] = values.length;
+      row["E"] = values.length;
     } else {
-      row["O"] = 0;
+      row["E"] = 0;
     }
 
-    // Column P: Count how many comma-separated values are in column N (unless it's empty, then set it to 0)
-    if (row["N"] && row["N"].trim() !== "") {
-      // check if column N is not empty or undefined
-      const values = row["N"].split(",");
-      row["P"] = values.length;
+    // Column F: Count how many comma-separated values are in column D (unless it's empty, then set it to 0)
+    if (row["D"] && row["D"].trim() !== "") {
+      // check if column D is not empty or undefined
+      const values = row["D"].split(",");
+      row["F"] = values.length;
     } else {
-      row["P"] = 0;
+      row["F"] = 0;
     }
   });
 
@@ -809,17 +809,17 @@ function generateMap() {
 	let closeness_border_ColorDictionary = closeness_borderColor(eigenvectorRank);
 	let disconnectionPotential_border_ColorDictionary = disconnectionPotential_borderColor(disconnectionPotentialRank);
 
-	// Populate columns D, E, F, and G with the centrality values
+	// Populate columns with the centrality values
 	for (let i = 0; i < tableData.length; i++) {
 	    let territory = tableData[i]['A'];
-	    tableData[i]['D'] = betweennessCentralityValues[territory];
-	    tableData[i]['E'] = betweennessRank[territory];
-	    tableData[i]['F'] = eigenvectorCentralityValues[territory];
-	    tableData[i]['G'] = eigenvectorRank[territory];
-	    tableData[i]['H'] = closenessCentralityValues[territory];
-	    tableData[i]['I'] = closenessRank[territory];
-	    tableData[i]['J'] = disconnectionPotentialValues[territory];
-	    tableData[i]['K'] = disconnectionPotentialRank[territory];
+	    tableData[i]['G'] = betweennessCentralityValues[territory];
+	    tableData[i]['H'] = betweennessRank[territory];
+	    tableData[i]['I'] = eigenvectorCentralityValues[territory];
+	    tableData[i]['J'] = eigenvectorRank[territory];
+	    tableData[i]['K'] = closenessCentralityValues[territory];
+	    tableData[i]['L'] = closenessRank[territory];
+	    tableData[i]['M'] = disconnectionPotentialValues[territory];
+	    tableData[i]['N'] = disconnectionPotentialRank[territory];
 	}
 	
   // Set font size of indirect connections
@@ -841,15 +841,15 @@ function generateMap() {
     for (var i = 0; i < tableData.length; i++) {
       if (tableData[i]["A"] === pathId) {
         // Color in the map
-        var value = tableData[i]["O"];
-	    var betweennessValue = tableData[i]["D"];
-	    var betweennessPosition = tableData[i]["E"];
-	    var eigenvectorValue = tableData[i]["F"];
-	    var eigenvectorPosition = tableData[i]["G"];
-	    var closenessValue = tableData[i]["H"];
-	    var closenessPosition = tableData[i]["I"];
-	    var disconnectionPotentialValue = tableData[i]["J"];
-	    var disconnectionPotentialPosition = tableData[i]["K"];
+        var value = tableData[i]["E"];
+	    var betweennessValue = tableData[i]["G"];
+	    var betweennessPosition = tableData[i]["H"];
+	    var eigenvectorValue = tableData[i]["I"];
+	    var eigenvectorPosition = tableData[i]["J"];
+	    var closenessValue = tableData[i]["K"];
+	    var closenessPosition = tableData[i]["L"];
+	    var disconnectionPotentialValue = tableData[i]["M"];
+	    var disconnectionPotentialPosition = tableData[i]["N"];
         if (value >= 12) {
           value = 12;
         }
@@ -877,7 +877,7 @@ function generateMap() {
         }
 
         // Add text to the specified location from CSV data
-        value = tableData[i]["P"];
+        value = tableData[i]["F"];
         if (value !== 0) {
           // Find matching row in CSV data
           var csvRow = csvData.find(function (row) {
@@ -899,7 +899,7 @@ function generateMap() {
           text.setAttribute("alignment-baseline", "middle");
           text.setAttribute("font-size", fontSizeInput.value);
           text.setAttribute("font-weight", "bold");
-	  if (tableData[i]["O"] >= 11) {
+	  if (tableData[i]["E"] >= 11) {
 	    text.setAttribute("fill", "white");
 	  } else {
 	    text.setAttribute("fill", "black");
@@ -926,22 +926,22 @@ function generateMap() {
       }
     }
   });
-	// Find the maximum value in column O
-	var maxO = Math.max(...tableData.map((row) => row["O"]));
+	// Find the maximum value in column E
+	var maxE = Math.max(...tableData.map((row) => row["E"]));
 
-	// Ensure that maxO is never greater than 12
-	if (maxO > 12) {
-	  maxO = 12;
+	// Ensure that maxE is never greater than 12
+	if (maxE > 12) {
+	  maxE = 12;
 	}
 	// Get the base image element & define base URL
 	var baseImage = document.getElementById("map");
 	var baseURL = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/";
 
-	// Decide which image to display based on the maximum value in column O
-	if (maxO < 3) {
+	// Decide which image to display based on the maximum value in column E
+	if (maxE < 3) {
 	    baseImage.src = baseURL + colorLegend + ".png";
 	} else {
-	    baseImage.src = baseURL + colorLegend + "%20" + maxO + ".png";
+	    baseImage.src = baseURL + colorLegend + "%20" + maxE + ".png";
 	}
 	
 // Create a mapping of node names to indices
