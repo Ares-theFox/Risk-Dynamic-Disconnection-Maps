@@ -1172,6 +1172,14 @@ function addBlizzards() {
     // Return early from the function
     return;
   }
+
+	// Call border color dictionaries
+	let [betweennessCentralityValues, eigenvectorCentralityValues, closenessCentralityValues, betweennessRank, eigenvectorRank, closenessRank, disconnectionPotentialValues, disconnectionPotentialRank] = calculateCentrality(tableData);
+	let betweenness_border_ColorDictionary = betweenness_borderColor(betweennessRank);
+	let eigenvector_border_ColorDictionary = eigenvector_borderColor(eigenvectorRank);
+	let closeness_border_ColorDictionary = closeness_borderColor(eigenvectorRank);
+	let disconnectionPotential_border_ColorDictionary = disconnectionPotential_borderColor(disconnectionPotentialRank);
+
 	// Define mouseover, mouseout, and click event handlers
 	const mouseoverHandler = function () {
 	  if (shouldReturn) {
@@ -1183,21 +1191,36 @@ function addBlizzards() {
 	    this.style.setProperty("stroke-width", "3", "important");
 	  }
 	};
-	const mouseoutHandler = function () {
-	  if (shouldReturn) {
-	    return;
-	  }
-	  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
-	    // Reset stroke color and width according to the color darktionary
-	    let value = tableData.find(row => row['A'] === this.id)['O'];
-	    if (value >= 12) {
-	      value = 12;
-	    }
-	    let border_color = colorDarktionary[value];
-	    this.style.setProperty("stroke", border_color, "important");
-	    this.style.setProperty("stroke-width", "2", "important");
-	  }
-	};
+const mouseoutHandler = function () {
+  if (shouldReturn) {
+    return;
+  }
+  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
+    // Reset stroke color and width according to the selected centrality measure
+    let value = tableData.find(row => row['A'] === this.id)['F'];
+    let border_color;
+    if (centralityMenu.value === "standard") {
+      if (value >= 12) {
+        value = 12;
+      }
+      border_color = colorDarktionary[value];
+    } else if (centralityMenu.value === "betweenness") {
+      let betweennessPosition = tableData.find(row => row['A'] === this.id)['I'];
+      border_color = betweenness_border_ColorDictionary[betweennessPosition];
+    } else if (centralityMenu.value === "eigenvector") {
+      let eigenvectorPosition = tableData.find(row => row['A'] === this.id)['K'];
+      border_color = eigenvector_border_ColorDictionary[eigenvectorPosition];
+    } else if (centralityMenu.value === "closeness") {
+      let closenessPosition = tableData.find(row => row['A'] === this.id)['M'];
+      border_color = closeness_border_ColorDictionary[closenessPosition];
+    } else if (centralityMenu.value === "disconnectionPotential") {
+      let disconnectionPotentialPosition = tableData.find(row => row['A'] === this.id)['O'];
+      border_color = disconnectionPotential_border_ColorDictionary[disconnectionPotentialPosition];
+    }
+	this.style.setProperty("stroke", border_color, "important");
+	this.style.setProperty("stroke-width", "2", "important");
+  }
+}
   const clickHandler = function () {
     if (shouldReturn) {
       return;
@@ -1386,6 +1409,14 @@ function addPortals() {
     // Return early from the function
     return;
   }
+
+	// Call border color dictionaries
+	let [betweennessCentralityValues, eigenvectorCentralityValues, closenessCentralityValues, betweennessRank, eigenvectorRank, closenessRank, disconnectionPotentialValues, disconnectionPotentialRank] = calculateCentrality(tableData);
+	let betweenness_border_ColorDictionary = betweenness_borderColor(betweennessRank);
+	let eigenvector_border_ColorDictionary = eigenvector_borderColor(eigenvectorRank);
+	let closeness_border_ColorDictionary = closeness_borderColor(eigenvectorRank);
+	let disconnectionPotential_border_ColorDictionary = disconnectionPotential_borderColor(disconnectionPotentialRank);
+
 	// Define mouseover, mouseout, and click event handlers
 	const mouseoverHandler = function () {
 	  if (shouldReturn) {
@@ -1402,16 +1433,31 @@ function addPortals() {
 	    return;
 	  }
 	  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
-	    // Reset stroke color and width according to the color darktionary
-	    let value = tableData.find(row => row['A'] === this.id)['O'];
-	    if (value >= 12) {
-	      value = 12;
+	    // Reset stroke color and width according to the selected centrality measure
+	    let value = tableData.find(row => row['A'] === this.id)['F'];
+	    let border_color;
+	    if (centralityMenu.value === "standard") {
+	      if (value >= 12) {
+	        value = 12;
+	      }
+	      border_color = colorDarktionary[value];
+	    } else if (centralityMenu.value === "betweenness") {
+	      let betweennessPosition = tableData.find(row => row['A'] === this.id)['I'];
+	      border_color = betweenness_border_ColorDictionary[betweennessPosition];
+	    } else if (centralityMenu.value === "eigenvector") {
+	      let eigenvectorPosition = tableData.find(row => row['A'] === this.id)['K'];
+	      border_color = eigenvector_border_ColorDictionary[eigenvectorPosition];
+	    } else if (centralityMenu.value === "closeness") {
+	      let closenessPosition = tableData.find(row => row['A'] === this.id)['M'];
+	      border_color = closeness_border_ColorDictionary[closenessPosition];
+	    } else if (centralityMenu.value === "disconnectionPotential") {
+	      let disconnectionPotentialPosition = tableData.find(row => row['A'] === this.id)['O'];
+	      border_color = disconnectionPotential_border_ColorDictionary[disconnectionPotentialPosition];
 	    }
-	    let border_color = colorDarktionary[value];
-	    this.style.setProperty("stroke", border_color, "important");
-	    this.style.setProperty("stroke-width", "2", "important");
+		this.style.setProperty("stroke", border_color, "important");
+		this.style.setProperty("stroke-width", "2", "important");
 	  }
-	};
+	}
   const clickHandler = function () {
     if (shouldReturn) {
       return;
@@ -1557,6 +1603,13 @@ function eraser() {
   document.getElementById("eraserButton").addEventListener("click", eraserButtonClick);
   document.getElementById("stopButton").addEventListener("click", stopButtonClick);
 
+	// Call border color dictionaries
+	let [betweennessCentralityValues, eigenvectorCentralityValues, closenessCentralityValues, betweennessRank, eigenvectorRank, closenessRank, disconnectionPotentialValues, disconnectionPotentialRank] = calculateCentrality(tableData);
+	let betweenness_border_ColorDictionary = betweenness_borderColor(betweennessRank);
+	let eigenvector_border_ColorDictionary = eigenvector_borderColor(eigenvectorRank);
+	let closeness_border_ColorDictionary = closeness_borderColor(eigenvectorRank);
+	let disconnectionPotential_border_ColorDictionary = disconnectionPotential_borderColor(disconnectionPotentialRank);
+
 	// Define mouseover, mouseout, and click event handlers
 	const mouseoverHandler = function () {
 	  if (shouldReturn) {
@@ -1568,23 +1621,37 @@ function eraser() {
 	    this.style.setProperty("stroke-width", "4", "important");
 	  }
 	};
-
 	const mouseoutHandler = function () {
 	  if (shouldReturn) {
 	    return;
 	  }
 	  if (clickedPathsBlizzardsPortals.includes(this.id)) {
 	    if (blizzardArray.includes(this.id)) {
-	      // Change stroke color to white and stroke width to 3
+	      // Change stroke color to white and stroke width to 1
 	      this.style.setProperty("stroke", "white", "important");
 	      this.style.setProperty("stroke-width", "1", "important");
 	    } else if (portalArray.includes(this.id)) {
-	      // Reset stroke color and width according to the color darktionary
-	      let value = tableData.find(row => row['A'] === this.id)['O'];
-	      if (value >= 12) {
-		value = 12;
+	      // Reset stroke color and width according to the selected centrality measure
+	      let border_color;
+	      if (centralityMenu.value === "standard") {
+	        let value = tableData.find(row => row['A'] === this.id)['F'];
+	        if (value >= 12) {
+	          value = 12;
+	        }
+	        border_color = colorDarktionary[value];
+	      } else if (centralityMenu.value === "betweenness") {
+	        let betweennessPosition = tableData.find(row => row['A'] === this.id)['I'];
+	        border_color = betweenness_border_ColorDictionary[betweennessPosition];
+	      } else if (centralityMenu.value === "eigenvector") {
+	        let eigenvectorPosition = tableData.find(row => row['A'] === this.id)['K'];
+	        border_color = eigenvector_border_ColorDictionary[eigenvectorPosition];
+	      } else if (centralityMenu.value === "closeness") {
+	        let closenessPosition = tableData.find(row => row['A'] === this.id)['M'];
+	        border_color = closeness_border_ColorDictionary[closenessPosition];
+	      } else if (centralityMenu.value === "disconnectionPotential") {
+	        let disconnectionPotentialPosition = tableData.find(row => row['A'] === this.id)['O'];
+	        border_color = disconnectionPotential_border_ColorDictionary[disconnectionPotentialPosition];
 	      }
-	      let border_color = colorDarktionary[value];
 	      this.style.setProperty("stroke", border_color, "important");
 	      this.style.setProperty("stroke-width", "2", "important");
 	    }
