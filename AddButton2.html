@@ -4,7 +4,7 @@
     <script src="jsnetworkx.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("8998989898")</script>
+	  <script>console.log("asdasd")</script>
     <title>TESTING PAGE #2</title>
     <style>
       #map,
@@ -818,16 +818,28 @@ function supernodeCentralityFunction(tableData) {
         }
     }
 
-    // Normalize and invert the scores of the nodes
-    let maxScore = Math.max(...Object.values(supernodeCentrality));
-    for (let key in supernodeCentrality) {
-        supernodeCentrality[key] = maxScore / supernodeCentrality[key];
-    }
-
+	// Normalize and invert the scores of the nodes
+	let maxScore = Math.max(...Object.values(supernodeCentrality));
+	for (let key in supernodeCentrality) {
+	    supernodeCentrality[key] = maxScore /supernodeCentrality[key];
+	}
+	
 	// Multiply each node by the size of the supernode it's in
 	for (let key in supernodeCentrality) {
-	    let supernodeSize = supernodes[key].length;
-	    supernodeCentrality[key] = Math.round(supernodeCentrality[key] * supernodeSize * 10) / 10;
+	    // Find the supernode that the territory belongs to
+	    let territorySupernode;
+	    for (let i = 0; i < filteredData.length; i++) {
+	        if (filteredData[i]['A'] === key) {
+	            territorySupernode = filteredData[i]['C'];
+	            break;
+	        }
+	    }
+	
+	    // Get the size of the supernode
+	    let supernodeSize = supernodeSizes[territorySupernode];
+	
+	    // Update the centrality score of the territory
+	    supernodeCentrality[key] = Math.round(supernodeCentrality[key] *supernodeSize * 10) / 10;
 	}
 	
     // Rank the nodes based on their normalized and inverted scores
