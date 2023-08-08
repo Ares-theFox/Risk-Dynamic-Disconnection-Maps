@@ -4,7 +4,7 @@
     <script src="jsnetworkx.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("808080808")</script>
+	  <script>console.log("8998989898")</script>
     <title>TESTING PAGE #2</title>
     <style>
       #map,
@@ -824,6 +824,12 @@ function supernodeCentralityFunction(tableData) {
         supernodeCentrality[key] = maxScore / supernodeCentrality[key];
     }
 
+	// Multiply each node by the size of the supernode it's in
+	for (let key in supernodeCentrality) {
+	    let supernodeSize = supernodes[key].length;
+	    supernodeCentrality[key] = Math.round(supernodeCentrality[key] * supernodeSize * 10) / 10;
+	}
+	
     // Rank the nodes based on their normalized and inverted scores
     let supernodeCentralityRank= {};
 
