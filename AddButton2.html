@@ -4,7 +4,7 @@
     <script src="jsnetworkx.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("555")</script>
+	  <script>console.log("666")</script>
     <title>TESTING PAGE #2</title>
     <style>
       #map,
@@ -867,7 +867,7 @@ function supernodeCentralityFunction(tableData, betweennessCentralityValues) {
 	    }
 	
 	    // Calculate the adjustment value
-	    let adjustmentValue = Math.min(maxDirectConnectionValue, 1) / (Math.max(supernodeCentrality[key], 1) * 10);
+	    let adjustmentValue = Math.max(maxDirectConnectionValue, 1) / (Math.min(supernodeCentrality[key], 1) * 10);
 	
 	    // Update the centrality score of the node
 	    supernodeCentrality[key] += adjustmentValue;
