@@ -51,10 +51,11 @@
     <label for="centralityType">Centrality:</label>
     <select id="centralityType" name="centralityType">
       <option value="standard">Direct Connections</option>
-      <option value="betweenness">Betweenness</option>
       <option value="eigenvector">Eigenvector</option>
+      <option value="betweenness">Betweenness</option>
       <option value="closeness">Closeness</option>
       <option value="disconnectionPotential">Averge Scaled B,C</option>
+      <option value="supernodeCentrality">EXPERIMENTAL CUSTOM METRIC</option>
     </select>
   </div>
 </div>
@@ -705,6 +706,223 @@ function eigenvector_borderColor(eigenvectorRank) {
 
     return eigenvector_border_colorDictionary;
 }
+
+// zzzzzzzzzzzz
+function supernodeCentralityFunction(tableData, betweennessCentralityValues) {
+    // Filter the input data
+    let filteredData = [];
+    for (let i = 0; i < tableData.length; i++) {
+        let row = tableData[i];
+        if (typeof row === 'object' && row.hasOwnProperty('A') && row.hasOwnProperty('B') && row.hasOwnProperty('C')) {
+            if (typeof row['A'] === 'string' && typeof row['B'] === 'string' && typeof row['C'] === 'string') {
+                filteredData.push(row);
+            }
+        }
+    }
+
+    // Create a list of unique territories and supernodes
+    let territories = [];
+    let supernodes = [];
+    for (let i = 0; i < filteredData.length; i++) {
+        if (filteredData[i]['B'] !== '' && !territories.includes(filteredData[i]['A'])) {
+            territories.push(filteredData[i]['A']);
+        }
+        if (!supernodes.includes(filteredData[i]['C'])) {
+            supernodes.push(filteredData[i]['C']);
+        }
+    }
+
+    // Create a graph object
+    let graph = {};
+    for (let i = 0; i < filteredData.length; i++) {
+        let territory = filteredData[i]['A'];
+        let connections = filteredData[i]['B'].split(',');
+        graph[territory] = {};
+        for (let j = 0; j < connections.length; j++) {
+            graph[territory][connections[j]] = 1;
+        }
+    }
+
+    // Calculate the size of each supernode
+    let supernodeSizes = {};
+    for (let i = 0; i < supernodes.length; i++) {
+        supernodeSizes[supernodes[i]] = 0;
+        for (let j = 0; j < filteredData.length; j++) {
+            if (filteredData[j]['C'] === supernodes[i]) {
+                supernodeSizes[supernodes[i]]++;
+            }
+        }
+    }
+
+    // Calculate the shortest path between nodes in different supernodes using Dijkstra's algorithm
+    let supernodeCentrality = {};
+    for (let i = 0; i < territories.length; i++) {
+        let startTerritory = territories[i];
+        let distances = {};
+        let previousTerritories = {};
+        let unvisitedTerritories = new Set(territories);
+
+        // Set the distance from the start territory to itself to be 0
+        distances[startTerritory] = 0;
+
+        // Set the distance from the start territory to all other territories to be infinity
+        for (let j = 0; j < territories.length; j++) {
+            if (territories[j] !== startTerritory) {
+                distances[territories[j]] = Infinity;
+            }
+        }
+
+        // While there are unvisited territories
+        while (unvisitedTerritories.size > 0) {
+            // Find the territory with the smallest distance from the start territory
+            let currentTerritory;
+            let minDistance = Infinity;
+            unvisitedTerritories.forEach(function(territory) {
+                if (distances[territory] < minDistance) {
+                    currentTerritory = territory;
+                    minDistance = distances[territory];
+                }
+            });
+
+            // Remove the current territory from the set of unvisited territories
+            unvisitedTerritories.delete(currentTerritory);
+
+            // Update the distances of the neighbors of the current territory
+            for (let neighbor in graph[currentTerritory]) {
+                let distanceThroughCurrentTerritory = distances[currentTerritory] + graph[currentTerritory][neighbor];
+                if (distanceThroughCurrentTerritory < distances[neighbor]) {
+                    distances[neighbor] = distanceThroughCurrentTerritory;
+                    previousTerritories[neighbor] = currentTerritory;
+                }
+            }
+        }
+
+        // Calculate the total travel distance from the start territory to all other supernodes, multiplied by the size of each supernode
+        supernodeCentrality[startTerritory] = 0;
+        for (let j = 0; j < supernodes.length; j++) {
+            if (supernodes[j] !== filteredData[i]['C']) {
+                let minDistanceToSupernode = Infinity;
+                for (let k = 0; k < filteredData.length; k++) {
+                    if (filteredData[k]['C'] === supernodes[j]) {
+                        if (distances[filteredData[k]['A']] < minDistanceToSupernode) {
+                            minDistanceToSupernode = distances[filteredData[k]['A']];
+                        }
+                    }
+                }
+                supernodeCentrality[startTerritory] += minDistanceToSupernode * supernodeSizes[supernodes[j]];
+            }
+        }
+    }
+
+	// Normalize and invert the scores of the nodes
+	let maxScore = Math.max(...Object.values(supernodeCentrality));
+	for (let key in supernodeCentrality) {
+	    supernodeCentrality[key] = maxScore /supernodeCentrality[key];
+	}
+	
+	// Multiply each node by the size of the supernode it's in
+	for (let key in supernodeCentrality) {
+	    // Find the supernode that the territory belongs to
+	    let territorySupernode;
+	    for (let i = 0; i < filteredData.length; i++) {
+	        if (filteredData[i]['A'] === key) {
+	            territorySupernode = filteredData[i]['C'];
+	            break;
+	        }
+	    }
+	
+	    // Get the size of the supernode
+	    let supernodeSize = supernodeSizes[territorySupernode];
+	
+	    // Update the centrality score of the territory
+	    supernodeCentrality[key] = supernodeCentrality[key] *supernodeSize
+	}
+
+	// Multiply the supernode centrality scores by the betweenness centrality scores
+	for (let key in supernodeCentrality) {
+	    supernodeCentrality[key] *= betweennessCentralityValues[key];
+	}
+	
+	// Divide the supernode centrality scores by the maximum betweenness score in the network
+	let maxBetweennessScore = Math.max(...Object.values(betweennessCentralityValues));
+	for (let key in supernodeCentrality) {
+	    supernodeCentrality[key] /= maxBetweennessScore;
+	}
+
+	// Add points to each node based on the highest supernode centrality value among its direct connections
+	for (let key in supernodeCentrality) {
+	    // Find the direct connections of the node
+	    let directConnections = graph[key];
+	
+	    // Find the highest supernode centrality value among the direct connections
+	    let maxDirectConnectionValue = 0;
+	    for (let connection in directConnections) {
+	        if (supernodeCentrality[connection] > maxDirectConnectionValue) {
+	            maxDirectConnectionValue = supernodeCentrality[connection];
+	        }
+	    }
+	
+	    // Calculate the adjustment value
+	    let adjustmentValue = (Math.max(maxDirectConnectionValue, 1) / Math.max(supernodeCentrality[key], 1))/10;
+	
+	    // Update the centrality score of the node
+	    supernodeCentrality[key] += adjustmentValue;
+	}
+	
+	for (let key in supernodeCentrality) {
+	    supernodeCentrality[key] = Math.round(supernodeCentrality[key] * 10) / 10;
+	}
+	
+    // Rank the nodes based on their normalized and inverted scores
+    let supernodeCentralityRank= {};
+
+    // Create an array of unique supernode centrality values
+    let uniqueSupernodeCentralityValues= [...new Set(Object.values(supernodeCentrality))];
+
+    // Sort the array in ascending order
+    uniqueSupernodeCentralityValues.sort((a, b) => a - b);
+
+    for(let key in supernodeCentrality){
+      supernodeCentralityRank[key]=uniqueSupernodeCentralityValues.indexOf(supernodeCentrality[key])+1;
+    }
+
+    return [supernodeCentrality, supernodeCentralityRank];
+}
+	
+function supernodeCentralityColor(supernodeCentralityRank) {
+    // Count the number of unique values in supernodeCentralityRank
+    let uniqueValues = new Set(Object.values(supernodeCentralityRank)).size;
+
+    // Generate a color dictionary with uniqueValues number of colors
+    let supernodeCentrality_colorDictionary = {};
+    for (let i = 0; i < uniqueValues; i++) {
+        let r = Math.round(255 - (255 - 204) * (i / (uniqueValues - 1)));
+        let g = Math.round(255 - (255 - 0) * (i / (uniqueValues - 1)));
+        let b = 0;
+        let color = '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
+        supernodeCentrality_colorDictionary[i + 1] = color;
+    }
+
+    return supernodeCentrality_colorDictionary;
+}
+
+function supernodeCentrality_borderColor(supernodeCentralityRank) {
+    // Count the number of unique values in supernodeCentralityRank
+    let uniqueValues = new Set(Object.values(supernodeCentralityRank)).size;
+
+    // Generate a color dictionary with uniqueValues number of colors
+    let supernodeCentrality_border_colorDictionary = {};
+    for (let i = 0; i < uniqueValues; i++) {
+        let r = Math.round(128 - (128 - 102) * (i / (uniqueValues - 1)));
+        let g = Math.round(128 - (128 - 0) * (i / (uniqueValues - 1)));
+        let b = 0;
+        let color = '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
+        supernodeCentrality_border_colorDictionary[i + 1] = color;
+    }
+
+    return supernodeCentrality_border_colorDictionary;
+}
+
 	
 // Generate the map
 function generateMap() {
@@ -805,6 +1023,10 @@ function generateMap() {
 	let closeness_border_ColorDictionary = closeness_borderColor(eigenvectorRank);
 	let disconnectionPotential_border_ColorDictionary = disconnectionPotential_borderColor(disconnectionPotentialRank);
 
+	let [supernodeCentrality, supernodeCentralityRank] = supernodeCentralityFunction(tableData, betweennessCentralityValues)
+	let supernodeCentrality_ColorDictionary = supernodeCentralityColor(supernodeCentralityRank)
+	let supernodeCentrality_border_ColorDictionary = supernodeCentrality_borderColor(supernodeCentralityRank)
+	
 	// Populate columns with the centrality values
 	for (let i = 0; i < tableData.length; i++) {
 	    let territory = tableData[i]['A'];
@@ -816,6 +1038,8 @@ function generateMap() {
 	    tableData[i]['M'] = closenessRank[territory];
 	    tableData[i]['N'] = disconnectionPotentialValues[territory];
 	    tableData[i]['O'] = disconnectionPotentialRank[territory];
+	    tableData[i]['P'] = supernodeCentrality[territory];
+	    tableData[i]['Q'] = supernodeCentralityRank[territory];
 	}
 	
   // Set font size of indirect connections
@@ -846,6 +1070,8 @@ function generateMap() {
 	    var closenessPosition = tableData[i]["M"];
 	    var disconnectionPotentialValue = tableData[i]["N"];
 	    var disconnectionPotentialPosition = tableData[i]["O"];
+	    var supernodeCentralityValue = tableData[i]["P"];
+	    var supernodeCentralityPosition = tableData[i]["Q"];
         if (value >= 12) {
           value = 12;
         }
@@ -865,6 +1091,9 @@ function generateMap() {
 	  } else if (centralityMenu.value === "disconnectionPotential") {
 	    var color = disconnectionPotential_ColorDictionary[disconnectionPotentialPosition];
 	    var border_color = disconnectionPotential_border_ColorDictionary[disconnectionPotentialPosition];
+	  } else if (centralityMenu.value === "supernodeCentrality") {
+	    var color = supernodeCentrality_ColorDictionary[supernodeCentralityPosition];
+	    var border_color = supernodeCentrality_border_ColorDictionary[supernodeCentralityPosition];
 	  }
           path.style.setProperty("fill", color, "important");
           path.setAttribute("stroke-opacity", "100");
@@ -910,6 +1139,8 @@ function generateMap() {
 	    text.textContent = closenessValue;
 	  } else if (centralityMenu.value === "disconnectionPotential") {
 	    text.textContent = disconnectionPotentialValue;
+	  } else if (centralityMenu.value === "supernodeCentrality") {
+	    text.textContent = supernodeCentralityValue;
 	  }
           // Adjust x and y coordinates to position midpoint of text at specified coordinates
           var bbox = text.getBBox();
@@ -1175,7 +1406,10 @@ function addBlizzards() {
 	let eigenvector_border_ColorDictionary = eigenvector_borderColor(eigenvectorRank);
 	let closeness_border_ColorDictionary = closeness_borderColor(eigenvectorRank);
 	let disconnectionPotential_border_ColorDictionary = disconnectionPotential_borderColor(disconnectionPotentialRank);
-
+	
+	let [supernodeCentrality, supernodeCentralityRank] = supernodeCentralityFunction(tableData, betweennessCentralityValues)
+	let supernodeCentrality_border_ColorDictionary = supernodeCentrality_borderColor(supernodeCentralityRank)
+	
 	// Define mouseover, mouseout, and click event handlers
 	const mouseoverHandler = function () {
 	  if (shouldReturn) {
@@ -1212,6 +1446,9 @@ const mouseoutHandler = function () {
     } else if (centralityMenu.value === "disconnectionPotential") {
       let disconnectionPotentialPosition = tableData.find(row => row['A'] === this.id)['O'];
       border_color = disconnectionPotential_border_ColorDictionary[disconnectionPotentialPosition];
+    } else if (centralityMenu.value === "supernodeCentrality") {
+      let supernodeCentralityPosition = tableData.find(row => row['A'] === this.id)['Q'];
+      border_color = supernodeCentrality_border_ColorDictionary[supernodeCentralityPosition];
     }
 	this.style.setProperty("stroke", border_color, "important");
 	this.style.setProperty("stroke-width", "2", "important");
@@ -1413,6 +1650,9 @@ function addPortals() {
 	let closeness_border_ColorDictionary = closeness_borderColor(eigenvectorRank);
 	let disconnectionPotential_border_ColorDictionary = disconnectionPotential_borderColor(disconnectionPotentialRank);
 
+	let [supernodeCentrality, supernodeCentralityRank] = supernodeCentralityFunction(tableData, betweennessCentralityValues)
+	let supernodeCentrality_border_ColorDictionary = supernodeCentrality_borderColor(supernodeCentralityRank)
+	
 	// Define mouseover, mouseout, and click event handlers
 	const mouseoverHandler = function () {
 	  if (shouldReturn) {
@@ -1449,6 +1689,9 @@ function addPortals() {
 	    } else if (centralityMenu.value === "disconnectionPotential") {
 	      let disconnectionPotentialPosition = tableData.find(row => row['A'] === this.id)['O'];
 	      border_color = disconnectionPotential_border_ColorDictionary[disconnectionPotentialPosition];
+	    } else if (centralityMenu.value === "supernodeCentrality") {
+	      let supernodeCentralityPosition = tableData.find(row => row['A'] === this.id)['Q'];
+	      border_color = supernodeCentrality_border_ColorDictionary[supernodeCentralityPosition];
 	    }
 		this.style.setProperty("stroke", border_color, "important");
 		this.style.setProperty("stroke-width", "2", "important");
@@ -1606,6 +1849,9 @@ function eraser() {
 	let closeness_border_ColorDictionary = closeness_borderColor(eigenvectorRank);
 	let disconnectionPotential_border_ColorDictionary = disconnectionPotential_borderColor(disconnectionPotentialRank);
 
+	let [supernodeCentrality, supernodeCentralityRank] = supernodeCentralityFunction(tableData, betweennessCentralityValues)
+	let supernodeCentrality_border_ColorDictionary = supernodeCentrality_borderColor(supernodeCentralityRank)
+	
 	// Define mouseover, mouseout, and click event handlers
 	const mouseoverHandler = function () {
 	  if (shouldReturn) {
@@ -1647,6 +1893,9 @@ function eraser() {
 	      } else if (centralityMenu.value === "disconnectionPotential") {
 	        let disconnectionPotentialPosition = tableData.find(row => row['A'] === this.id)['O'];
 	        border_color = disconnectionPotential_border_ColorDictionary[disconnectionPotentialPosition];
+	      } else if (centralityMenu.value === "supernodeCentrality") {
+		let supernodeCentralityPosition = tableData.find(row => row['A'] === this.id)['Q'];
+		border_color = supernodeCentrality_border_ColorDictionary[supernodeCentralityPosition];
 	      }
 	      this.style.setProperty("stroke", border_color, "important");
 	      this.style.setProperty("stroke-width", "2", "important");
