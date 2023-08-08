@@ -543,17 +543,13 @@ function calculateCentrality(tableData) {
 
     // Calculate the scaled values for each metric
     let betweennessScaled = {};
-    let eigenvectorScaled = {};
     let closenessScaled = {};
     let minBetweenness = Math.min(...Object.values(betweennessCentralityValues));
     let maxBetweenness = Math.max(...Object.values(betweennessCentralityValues));
-    let minEigenvector = Math.min(...Object.values(eigenvectorCentralityValues));
-    let maxEigenvector = Math.max(...Object.values(eigenvectorCentralityValues));
     let minCloseness = Math.min(...Object.values(closenessCentralityValues));
     let maxCloseness = Math.max(...Object.values(closenessCentralityValues));
     for (let territory of territories) {
         betweennessScaled[territory] = 100 * (betweennessCentralityValues[territory] - minBetweenness) / (maxBetweenness - minBetweenness);
-        eigenvectorScaled[territory] = 100 * (eigenvectorCentralityValues[territory] - minEigenvector) / (maxEigenvector - minEigenvector);
         closenessScaled[territory] = 100 * (closenessCentralityValues[territory] - minCloseness) / (maxCloseness - minCloseness);
     }
 
@@ -561,7 +557,7 @@ function calculateCentrality(tableData) {
     let disconnectionPotentialValues = {};
     let disconnectionPotentialRank = {};
     for (let territory of territories) {
-        disconnectionPotentialValues[territory] = (betweennessScaled[territory] + eigenvectorScaled[territory] + closenessScaled[territory]) / 3;
+        disconnectionPotentialValues[territory] = (betweennessScaled[territory] + closenessScaled[territory]) / 3;
     }
     let uniqueDisconnectionPotentialValues = [...new Set(Object.values(disconnectionPotentialValues))].sort((a, b) => a - b);
     for (let territory of territories) {
@@ -756,8 +752,8 @@ function generateMap() {
 	});
   // Calculate new columns
   tableData.forEach((row) => {
-    // Column C: vlookup col B values and add them + current value A and B
-    row["C"] = ""; // initialize column C to blank
+    // Column D: vlookup col B values and add them + current value A and B
+    row["D"] = ""; // initialize column D to blank
     if (row["B"] && row["B"].trim() !== "") {
       // check if column B is not empty or undefined
       const searchValues = row["B"].split(",");
@@ -771,30 +767,30 @@ function generateMap() {
           }
         }
       }
-      row["C"] = [row["A"], row["B"], ...searchResults].join(",");
+      row["D"] = [row["A"], row["B"], ...searchResults].join(",");
     }
 
-    // Column D: Remove duplicate values from column C
-    row["D"] = [...new Set(row["C"].split(","))]
+    // Column E: Remove duplicate values from column D
+    row["E"] = [...new Set(row["D"].split(","))]
       .filter((value) => value !== row["A"])
       .join(",");
 	  
-    // Column E: Count how many comma-separated values are in column B
+    // Column F: Count how many comma-separated values are in column B
     if (row["B"] && row["B"].trim() !== "") {
       // check if column B is not empty or undefined
       const values = row["B"].split(",");
-      row["E"] = values.length;
-    } else {
-      row["E"] = 0;
-    }
-
-    // Column F: Count how many comma-separated values are in column D (unless it's empty, then set it to 0)
-    if (row["D"] && row["D"].trim() !== "") {
-      // check if column D is not empty or undefined
-      const values = row["D"].split(",");
       row["F"] = values.length;
     } else {
       row["F"] = 0;
+    }
+
+    // Column G: Count how many comma-separated values are in column E (unless it's empty, then set it to 0)
+    if (row["E"] && row["E"].trim() !== "") {
+      // check if column E is not empty or undefined
+      const values = row["E"].split(",");
+      row["G"] = values.length;
+    } else {
+      row["G"] = 0;
     }
   });
 
@@ -812,14 +808,14 @@ function generateMap() {
 	// Populate columns with the centrality values
 	for (let i = 0; i < tableData.length; i++) {
 	    let territory = tableData[i]['A'];
-	    tableData[i]['G'] = betweennessCentralityValues[territory];
-	    tableData[i]['H'] = betweennessRank[territory];
-	    tableData[i]['I'] = eigenvectorCentralityValues[territory];
-	    tableData[i]['J'] = eigenvectorRank[territory];
-	    tableData[i]['K'] = closenessCentralityValues[territory];
-	    tableData[i]['L'] = closenessRank[territory];
-	    tableData[i]['M'] = disconnectionPotentialValues[territory];
-	    tableData[i]['N'] = disconnectionPotentialRank[territory];
+	    tableData[i]['H'] = betweennessCentralityValues[territory];
+	    tableData[i]['I'] = betweennessRank[territory];
+	    tableData[i]['J'] = eigenvectorCentralityValues[territory];
+	    tableData[i]['K'] = eigenvectorRank[territory];
+	    tableData[i]['L'] = closenessCentralityValues[territory];
+	    tableData[i]['M'] = closenessRank[territory];
+	    tableData[i]['N'] = disconnectionPotentialValues[territory];
+	    tableData[i]['O'] = disconnectionPotentialRank[territory];
 	}
 	
   // Set font size of indirect connections
@@ -841,15 +837,15 @@ function generateMap() {
     for (var i = 0; i < tableData.length; i++) {
       if (tableData[i]["A"] === pathId) {
         // Color in the map
-        var value = tableData[i]["E"];
-	    var betweennessValue = tableData[i]["G"];
-	    var betweennessPosition = tableData[i]["H"];
-	    var eigenvectorValue = tableData[i]["I"];
-	    var eigenvectorPosition = tableData[i]["J"];
-	    var closenessValue = tableData[i]["K"];
-	    var closenessPosition = tableData[i]["L"];
-	    var disconnectionPotentialValue = tableData[i]["M"];
-	    var disconnectionPotentialPosition = tableData[i]["N"];
+        var value = tableData[i]["F"];
+	    var betweennessValue = tableData[i]["H"];
+	    var betweennessPosition = tableData[i]["I"];
+	    var eigenvectorValue = tableData[i]["J"];
+	    var eigenvectorPosition = tableData[i]["K"];
+	    var closenessValue = tableData[i]["L"];
+	    var closenessPosition = tableData[i]["M"];
+	    var disconnectionPotentialValue = tableData[i]["N"];
+	    var disconnectionPotentialPosition = tableData[i]["O"];
         if (value >= 12) {
           value = 12;
         }
@@ -877,7 +873,7 @@ function generateMap() {
         }
 
         // Add text to the specified location from CSV data
-        value = tableData[i]["F"];
+        value = tableData[i]["G"];
         if (value !== 0) {
           // Find matching row in CSV data
           var csvRow = csvData.find(function (row) {
@@ -899,7 +895,7 @@ function generateMap() {
           text.setAttribute("alignment-baseline", "middle");
           text.setAttribute("font-size", fontSizeInput.value);
           text.setAttribute("font-weight", "bold");
-	  if (tableData[i]["E"] >= 11) {
+	  if (tableData[i]["F"] >= 11) {
 	    text.setAttribute("fill", "white");
 	  } else {
 	    text.setAttribute("fill", "black");
@@ -926,22 +922,22 @@ function generateMap() {
       }
     }
   });
-	// Find the maximum value in column E
-	var maxE = Math.max(...tableData.map((row) => row["E"]));
+	// Find the maximum value in column F
+	var maxF = Math.max(...tableData.map((row) => row["F"]));
 
-	// Ensure that maxE is never greater than 12
-	if (maxE > 12) {
-	  maxE = 12;
+	// Ensure that maxF is never greater than 12
+	if (maxF > 12) {
+	  maxF = 12;
 	}
 	// Get the base image element & define base URL
 	var baseImage = document.getElementById("map");
 	var baseURL = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/";
 
-	// Decide which image to display based on the maximum value in column E
-	if (maxE < 3) {
+	// Decide which image to display based on the maximum value in column F
+	if (maxF < 3) {
 	    baseImage.src = baseURL + colorLegend + ".png";
 	} else {
-	    baseImage.src = baseURL + colorLegend + "%20" + maxE + ".png";
+	    baseImage.src = baseURL + colorLegend + "%20" + maxF + ".png";
 	}
 	
 // Create a mapping of node names to indices
