@@ -4,7 +4,7 @@
     <script src="jsnetworkx.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("919191919")</script>
+	  <script>console.log("234234234")</script>
     <title>TESTING PAGE #2</title>
     <style>
       #map,
@@ -712,7 +712,7 @@ function eigenvector_borderColor(eigenvectorRank) {
 
 
 
-function supernodeCentrality(tableData) {
+function supernodeCentralityFunction(tableData) {
     // Filter the input data
     let filteredData = [];
     for (let i = 0; i < tableData.length; i++) {
@@ -942,7 +942,7 @@ function generateMap() {
 	let closeness_border_ColorDictionary = closeness_borderColor(eigenvectorRank);
 	let disconnectionPotential_border_ColorDictionary = disconnectionPotential_borderColor(disconnectionPotentialRank);
 
-	let [supernodeCentrality, supernodeCentralityRank] = supernodeCentrality(tableData)
+	let [supernodeCentrality, supernodeCentralityRank] = supernodeCentralityFunction(tableData)
 	let supernodeCentrality_ColorDictionary = supernodeCentralityColor(supernodeCentralityRank)
 
 	
