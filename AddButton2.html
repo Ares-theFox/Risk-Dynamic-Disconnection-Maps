@@ -4,7 +4,7 @@
     <script src="jsnetworkx.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("11111111")</script>
+	  <script>console.log("22222222222222222")</script>
     <title>TESTING PAGE #2</title>
     <style>
       #map,
@@ -710,7 +710,7 @@ function eigenvector_borderColor(eigenvectorRank) {
 
 
 
-
+// zzzzzzzzzzzz
 
 function supernodeCentralityFunction(tableData) {
     // Filter the input data
@@ -744,6 +744,17 @@ function supernodeCentralityFunction(tableData) {
         graph[territory] = {};
         for (let j = 0; j < connections.length; j++) {
             graph[territory][connections[j]] = 1;
+        }
+    }
+
+    // Calculate the size of each supernode
+    let supernodeSizes = {};
+    for (let i = 0; i < supernodes.length; i++) {
+        supernodeSizes[supernodes[i]] = 0;
+        for (let j = 0; j < filteredData.length; j++) {
+            if (filteredData[j]['C'] === supernodes[i]) {
+                supernodeSizes[supernodes[i]]++;
+            }
         }
     }
 
@@ -790,7 +801,7 @@ function supernodeCentralityFunction(tableData) {
             }
         }
 
-        // Calculate the total travel distance from the start territory to all other supernodes
+        // Calculate the total travel distance from the start territory to all other supernodes, multiplied by the size of each supernode
         supernodeCentrality[startTerritory] = 0;
         for (let j = 0; j < supernodes.length; j++) {
             if (supernodes[j] !== filteredData[i]['C']) {
@@ -802,12 +813,12 @@ function supernodeCentralityFunction(tableData) {
                         }
                     }
                 }
-                supernodeCentrality[startTerritory] += minDistanceToSupernode;
+                supernodeCentrality[startTerritory] += minDistanceToSupernode * supernodeSizes[supernodes[j]];
             }
         }
     }
 
-    // Rank the nodes based on their total travel distance to all other supernodes
+    // Rank the nodes based on their total travel distance to all other supernodes, multiplied by the size of each supernode
     let supernodeCentralityRank= {};
 
     // Create an array of unique supernode centrality values
@@ -822,6 +833,9 @@ function supernodeCentralityFunction(tableData) {
 
     return [supernodeCentrality, supernodeCentralityRank];
 }
+
+
+	
 
 	
 function supernodeCentralityColor(supernodeCentralityRank) {
