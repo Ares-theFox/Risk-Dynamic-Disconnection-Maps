@@ -4,7 +4,7 @@
     <script src="jsnetworkx.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("444")</script>
+	  <script>console.log("555")</script>
     <title>TESTING PAGE #2</title>
     <style>
       #map,
@@ -712,7 +712,7 @@ function eigenvector_borderColor(eigenvectorRank) {
 
 // zzzzzzzzzzzz
 
-function supernodeCentralityFunction(tableData, betweennessCentralityValues, closenessCentralityValues) {
+function supernodeCentralityFunction(tableData, betweennessCentralityValues) {
     // Filter the input data
     let filteredData = [];
     for (let i = 0; i < tableData.length; i++) {
@@ -853,17 +853,26 @@ function supernodeCentralityFunction(tableData, betweennessCentralityValues, clo
 	    supernodeCentrality[key] /= maxBetweennessScore;
 	}
 
-	// Multiply the supernode centrality scores by the closeness centrality scores
+	// Add points to each node based on the highest supernode centrality value among its direct connections
 	for (let key in supernodeCentrality) {
-	    supernodeCentrality[key] *= closenessCentralityValues[key];
+	    // Find the direct connections of the node
+	    let directConnections = graph[key];
+	
+	    // Find the highest supernode centrality value among the direct connections
+	    let maxDirectConnectionValue = 0;
+	    for (let connection in directConnections) {
+	        if (supernodeCentrality[connection] > maxDirectConnectionValue) {
+	            maxDirectConnectionValue = supernodeCentrality[connection];
+	        }
+	    }
+	
+	    // Calculate the adjustment value
+	    let adjustmentValue = Math.min(maxDirectConnectionValue, 1) / (Math.max(supernodeCentrality[key], 1) * 10);
+	
+	    // Update the centrality score of the node
+	    supernodeCentrality[key] += adjustmentValue;
 	}
 	
-	// Divide the supernode centrality scores by the maximum closeness score in the network
-	let maxClosenessScore = Math.max(...Object.values(closenessCentralityValues));
-	for (let key in supernodeCentrality) {
-	    supernodeCentrality[key] /= maxClosenessScore;
-	}
-
 	for (let key in supernodeCentrality) {
 	    supernodeCentrality[key] = Math.round(supernodeCentrality[key] * 10) / 10;
 	}
@@ -1007,7 +1016,7 @@ function generateMap() {
 	let closeness_border_ColorDictionary = closeness_borderColor(eigenvectorRank);
 	let disconnectionPotential_border_ColorDictionary = disconnectionPotential_borderColor(disconnectionPotentialRank);
 
-	let [supernodeCentrality, supernodeCentralityRank] = supernodeCentralityFunction(tableData, betweennessCentralityValues, closenessCentralityValues)
+	let [supernodeCentrality, supernodeCentralityRank] = supernodeCentralityFunction(tableData, betweennessCentralityValues)
 	let supernodeCentrality_ColorDictionary = supernodeCentralityColor(supernodeCentralityRank)
 
 	
