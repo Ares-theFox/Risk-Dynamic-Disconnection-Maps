@@ -4,7 +4,7 @@
     <script src="jsnetworkx.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("234234234")</script>
+	  <script>console.log("11111111")</script>
     <title>TESTING PAGE #2</title>
     <style>
       #map,
@@ -1058,6 +1058,8 @@ function generateMap() {
 	    text.textContent = closenessValue;
 	  } else if (centralityMenu.value === "disconnectionPotential") {
 	    text.textContent = disconnectionPotentialValue;
+	  } else if (centralityMenu.value === "supernodeCentrality") {
+	    text.textContent = supernodeCentralityValue;
 	  }
           // Adjust x and y coordinates to position midpoint of text at specified coordinates
           var bbox = text.getBBox();
