@@ -4,7 +4,7 @@
     <script src="jsnetworkx.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("51sad5f1sdf")</script>
+	  <script>console.log("z8z8z8z8zzazzz")</script>
     <title>TESTING PAGE #2</title>
     <style>
       #map,
@@ -1168,6 +1168,14 @@ function addBlizzards() {
     // Return early from the function
     return;
   }
+
+	// Call border color dictionaries
+	let [betweennessCentralityValues, eigenvectorCentralityValues, closenessCentralityValues, betweennessRank, eigenvectorRank, closenessRank, disconnectionPotentialValues, disconnectionPotentialRank] = calculateCentrality(tableData);
+	let betweenness_border_ColorDictionary = betweenness_borderColor(betweennessRank);
+	let eigenvector_border_ColorDictionary = eigenvector_borderColor(eigenvectorRank);
+	let closeness_border_ColorDictionary = closeness_borderColor(eigenvectorRank);
+	let disconnectionPotential_border_ColorDictionary = disconnectionPotential_borderColor(disconnectionPotentialRank);
+
 	// Define mouseover, mouseout, and click event handlers
 	const mouseoverHandler = function () {
 	  if (shouldReturn) {
@@ -1395,6 +1403,14 @@ function addPortals() {
     // Return early from the function
     return;
   }
+
+	// Call border color dictionaries
+	let [betweennessCentralityValues, eigenvectorCentralityValues, closenessCentralityValues, betweennessRank, eigenvectorRank, closenessRank, disconnectionPotentialValues, disconnectionPotentialRank] = calculateCentrality(tableData);
+	let betweenness_border_ColorDictionary = betweenness_borderColor(betweennessRank);
+	let eigenvector_border_ColorDictionary = eigenvector_borderColor(eigenvectorRank);
+	let closeness_border_ColorDictionary = closeness_borderColor(eigenvectorRank);
+	let disconnectionPotential_border_ColorDictionary = disconnectionPotential_borderColor(disconnectionPotentialRank);
+
 	// Define mouseover, mouseout, and click event handlers
 	const mouseoverHandler = function () {
 	  if (shouldReturn) {
@@ -1578,6 +1594,13 @@ function eraser() {
   document.getElementById("portalButton").addEventListener("click", portalButtonClick);
   document.getElementById("eraserButton").addEventListener("click", eraserButtonClick);
   document.getElementById("stopButton").addEventListener("click", stopButtonClick);
+
+	// Call border color dictionaries
+	let [betweennessCentralityValues, eigenvectorCentralityValues, closenessCentralityValues, betweennessRank, eigenvectorRank, closenessRank, disconnectionPotentialValues, disconnectionPotentialRank] = calculateCentrality(tableData);
+	let betweenness_border_ColorDictionary = betweenness_borderColor(betweennessRank);
+	let eigenvector_border_ColorDictionary = eigenvector_borderColor(eigenvectorRank);
+	let closeness_border_ColorDictionary = closeness_borderColor(eigenvectorRank);
+	let disconnectionPotential_border_ColorDictionary = disconnectionPotential_borderColor(disconnectionPotentialRank);
 
 	// Define mouseover, mouseout, and click event handlers
 	const mouseoverHandler = function () {
