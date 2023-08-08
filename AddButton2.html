@@ -4,7 +4,7 @@
     <script src="jsnetworkx.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("as87d49f8as4dfas")</script>
+	  <script>console.log("01201201")</script>
     <title>TESTING PAGE #2</title>
     <style>
       #map,
@@ -543,17 +543,13 @@ function calculateCentrality(tableData) {
 
     // Calculate the scaled values for each metric
     let betweennessScaled = {};
-    let eigenvectorScaled = {};
     let closenessScaled = {};
     let minBetweenness = Math.min(...Object.values(betweennessCentralityValues));
     let maxBetweenness = Math.max(...Object.values(betweennessCentralityValues));
-    let minEigenvector = Math.min(...Object.values(eigenvectorCentralityValues));
-    let maxEigenvector = Math.max(...Object.values(eigenvectorCentralityValues));
     let minCloseness = Math.min(...Object.values(closenessCentralityValues));
     let maxCloseness = Math.max(...Object.values(closenessCentralityValues));
     for (let territory of territories) {
         betweennessScaled[territory] = 100 * (betweennessCentralityValues[territory] - minBetweenness) / (maxBetweenness - minBetweenness);
-        eigenvectorScaled[territory] = 100 * (eigenvectorCentralityValues[territory] - minEigenvector) / (maxEigenvector - minEigenvector);
         closenessScaled[territory] = 100 * (closenessCentralityValues[territory] - minCloseness) / (maxCloseness - minCloseness);
     }
 
@@ -561,7 +557,7 @@ function calculateCentrality(tableData) {
     let disconnectionPotentialValues = {};
     let disconnectionPotentialRank = {};
     for (let territory of territories) {
-        disconnectionPotentialValues[territory] = (betweennessScaled[territory] + eigenvectorScaled[territory] + closenessScaled[territory]) / 3;
+        disconnectionPotentialValues[territory] = (betweennessScaled[territory] + closenessScaled[territory]) / 3;
     }
     let uniqueDisconnectionPotentialValues = [...new Set(Object.values(disconnectionPotentialValues))].sort((a, b) => a - b);
     for (let territory of territories) {
