@@ -54,7 +54,7 @@
       <option value="eigenvector">Eigenvector</option>
       <option value="betweenness">Betweenness</option>
       <option value="closeness">Closeness</option>
-      <option value="disconnectionPotential">Averge Scaled B,C</option>
+      <option value="disconnectionPotential">Average Scaled B,C</option>
       <option value="experimentalCentrality">EXPERIMENTAL CUSTOM METRIC</option>
     </select>
   </div>
@@ -752,11 +752,17 @@ function experimentalCentralityFunction(tableData, betweennessCentralityValues, 
 	for (let key in betweennessCentralityValues) {
 	    experimentalCentrality[key] = Math.max(betweennessCentralityValues[key], 1) * Math.max(closenessCentralityValues[key], 1) * Math.max(directConnections[key], 1);
 	}
-
-    // Round the experimental centrality scores to the nearest decimal
-    for (let key in experimentalCentrality) {
-        experimentalCentrality[key] = Math.round(experimentalCentrality[key] * 10) / 10;
-    }
+	
+	// Normalize the experimental centrality scores by themselves
+	let maxExperimentalCentralityScore = Math.max(...Object.values(experimentalCentrality));
+	for (let key in experimentalCentrality) {
+	    experimentalCentrality[key] /= maxExperimentalCentralityScore;
+	}
+	
+	// Multiply the experimental centrality scores by 100 and round them to the nearest integer
+	for (let key in experimentalCentrality) {
+	    experimentalCentrality[key] = Math.round(experimentalCentrality[key] * 100);
+	}
 
     // Rank the nodes based on their experimental centrality scores
     let experimentalCentralityRank = {};
