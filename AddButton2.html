@@ -761,7 +761,7 @@ function experimentalCentralityFunction(tableData, betweennessCentralityValues, 
 	
 	// Multiply the experimental centrality scores by 100 and round them to the nearest integer
 	for (let key in experimentalCentrality) {
-	    experimentalCentrality[key] = Math.round(experimentalCentrality[key] * 1000 / 10);
+	    experimentalCentrality[key] = Math.round(experimentalCentrality[key] * 1000) / 10;
 	}
 
     // Rank the nodes based on their experimental centrality scores
