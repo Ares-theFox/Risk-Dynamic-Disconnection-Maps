@@ -1052,7 +1052,9 @@ function generateMap() {
 	var baseURL = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/";
 
 	// Decide which image to display based on the maximum value in column F
-	if (maxF < 3) {
+	if (centralityMenu.value !== "standard") {
+	    baseImage.src = baseURL + colorLegend + "%20Heatmap.png"
+	} else if (maxF < 3) {
 	    baseImage.src = baseURL + colorLegend + ".png";
 	} else {
 	    baseImage.src = baseURL + colorLegend + "%20" + maxF + ".png";
