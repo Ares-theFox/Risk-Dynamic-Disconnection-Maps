@@ -954,6 +954,7 @@ function generateMap() {
         // Color in the map
         var value = tableData[i]["F"];
 	      var noobValue = tableData[i]["R"];
+	      var noobValueCap = tableData[i]["R"];
 	    var betweennessValue = tableData[i]["H"];
 	    var betweennessPosition = tableData[i]["I"];
 	    var eigenvectorValue = tableData[i]["J"];
@@ -966,6 +967,9 @@ function generateMap() {
 	    var experimentalCentralityPosition = tableData[i]["Q"];
         if (value >= 12) {
           value = 12;
+        }
+        if (noobValueCap >= 12) {
+          noobValueCap = 12;
         }
         if (value !== 0) {
 	  if (centralityMenu.value === "standard") {
@@ -987,11 +991,8 @@ function generateMap() {
 	    var color = experimentalCentrality_ColorDictionary[experimentalCentralityPosition];
 	    var border_color = experimentalCentrality_border_ColorDictionary[experimentalCentralityPosition];
 	  } else if (centralityMenu.value === "capConnections") {
-		  if noobValue > 12 {
-			  noobValue  = 12
-		  }
-	    var color = colorDictionary[noobValue];
-	    var border_color = colorDarktionary[noobValue];
+	    var color = colorDictionary[noobValueCap];
+	    var border_color = colorDarktionary[noobValueCap];
 	  }
           path.style.setProperty("fill", color, "important");
           path.setAttribute("stroke-opacity", "100");
