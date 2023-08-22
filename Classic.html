@@ -987,6 +987,9 @@ function generateMap() {
 	    var color = experimentalCentrality_ColorDictionary[experimentalCentralityPosition];
 	    var border_color = experimentalCentrality_border_ColorDictionary[experimentalCentralityPosition];
 	  } else if (centralityMenu.value === "capConnections") {
+		  if noobValue > 12 {
+			  noobValue  = 12
+		  }
 	    var color = colorDictionary[noobValue];
 	    var border_color = colorDarktionary[noobValue];
 	  }
@@ -1020,7 +1023,7 @@ function generateMap() {
           text.setAttribute("alignment-baseline", "middle");
           text.setAttribute("font-size", fontSizeInput.value);
           text.setAttribute("font-weight", "bold");
-	  if (tableData[i]["F"] >= 11) {
+	  if (tableData[i]["F"] >= 11 || centralityMenu.value === "capConnections") {
 	    text.setAttribute("fill", "white");
 	  } else {
 	    text.setAttribute("fill", "black");
@@ -1063,10 +1066,12 @@ function generateMap() {
 	var baseURL = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/";
 
 	// Decide which image to display based on the maximum value in column F
-	if (centralityMenu.value !== "standard" && centralityMenu.value !== "capConnections") {
+	if (centralityMenu.value !== "standard") {
 	    baseImage.src = baseURL + colorLegend + "%20Heatmap.png"
 	} else if (maxF < 3) {
 	    baseImage.src = baseURL + colorLegend + ".png";
+	} else if (centralityMenu.value !== "capConnections") {
+	    baseImage.src = baseURL + colorLegend + "%2012.png";
 	} else {
 	    baseImage.src = baseURL + colorLegend + "%20" + maxF + ".png";
 	}
@@ -1351,6 +1356,9 @@ const mouseoutHandler = function () {
       let experimentalCentralityPosition = tableData.find(row => row['A'] === this.id)['Q'];
       border_color = experimentalCentrality_border_ColorDictionary[experimentalCentralityPosition];
     } else if (centralityMenu.value === "capConnections") {
+      if (noobValue >= 12) {
+        noobValue = 12;
+      }
       border_color = colorDarktionary[noobValue];
     }
 	this.style.setProperty("stroke", border_color, "important");
@@ -1597,6 +1605,9 @@ function addPortals() {
 	      let experimentalCentralityPosition = tableData.find(row => row['A'] === this.id)['Q'];
 	      border_color = experimentalCentrality_border_ColorDictionary[experimentalCentralityPosition];
 	    } else if (centralityMenu.value === "capConnections") {
+      if (noobValue >= 12) {
+        noobValue = 12;
+      }
 	      border_color = colorDarktionary[noobValue];
 	    }
 		this.style.setProperty("stroke", border_color, "important");
@@ -1804,6 +1815,9 @@ function eraser() {
 		let experimentalCentralityPosition = tableData.find(row => row['A'] === this.id)['Q'];
 		border_color = experimentalCentrality_border_ColorDictionary[experimentalCentralityPosition];
 	      } else if (centralityMenu.value === "capConnections") {
+      if (noobValue >= 12) {
+        noobValue = 12;
+      }
 	        border_color = colorDarktionary[noobValue];
 	      }
 	      this.style.setProperty("stroke", border_color, "important");
