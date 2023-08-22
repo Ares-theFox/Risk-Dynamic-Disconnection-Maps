@@ -1057,6 +1057,7 @@ function generateMap() {
   });
 	// Find the maximum value in column F
 	var maxF = Math.max(...tableData.map((row) => row["F"]));
+	var maxFF = 12;
 
 	// Ensure that maxF is never greater than 12
 	if (maxF > 12) {
@@ -1072,7 +1073,7 @@ function generateMap() {
 	} else if (maxF < 3) {
 	    baseImage.src = baseURL + colorLegend + ".png";
 	} else if (centralityMenu.value !== "capConnections") {
-	    baseImage.src = baseURL + colorLegend + "%2012.png";
+	    baseImage.src = baseURL + colorLegend + "%20" + maxFF + ".png";
 	} else {
 	    baseImage.src = baseURL + colorLegend + "%20" + maxF + ".png";
 	}
