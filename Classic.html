@@ -4,7 +4,7 @@
     <script src="jsnetworkx.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5"></script>
-	  <script>console.log("86418468")</script>
+	  <script>console.log("noobchanges")</script>
     <title>Classic</title>
     <style>
       #map,
@@ -56,6 +56,7 @@
       <option value="closeness">Closeness</option>
       <option value="disconnectionPotential">Average Scaled B,C</option>
       <option value="experimentalCentrality">EXPERIMENTAL CUSTOM METRIC</option>
+      <option value="capConnections">Noob's Cap Connections™</option>
     </select>
   </div>
 </div>
@@ -897,6 +898,9 @@ function generateMap() {
     } else {
       row["G"] = 0;
     }
+
+	  // FOR NOOB: col R: cap connections
+	  row["R"] = row["G"] - row["F"];
   });
 
 	// Calculate rescaled betweenness centrality and closeness centrality
@@ -949,6 +953,7 @@ function generateMap() {
       if (tableData[i]["A"] === pathId) {
         // Color in the map
         var value = tableData[i]["F"];
+	      var noobValue = tableData[i]["R"];
 	    var betweennessValue = tableData[i]["H"];
 	    var betweennessPosition = tableData[i]["I"];
 	    var eigenvectorValue = tableData[i]["J"];
@@ -981,6 +986,9 @@ function generateMap() {
 	  } else if (centralityMenu.value === "experimentalCentrality") {
 	    var color = experimentalCentrality_ColorDictionary[experimentalCentralityPosition];
 	    var border_color = experimentalCentrality_border_ColorDictionary[experimentalCentralityPosition];
+	  } else if (centralityMenu.value === "capConnections") {
+	    var color = colorDictionary[noobValue];
+	    var border_color = colorDarktionary[noobValue];
 	  }
           path.style.setProperty("fill", color, "important");
           path.setAttribute("stroke-opacity", "100");
@@ -990,6 +998,7 @@ function generateMap() {
 
         // Add text to the specified location from CSV data
         value = tableData[i]["G"];
+	      noobValue = tableData[i]["R"];
         if (value !== 0) {
           // Find matching row in CSV data
           var csvRow = csvData.find(function (row) {
@@ -1028,6 +1037,8 @@ function generateMap() {
 	    text.textContent = disconnectionPotentialValue;
 	  } else if (centralityMenu.value === "experimentalCentrality") {
 	    text.textContent = experimentalCentralityValue;
+	  } else if (centralityMenu.value === "capConnections") {
+	    text.textContent = noobValue;
 	  }
           // Adjust x and y coordinates to position midpoint of text at specified coordinates
           var bbox = text.getBBox();
@@ -1052,7 +1063,7 @@ function generateMap() {
 	var baseURL = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/";
 
 	// Decide which image to display based on the maximum value in column F
-	if (centralityMenu.value !== "standard") {
+	if (centralityMenu.value !== "standard" && centralityMenu.value !== "capConnections") {
 	    baseImage.src = baseURL + colorLegend + "%20Heatmap.png"
 	} else if (maxF < 3) {
 	    baseImage.src = baseURL + colorLegend + ".png";
@@ -1317,6 +1328,7 @@ const mouseoutHandler = function () {
   if (!clickedPathsBlizzardsPortals.includes(this.id)) {
     // Reset stroke color and width according to the selected centrality measure
     let value = tableData.find(row => row['A'] === this.id)['F'];
+	  let noobValue = tableData.find(row => row['A'] === this.id)['R'];
     let border_color;
     if (centralityMenu.value === "standard") {
       if (value >= 12) {
@@ -1338,6 +1350,8 @@ const mouseoutHandler = function () {
     } else if (centralityMenu.value === "experimentalCentrality") {
       let experimentalCentralityPosition = tableData.find(row => row['A'] === this.id)['Q'];
       border_color = experimentalCentrality_border_ColorDictionary[experimentalCentralityPosition];
+    } else if (centralityMenu.value === "capConnections") {
+      border_color = colorDarktionary[noobValue];
     }
 	this.style.setProperty("stroke", border_color, "important");
 	this.style.setProperty("stroke-width", "2", "important");
@@ -1560,6 +1574,7 @@ function addPortals() {
 	  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
 	    // Reset stroke color and width according to the selected centrality measure
 	    let value = tableData.find(row => row['A'] === this.id)['F'];
+		  let noobValue = tableData.find(row => row['A'] === this.id)['R'];
 	    let border_color;
 	    if (centralityMenu.value === "standard") {
 	      if (value >= 12) {
@@ -1581,6 +1596,8 @@ function addPortals() {
 	    } else if (centralityMenu.value === "experimentalCentrality") {
 	      let experimentalCentralityPosition = tableData.find(row => row['A'] === this.id)['Q'];
 	      border_color = experimentalCentrality_border_ColorDictionary[experimentalCentralityPosition];
+	    } else if (centralityMenu.value === "capConnections") {
+	      border_color = colorDarktionary[noobValue];
 	    }
 		this.style.setProperty("stroke", border_color, "important");
 		this.style.setProperty("stroke-width", "2", "important");
@@ -1764,6 +1781,7 @@ function eraser() {
 	    } else if (portalArray.includes(this.id)) {
 	      // Reset stroke color and width according to the selected centrality measure
 	      let border_color;
+		    let noobValue = tableData.find(row => row['A'] === this.id)['R'];
 	      if (centralityMenu.value === "standard") {
 	        let value = tableData.find(row => row['A'] === this.id)['F'];
 	        if (value >= 12) {
@@ -1785,6 +1803,8 @@ function eraser() {
 	      } else if (centralityMenu.value === "experimentalCentrality") {
 		let experimentalCentralityPosition = tableData.find(row => row['A'] === this.id)['Q'];
 		border_color = experimentalCentrality_border_ColorDictionary[experimentalCentralityPosition];
+	      } else if (centralityMenu.value === "capConnections") {
+	        border_color = colorDarktionary[noobValue];
 	      }
 	      this.style.setProperty("stroke", border_color, "important");
 	      this.style.setProperty("stroke-width", "2", "important");
