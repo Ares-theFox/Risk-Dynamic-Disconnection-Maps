@@ -1,0 +1,45 @@
+A,B,C
+DC1,"DC2,DC3,DC12,DC39",Pterodactyl Terrace
+DC2,"DC1,DC3,DC4",Pterodactyl Terrace
+DC3,"DC1,DC2,DC4,DC11,DC12",Pterodactyl Terrace
+DC4,"DC2,DC3,DC5,DC6,DC10,DC11",Pterodactyl Terrace
+DC5,"DC4,DC6,DC7",Pterodactyl Terrace
+DC6,"DC4,DC5,DC7,DC10",Pterodactyl Terrace
+DC7,"DC5,DC6,DC8,DC9,DC10",Pterodactyl Terrace
+DC8,"DC7,DC9,DC23",Pterodactyl Terrace
+DC9,"DC7,DC8,DC10,DC16,DC18",Carnotaurus Cliff
+DC10,"DC4,DC6,DC7,DC9,DC11,DC13,DC15,DC16",Carnotaurus Cliff
+DC11,"DC3,DC4,DC10,DC12,DC13",Carnotaurus Cliff
+DC12,"DC1,DC3,DC11,DC13,DC40",Carnotaurus Cliff
+DC13,"DC10,DC11,DC12,DC14,DC15",Hadrosaurus Plane
+DC14,"DC13,DC15",Hadrosaurus Plane
+DC15,"DC10,DC13,DC14,DC16,DC17",Hadrosaurus Plane
+DC16,"DC9,DC10,DC15,DC17",Hadrosaurus Plane
+DC17,"DC15,DC16",Hadrosaurus Plane
+DC18,"DC9,DC19,DC22,DC23,DC24",Carnivore Clutch
+DC19,"DC18,DC20,DC21,DC22",Carnivore Clutch
+DC20,"DC19,DC21,DC29,DC30",Carnivore Clutch
+DC21,"DC19,DC20,DC22,DC26,DC27,DC29",Carnivore Clutch
+DC22,"DC18,DC19,DC21,DC24,DC26",Carnivore Clutch
+DC23,"DC8,DC18,DC24",Pen
+DC24,"DC18,DC22,DC23,DC25,DC26",Pen
+DC25,"DC24,DC26",Pen
+DC26,"DC21,DC22,DC24,DC25,DC27",Pen
+DC27,"DC21,DC26,DC28,DC29",Pen
+DC28,"DC27,DC29,DC30",Temple of Bob
+DC29,"DC20,DC21,DC27,DC28,DC30",Temple of Bob
+DC30,"DC20,DC28,DC29,DC31,DC32",Temple of Bob
+DC31,"DC30,DC32,DC44",Temple of Bob
+DC32,"DC30,DC31,DC33,DC34,DC43,DC44",Temple of Bob
+DC33,"DC32,DC34,DC35",Lava Fields
+DC34,"DC32,DC33,DC35,DC36,DC41,DC43",Lava Fields
+DC35,"DC33,DC34,DC36",Lava Fields
+DC36,"DC34,DC35,DC37,DC41,DC42",Lava Fields
+DC37,"DC36,DC38,DC42",Lava Fields
+DC38,"DC37,DC39,DC40,DC41,DC42",Lava Fields
+DC39,"DC1,DC38,DC40",Lava Fields
+DC40,"DC12,DC38,DC39,DC41",Herbivore Hatchery
+DC41,"DC34,DC36,DC38,DC40,DC42,DC43",Herbivore Hatchery
+DC42,"DC36,DC37,DC38,DC41",Herbivore Hatchery
+DC43,"DC32,DC34,DC41,DC44",Herbivore Hatchery
+DC44,"DC31,DC32,DC43",Herbivore Hatchery
