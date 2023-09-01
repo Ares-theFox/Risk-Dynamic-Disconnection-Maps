@@ -8,11 +8,11 @@ if (urlParams.has('map')) {
 
 const mapUrls = {
 	"boston": {
-		"prettyname": "Castle",
+		"prettyname": "Boston",
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Boston.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Boston%20blizzard%20pattern.png",
 		"totalBlizzards": 3,
-		"totalPortals": 4
+		"totalPortals": 5
 	},
 	"brazil": {
 		"prettyname": "Brazil",
