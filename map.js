@@ -363,7 +363,7 @@ window.onload = function() {
 	};
 	xhr.send();
 
-// Stop editing
+// Stop editing function
 function stopEditing() {
 	document.getElementById("stopButton").innerHTML = "Stop Editing";
 	// Set the regular background color to white
