@@ -125,7 +125,7 @@ let imgElement = document.getElementById("map");
 imgElement.src = mapUrls[mapselected].baseurl;
 
 let title = document.getElementById("mapnametitle");
-title.text = mapUrls[mapselected].prettyname;
+title.textContent = mapUrls[mapselected].prettyname;
 
 document.title = mapUrls[mapselected].prettyname;
 
