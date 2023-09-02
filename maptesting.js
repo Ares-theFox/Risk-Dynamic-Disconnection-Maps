@@ -177,195 +177,165 @@ window.onload = function() {
   img.src = images[randomIndex];
 };
 
-// Define global variables
-	// Define map-specific items
-	var colorLegend = mapUrls[mapselected].prettyname;
-	var DirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "%20CSV.csv";
-	var IndirectConnections = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "%20Indirect%20Connection%20Locations%20CSV.csv";
-	var SVG = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "%20Paths.svg";
-	var BlizzardPattern = blizzardPatternImage.src;
+// Set initial variables
+var colorLegend = mapUrls[mapselected].prettyname;
+var csvData = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "%20Master%20File.csv";
+var SVG = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "%20Paths.svg";
+var BlizzardPattern = blizzardPatternImage.src;
+var totalBlizzards = mapUrls[mapselected].totalBlizzards;
+var totalPortals = mapUrls[mapselected].totalPortals;
+let blizzardArray = []
+let portalArray = []
+let clickedPathsBlizzardsPortals = []
+const colorDictionary = {
+  0: "#ffffff",
+  1: "#eb3337",
+  2: "#fd8238",
+  3: "#fdf12c",
+  4: "#2ed14f",
+  5: "#2ca9f1",
+  6: "#4a51cc",
+  7: "#b948ba",
+  8: "#8b2c32",
+  9: "#5f5f5f",
+ 10: "#377a46",
+ 11: "#460055",
+ 12: "#161616"
+};
+const colorDarktionary = {
+ 0: "#808080",
+ 1: "#761a1c",
+ 2: "#7f411c",
+ 3: "#7f7916",
+ 4: "#176928",
+ 5: "#165579",
+ 6: "#252966",
+ 7: "#5d245d",
+ 8: "#461619",
+ 9: "#303030",
+10: "#1c3d23",
+11: "#23002b",
+12: "#000000"
+};
 
-	var totalBlizzards = mapUrls[mapselected].totalBlizzards;
-	var totalPortals = mapUrls[mapselected].totalPortals;
+// Menu stuff
+var selectMenuContainer = document.getElementById("selectMenuContainer");
+selectMenuContainer.style.display = "none";
+centralityMenu = document.getElementById("centralityType");
+centralityMenu.addEventListener("change", function() {
+  generateMap();
+});
 
-	// Get the select menu container element
-	var selectMenuContainer = document.getElementById("selectMenuContainer");
+// Hidden menu shenanigans
+var sequence = [
+  { button: "blizzardButton", count: totalBlizzards },
+  { button: "portalButton", count: totalPortals }
+];
+var sequenceIndex = 0;
+var sequenceCount = 0;
+var sequenceCompleted = false;
+sequence.forEach(function (item) {
+  var button = document.getElementById(item.button);
+  var clickHandler = function () {
+    // Check if the sequence has been completed
+    if (sequenceCompleted) {
+      // If it has, remove the event listener for this button
+      button.removeEventListener("click", clickHandler);
+    } else {
+      if (item.button === sequence[sequenceIndex].button) {
+	sequenceCount++;
+	if (sequenceCount === item.count) {
+	  sequenceIndex++;
+	  sequenceCount = 0;
+	}
+      } else {
+	sequenceIndex = 0;
+	sequenceCount = 0;
+      }
+      if (sequenceIndex === sequence.length) {
+	selectMenuContainer.style.display = "";
+	// Set the flag to true once the sequence is completed
+	sequenceCompleted = true;
+      }
+    }
+  };
+  button.addEventListener("click", clickHandler);
+});
 
-	// Hide the select menu container by default
-	selectMenuContainer.style.display = "none";
-
-	// Define a sequence of button presses
-	var sequence = [
-	  { button: "blizzardButton", count: totalBlizzards },
-	  { button: "portalButton", count: totalPortals }
-	];
-
-	// Keep track of the current position in the sequence
-	var sequenceIndex = 0;
-	var sequenceCount = 0;
-
-	// Add a flag to keep track of whether the sequence has been completed or not
-	var sequenceCompleted = false;
-
-	// Add event listeners to the buttons
-	sequence.forEach(function (item) {
-	  var button = document.getElementById(item.button);
-	  var clickHandler = function () {
-	    // Check if the sequence has been completed
-	    if (sequenceCompleted) {
-	      // If it has, remove the event listener for this button
-	      button.removeEventListener("click", clickHandler);
-	    } else {
-	      if (item.button === sequence[sequenceIndex].button) {
-		sequenceCount++;
-		if (sequenceCount === item.count) {
-		  sequenceIndex++;
-		  sequenceCount = 0;
-		}
-	      } else {
-		sequenceIndex = 0;
-		sequenceCount = 0;
-	      }
-
-	      if (sequenceIndex === sequence.length) {
-		selectMenuContainer.style.display = "";
-		// Set the flag to true once the sequence is completed
-		sequenceCompleted = true;
-	      }
-	    }
-	  };
-
-	  // Add the click event listener with the clickHandler function
-	  button.addEventListener("click", clickHandler);
-	});
-
-	let blizzardArray = []
-	let portalArray = []
-	let clickedPathsBlizzardsPortals = []
-	
-	// Define connections tableData
-	let tableData;
-	let tableDataClone;
-	Papa.parse(
-	  DirectConnections,
-	  {
-	    download: true,
-	    header: true,
-	    complete: function (results) {
-	      // Assign parsed data to tableData
-	      tableData = results.data;
-	      // Remove zero-width space character from tableData
-	      for (let i = 0; i < tableData.length; i++) {
-		for (let key in tableData[i]) {
-		  if (tableData[i].hasOwnProperty(key)) {
-		    tableData[i][key] = tableData[i][key].replace(/\u200B/g, "");
-		  }
-		}
-	      }
-	      // Create a deep copy of tableData
-	      tableDataClone = JSON.parse(JSON.stringify(tableData));
-	    },
-	  }
-	);
-	
-	// Define color dictionaries 
-	const colorDictionary = {
-	  1: "#eb3337",
-	  2: "#fd8238",
-	  3: "#fdf12c",
-	  4: "#2ed14f",
-	  5: "#2ca9f1",
-	  6: "#4a51cc",
-	  7: "#b948ba",
-	  8: "#8b2c32",
-	  9: "#5f5f5f",
-	 10: "#377a46",
-	 11: "#460055",
-	 12: "#161616"
-	};
-	const colorDarktionary = {
-	 1: "#761a1c",
-	 2: "#7f411c",
-	 3: "#7f7916",
-	 4: "#176928",
-	 5: "#165579",
-	 6: "#252966",
-	 7: "#5d245d",
-	 8: "#461619",
-	 9: "#303030",
-	10: "#1c3d23",
-	11: "#23002b",
-	12: "#000000"
-	};
-	
-	// Define csvData as a global variable
-	var csvData;
-	
-	// Define a counter variable to keep track of the number of requests that have completed
-	var requestsCompleted = 0;
-	
-	// Define a function to call when a request has completed
-	function onRequestComplete() {
-	  requestsCompleted++;
-	  if (requestsCompleted === 2) {
-	    // Both requests have completed, so call the generateMap function
-	    generateMap();
+// Load the CSVs and push to tableData
+let tableData;
+let tableDataClone;
+Papa.parse(
+  DirectConnections,
+  {
+    download: true,
+    header: true,
+    complete: function (results) {
+      // Assign parsed data to tableData
+      tableData = results.data;
+      // Remove zero-width space character from tableData
+      for (let i = 0; i < tableData.length; i++) {
+	for (let key in tableData[i]) {
+	  if (tableData[i].hasOwnProperty(key)) {
+	    tableData[i][key] = tableData[i][key].replace(/\u200B/g, "");
 	  }
 	}
+      }
+      // Filter the input data
+      let filteredTableData = [];
+      for (let i = 0; i < tableData.length; i++) {
+          let row = tableData[i];
+          if (typeof row === 'object' && row.hasOwnProperty('A') && row.hasOwnProperty('B')) {
+              if (typeof row['A'] === 'string' && typeof row['B'] === 'string') {
+                  filteredTableData.push(row);
+              }
+          }
+      }
+      // Assign filtered data to tableData and create a clone
+      tableData = filteredTableData;
+      tableDataClone = JSON.parse(JSON.stringify(tableData));
+      onRequestComplete();
+    },
+  }
+);
 
-	// Load the CSV data
-	Papa.parse(
-	  IndirectConnections,
-	  {
-	    download: true,
-	    header: true,
-	    complete: function (results) {
-	      // Assign the parsed data to the global csvData variable
-	      csvData = results.data;
-	      // Call the onRequestComplete function to indicate that this request has completed
-	      onRequestComplete();
-	    }
-	  }
-	);
+// Preload CSVs before generating the map
+var requestsCompleted = 0;
+function onRequestComplete() {
+  requestsCompleted++;
+  if (requestsCompleted === 2) {
+    // Both requests have completed, so call the generateMap function
+    generateMap();
+  }
+}
 
-	// Define global variables
-	centralityMenu = document.getElementById("centralityType");
+// Load the SVG
+let paths;
+let svgElement;
+var xhr = new XMLHttpRequest();
+xhr.open(
+  "GET",
+  SVG
+);
+xhr.onload = function () {
+  if (xhr.status === 200) {
+    var svg = xhr.responseText;
+    var rangeElement = document.getElementById("range");
+    rangeElement.innerHTML = svg;
+    svgElement = rangeElement.querySelector("svg");
+    paths = svgElement.querySelectorAll("path");
+    paths.forEach(function (path) {
+      path.setAttribute("fill", "transparent");
+      path.setAttribute("stroke-opacity", "0");
+    });
+    // Call the onRequestComplete function to indicate that this request has completed
+    onRequestComplete();
+  }
+};
+xhr.send();
 
-	// Add an event listener to the menu element
-	centralityMenu.addEventListener("change", function() {
-	  generateMap();
-	});
-	
-// End of global variables
-
-	// Load the SVG
-	let paths;
-	let svgElement;
-	var xhr = new XMLHttpRequest();
-	xhr.open(
-	  "GET",
-	  SVG
-	);
-	xhr.onload = function () {
-	  if (xhr.status === 200) {
-	    var svg = xhr.responseText;
-	    var rangeElement = document.getElementById("range");
-	    rangeElement.innerHTML = svg;
-	    svgElement = rangeElement.querySelector("svg");
-	    paths = svgElement.querySelectorAll("path");
-	    paths.forEach(function (path) {
-	      path.setAttribute("fill", "transparent");
-	      path.setAttribute("stroke-opacity", "0");
-	    });
-	    // Call the onRequestComplete function to indicate that this request has completed
-	    onRequestComplete();
-	  }
-	};
-	xhr.send();
-
-// Stop editing function
+// FUNCTION: stop editing
 function stopEditing() {
-	document.getElementById("stopButton").innerHTML = "Stop Editing";
 	// Set the regular background color to white
 	document.getElementById("stopButton").style.backgroundColor = "white";
 	// Set the hover background color to white
@@ -376,408 +346,173 @@ function stopEditing() {
 	return;
 }
 
-// Centrality
+// FUNCTION: calculate centrality
 function calculateCentrality(tableData) {
-    // Filter the input data
-    let filteredData = [];
-    for (let i = 0; i < tableData.length; i++) {
-        let row = tableData[i];
-        if (typeof row === 'object' && row.hasOwnProperty('A') && row.hasOwnProperty('B')) {
-            if (typeof row['A'] === 'string' && typeof row['B'] === 'string') {
-                filteredData.push(row);
-            }
-        }
-    }
+  // Create a graph object from tableData
+  let graph = {
+    nodes: [],
+    neighbors: function (node) {
+      let index = this.nodes.indexOf(node);
+      if (index === -1) return [];
+      return this.edges[index];
+    },
+    edges: [],
+  };
 
-    // Create a list of unique territories
-    let territories = [];
-    for (let i = 0; i < filteredData.length; i++) {
-        if (filteredData[i]['B'] !== '' && !territories.includes(filteredData[i]['A'])) {
-            territories.push(filteredData[i]['A']);
-        }
+  // Populate the graph object with data from tableData
+  for (let row of tableData) {
+    let node = row["Territory"];
+    let index = graph.nodes.indexOf(node);
+    if (index === -1) {
+      index = graph.nodes.length;
+      graph.nodes.push(node);
+      graph.edges.push([]);
     }
-    // Create an empty adjacency matrix
-    let adjacencyMatrix = [];
-    for (let i = 0; i < territories.length; i++) {
-        adjacencyMatrix.push(new Array(territories.length).fill(0));
+    let connections = row["Connections"].split(",");
+    for (let neighbor of connections) {
+      graph.edges[index].push(neighbor.trim());
     }
-    // Populate the adjacency matrix
-    for (let i = 0; i < filteredData.length; i++) {
-        if (filteredData[i]['B'] !== undefined && filteredData[i]['B'] !== '') {
-            let territory = filteredData[i]['A'];
-            let connections = filteredData[i]['B'].split(',');
-            for (let j = 0; j < connections.length; j++) {
-                let connection = connections[j];
-                if (connection !== '') {
-                    let index1 = territories.indexOf(territory);
-                    let index2 = territories.indexOf(connection);
-                    adjacencyMatrix[index1][index2] = 1;
-                }
-            }
-        }
-    }
+  }
 
-    // Calculate the shortest paths between all pairs of nodes using the Floyd-Warshall algorithm
-    let dist = [];
-    for (let i = 0; i < adjacencyMatrix.length; i++) {
-        dist[i] = [];
-        for (let j = 0; j < adjacencyMatrix.length; j++) {
-            if (i === j) {
-                dist[i][j] = 0;
-            } else if (adjacencyMatrix[i][j]) {
-                dist[i][j] = adjacencyMatrix[i][j];
-            } else {
-                dist[i][j] = Infinity;
-            }
-        }
-    }
-    for (let k = 0; k < adjacencyMatrix.length; k++) {
-        for (let i = 0; i < adjacencyMatrix.length; i++) {
-            for (let j = 0; j < adjacencyMatrix.length; j++) {
-                if (dist[i][k] + dist[k][j] < dist[i][j]) {
-                    dist[i][j] = dist[i][k] + dist[k][j];
-                }
-            }
-        }
-    }
+  let bc = betweennessCentrality(graph);
+  let cc = closenessCentrality(graph);
+  let ec = eigenvectorCentrality(graph);
 
-    // Calculate the closeness centrality of each node
-	let closenessCentralityValues= {};
-	let closenessRank= {};
-	
-	for(let i=0;i<territories.length;i++){
-		let sumOfDistances=0;
-		for(let j=0;j<territories.length;j++){
-			sumOfDistances+=dist[i][j];
-		}
-		closenessCentralityValues[territories[i]]=(1/sumOfDistances);
-	}
-	
-	let uniqueClosenessValues=[...new Set(Object.values(closenessCentralityValues))].sort((a,b) => a-b);
-	
-	for(let key in closenessCentralityValues){
-		closenessRank[key]=uniqueClosenessValues.indexOf(closenessCentralityValues[key])+1;
-	}
-	
-	for(let key in closenessCentralityValues){
-		closenessCentralityValues[key]=Math.round(closenessCentralityValues[key]*10000)/10;
-	}
+  // Generate color dictionaries for the centrality values
+  let bcColor = generateColorDictionary(bc);
+  let ccColor = generateColorDictionary(cc);
+  let ecColor = generateColorDictionary(ec);
 
-    // Create a graph from the adjacency matrix
-    let G = new jsnx.Graph();
-    for (let i = 0; i < adjacencyMatrix.length; i++) {
-        for (let j = i + 1; j < adjacencyMatrix.length; j++) {
-            if (adjacencyMatrix[i][j] === 1) {
-                G.addEdge(i, j);
-            }
-        }
+  // Calculate border colors
+  let bcBorderColor = bcColor.map((color) => averageColor(color, "000000"));
+  let ccBorderColor = ccColor.map((color) => averageColor(color, "000000"));
+  let ecBorderColor = ecColor.map((color) => averageColor(color, "000000"));
+
+  // Calculate whether the centrality values are above the standard deviation range
+  let bcAboveStdev = isAboveStdev(bc);
+  let ccAboveStdev = isAboveStdev(cc);
+  let ecAboveStdev = isAboveStdev(ec);
+
+  // Add the calculated centrality values and their colors to tableData
+  for (let i = 0; i < tableData.length; i++) {
+    tableData[i]["Betweenness"] = bc[i];
+    tableData[i]["Closeness"] = cc[i];
+    tableData[i]["Eigenvector"] = ec[i];
+    tableData[i]["Betweenness Color"] = bcColor[i];
+    tableData[i]["Closeness Color"] = ccColor[i];
+    tableData[i]["Eigenvector Color"] = ecColor[i];
+    tableData[i]["Betweenness Border Color"] = bcBorderColor[i];
+    tableData[i]["Closeness Border Color"] = ccBorderColor[i];
+    tableData[i]["Eigenvector Border Color"] = ecBorderColor[i];
+    tableData[i]["Betweenness Above STDEV"] = bcAboveStdev[i];
+    tableData[i]["Closeness Above STDEV"] = ccAboveStdev[i];
+    tableData[i]["Eigenvector Above STDEV"] = ecAboveStdev[i];
+  }
+
+  function generateColorDictionary(values) {
+    // Calculate average and standard deviation
+    let avg = values.reduce((a, b) => a + b, 0) / values.length;
+    let stdev = Math.sqrt(
+      values.reduce((a, b) => a + (b - avg) ** 2, 0) / values.length
+    );
+
+    // Define upper and lower range based on standard deviation
+    let upperRange = avg + stdev;
+    let lowerRange = avg - stdev;
+
+    // Separate values into three parts
+    let withinStdevRange = values.filter(
+      (value) => value >= lowerRange && value <= upperRange
+    );
+    let aboveStdevRange = values.filter((value) => value > upperRange);
+    let belowStdevRange = values.filter((value) => value < lowerRange);
+
+    // Assign colors to values within the standard deviation range
+    let withinStdevRangeColors = withinStdevRange.map((value) =>
+      getColorInRange(value, withinStdevRange, "CC0000", "FFED01")
+    );
+
+    // Assign colors to values above the standard deviation range
+    let aboveStdevRangeColors = aboveStdevRange.map((value) =>
+      getColorInRange(value, aboveStdevRange, "000000", "CC0000")
+    );
+
+    // Assign colors to values below the standard deviation range
+    let belowStdevRangeColors = belowStdevRange.map((value) =>
+      getColorInRange(value, belowStdevRange, "FFFFFF", "FFED01")
+    );
+
+    // Combine all colors into a single array
+    let colors = [];
+    for (let value of values) {
+      if (value >= lowerRange && value <= upperRange) {
+        colors.push(
+          withinStdevRangeColors[withinStdevRange.indexOf(value)]
+        );
+      } else if (value > upperRange) {
+        colors.push(aboveStdevRangeColors[aboveStdevRange.indexOf(value)]);
+      } else {
+        colors.push(belowStdevRangeColors[belowStdevRange.indexOf(value)]);
+      }
     }
+    return colors;
+  }
+  function getColorInRange(value, range, startColor, endColor) {
+    // Calculate the position of the value within the range
+    let min = Math.min(...range);
+    let max = Math.max(...range);
+    let position = (value - min) / (max - min);
 
-    // Calculate betweenness centrality and eigenvector centrality
-	let betweennessCentrality=jsnx.betweennessCentrality(G);
-	let eigenvectorCentrality=jsnx.eigenvectorCentrality(G,{maxIter:500});
-	
-	let betweennessCentralityValues={};
-	let betweennessRank={};
-	let eigenvectorCentralityValues={};	
-	let eigenvectorRank={};
-		
-	for(let key in betweennessCentrality._numberValues){
-		betweennessCentralityValues[territories[key]]=betweennessCentrality._numberValues[key];
-	}
-	
-	for(let key in eigenvectorCentrality._numberValues){
-		eigenvectorCentralityValues[territories[key]]=eigenvectorCentrality._numberValues[key];
-	}
-	
-	let uniqueBetweennessValues=[...new Set(Object.values(betweennessCentralityValues))].sort((a,b) => a-b);
-	let uniqueEigenvectorValues=[...new Set(Object.values(eigenvectorCentralityValues))].sort((a,b) => a-b);
-	
-	for(let key in betweennessCentralityValues){
-		betweennessRank[key]=uniqueBetweennessValues.indexOf(betweennessCentralityValues[key])+1;
-	}
-	
-	for(let key in eigenvectorCentralityValues){
-		eigenvectorRank[key]=uniqueEigenvectorValues.indexOf(eigenvectorCentralityValues[key])+1;
-	}
-	
-	for(let key in betweennessCentralityValues){
-		betweennessCentralityValues[key]=Math.round(betweennessCentralityValues[key]*1000)/10;
-	}
-	
-	for(let key in eigenvectorCentralityValues){
-		eigenvectorCentralityValues[key]=Math.round(eigenvectorCentralityValues[key]*1000)/10;
-	}
+    // Convert start and end colors to RGB format
+    let [r1, g1, b1] = hexToRgb(startColor);
+    let [r2, g2, b2] = hexToRgb(endColor);
 
-    // Calculate the scaled values for each metric
-    let betweennessScaled = {};
-    let closenessScaled = {};
-    let minBetweenness = Math.min(...Object.values(betweennessCentralityValues));
-    let maxBetweenness = Math.max(...Object.values(betweennessCentralityValues));
-    let minCloseness = Math.min(...Object.values(closenessCentralityValues));
-    let maxCloseness = Math.max(...Object.values(closenessCentralityValues));
-    for (let territory of territories) {
-        betweennessScaled[territory] = 100 * (betweennessCentralityValues[territory] - minBetweenness) / (maxBetweenness - minBetweenness);
-        closenessScaled[territory] = 100 * (closenessCentralityValues[territory] - minCloseness) / (maxCloseness - minCloseness);
-    }
+    // Calculate the color at the specified position in the gradient
+    let r = Math.round(r1 + (r2 - r1) * position);
+    let g = Math.round(g1 + (g2 - g1) * position);
+    let b = Math.round(b1 + (b2 - b1) * position);
 
-    // Calculate the disconnection potential values and rank
-    let disconnectionPotentialValues = {};
-    let disconnectionPotentialRank = {};
-    for (let territory of territories) {
-        disconnectionPotentialValues[territory] = (betweennessScaled[territory] + closenessScaled[territory]) / 3;
-    }
-    let uniqueDisconnectionPotentialValues = [...new Set(Object.values(disconnectionPotentialValues))].sort((a, b) => a - b);
-    for (let territory of territories) {
-        disconnectionPotentialRank[territory] = uniqueDisconnectionPotentialValues.indexOf(disconnectionPotentialValues[territory]) + 1;
-    }
+    // Convert the color to hexadecimal format
+    return rgbToHex(r, g, b);
+  }
+  function hexToRgb(hex) {
+    // Convert a hexadecimal color string to an array of RGB values
+    return [
+      parseInt(hex.substring(0, 2), 16),
+      parseInt(hex.substring(2, 4), 16),
+      parseInt(hex.substring(4, 6), 16),
+    ];
+  }
+  function rgbToHex(r, g, b) {
+    // Convert an array of RGB values to a hexadecimal color string
+    return [r, g, b]
+      .map((x) => x.toString(16).padStart(2, "0"))
+      .join("")
+      .toUpperCase();
+  }
+   function averageColor(color1, color2) {
+     let [r1, g1, b1] = hexToRgb(color1);
+     let [r2, g2, b2] = hexToRgb(color2);
+     let r = Math.round((r1 + r2) / 2);
+     let g = Math.round((g1 + g2) / 2);
+     let b = Math.round((b1 + b2) / 2);
+     return rgbToHex(r, g, b);
+   }
+   function isAboveStdev(values) {
+     // Calculate average and standard deviation
+     let avg = values.reduce((a, b) => a + b, 0) / values.length;
+     let stdev = Math.sqrt(
+       values.reduce((a, b) => a + (b - avg) ** 2, 0) / values.length
+     );
 
-	for(let key in disconnectionPotentialValues){
-	    disconnectionPotentialValues[key]=Math.round(disconnectionPotentialValues[key]*10)/10;
-	}
-    return [betweennessCentralityValues, eigenvectorCentralityValues, closenessCentralityValues, betweennessRank, eigenvectorRank, closenessRank, disconnectionPotentialValues, disconnectionPotentialRank];
+     // Define upper range based on standard deviation
+     let upperRange = avg + stdev;
+
+     // Determine whether each value is above the upper range
+     return values.map((value) => (value > upperRange ? 1 : 0));
+   }
 }
 
-function disconnectionPotentialColor(disconnectionPotentialRank) {
-    // Count the number of unique values in disconnectionPotentialRank
-    let uniqueValues = new Set(Object.values(disconnectionPotentialRank)).size;
-
-    // Generate a color dictionary with uniqueValues number of colors
-    let disconnectionPotential_colorDictionary = {};
-    for (let i = 0; i < uniqueValues; i++) {
-        let r = Math.round(255 - (255 - 204) * (i / (uniqueValues - 1)));
-        let g = Math.round(255 - (255 - 0) * (i / (uniqueValues - 1)));
-        let b = 0;
-        let color = '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
-        disconnectionPotential_colorDictionary[i + 1] = color;
-    }
-
-    return disconnectionPotential_colorDictionary;
-}
-
-function disconnectionPotential_borderColor(disconnectionPotentialRank) {
-    // Count the number of unique values in disconnectionPotentialRank
-    let uniqueValues = new Set(Object.values(disconnectionPotentialRank)).size;
-
-    // Generate a color dictionary with uniqueValues number of colors
-    let disconnectionPotential_border_colorDictionary = {};
-    for (let i = 0; i < uniqueValues; i++) {
-        let r = Math.round(128 - (128 - 102) * (i / (uniqueValues - 1)));
-        let g = Math.round(128 - (128 - 0) * (i / (uniqueValues - 1)));
-        let b = 0;
-        let color = '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
-        disconnectionPotential_border_colorDictionary[i + 1] = color;
-    }
-
-    return disconnectionPotential_border_colorDictionary;
-}
-
-function closenessColor(closenessRank) {
-    // Count the number of unique values in closenessRank
-    let uniqueValues = new Set(Object.values(closenessRank)).size;
-
-    // Generate a color dictionary with uniqueValues number of colors
-    let closeness_colorDictionary = {};
-    for (let i = 0; i < uniqueValues; i++) {
-        let r = Math.round(255 - (255 - 204) * (i / (uniqueValues - 1)));
-        let g = Math.round(255 - (255 - 0) * (i / (uniqueValues - 1)));
-        let b = 0;
-        let color = '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
-        closeness_colorDictionary[i + 1] = color;
-    }
-
-    return closeness_colorDictionary;
-}
-
-function closeness_borderColor(closenessRank) {
-    // Count the number of unique values in closenessRank
-    let uniqueValues = new Set(Object.values(closenessRank)).size;
-
-    // Generate a color dictionary with uniqueValues number of colors
-    let closeness_border_colorDictionary = {};
-    for (let i = 0; i < uniqueValues; i++) {
-        let r = Math.round(128 - (128 - 102) * (i / (uniqueValues - 1)));
-        let g = Math.round(128 - (128 - 0) * (i / (uniqueValues - 1)));
-        let b = 0;
-        let color = '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
-        closeness_border_colorDictionary[i + 1] = color;
-    }
-
-    return closeness_border_colorDictionary;
-}
-
-function betweennessColor(betweennessRank) {
-    // Count the number of unique values in betweennessRank
-    let uniqueValues = new Set(Object.values(betweennessRank)).size;
-
-    // Generate a color dictionary with uniqueValues number of colors
-    let betweenness_colorDictionary = {};
-    for (let i = 0; i < uniqueValues; i++) {
-        let r = Math.round(255 - (255 - 204) * (i / (uniqueValues - 1)));
-        let g = Math.round(255 - (255 - 0) * (i / (uniqueValues - 1)));
-        let b = 0;
-        let color = '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
-        betweenness_colorDictionary[i + 1] = color;
-    }
-
-    return betweenness_colorDictionary;
-}
-
-function betweenness_borderColor(betweennessRank) {
-    // Count the number of unique values in betweennessRank
-    let uniqueValues = new Set(Object.values(betweennessRank)).size;
-
-    // Generate a color dictionary with uniqueValues number of colors
-    let betweenness_border_colorDictionary = {};
-    for (let i = 0; i < uniqueValues; i++) {
-        let r = Math.round(128 - (128 - 102) * (i / (uniqueValues - 1)));
-        let g = Math.round(128 - (128 - 0) * (i / (uniqueValues - 1)));
-        let b = 0;
-        let color = '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
-        betweenness_border_colorDictionary[i + 1] = color;
-    }
-
-    return betweenness_border_colorDictionary;
-}
-
-function eigenvectorColor(eigenvectorRank) {
-    // Count the number of unique values in eigenvectorRank
-    let uniqueValues = new Set(Object.values(eigenvectorRank)).size;
-
-    // Generate a color dictionary with uniqueValues number of colors
-    let eigenvector_colorDictionary = {};
-    for (let i = 0; i < uniqueValues; i++) {
-        let r = Math.round(255 - (255 - 204) * (i / (uniqueValues - 1)));
-        let g = Math.round(255 - (255 - 0) * (i / (uniqueValues - 1)));
-        let b = 0;
-        let color = '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
-        eigenvector_colorDictionary[i + 1] = color;
-    }
-
-    return eigenvector_colorDictionary;
-}
-
-function eigenvector_borderColor(eigenvectorRank) {
-    // Count the number of unique values in eigenvectorRank
-    let uniqueValues = new Set(Object.values(eigenvectorRank)).size;
-
-    // Generate a color dictionary with uniqueValues number of colors
-    let eigenvector_border_colorDictionary = {};
-    for (let i = 0; i < uniqueValues; i++) {
-        let r = Math.round(128 - (128 - 102) * (i / (uniqueValues - 1)));
-        let g = Math.round(128 - (128 - 0) * (i / (uniqueValues - 1)));
-        let b = 0;
-        let color = '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
-        eigenvector_border_colorDictionary[i + 1] = color;
-    }
-
-    return eigenvector_border_colorDictionary;
-}
-
-// zzzzzzzzzzzz
-function experimentalCentralityFunction(tableData, betweennessCentralityValues, closenessCentralityValues) {
-    // Filter the input data
-    let filteredData = [];
-    for (let i = 0; i < tableData.length; i++) {
-        let row = tableData[i];
-        if (typeof row === 'object' && row.hasOwnProperty('A') && row.hasOwnProperty('B') && row.hasOwnProperty('C')) {
-            if (typeof row['A'] === 'string' && typeof row['B'] === 'string' && typeof row['C'] === 'string') {
-                filteredData.push(row);
-            }
-        }
-    }
-
-    // Create a list of unique territories
-    let territories = [];
-    for (let i = 0; i < filteredData.length; i++) {
-        if (filteredData[i]['B'] !== '' && !territories.includes(filteredData[i]['A'])) {
-            territories.push(filteredData[i]['A']);
-        }
-    }
-
-    // Create a graph object
-    let graph = {};
-    for (let i = 0; i < filteredData.length; i++) {
-        let territory = filteredData[i]['A'];
-        let connections = filteredData[i]['B'].split(',');
-        graph[territory] = {};
-        for (let j = 0; j < connections.length; j++) {
-            graph[territory][connections[j]] = 1;
-        }
-    }
-
-    // Calculate the number of direct connections for each node
-    let directConnections = {};
-    for (let i = 0; i < filteredData.length; i++) {
-        let territory = filteredData[i]['A'];
-        let connections = filteredData[i]['B'].split(',');
-        directConnections[territory] = Math.max(connections.length, 1);
-    }
-
-	// Calculate the experimental centrality scores by multiplying the maximum of each centrality value and 1, and by the number of direct connections
-	let experimentalCentrality = {};
-	for (let key in betweennessCentralityValues) {
-	    experimentalCentrality[key] = Math.max(betweennessCentralityValues[key], 1) * Math.max(closenessCentralityValues[key], 1) * Math.max(directConnections[key], 1);
-	}
-	
-	// Normalize the experimental centrality scores by themselves
-	let maxExperimentalCentralityScore = Math.max(...Object.values(experimentalCentrality));
-	for (let key in experimentalCentrality) {
-	    experimentalCentrality[key] /= maxExperimentalCentralityScore;
-	}
-	
-	// Multiply the experimental centrality scores by 100 and round them to the nearest integer
-	for (let key in experimentalCentrality) {
-	    experimentalCentrality[key] = Math.round(experimentalCentrality[key] * 1000) / 10;
-	}
-
-    // Rank the nodes based on their experimental centrality scores
-    let experimentalCentralityRank = {};
-    let uniqueExperimentalCentralityValues = [...new Set(Object.values(experimentalCentrality))];
-    uniqueExperimentalCentralityValues.sort((a, b) => a - b);
-    for (let key in experimentalCentrality) {
-        experimentalCentralityRank[key] = uniqueExperimentalCentralityValues.indexOf(experimentalCentrality[key]) + 1;
-    }
-
-    return [experimentalCentrality,experimentalCentralityRank];
-}
-	
-	
-function experimentalCentralityColor(experimentalCentralityRank) {
-    // Count the number of unique values in experimentalCentralityRank
-    let uniqueValues = new Set(Object.values(experimentalCentralityRank)).size;
-
-    // Generate a color dictionary with uniqueValues number of colors
-    let experimentalCentrality_colorDictionary = {};
-    for (let i = 0; i < uniqueValues; i++) {
-        let r = Math.round(255 - (255 - 204) * (i / (uniqueValues - 1)));
-        let g = Math.round(255 - (255 - 0) * (i / (uniqueValues - 1)));
-        let b = 0;
-        let color = '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
-        experimentalCentrality_colorDictionary[i + 1] = color;
-    }
-
-    return experimentalCentrality_colorDictionary;
-}
-
-function experimentalCentrality_borderColor(experimentalCentralityRank) {
-    // Count the number of unique values in experimentalCentralityRank
-    let uniqueValues = new Set(Object.values(experimentalCentralityRank)).size;
-
-    // Generate a color dictionary with uniqueValues number of colors
-    let experimentalCentrality_border_colorDictionary = {};
-    for (let i = 0; i < uniqueValues; i++) {
-        let r = Math.round(128 - (128 - 102) * (i / (uniqueValues - 1)));
-        let g = Math.round(128 - (128 - 0) * (i / (uniqueValues - 1)));
-        let b = 0;
-        let color = '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
-        experimentalCentrality_border_colorDictionary[i + 1] = color;
-    }
-
-    return experimentalCentrality_border_colorDictionary;
-}
-
-	
 // Generate the map
 function generateMap() {
   // Update buttons
@@ -786,115 +521,101 @@ function generateMap() {
   tableData = JSON.parse(JSON.stringify(tableDataClone));
   // Remove existing text elements
   svgElement.querySelectorAll("text").forEach((text) => text.remove());
-  // Remove everything contained in the blizzard array
-	// Find rows in table data where column A matches values in blizzardArray
-	const rows = tableData.filter((row) => blizzardArray.includes(row["A"]));
-
-	// Remove everything in column B for those rows
-	rows.forEach((row) => {
-	  row["B"] = "";
-	});
-
-	// Remove all instances of values in blizzardArray from column B
+	
+  	// Remove everything contained in the blizzard array
 	tableData.forEach((row) => {
-	  if (row["B"]) {
-	    // Split the value in column B into an array of values
-	    let values = row["B"].split(",");
-	    // Filter out any values that are included in the blizzardArray
-	    values = values.filter((value) => !blizzardArray.includes(value));
-	    // Join the remaining values back into a string and update the value in column B
-	    row["B"] = values.join(",");
+	  if (blizzardArray.includes(row["Territory"])) {
+	    row["Blizzard"] = 1;
+	    row["Connections"] = "";
+	  } else {
+	    row["Blizzard"] = 0;
+	    if (row["Connections"]) {
+	      let values = row["Connections"].split(",");
+	      values = values.filter((value) => !blizzardArray.includes(value));
+	      row["Connections"] = values.join(",");
+	    }
 	  }
 	});
-  // Add everything contained in the portal array
-	// Iterate over tableData
+	
+  	// Add everything contained in the portal array
 	tableData.forEach((row) => {
-	  // Check if value in column A matches a value in portalArray
-	  if (portalArray.includes(row["A"])) {
-	    // Add contents of portalArray to column B
-	    row["B"] = [
+	  if (portalArray.includes(row["Territory"])) {
+	    row["Connections"] = [
 	      ...new Set([
-		...(row["B"] ? row["B"].split(",") : []),
+		...(row["Connections"] ? row["Connections"].split(",") : []),
 		...portalArray,
 	      ]),
 	    ]
-	      .filter((value) => value !== row["A"])
+	      .filter((value) => value !== row["Territory"])
 	      .join(",");
 	  }
 	});
-  // Calculate new columns
-  tableData.forEach((row) => {
-    // Column D: vlookup col B values and add them + current value A and B
-    row["D"] = ""; // initialize column D to blank
-    if (row["B"] && row["B"].trim() !== "") {
-      // check if column B is not empty or undefined
-      const searchValues = row["B"].split(",");
-      let searchResults = [];
-      for (const searchValue of searchValues) {
-        const trimmedSearchValue = searchValue.trim().replace(/\u200B/g, "");
-        for (let i = 0; i < tableData.length; i++) {
-          if (tableData[i]["A"] === trimmedSearchValue) {
-            searchResults.push(tableData[i]["B"]);
-            break;
+
+    // Calculate new columns
+    tableData.forEach((row) => {
+      // Non-Unique Indirect Connections: vlookup Connections values and add them + current Territory & Connections
+      if (row["Blizzard"] === 0) {
+        const searchValues = row["Connections"].split(",");
+        let searchResults = [];
+        for (const searchValue of searchValues) {
+          for (let i = 0; i < tableData.length; i++) {
+            if (tableData[i]["Territory"] === searchValue) {
+              searchResults.push(tableData[i]["Connections"]);
+              break;
+            }
           }
         }
+        row["Non-Unique Indirect Connections"] = [row["Territory"], row["Connections"], ...searchResults].join(",");
+      } else {
+        row["Non-Unique Indirect Connections"] = 0
       }
-      row["D"] = [row["A"], row["B"], ...searchResults].join(",");
-    }
 
-    // Column E: Remove duplicate values from column D
-    row["E"] = [...new Set(row["D"].split(","))]
-      .filter((value) => value !== row["A"])
+    // Unique Indirect Connections: Remove duplicate values and Territory from Non-Unique Indirect Connections
+    row["Unique Indirect Connections"] = [...new Set(row["Non-Unique Indirect Connections"].split(","))]
+      .filter((value) => value !== row["Territory"])
       .join(",");
 	  
-    // Column F: Count how many comma-separated values are in column B
-    if (row["B"] && row["B"].trim() !== "") {
-      // check if column B is not empty or undefined
-      const values = row["B"].split(",");
-      row["F"] = values.length;
+    // Number of Direct Connections: Count how many comma-separated values are in column Connections
+    if (row["Blizzard"] === 0) {
+      const direct = row["Connections"].split(",");
+      const indirect = row["Unique Indirect Connections"].split(",");
+      row["Number of Direct Connections"] = Math.min(direct.length, 12);
+      row["Number of Indirect Connections"] = indirect.length;
+      row["Number of Cap Connections"] = row["Number of Indirect Connections"] - row["Number of Direct Connections"];
     } else {
-      row["F"] = 0;
-    }
-
-    // Column G: Count how many comma-separated values are in column E (unless it's empty, then set it to 0)
-    if (row["E"] && row["E"].trim() !== "") {
-      // check if column E is not empty or undefined
-      const values = row["E"].split(",");
-      row["G"] = values.length;
-    } else {
-      row["G"] = 0;
+      row["Number of Direct Connections"] = 0;
+      row["Number of Indirect Connections"] = 0;
+      row["Number of Cap Connections"] = 0;
     }
   });
 
-	// Calculate rescaled betweenness centrality and closeness centrality
-	let [betweennessCentralityValues, eigenvectorCentralityValues, closenessCentralityValues, betweennessRank, eigenvectorRank, closenessRank, disconnectionPotentialValues, disconnectionPotentialRank] = calculateCentrality(tableData);
-	let betweenness_ColorDictionary = betweennessColor(betweennessRank);
-	let eigenvector_ColorDictionary = eigenvectorColor(eigenvectorRank);
-	let closeness_ColorDictionary = closenessColor(eigenvectorRank);
-	let disconnectionPotential_ColorDictionary = disconnectionPotentialColor(disconnectionPotentialRank);
-	let betweenness_border_ColorDictionary = betweenness_borderColor(betweennessRank);
-	let eigenvector_border_ColorDictionary = eigenvector_borderColor(eigenvectorRank);
-	let closeness_border_ColorDictionary = closeness_borderColor(eigenvectorRank);
-	let disconnectionPotential_border_ColorDictionary = disconnectionPotential_borderColor(disconnectionPotentialRank);
+  // Call centrality function
+  calculateCentrality(tableData);
 
-	let [experimentalCentrality,experimentalCentralityRank] = experimentalCentralityFunction(tableData, betweennessCentralityValues, closenessCentralityValues)
-	let experimentalCentrality_ColorDictionary = experimentalCentralityColor(experimentalCentralityRank)
-	let experimentalCentrality_border_ColorDictionary = experimentalCentrality_borderColor(experimentalCentralityRank)
-	
-	// Populate columns with the centrality values
-	for (let i = 0; i < tableData.length; i++) {
-	    let territory = tableData[i]['A'];
-	    tableData[i]['H'] = betweennessCentralityValues[territory];
-	    tableData[i]['I'] = betweennessRank[territory];
-	    tableData[i]['J'] = eigenvectorCentralityValues[territory];
-	    tableData[i]['K'] = eigenvectorRank[territory];
-	    tableData[i]['L'] = closenessCentralityValues[territory];
-	    tableData[i]['M'] = closenessRank[territory];
-	    tableData[i]['N'] = disconnectionPotentialValues[territory];
-	    tableData[i]['O'] = disconnectionPotentialRank[territory];
-	    tableData[i]['P'] = experimentalCentrality[territory];
-	    tableData[i]['Q'] = experimentalCentralityRank[territory];
-	}
+	// Columns at this point:
+	// Territory = nodes
+	// Connections = list of direct connections for each node
+	// Blizzard = 1 if blizzard, 0 if not
+	// Pixel Pair 1, Pixel Pair 2 = pixel coordinates
+	// Continent = supernodes
+	// Value = continent bonus troops
+	// Non-Unique Indirect Connections = non-unique list of indirect connections + the node + the direct connections
+	// Unique Indirect Connections = list of unique indirect connections + the direct connections (node value is removed)
+	// Number of Direct Connections = integer
+	// Number of Indirect Connections = integer
+	// Number of Cap Connections = integer number of indirect - number of direct
+	// Betweenness = betweenness centrality value
+	// Betweenness Color = the color for that node
+	// Betweenness Border Color = the border color for that node
+	// Betweenness Above STDEV = 1 if the value is > stdev range, 0 otherwise
+	// Closeness = closeness centrality value
+	// Closeness Color = the color for that node
+	// Closeness Border Color = the border color for that node
+	// Closeness Above STDEV = 1 if the value is > stdev range, 0 otherwise
+	// Eigenvector = eigenvector centrality value
+	// Eigenvector Color = the color for that node
+	// Eigenvector Border Color = the border color for that node
+	// Eigenvector Above STDEV = 1 if the value is > stdev range, 0 otherwise
 	
   // Set font size of indirect connections
   var fontSizeInput = document.getElementById("fontSizeInput");
@@ -913,41 +634,24 @@ function generateMap() {
   paths.forEach(function (path) {
     var pathId = path.getAttribute("id");
     for (var i = 0; i < tableData.length; i++) {
-      if (tableData[i]["A"] === pathId) {
+      if (tableData[i]["Territory"] === pathId) {
         // Color in the map
-        var value = tableData[i]["F"];
-	    var betweennessValue = tableData[i]["H"];
-	    var betweennessPosition = tableData[i]["I"];
-	    var eigenvectorValue = tableData[i]["J"];
-	    var eigenvectorPosition = tableData[i]["K"];
-	    var closenessValue = tableData[i]["L"];
-	    var closenessPosition = tableData[i]["M"];
-	    var disconnectionPotentialValue = tableData[i]["N"];
-	    var disconnectionPotentialPosition = tableData[i]["O"];
-	    var experimentalCentralityValue = tableData[i]["P"];
-	    var experimentalCentralityPosition = tableData[i]["Q"];
-        if (value >= 12) {
-          value = 12;
-        }
-        if (value !== 0) {
+        if (tableData[i]["Blizzard"] === 0) {
 	  if (centralityMenu.value === "standard") {
-	    var color = colorDictionary[value];
-	    var border_color = colorDarktionary[value];
-	  } else if (centralityMenu.value === "betweenness") {
-	    var color = betweenness_ColorDictionary[betweennessPosition];
-	    var border_color = betweenness_border_ColorDictionary[betweennessPosition];
+	    var color = colorDictionary[tableData[i]["Number of Direct Connections"]];
+	    var border_color = colorDarktionary[tableData[i]["Number of Direct Connections"]];
 	  } else if (centralityMenu.value === "eigenvector") {
-	    var color = eigenvector_ColorDictionary[eigenvectorPosition];
-	    var border_color = eigenvector_border_ColorDictionary[eigenvectorPosition];
+	    var color = tableData[i]["Eigenvector Color"];
+	    var border_color = tableData[i]["Eigenvector Border Color"];
+	  } else if (centralityMenu.value === "betweenness") {
+	    var color = tableData[i]["Betweenness Color"];
+	    var border_color = tableData[i]["Betweenness Border Color"];
 	  } else if (centralityMenu.value === "closeness") {
-	    var color = closeness_ColorDictionary[closenessPosition];
-	    var border_color = closeness_border_ColorDictionary[closenessPosition];
-	  } else if (centralityMenu.value === "disconnectionPotential") {
-	    var color = disconnectionPotential_ColorDictionary[disconnectionPotentialPosition];
-	    var border_color = disconnectionPotential_border_ColorDictionary[disconnectionPotentialPosition];
-	  } else if (centralityMenu.value === "experimentalCentrality") {
-	    var color = experimentalCentrality_ColorDictionary[experimentalCentralityPosition];
-	    var border_color = experimentalCentrality_border_ColorDictionary[experimentalCentralityPosition];
+	    var color = tableData[i]["Closeness Color"];
+	    var border_color = tableData[i]["Closeness Border Color"];
+	  } else if (centralityMenu.value === "capConnections") {
+	    var color = colorDictionary[Math.min(tableData[i]["Number of Cap Connections"], 12)];
+	    var border_color = colorDarktionary[Math.min(tableData[i]["Number of Cap Connections"], 12)];
 	  }
           path.style.setProperty("fill", color, "important");
           path.setAttribute("stroke-opacity", "100");
@@ -955,17 +659,16 @@ function generateMap() {
           path.style.setProperty("stroke-width", "2", "important");
         }
 
-        // Add text to the specified location from CSV data
-        value = tableData[i]["G"];
-        if (value !== 0) {
+        // Add text to the specified location from tableData
+        if (tableData[i]["Blizzard"] === 0) {
           // Find matching row in CSV data
-          var csvRow = csvData.find(function (row) {
-            return row["Range"] === pathId;
+          var coordinates = tableData.find(function (row) {
+            return row["Territory"] === pathId;
           });
 
           // Get coordinates from CSV data
-          var x = csvRow["Pixel Pair 1"];
-          var y = csvRow["Pixel Pair 2"];
+          var x = coordinates["Pixel Pair 1"];
+          var y = coordinates["Pixel Pair 2"];
 
           var text = document.createElementNS(
             "http://www.w3.org/2000/svg",
@@ -978,24 +681,31 @@ function generateMap() {
           text.setAttribute("alignment-baseline", "middle");
           text.setAttribute("font-size", fontSizeInput.value);
           text.setAttribute("font-weight", "bold");
-	  if (tableData[i]["F"] >= 11) {
+
+	let condition1 = centralityMenu.value === "standard" && tableData[i]["Number of Direct Connections"] >= 11;
+	let condition2 = centralityMenu.value === "eigenvector" && tableData[i]["Eigenvector Above STDEV"] === 1;
+	let condition3 = centralityMenu.value === "betweenness" && tableData[i]["Betweenness Above STDEV"] === 1;
+	let condition4 = centralityMenu.value === "closeness" && tableData[i]["Closeness Above STDEV"] === 1;
+	let condition5 = centralityMenu.value === "capConnections" && tableData[i]["Number of Cap Connections"] >= 11;
+		
+	  if (condition1 || condition2 || condition3 || condition4 || condition5) {
 	    text.setAttribute("fill", "white");
 	  } else {
 	    text.setAttribute("fill", "black");
 	  }
+		
 	  if (centralityMenu.value === "standard") {
-	    text.textContent = value;
-	  } else if (centralityMenu.value === "betweenness") {
-	    text.textContent = betweennessValue;
+	    text.textContent = tableData[i]["Number of Indirect Connections"];
 	  } else if (centralityMenu.value === "eigenvector") {
-	    text.textContent = eigenvectorValue;
+	    text.textContent = tableData[i]["Eigenvector"];
+	  } else if (centralityMenu.value === "betweenness") {
+	    text.textContent = tableData[i]["Betweenness"];
 	  } else if (centralityMenu.value === "closeness") {
-	    text.textContent = closenessValue;
-	  } else if (centralityMenu.value === "disconnectionPotential") {
-	    text.textContent = disconnectionPotentialValue;
-	  } else if (centralityMenu.value === "experimentalCentrality") {
-	    text.textContent = experimentalCentralityValue;
+	    text.textContent = tableData[i]["Closeness"];
+	  } else if (centralityMenu.value === "capConnections") {
+	    text.textContent = tableData[i]["Number of Cap Connections"];
 	  }
+		
           // Adjust x and y coordinates to position midpoint of text at specified coordinates
           var bbox = text.getBBox();
           text.setAttribute("x", x - bbox.width / 2);
@@ -1007,34 +717,30 @@ function generateMap() {
       }
     }
   });
-	// Find the maximum value in column F
-	var maxF = Math.max(...tableData.map((row) => row["F"]));
+	// Find the maximum number of direct connections
+	var maxConnections = Math.max(...tableData.map((row) => row["Number of Direct Connections"]));
 
-	// Ensure that maxF is never greater than 12
-	if (maxF > 12) {
-	  maxF = 12;
-	}
 	// Get the base image element & define base URL
 	var baseImage = document.getElementById("map");
 	var baseURL = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/";
 
 	// Decide which image to display based on the maximum value in column F
-	if (centralityMenu.value !== "standard") {
+	if (centralityMenu.value !== "standard" && centralityMenu.value !== "capConnections") {
 	    baseImage.src = baseURL + colorLegend + "%20Heatmap.png"
-	} else if (maxF < 3) {
+	} else if (maxConnections < 3) {
 	    baseImage.src = baseURL + colorLegend + ".png";
 	} else {
-	    baseImage.src = baseURL + colorLegend + "%20" + maxF + ".png";
+	    baseImage.src = baseURL + colorLegend + "%20" + maxConnections + ".png";
 	}
 	
 // Create a mapping of node names to indices
 let nodeToIndex = {};
 let index = 0;
 tableData.forEach(row => {
-  if (row['A'] && !nodeToIndex.hasOwnProperty(row['A'])) {
-    nodeToIndex[row['A']] = index++;
+  if (row['Territory'] && !nodeToIndex.hasOwnProperty(row['Territory'])) {
+    nodeToIndex[row['Territory']] = index++;
   }
-  let neighbors = row['B'] ? row['B'].split(',') : [];
+  let neighbors = row['Connections'] ? row['Connections'].split(',') : [];
   neighbors.forEach(neighbor => {
     if (!nodeToIndex.hasOwnProperty(neighbor)) {
       nodeToIndex[neighbor] = index++;
@@ -1057,8 +763,8 @@ for (let i = 0; i < index; i++) {
 
 // Populate the distance matrix with the distances between directly connected nodes
 tableData.forEach(row => {
-  let x = nodeToIndex[row['A']];
-  let neighbors = row['B'] ? row['B'].split(',') : [];
+  let x = nodeToIndex[row['Territory']];
+  let neighbors = row['Connections'] ? row['Connections'].split(',') : [];
   neighbors.forEach(neighbor => {
     let y = nodeToIndex[neighbor];
     dist[x][y] = 1;
@@ -1099,10 +805,10 @@ for (let i = 0; i < index; i++) {
 let nodeToIndexClone = {};
 let indexClone = 0;
 tableDataClone.forEach(row => {
-  if (row['A'] && !nodeToIndexClone.hasOwnProperty(row['A'])) {
-    nodeToIndexClone[row['A']] = indexClone++;
+  if (row['Territory'] && !nodeToIndexClone.hasOwnProperty(row['Territory'])) {
+    nodeToIndexClone[row['Territory']] = indexClone++;
   }
-  let neighbors = row['B'] ? row['B'].split(',') : [];
+  let neighbors = row['Connections'] ? row['Connections'].split(',') : [];
   neighbors.forEach(neighbor => {
     if (!nodeToIndexClone.hasOwnProperty(neighbor)) {
       nodeToIndexClone[neighbor] = indexClone++;
@@ -1125,8 +831,8 @@ for (let i = 0; i < indexClone; i++) {
 
 // Populate the distance matrix with the distances between directly connected nodes for tableDataCloneCopy
 tableDataClone.forEach(row => {
-  let x = nodeToIndexClone[row['A']];
-  let neighbors = row['B'] ? row['B'].split(',') : [];
+  let x = nodeToIndexClone[row['Territory']];
+  let neighbors = row['Connections'] ? row['Connections'].split(',') : [];
   neighbors.forEach(neighbor => {
     let y = nodeToIndexClone[neighbor];
     distClone[x][y] = 1;
@@ -1166,21 +872,21 @@ for (let i = 0; i < portalArray.length; i++) {
   // Check for too-small continents
   let continentCounts = {};
   tableData.forEach(row => {
-    if (row['A'] && row['C']) {
-      if (!continentCounts.hasOwnProperty(row['C'])) {
-        continentCounts[row['C']] = 0;
+    if (row['Territory'] && row['Continent']) {
+      if (!continentCounts.hasOwnProperty(row['Continent'])) {
+        continentCounts[row['Continent']] = 0;
       }
-      continentCounts[row['C']]++;
+      continentCounts[row['Continent']]++;
     }
   });
   let blizzardContinentCounts = {};
   blizzardArray.forEach(path => {
-    let row = tableData.find(row => row['A'] === path);
-    if (row && row['C']) {
-      if (!blizzardContinentCounts.hasOwnProperty(row['C'])) {
-        blizzardContinentCounts[row['C']] = 0;
+    let row = tableData.find(row => row['Territory'] === path);
+    if (row && row['Continent']) {
+      if (!blizzardContinentCounts.hasOwnProperty(row['Continent'])) {
+        blizzardContinentCounts[row['Continent']] = 0;
       }
-      blizzardContinentCounts[row['C']]++;
+      blizzardContinentCounts[row['Continent']]++;
     }
   });
   let continentTooSmall = false;
@@ -1190,6 +896,7 @@ for (let i = 0; i < portalArray.length; i++) {
       break;
     }
   }
+	
   // Update invalid text
   var invalidText = document.getElementById("invalidText");
   if (!allNodesConnected && portalsTooClose && continentTooSmall) {
@@ -1256,55 +963,37 @@ function addBlizzards() {
     return;
   }
 
-	// Call border color dictionaries
-	let [betweennessCentralityValues, eigenvectorCentralityValues, closenessCentralityValues, betweennessRank, eigenvectorRank, closenessRank, disconnectionPotentialValues, disconnectionPotentialRank] = calculateCentrality(tableData);
-	let betweenness_border_ColorDictionary = betweenness_borderColor(betweennessRank);
-	let eigenvector_border_ColorDictionary = eigenvector_borderColor(eigenvectorRank);
-	let closeness_border_ColorDictionary = closeness_borderColor(eigenvectorRank);
-	let disconnectionPotential_border_ColorDictionary = disconnectionPotential_borderColor(disconnectionPotentialRank);
+// Define mouseover, mouseout, and click event handlers
+const mouseoverHandler = function () {
+  if (shouldReturn) {
+    return;
+  }
+  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
+    // Change stroke color to white and stroke width to 3
+    this.style.setProperty("stroke", "white", "important");
+    this.style.setProperty("stroke-width", "3", "important");
+  }
+};
 	
-	let [experimentalCentrality,experimentalCentralityRank] = experimentalCentralityFunction(tableData, betweennessCentralityValues, closenessCentralityValues)
-	let experimentalCentrality_border_ColorDictionary = experimentalCentrality_borderColor(experimentalCentralityRank)
-	
-	// Define mouseover, mouseout, and click event handlers
-	const mouseoverHandler = function () {
-	  if (shouldReturn) {
-	    return;
-	  }
-	  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
-	    // Change stroke color to white and stroke width to 3
-	    this.style.setProperty("stroke", "white", "important");
-	    this.style.setProperty("stroke-width", "3", "important");
-	  }
-	};
 const mouseoutHandler = function () {
   if (shouldReturn) {
     return;
   }
   if (!clickedPathsBlizzardsPortals.includes(this.id)) {
     // Reset stroke color and width according to the selected centrality measure
-    let value = tableData.find(row => row['A'] === this.id)['F'];
     let border_color;
     if (centralityMenu.value === "standard") {
-      if (value >= 12) {
-        value = 12;
-      }
+      let value = tableData.find(row => row['Territory'] === this.id)['Number of Direct Connections'];
       border_color = colorDarktionary[value];
-    } else if (centralityMenu.value === "betweenness") {
-      let betweennessPosition = tableData.find(row => row['A'] === this.id)['I'];
-      border_color = betweenness_border_ColorDictionary[betweennessPosition];
     } else if (centralityMenu.value === "eigenvector") {
-      let eigenvectorPosition = tableData.find(row => row['A'] === this.id)['K'];
-      border_color = eigenvector_border_ColorDictionary[eigenvectorPosition];
+      border_color = tableData.find(row => row['Territory'] === this.id)['Eigenvector Border Color'];
+    } else if (centralityMenu.value === "betweenness") {
+      border_color = tableData.find(row => row['Territory'] === this.id)['Betweenness Border Color'];
     } else if (centralityMenu.value === "closeness") {
-      let closenessPosition = tableData.find(row => row['A'] === this.id)['M'];
-      border_color = closeness_border_ColorDictionary[closenessPosition];
-    } else if (centralityMenu.value === "disconnectionPotential") {
-      let disconnectionPotentialPosition = tableData.find(row => row['A'] === this.id)['O'];
-      border_color = disconnectionPotential_border_ColorDictionary[disconnectionPotentialPosition];
-    } else if (centralityMenu.value === "experimentalCentrality") {
-      let experimentalCentralityPosition = tableData.find(row => row['A'] === this.id)['Q'];
-      border_color = experimentalCentrality_border_ColorDictionary[experimentalCentralityPosition];
+      border_color = tableData.find(row => row['Territory'] === this.id)['Closeness Border Color'];
+    } else if (centralityMenu.value === "capConnections") {
+      let value = tableData.find(row => row['Territory'] === this.id)['Number of Cap Connections'];
+      border_color = colorDarktionary[Math.min(value, 12)];
     }
 	this.style.setProperty("stroke", border_color, "important");
 	this.style.setProperty("stroke-width", "2", "important");
@@ -1499,16 +1188,6 @@ function addPortals() {
     return;
   }
 
-	// Call border color dictionaries
-	let [betweennessCentralityValues, eigenvectorCentralityValues, closenessCentralityValues, betweennessRank, eigenvectorRank, closenessRank, disconnectionPotentialValues, disconnectionPotentialRank] = calculateCentrality(tableData);
-	let betweenness_border_ColorDictionary = betweenness_borderColor(betweennessRank);
-	let eigenvector_border_ColorDictionary = eigenvector_borderColor(eigenvectorRank);
-	let closeness_border_ColorDictionary = closeness_borderColor(eigenvectorRank);
-	let disconnectionPotential_border_ColorDictionary = disconnectionPotential_borderColor(disconnectionPotentialRank);
-
-	let [experimentalCentrality,experimentalCentralityRank] = experimentalCentralityFunction(tableData, betweennessCentralityValues, closenessCentralityValues)
-	let experimentalCentrality_border_ColorDictionary = experimentalCentrality_borderColor(experimentalCentralityRank)
-	
 	// Define mouseover, mouseout, and click event handlers
 	const mouseoverHandler = function () {
 	  if (shouldReturn) {
@@ -1526,28 +1205,19 @@ function addPortals() {
 	  }
 	  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
 	    // Reset stroke color and width according to the selected centrality measure
-	    let value = tableData.find(row => row['A'] === this.id)['F'];
 	    let border_color;
 	    if (centralityMenu.value === "standard") {
-	      if (value >= 12) {
-	        value = 12;
-	      }
+	      let value = tableData.find(row => row['Territory'] === this.id)['Number of Direct Connections'];
 	      border_color = colorDarktionary[value];
-	    } else if (centralityMenu.value === "betweenness") {
-	      let betweennessPosition = tableData.find(row => row['A'] === this.id)['I'];
-	      border_color = betweenness_border_ColorDictionary[betweennessPosition];
 	    } else if (centralityMenu.value === "eigenvector") {
-	      let eigenvectorPosition = tableData.find(row => row['A'] === this.id)['K'];
-	      border_color = eigenvector_border_ColorDictionary[eigenvectorPosition];
+	      border_color = tableData.find(row => row['Territory'] === this.id)['Eigenvector Border Color'];
+	    } else if (centralityMenu.value === "betweenness") {
+	      border_color = tableData.find(row => row['Territory'] === this.id)['Betweenness Border Color'];
 	    } else if (centralityMenu.value === "closeness") {
-	      let closenessPosition = tableData.find(row => row['A'] === this.id)['M'];
-	      border_color = closeness_border_ColorDictionary[closenessPosition];
-	    } else if (centralityMenu.value === "disconnectionPotential") {
-	      let disconnectionPotentialPosition = tableData.find(row => row['A'] === this.id)['O'];
-	      border_color = disconnectionPotential_border_ColorDictionary[disconnectionPotentialPosition];
-	    } else if (centralityMenu.value === "experimentalCentrality") {
-	      let experimentalCentralityPosition = tableData.find(row => row['A'] === this.id)['Q'];
-	      border_color = experimentalCentrality_border_ColorDictionary[experimentalCentralityPosition];
+	      border_color = tableData.find(row => row['Territory'] === this.id)['Closeness Border Color'];
+	    } else if (centralityMenu.value === "capConnections") {
+	      let value = tableData.find(row => row['Territory'] === this.id)['Number of Cap Connections'];
+	      border_color = colorDarktionary[Math.min(value, 12)];
 	    }
 		this.style.setProperty("stroke", border_color, "important");
 		this.style.setProperty("stroke-width", "2", "important");
@@ -1577,13 +1247,13 @@ function addPortals() {
 	var pathId = this.id;
 
 	// Find matching row in CSV data
-	var csvRow = csvData.find(function (row) {
-	  return row["Range"] === pathId;
+	var coordinates = tableData.find(function (row) {
+	  return row["Territory"] === pathId;
 	});
 
       // Get coordinates from CSV data
-      var x = csvRow["Pixel Pair 1"];
-      var y = csvRow["Pixel Pair 2"];
+      var x = coordinates["Pixel Pair 1"];
+      var y = coordinates["Pixel Pair 2"];
 
       // Set pointer-events attribute of the image element to none
       image.setAttribute("pointer-events", "none");
@@ -1698,16 +1368,6 @@ function eraser() {
   document.getElementById("eraserButton").addEventListener("click", eraserButtonClick);
   document.getElementById("stopButton").addEventListener("click", stopButtonClick);
 
-	// Call border color dictionaries
-	let [betweennessCentralityValues, eigenvectorCentralityValues, closenessCentralityValues, betweennessRank, eigenvectorRank, closenessRank, disconnectionPotentialValues, disconnectionPotentialRank] = calculateCentrality(tableData);
-	let betweenness_border_ColorDictionary = betweenness_borderColor(betweennessRank);
-	let eigenvector_border_ColorDictionary = eigenvector_borderColor(eigenvectorRank);
-	let closeness_border_ColorDictionary = closeness_borderColor(eigenvectorRank);
-	let disconnectionPotential_border_ColorDictionary = disconnectionPotential_borderColor(disconnectionPotentialRank);
-
-	let [experimentalCentrality,experimentalCentralityRank] = experimentalCentralityFunction(tableData, betweennessCentralityValues, closenessCentralityValues)
-	let experimentalCentrality_border_ColorDictionary = experimentalCentrality_borderColor(experimentalCentralityRank)
-	
 	// Define mouseover, mouseout, and click event handlers
 	const mouseoverHandler = function () {
 	  if (shouldReturn) {
@@ -1732,26 +1392,17 @@ function eraser() {
 	      // Reset stroke color and width according to the selected centrality measure
 	      let border_color;
 	      if (centralityMenu.value === "standard") {
-	        let value = tableData.find(row => row['A'] === this.id)['F'];
-	        if (value >= 12) {
-	          value = 12;
-	        }
+	        let value = tableData.find(row => row['Territory'] === this.id)['Number of Direct Connections'];
 	        border_color = colorDarktionary[value];
-	      } else if (centralityMenu.value === "betweenness") {
-	        let betweennessPosition = tableData.find(row => row['A'] === this.id)['I'];
-	        border_color = betweenness_border_ColorDictionary[betweennessPosition];
 	      } else if (centralityMenu.value === "eigenvector") {
-	        let eigenvectorPosition = tableData.find(row => row['A'] === this.id)['K'];
-	        border_color = eigenvector_border_ColorDictionary[eigenvectorPosition];
+	        border_color = tableData.find(row => row['Territory'] === this.id)['Eigenvector Border Color'];
+	      } else if (centralityMenu.value === "betweenness") {
+	        border_color = tableData.find(row => row['Territory'] === this.id)['Betweenness Border Color'];
 	      } else if (centralityMenu.value === "closeness") {
-	        let closenessPosition = tableData.find(row => row['A'] === this.id)['M'];
-	        border_color = closeness_border_ColorDictionary[closenessPosition];
-	      } else if (centralityMenu.value === "disconnectionPotential") {
-	        let disconnectionPotentialPosition = tableData.find(row => row['A'] === this.id)['O'];
-	        border_color = disconnectionPotential_border_ColorDictionary[disconnectionPotentialPosition];
-	      } else if (centralityMenu.value === "experimentalCentrality") {
-		let experimentalCentralityPosition = tableData.find(row => row['A'] === this.id)['Q'];
-		border_color = experimentalCentrality_border_ColorDictionary[experimentalCentralityPosition];
+	        border_color = tableData.find(row => row['Territory'] === this.id)['Closeness Border Color'];
+	      } else if (centralityMenu.value === "capConnections") {
+	        let value = tableData.find(row => row['Territory'] === this.id)['Number of Cap Connections'];
+	        border_color = colorDarktionary[Math.min(value, 12)];
 	      }
 	      this.style.setProperty("stroke", border_color, "important");
 	      this.style.setProperty("stroke-width", "2", "important");
@@ -1851,13 +1502,13 @@ function addPortals_pathID(pathID) {
   var clickedPathId = pathID;
 
   // Find matching row in CSV data
-  var csvRow = csvData.find(function (row) {
-    return row["Range"] === clickedPathId;
+  var coordinates = tableData.find(function (row) {
+    return row["Territory"] === clickedPathId;
   });
 
   // Get coordinates from CSV data
-  var x = csvRow["Pixel Pair 1"];
-  var y = csvRow["Pixel Pair 2"];
+  var x = coordinates["Pixel Pair 1"];
+  var y = coordinates["Pixel Pair 2"];
 
   // Set pointer-events attribute of the image element to none
   image.setAttribute("pointer-events", "none");
