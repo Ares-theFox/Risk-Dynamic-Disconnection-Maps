@@ -1,0 +1,43 @@
+Territory,Connections,Pixel Pair 1,Pixel Pair 2,Continent,Value
+Boston1,"Boston2,Boston3,Boston5,Boston7",230,444,West Roxbury,5
+Boston2,"Boston1,Boston3,Boston4,Boston7,Boston9,Boston13",414,530,West Roxbury,5
+Boston3,"Boston1,Boston2,Boston4",314,632,West Roxbury,5
+Boston4,"Boston2,Boston3,Boston13,Boston14,Boston20",457,647,West Roxbury,5
+Boston5,"Boston1,Boston6,Boston7,Boston8",538,375,Jamaica Plain,5
+Boston6,"Boston5,Boston8,Boston10,Boston39",592,360,Jamaica Plain,5
+Boston7,"Boston1,Boston2,Boston5,Boston8,Boston9",510,426,Jamaica Plain,5
+Boston8,"Boston5,Boston6,Boston7,Boston9,Boston10",568,413,Jamaica Plain,5
+Boston9,"Boston2,Boston7,Boston8,Boston10,Boston12,Boston13,Boston14,Boston15",568,488,Roxbury,7
+Boston10,"Boston6,Boston8,Boston9,Boston11,Boston12,Boston39",664,407,Roxbury,7
+Boston11,"Boston10,Boston12,Boston16,Boston39,Boston42",711,372,Roxbury,7
+Boston12,"Boston9,Boston10,Boston11,Boston15,Boston16",661,484,Roxbury,7
+Boston13,"Boston2,Boston4,Boston9,Boston14",539,590,Dorchester,10
+Boston14,"Boston4,Boston9,Boston13,Boston15,Boston19,Boston20",600,596,Dorchester,10
+Boston15,"Boston9,Boston12,Boston14,Boston16,Boston17,Boston18,Boston19",687,574,Dorchester,10
+Boston16,"Boston11,Boston12,Boston15,Boston17,Boston26,Boston42",754,496,Dorchester,10
+Boston17,"Boston15,Boston16,Boston18,Boston26",824,538,Dorchester,10
+Boston18,"Boston15,Boston17,Boston19,Boston20,Boston22",728,693,Dorchester,10
+Boston19,"Boston14,Boston15,Boston18,Boston20",639,668,Dorchester,10
+Boston20,"Boston4,Boston14,Boston18,Boston19",600,748,Dorchester,10
+Boston21,"Boston22,Boston27",943,575,Harbor Islands,4
+Boston22,"Boston21,Boston23,Boston18",1060,612,Harbor Islands,4
+Boston23,"Boston22,Boston24",1138,658,Harbor Islands,4
+Boston24,"Boston23,Boston25",1232,704,Harbor Islands,4
+Boston25,Boston24,1318,793,Harbor Islands,4
+Boston26,"Boston16,Boston17,Boston27,Boston28,Boston34,Boston42,Boston29",849,450,Waterfront,5
+Boston27,"Boston21,Boston26,Boston28,Boston29",918,448,Waterfront,5
+Boston28,"Boston26,Boston27,Boston29",877,401,Waterfront,5
+Boston29,"Boston26,Boston27,Boston28,Boston32,Boston34",932,388,Waterfront,5
+Boston30,Boston31,1089,197,East Boston,3
+Boston31,"Boston30,Boston32,Boston34",1132,243,East Boston,3
+Boston32,"Boston29,Boston31",1153,336,East Boston,3
+Boston33,"Boston34,Boston41,Boston42",884,262,Downtown,3
+Boston34,"Boston26,Boston29,Boston31,Boston33,Boston36,Boston42",946,270,Downtown,3
+Boston35,Boston36,870,105,Charlestown,2
+Boston36,"Boston34,Boston35",914,154,Charlestown,2
+Boston37,Boston38,502,134,Allston Brighton,2
+Boston38,"Boston37,Boston40",627,126,Allston Brighton,2
+Boston39,"Boston6,Boston10,Boston11,Boston40,Boston42",625,311,The Fens,5
+Boston40,"Boston38,Boston39,Boston41,Boston42",694,272,The Fens,5
+Boston41,"Boston33,Boston40,Boston42",794,278,The Fens,5
+Boston42,"Boston11,Boston16,Boston26,Boston33,Boston34,Boston39,Boston40,Boston41",791,342,The Fens,5
