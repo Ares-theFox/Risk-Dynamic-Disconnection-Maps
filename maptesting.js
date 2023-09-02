@@ -266,7 +266,7 @@ sequence.forEach(function (item) {
 let tableData;
 let tableDataClone;
 Papa.parse(
-  DirectConnections,
+  csvData,
   {
     download: true,
     header: true,
