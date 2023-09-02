@@ -285,8 +285,8 @@ Papa.parse(
       let filteredTableData = [];
       for (let i = 0; i < tableData.length; i++) {
           let row = tableData[i];
-          if (typeof row === 'object' && row.hasOwnProperty('A') && row.hasOwnProperty('B')) {
-              if (typeof row['A'] === 'string' && typeof row['B'] === 'string') {
+          if (typeof row === 'object' && row.hasOwnProperty('Territory') && row.hasOwnProperty('Connections')) {
+              if (typeof row['Territory'] === 'string' && typeof row['Connections'] === 'string') {
                   filteredTableData.push(row);
               }
           }
