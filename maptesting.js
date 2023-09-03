@@ -347,171 +347,189 @@ function stopEditing() {
 }
 
 // FUNCTION: calculate centrality
-function calculateCentrality(tableData) {
-  // Create a graph object from tableData
-  let graph = {
-    nodes: [],
-    neighbors: function (node) {
-      let index = this.nodes.indexOf(node);
-      if (index === -1) return [];
-      return this.edges[index];
-    },
-    edges: [],
-  };
-
-  // Populate the graph object with data from tableData
-  for (let row of tableData) {
-    let node = row["Territory"];
-    let index = graph.nodes.indexOf(node);
-    if (index === -1) {
-      index = graph.nodes.length;
-      graph.nodes.push(node);
-      graph.edges.push([]);
-    }
-    let connections = row["Connections"].split(",");
-    for (let neighbor of connections) {
-      graph.edges[index].push(neighbor.trim());
-    }
-  }
-
-  let bc = betweennessCentrality(graph);
-  let cc = closenessCentrality(graph);
-  let ec = eigenvectorCentrality(graph);
-
-  // Generate color dictionaries for the centrality values
-  let bcColor = generateColorDictionary(bc);
-  let ccColor = generateColorDictionary(cc);
-  let ecColor = generateColorDictionary(ec);
-
-  // Calculate border colors
-  let bcBorderColor = bcColor.map((color) => averageColor(color, "000000"));
-  let ccBorderColor = ccColor.map((color) => averageColor(color, "000000"));
-  let ecBorderColor = ecColor.map((color) => averageColor(color, "000000"));
-
-  // Calculate whether the centrality values are above the standard deviation range
-  let bcAboveStdev = isAboveStdev(bc);
-  let ccAboveStdev = isAboveStdev(cc);
-  let ecAboveStdev = isAboveStdev(ec);
-
-  // Add the calculated centrality values and their colors to tableData
-  for (let i = 0; i < tableData.length; i++) {
-    tableData[i]["Betweenness"] = bc[i];
-    tableData[i]["Closeness"] = cc[i];
-    tableData[i]["Eigenvector"] = ec[i];
-    tableData[i]["Betweenness Color"] = bcColor[i];
-    tableData[i]["Closeness Color"] = ccColor[i];
-    tableData[i]["Eigenvector Color"] = ecColor[i];
-    tableData[i]["Betweenness Border Color"] = bcBorderColor[i];
-    tableData[i]["Closeness Border Color"] = ccBorderColor[i];
-    tableData[i]["Eigenvector Border Color"] = ecBorderColor[i];
-    tableData[i]["Betweenness Above STDEV"] = bcAboveStdev[i];
-    tableData[i]["Closeness Above STDEV"] = ccAboveStdev[i];
-    tableData[i]["Eigenvector Above STDEV"] = ecAboveStdev[i];
-  }
-
-  function generateColorDictionary(values) {
-    // Calculate average and standard deviation
-    let avg = values.reduce((a, b) => a + b, 0) / values.length;
-    let stdev = Math.sqrt(
-      values.reduce((a, b) => a + (b - avg) ** 2, 0) / values.length
-    );
-
-    // Define upper and lower range based on standard deviation
-    let upperRange = avg + stdev;
-    let lowerRange = avg - stdev;
-
-    // Separate values into three parts
-    let withinStdevRange = values.filter(
-      (value) => value >= lowerRange && value <= upperRange
-    );
-    let aboveStdevRange = values.filter((value) => value > upperRange);
-    let belowStdevRange = values.filter((value) => value < lowerRange);
-
-    // Assign colors to values within the standard deviation range
-    let withinStdevRangeColors = withinStdevRange.map((value) =>
-      getColorInRange(value, withinStdevRange, "CC0000", "FFED01")
-    );
-
-    // Assign colors to values above the standard deviation range
-    let aboveStdevRangeColors = aboveStdevRange.map((value) =>
-      getColorInRange(value, aboveStdevRange, "000000", "CC0000")
-    );
-
-    // Assign colors to values below the standard deviation range
-    let belowStdevRangeColors = belowStdevRange.map((value) =>
-      getColorInRange(value, belowStdevRange, "FFFFFF", "FFED01")
-    );
-
-    // Combine all colors into a single array
-    let colors = [];
+function stats(values) {
+    let sum = 0;
+    let count = 0;
     for (let value of values) {
-      if (value >= lowerRange && value <= upperRange) {
-        colors.push(
-          withinStdevRangeColors[withinStdevRange.indexOf(value)]
-        );
-      } else if (value > upperRange) {
-        colors.push(aboveStdevRangeColors[aboveStdevRange.indexOf(value)]);
-      } else {
-        colors.push(belowStdevRangeColors[belowStdevRange.indexOf(value)]);
-      }
+        if (value !== undefined) {
+            sum += value;
+            count += 1;
+        }
     }
-    return colors;
-  }
-  function getColorInRange(value, range, startColor, endColor) {
-    // Calculate the position of the value within the range
-    let min = Math.min(...range);
-    let max = Math.max(...range);
-    let position = (value - min) / (max - min);
-
-    // Convert start and end colors to RGB format
-    let [r1, g1, b1] = hexToRgb(startColor);
-    let [r2, g2, b2] = hexToRgb(endColor);
-
-    // Calculate the color at the specified position in the gradient
-    let r = Math.round(r1 + (r2 - r1) * position);
-    let g = Math.round(g1 + (g2 - g1) * position);
-    let b = Math.round(b1 + (b2 - b1) * position);
-
-    // Convert the color to hexadecimal format
-    return rgbToHex(r, g, b);
-  }
-  function hexToRgb(hex) {
-    // Convert a hexadecimal color string to an array of RGB values
-    return [
-      parseInt(hex.substring(0, 2), 16),
-      parseInt(hex.substring(2, 4), 16),
-      parseInt(hex.substring(4, 6), 16),
-    ];
-  }
-  function rgbToHex(r, g, b) {
-    // Convert an array of RGB values to a hexadecimal color string
-    return [r, g, b]
-      .map((x) => x.toString(16).padStart(2, "0"))
-      .join("")
-      .toUpperCase();
-  }
-   function averageColor(color1, color2) {
-     let [r1, g1, b1] = hexToRgb(color1);
-     let [r2, g2, b2] = hexToRgb(color2);
-     let r = Math.round((r1 + r2) / 2);
-     let g = Math.round((g1 + g2) / 2);
-     let b = Math.round((b1 + b2) / 2);
-     return rgbToHex(r, g, b);
-   }
-   function isAboveStdev(values) {
-     // Calculate average and standard deviation
-     let avg = values.reduce((a, b) => a + b, 0) / values.length;
-     let stdev = Math.sqrt(
-       values.reduce((a, b) => a + (b - avg) ** 2, 0) / values.length
-     );
-
-     // Define upper range based on standard deviation
-     let upperRange = avg + stdev;
-
-     // Determine whether each value is above the upper range
-     return values.map((value) => (value > upperRange ? 1 : 0));
-   }
+    let mean = sum / count;
+    let squaredDifferences = values.map(value => {
+        if (value !== undefined) {
+            let difference = value - mean;
+            return difference * difference;
+        }
+    });
+    let squaredDifferencesSum = 0;
+    for (let squaredDifference of squaredDifferences) {
+        if (squaredDifference !== undefined) {
+            squaredDifferencesSum += squaredDifference;
+        }
+    }
+    let stdDev = Math.sqrt(squaredDifferencesSum / count);
+    return {mean: mean, stdDev: stdDev};
 }
+
+function rgbToHex(rgb) {
+    return "#" + rgb.map(x => x.toString(16).padStart(2, "0")).join("");
+}
+
+function calculateColor(tableData, columnName, stats) {
+    let min = stats.mean - stats.stdDev;
+    let max = stats.mean + stats.stdDev;
+    let minColor = [0xFF, 0xED, 0x01];
+    let maxColor = [0xCC, 0x00, 0x00];
+    let aboveColor = [0x00, 0x00, 0x00];
+    let belowColor = [0xFF, 0xFF, 0xFF];
+
+    tableData.forEach(row => {
+        let value = row[columnName];
+        if (value >= min && value <= max) {
+            // Calculate the rank of the value within the stdev range
+            let withinValues = tableData.filter(row => row[columnName] >= min && row[columnName] <= max).map(row => row[columnName]);
+            withinValues.sort((a, b) => a - b);
+            let rank = withinValues.indexOf(value);
+            // Calculate the position of the value based on its rank
+            let position = rank / (withinValues.length - 1);
+            // Calculate the color as a linear interpolation between minColor and maxColor
+            let color = minColor.map((c, i) => Math.round(c + position * (maxColor[i] - c)));
+            row[columnName + " Color"] = rgbToHex(color);
+            // Calculate the border color as the midpoint between the color and black
+            let borderColor = color.map(c => Math.round(c / 2));
+            row[columnName + " Border Color"] = rgbToHex(borderColor);
+        } else if (value > max) {
+            // Calculate the rank of the value above the stdev range
+            let aboveValues = tableData.filter(row => row[columnName] > max).map(row => row[columnName]);
+            aboveValues.sort((a, b) => a - b);
+            let rank = aboveValues.indexOf(value);
+            // Calculate the position of the value based on its rank
+            let position = rank / (aboveValues.length - 1);
+            // Calculate the color as a linear interpolation between maxColor and aboveColor
+            let color = maxColor.map((c, i) => Math.round(c + position * (aboveColor[i] - c)));
+            row[columnName + " Color"] = rgbToHex(color);
+            // Calculate the border color as the midpoint between the color and black
+            let borderColor = color.map(c => Math.round(c / 2));
+            row[columnName + " Border Color"] = rgbToHex(borderColor);
+        } else if (value < min) {
+            // Calculate the rank of the value below the stdev range
+            let belowValues = tableData.filter(row => row[columnName] < min).map(row => row[columnName]);
+            belowValues.sort((a, b) => a - b);
+            let rank = belowValues.indexOf(value);
+            // Calculate the position of the value based on its rank
+            let position = rank / (belowValues.length - 1);
+            // Calculate the color as a linear interpolation between belowColor and minColor
+            let color = belowColor.map((c, i) => Math.round(c + position * (minColor[i] - c)));
+            row[columnName + " Color"] = rgbToHex(color);
+            // Calculate the border color as the midpoint between the color and black
+            let borderColor = color.map(c => Math.round(c / 2));
+            row[columnName + " Border Color"] = rgbToHex(borderColor);
+        }
+    });
+}
+
+function calculateBetweenness(tableData) {
+    let elements = [];
+    tableData.forEach((row, i) => {
+        let node = { data: { id: row["Territory"] } };
+        elements.push(node);
+        let connections = row["Connections"].split(",");
+        connections.forEach(connection => {
+            let edge = { data: { id: row["Territory"] + connection, source: row["Territory"], target: connection } };
+            elements.push(edge);
+        });
+    });
+    let cy = cytoscape({
+        headless: true,
+        elements: elements
+    });
+    let bc = cy.elements().betweennessCentrality({
+        weight: function (edge) {
+            return edge.data('weight');
+        }
+    });
+    let betweennessValues = [];
+    cy.nodes().forEach((n, i) => {
+        let betweenness = bc.betweenness(n);
+        tableData[i]["Betweenness"] = betweenness;
+	    tableData[i]["Betweenness Rounded"] = Math.round(betweenness * 1000) / 10;
+        betweennessValues.push(betweenness);
+    });
+
+    // Calculate the average and standard deviation of the "Betweenness" values
+    let betweennessStats = stats(betweennessValues);
+
+    // Calculate the hex color for each row based on the "Betweenness" value
+    calculateColor(tableData, "Betweenness", betweennessStats);
+}
+
+function calculateCloseness(tableData) {
+    let elements = [];
+    tableData.forEach((row, i) => {
+        let node = { data: { id: row["Territory"] } };
+        elements.push(node);
+        let connections = row["Connections"].split(",");
+        connections.forEach(connection => {
+            let edge = { data: { id: row["Territory"] + connection, source: row["Territory"], target: connection } };
+            elements.push(edge);
+        });
+    });
+    let cy = cytoscape({
+        headless: true,
+        elements: elements
+    });
+    let cc = cy.elements().closenessCentrality({
+        weight: function (edge) {
+            return edge.data('weight');
+        }
+    });
+    let closenessValues = [];
+    cy.nodes().forEach((n, i) => {
+        let closeness = cc.closeness(n);
+        tableData[i]["Closeness"] = closeness;
+	    tableData[i]["Closeness Rounded"] = Math.round(closeness * 1000) / 10;
+        closenessValues.push(closeness);
+    });
+
+    // Calculate the average and standard deviation of the "Closeness" values
+    let closenessStats = stats(closenessValues);
+
+    // Calculate the hex color for each row based on the "Closeness" value
+    calculateColor(tableData, "Closeness", closenessStats);
+}
+
+function calculateEigenvector(tableData) {
+    let G = new jsnx.Graph();
+    tableData.forEach((row, i) => {
+        G.addNode(row["Territory"]);
+        let connections = row["Connections"].split(",");
+        connections.forEach(connection => {
+            G.addEdge(row["Territory"], connection);
+        });
+    });
+    let ec = jsnx.eigenvectorCentrality(G);
+    let eigenvectorValues = [];
+    tableData.forEach((row, i) => {
+        let eigenvector = ec.get(row["Territory"]);
+        row["Eigenvector"] = eigenvector;
+	    row["Eigenvector Rounded"] = Math.round(eigenvector * 1000) / 10;
+        eigenvectorValues.push(eigenvector);
+    });
+
+    // Calculate the average and standard deviation of the "Eigenvector" values
+    let eigenvectorStats = stats(eigenvectorValues);
+
+    // Calculate the hex color for each row based on the "Eigenvector" value
+    calculateColor(tableData, "Eigenvector", eigenvectorStats);
+}
+
+function calculateCentrality(tableData) {
+    calculateBetweenness(tableData);
+    calculateCloseness(tableData);
+    calculateEigenvector(tableData);
+}  
 
 // Generate the map
 function generateMap() {
@@ -607,15 +625,12 @@ function generateMap() {
 	// Betweenness = betweenness centrality value
 	// Betweenness Color = the color for that node
 	// Betweenness Border Color = the border color for that node
-	// Betweenness Above STDEV = 1 if the value is > stdev range, 0 otherwise
 	// Closeness = closeness centrality value
 	// Closeness Color = the color for that node
 	// Closeness Border Color = the border color for that node
-	// Closeness Above STDEV = 1 if the value is > stdev range, 0 otherwise
 	// Eigenvector = eigenvector centrality value
 	// Eigenvector Color = the color for that node
 	// Eigenvector Border Color = the border color for that node
-	// Eigenvector Above STDEV = 1 if the value is > stdev range, 0 otherwise
 	
   // Set font size of indirect connections
   var fontSizeInput = document.getElementById("fontSizeInput");
