@@ -633,6 +633,7 @@ function calculateSubgraph(tableData) {
     });
 
     // Calculate the matrix exponential of the adjacency matrix
+	console.log('adjacencyMatrix:', adjacencyMatrix);
     let expm = expm1(adjacencyMatrix);
 
     // Calculate the subgraph centrality for each node
