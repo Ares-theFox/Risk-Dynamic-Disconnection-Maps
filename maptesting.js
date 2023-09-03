@@ -577,6 +577,7 @@ function matAdd(A, B) {
             C[i][j] = A[i][j] + B[i][j];
         }
     }
+    console.log('C:', C);
     return C;
 }
 
@@ -602,20 +603,16 @@ function matMul(A, B) {
             }
         }
     }
+    console.log('C:', C);
     return C;
 }
 
 function expm1(A) {
     let n = A.length;
-    console.log('n:', n);
     let A2 = matMul(A, A);
-    console.log('A2:', A2);
     let A4 = matMul(A2, A2);
-    console.log('A4:', A4);
     let A6 = matMul(A4, A2);
-    console.log('A6:', A6);
     let A8 = matMul(A6, A2);
-    console.log('A8:', A8);
     let u = matAdd(matAdd(matMul(17643225600, A8), matMul(8821612800, A6)), matAdd(matMul(2075673600, A4), matMul(302702400, A2)));
     console.log('u:', u);
     let v = matAdd(matAdd(matMul(17643225600, A8), matMul(70572902400, A6)), matAdd(matMul(40874803200, A4), matAdd(matMul(9609600000, A2), matMul(163459296000, eye(n)))));
