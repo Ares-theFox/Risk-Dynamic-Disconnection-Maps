@@ -1,0 +1,43 @@
+Territory,Connections,Continent,Value,Pixel Pair 1,Pixel Pair 2
+Alabama,"Tennessee,Mississippi,Georgia,Florida",Southeast,3,932,520
+Arizona,"New_Mexico,Utah,Nevada,California",Southwest,4,284,478
+Arkansas,"Louisiana,Texas,Tennessee,Missouri,Oklahoma",Southeast,3,767,479
+California,"Oregon,Nevada,Arizona",Pacific Coast,2,128,386
+Central_New_England,"North_New_England,South_New_England,New_York",New England,1,1138,140
+Colorado,"Wyoming,Nebraska,Kansas,Oklahoma,New_Mexico",Rocky Mountains,4,474,345
+Florida,"Georgia,Alabama,Mississippi",Southeast,3,1114,678
+Georgia,"Alabama,South_Carolina,Florida",Southeast,3,1019,529
+Idaho,"Montana,Washington,Oregon,Nevada,Utah",Rocky Mountains,4,291,198
+Illinois,"Indiana,Wisconsin,Kentucky,Missouri",Midwest,3,831,292
+Indiana,"Illinois,Michigan,Ohio,Kentucky",Midwest,3,894,294
+Iowa,"Minnesota,Missouri,South_Dakota,Nebraska",Heartland,5,718,260
+Kansas,"Nebraska,Missouri,Oklahoma,Colorado",Heartland,5,624,362
+Kentucky,"Illinois,Indiana,Ohio,West_Virginia,Tennessee",Appalachian Highlands,4,955,368
+Louisiana,"Mississippi,Arkansas,Texas",Southeast,3,787,632
+Michigan,"Ohio,Indiana,Wisconsin",Midwest,3,891,191
+Minnesota,"Wisconsin,Iowa,South_Dakota,North_Dakota",Heartland,5,698,125
+Mississippi,"Alabama,Florida,Tennessee,Louisiana",Southeast,3,863,531
+Missouri,"Arkansas,Illinois,Iowa,Nebraska,Kansas,Oklahoma",Heartland,5,748,362
+Montana,"North_Dakota,South_Dakota,Wyoming,Idaho,Washington",Rocky Mountains,4,449,118
+Nebraska,"Wyoming,South_Dakota,Iowa,Missouri,Kansas,Colorado",Heartland,5,607,277
+Nevada,"Oregon,Idaho,Utah,Arizona,California",Rocky Mountains,4,214,292
+New_Mexico,"Colorado,Oklahoma,Texas,Arizona",Southwest,4,425,485
+New_York,"Central_New_England,South_New_England,Southern_Mid-Atlantic_States",Mid-Atlantic,2,1088,174
+North_Carolina,"Virginia,South_Carolina,South_New_England",Appalachian Highlands,4,1119,401
+North_Dakota,"South_Dakota,Minnesota,Montana",Heartland,5,590,118
+North_New_England,Central_New_England,New England,1,1177,97
+Ohio,"West_Virginia,Kentucky,Indiana,Michigan,Southern_Mid-Atlantic_States",Midwest,3,961,282
+Oklahoma,"Missouri,Kansas,Arkansas,Texas,New_Mexico,Colorado",Southwest,4,645,461
+Oregon,"Washington,Idaho,California,Nevada",Pacific Coast,2,181,161
+South_Carolina,"Georgia,North_Carolina",Southeast,3,1079,478
+South_Dakota,"Minnesota,North_Dakota,Montana,Wyoming,Nebraska,Iowa",Heartland,5,593,198
+South_New_England,"Central_New_England,New_York,North_Carolina",New England,1,1162,186
+Southern_Mid-Atlantic_States,"New_York,Ohio,West_Virginia,Virginia",Mid-Atlantic,2,1086,249
+Tennessee,"Kentucky,Arkansas,Mississippi,Alabama",Appalachian Highlands,4,903,427
+Texas,"Louisiana,Arkansas,Oklahoma,New_Mexico",Southwest,4,613,594
+Utah,"Idaho,Nevada,Arizona",Rocky Mountains,4,303,344
+Virginia,"North_Carolina,West_Virginia,Southern_Mid-Atlantic_States",Appalachian Highlands,4,1086,341
+Washington,"Montana,Idaho,Oregon",Pacific Coast,2,221,79
+West_Virginia,"Virginia,Kentucky,Southern_Mid-Atlantic_States,Ohio",Appalachian Highlands,4,1024,336
+Wisconsin,"Illinois,Michigan,Minnesota",Midwest,3,794,179
+Wyoming,"South_Dakota,Montana,Nebraska,Colorado",Rocky Mountains,4,452,222

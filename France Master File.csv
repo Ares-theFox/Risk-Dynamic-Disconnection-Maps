@@ -1,0 +1,27 @@
+Territory,Connections,Continent,Value,Pixel Pair 1,Pixel Pair 2
+Brittany,"Lower_Normandy,Western_Loire_Valley",Western France,4,302,215
+Lower_Normandy,"Brittany,Western_Loire_Valley,Upper_Normandy,Center_Loire_Valley",Western France,4,465,160
+Upper_Normandy,"Lower_Normandy,Center_Loire_Valley,Picardie,Ile_de_France",Western France,4,558,122
+Western_Loire_Valley,"Brittany,Lower_Normandy,Center_Loire_Valley,Poitou_Chanente",Western France,4,430,272
+Center_Loire_Valley,"Lower_Normandy,Upper_Normandy,Western_Loire_Valley,Poitou_Chanente,Ile_de_France,Burgundy,Limousin,Northern_Auvergne",Western France,4,600,272
+Poitou_Chanente,"Western_Loire_Valley,Center_Loire_Valley,Limousin,Northern_Aquitaine",Western France,4,468,379
+Nord_Pas_de_Calais,Picardie,Northern France,2,624,36
+Picardie,"Upper_Normandy,Nord_Pas_de_Calais,Ile_de_France,Champagne",Northern France,2,670,113
+Ile_de_France,"Upper_Normandy,Center_Loire_Valley,Picardie,Champagne,Burgundy",Northern France,2,656,173
+Champagne,"Picardie,Ile_de_France,Lorraine,Burgundy,Franche_Comte",Eastern France,3,774,185
+Lorraine,"Champagne,Alsace,Franche_Comte",Eastern France,3,885,166
+Alsace,"Lorraine,Franche_Comte",Eastern France,3,985,183
+Burgundy,"Center_Loire_Valley,Ile_de_France,Champagne,Franche_Comte,Northern_Auvergne,Rhone_Alps",Eastern France,3,783,288
+Franche_Comte,"Champagne,Lorraine,Alsace,Burgundy,Rhone_Alps",Eastern France,3,910,271
+Limousin,"Center_Loire_Valley,Poitou_Chanente,Northern_Auvergne,Southern_Auvergne,Northern_Aquitaine,Northern_Midi_Pyrenees",Central France,5,611,408
+Northern_Auvergne,"Center_Loire_Valley,Burgundy,Limousin,Southern_Auvergne,Rhone_Alps",Central France,5,710,388
+Southern_Auvergne,"Limousin,Northern_Auvergne,Northern_Midi_Pyrenees,Rhone_Alps,Languedoc_Roussillon",Central France,5,710,469
+Northern_Aquitaine,"Poitou_Chanente,Limousin,Southern_Aquitaine,Northern_Midi_Pyrenees,Southern_Midi_Pyrenees",Southwestern France,3,497,520
+Southern_Aquitaine,"Northern_Aquitaine,Southern_Midi_Pyrenees",Southwestern France,3,394,604
+Northern_Midi_Pyrenees,"Limousin,Southern_Auvergne,Northern_Aquitaine,Southern_Midi_Pyrenees,Languedoc_Roussillon",Southwestern France,3,625,557
+Southern_Midi_Pyrenees,"Northern_Aquitaine,Southern_Aquitaine,Northern_Midi_Pyrenees,Languedoc_Roussillon",Southwestern France,3,512,633
+Rhone_Alps,"Burgundy,Franche_Comte,Northern_Auvergne,Southern_Auvergne,Languedoc_Roussillon,Provence",Southern France,3,888,442
+Languedoc_Roussillon,"Southern_Auvergne,Northern_Midi_Pyrenees,Southern_Midi_Pyrenees,Rhone_Alps,Provence,Corse",Southern France,3,798,579
+Provence,"Rhone_Alps,Languedoc_Roussillon,Riviera",Southern France,3,936,558
+Riviera,"Provence,Corse",Southern France,3,975,626
+Corse,"Languedoc_Roussillon,Riviera",Southern France,3,1141,723

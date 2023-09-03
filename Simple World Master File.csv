@@ -1,0 +1,20 @@
+Territory,Connections,Continent,Value,Pixel Pair 1,Pixel Pair 2
+Andean_States,"Brazil,The_Guianas,Eastern_Australia",South America,2,499,714
+Brazil,"Andean_States,The_Guianas,North_Africa",South America,2,602,573
+British_Isles,"Scandinavia,Mainland_Europe",Europe,3,779,296
+Canada,"Greenland,USA,Russia",North America,3,468,201
+Central_Africa,"North_Africa,South_Africa,Middle_East",Africa,2,985,643
+Central_America,"USA,The_Guianas",North America,3,411,394
+China,"Russia,Middle_East,South_East_Asia,Mainland_Europe",Asia,5,1225,354
+Eastern_Australia,"Western_Australia,Andean_States,South_East_Asia",Australia,1,1474,738
+Greenland,"Canada,Scandinavia",North America,3,720,131
+Mainland_Europe,"British_Isles,Scandinavia,Russia,China,Middle_East,North_Africa",Europe,3,911,326
+Middle_East,"Mainland_Europe,China,South_East_Asia,North_Africa,Central_Africa",Asia,5,1051,432
+North_Africa,"Middle_East,Central_Africa,Brazil,Mainland_Europe",Africa,2,845,534
+Russia,"China,Mainland_Europe,Scandinavia,Canada",Asia,5,1218,207
+Scandinavia,"Greenland,British_Isles,Mainland_Europe,Russia",Europe,3,893,220
+South_Africa,"Central_Africa,Western_Australia",Africa,2,936,790
+South_East_Asia,"Western_Australia,Eastern_Australia,China,Middle_East",Asia,5,1209,460
+The_Guianas,"Central_America,Brazil,Andean_States",South America,2,500,491
+USA,"Canada,Central_America",North America,3,468,318
+Western_Australia,"Eastern_Australia,South_East_Asia,South_Africa",Australia,1,1396,812

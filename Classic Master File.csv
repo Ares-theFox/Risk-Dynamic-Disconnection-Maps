@@ -1,0 +1,43 @@
+Territory,Connections,Continent,Value,Pixel Pair 1,Pixel Pair 2
+Alaska,"Northwest_Territory,Alberta,Kamchatka",North America,5,296,127
+Northwest_Territory,"Alaska,Greenland,Alberta,Ontario",North America,5,397,124
+Greenland,"Northwest_Territory,Ontario,Quebec,Iceland",North America,5,648,87
+Alberta,"Alaska,Northwest_Territory,Ontario,Western_United_States",North America,5,384,183
+Ontario,"Northwest_Territory,Greenland,Alberta,Quebec,Western_United_States,Eastern_United_States",North America,5,461,194
+Quebec,"Greenland,Ontario,Eastern_United_States",North America,5,553,191
+Western_United_States,"Alberta,Ontario,Eastern_United_States,Central_America",North America,5,368,262
+Eastern_United_States,"Ontario,Quebec,Western_United_States,Central_America",North America,5,461,281
+Central_America,"Western_United_States,Eastern_United_States,Venezuela",North America,5,346,346
+Venezuela,"Central_America,Peru,Brazil",South America,2,446,432
+Peru,"Venezuela,Brazil,Argentina",South America,2,442,556
+Brazil,"Venezuela,Peru,Argentina,North_Africa",South America,2,531,520
+Argentina,"Peru,Brazil",South America,2,439,641
+Iceland,"Greenland,Great_Britain,Scandinavia",Europe,5,747,149
+Great_Britain,"Iceland,Scandinavia,Northern_Europe,Western_Europe",Europe,5,704,248
+Scandinavia,"Iceland,Great_Britain,Ukraine,Northern_Europe",Europe,5,815,174
+Ukraine,"Scandinavia,Northern_Europe,Southern_Europe,Ural,Afghanistan,Middle_East",Europe,5,943,192
+Northern_Europe,"Great_Britain,Scandinavia,Ukraine,Western_Europe,Southern_Europe",Europe,5,819,254
+Western_Europe,"Great_Britain,Northern_Europe,Southern_Europe,North_Africa",Europe,5,708,367
+Southern_Europe,"Ukraine,Northern_Europe,Western_Europe,North_Africa,Egypt,Middle_East",Europe,5,844,322
+Egypt,"Southern_Europe,Middle_East,North_Africa,East_Africa",Africa,3,861,447
+North_Africa,"Brazil,Western_Europe,Southern_Europe,Egypt,East_Africa,Congo",Africa,3,746,488
+East_Africa,"Middle_East,Egypt,North_Africa,Congo,South_Africa,Madagascar",Africa,3,911,520
+Congo,"North_Africa,East_Africa,South_Africa",Africa,3,865,601
+South_Africa,"East_Africa,Congo,Madagascar",Africa,3,863,724
+Madagascar,"East_Africa,South_Africa",Africa,3,1016,716
+Indonesia,"New_Guinea,Western_Australia,Siam",Australia,2,1253,576
+New_Guinea,"Indonesia,Western_Australia,Eastern_Australia",Australia,2,1401,555
+Western_Australia,"Indonesia,New_Guinea,Eastern_Australia",Australia,2,1310,736
+Eastern_Australia,"New_Guinea,Western_Australia",Australia,2,1461,738
+Kamchatka,"Alaska,Japan,Yakutsk,Irkutsk,Mongolia",Asia,7,1339,118
+Japan,"Kamchatka,Mongolia",Asia,7,1379,277
+Yakutsk,"Kamchatka,Irkutsk,Siberia",Asia,7,1217,111
+Irkutsk,"Kamchatka,Yakutsk,Mongolia,Siberia",Asia,7,1212,200
+Mongolia,"Kamchatka,Japan,Irkutsk,Siberia,China",Asia,7,1244,268
+Siberia,"Yakutsk,Irkutsk,Mongolia,Ural,China",Asia,7,1120,130
+Ural,"Ukraine,Siberia,China,Afghanistan",Asia,7,1058,166
+China,"Mongolia,Siberia,Ural,Afghanistan,India,Siam",Asia,7,1233,345
+Afghanistan,"Ukraine,Ural,China,Middle_East,India",Asia,7,1048,290
+Middle_East,"Ukraine,Southern_Europe,Egypt,East_Africa,India,Afghanistan",Asia,7,974,436
+India,"China,Afghanistan,Middle_East,Siam",Asia,7,1125,403
+Siam,"Indonesia,China,India",Asia,7,1228,435

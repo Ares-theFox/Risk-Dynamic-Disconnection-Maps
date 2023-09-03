@@ -1,0 +1,24 @@
+Territory,Connections,Continent,Value,Pixel Pair 1,Pixel Pair 2
+Brazil1,"Brazil2,Brazil23",Norte,6,741,70
+Brazil2,"Brazil1,Brazil4,Brazil5,Brazil6,Brazil23",Norte,6,824,143
+Brazil3,"Brazil4,Brazil10,Brazil11,Brazil20,Brazil22,Brazil23",Norte,6,907,343
+Brazil4,"Brazil2,Brazil3,Brazil5,Brazil7,Brazil10,Brazil23",Norte,6,650,262
+Brazil5,"Brazil2,Brazil4,Brazil6,Brazil7,Brazil8",Norte,6,385,181
+Brazil6,"Brazil2,Brazil5",Norte,6,459,91
+Brazil7,"Brazil4,Brazil5,Brazil8,Brazil9,Brazil10",Norte,6,262,330
+Brazil8,"Brazil5,Brazil7,Brazil10",Norte,6,210,424
+Brazil9,"Brazil7,Brazil10",Norte,6,408,406
+Brazil10,"Brazil3,Brazil4,Brazil7,Brazil8,Brazil9,Brazil11,Brazil12",Centro-Oeste,3,698,449
+Brazil11,"Brazil3,Brazil10,Brazil12,Brazil19,Brazil20",Centro-Oeste,3,908,494
+Brazil12,"Brazil10,Brazil11,Brazil13,Brazil15,Brazil16",Centro-Oeste,3,729,657
+Brazil13,"Brazil12,Brazil14",Sul,3,868,956
+Brazil14,"Brazil13,Brazil15,Brazil17",Sul,3,976,868
+Brazil15,"Brazil12,Brazil14,Brazil16",Sul,3,848,791
+Brazil16,"Brazil12,Brazil15,Brazil17,Brazil19",Sudeste,4,991,696
+Brazil17,"Brazil14,Brazil16,Brazil18,Brazil19",Sudeste,4,1162,645
+Brazil18,"Brazil17,Brazil19,Brazil20,Brazil21",Sudeste,4,1198,563
+Brazil19,"Brazil11,Brazil16,Brazil17,Brazil18,Brazil20",Sudeste,4,1072,550
+Brazil20,"Brazil3,Brazil11,Brazil18,Brazil19,Brazil21,Brazil22",Nordeste,4,1092,368
+Brazil21,"Brazil18,Brazil20,Brazil22",Nordeste,4,1183,249
+Brazil22,"Brazil3,Brazil20,Brazil21,Brazil23",Nordeste,4,1028,287
+Brazil23,"Brazil1,Brazil2,Brazil3,Brazil4,Brazil22",Nordeste,4,966,188

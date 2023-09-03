@@ -1,0 +1,43 @@
+Territory,Connections,Continent,Value,Pixel Pair 1,Pixel Pair 2
+Nan1,"Nan2,Nan3,Nan17",Peinkitel,7,1123,76
+Nan2,"Nan1,Nan4,Nan9",Peinkitel,7,1038,90
+Nan3,"Nan1,Nan6",Peinkitel,7,1077,166
+Nan4,"Nan2,Nan5",Peinkitel,7,1001,134
+Nan5,"Nan4,Nan6,Nan7",Peinkitel,7,954,170
+Nan6,"Nan3,Nan5,Nan7,Nan15",Peinkitel,7,1027,207
+Nan7,"Nan5,Nan6,Nan8",Peinkitel,7,894,212
+Nan8,"Nan7,Nan9",Peinkitel,7,855,248
+Nan9,"Nan2,Nan8,Nan10,Nan12",Peinkitel,7,755,222
+Nan10,"Nan9,Nan11",Peinkitel,7,672,200
+Nan11,"Nan10,Nan36,Nan41",Peinkitel,7,581,214
+Nan12,"Nan9,Nan13",Peinkitel,7,771,306
+Nan13,"Nan12,Nan14,Nan16",Dapahu,4,848,355
+Nan14,"Nan13,Nan15,Nan23",Dapahu,4,945,323
+Nan15,"Nan6,Nan14",Dapahu,4,1020,284
+Nan16,"Nan13,Nan28,Nan29,Nan40",Dapahu,4,787,444
+Nan17,"Nan1,Nan18",Nan Dowas,5,1222,182
+Nan18,"Nan17,Nan19",Nan Dowas,5,1342,248
+Nan19,"Nan18,Nan20,Nan24",Nan Dowas,5,1390,346
+Nan20,"Nan19,Nan21",Nan Dowas,5,1264,319
+Nan21,"Nan20,Nan22",Nan Dowas,5,1190,283
+Nan22,"Nan21,Nan23",Nan Dowas,5,1113,357
+Nan23,"Nan14,Nan22",Nan Dowas,5,1192,407
+Nan24,"Nan19,Nan25",Powe,5,1354,509
+Nan25,"Nan24,Nan26",Powe,5,1227,541
+Nan26,"Nan25,Nan27,Nan28",Powe,5,1080,568
+Nan27,"Nan26,Nan29",Powe,5,970,593
+Nan28,"Nan16,Nan26",Dapahu,4,978,480
+Nan29,"Nan16,Nan27,Nan30",Powe,5,788,627
+Nan30,"Nan29,Nan31",Pahnwi,3,607,670
+Nan31,"Nan30,Nan32,Nan39",Pahnwi,3,454,676
+Nan32,"Nan31,Nan33",Pahnwi,3,270,720
+Nan33,"Nan32,Nan34",Pahnwi,3,195,600
+Nan34,"Nan33,Nan35,Nan37",Pah,3,124,466
+Nan35,"Nan34,Nan36",Pah,3,94,307
+Nan36,"Nan11,Nan35",Pah,3,311,246
+Nan37,"Nan34,Nan39",Pah,3,266,368
+Nan38,"Nan39,Nan42",Idedh,4,426,349
+Nan39,"Nan31,Nan37,Nan38,Nan40",Idedh,4,437,432
+Nan40,"Nan16,Nan39,Nan41",Idedh,4,632,421
+Nan41,"Nan11,Nan40,Nan42",Idedh,4,536,430
+Nan42,"Nan38,Nan41",Idedh,4,511,342

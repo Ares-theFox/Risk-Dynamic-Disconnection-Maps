@@ -1,0 +1,43 @@
+Territory,Connections,Continent,Value,Pixel Pair 1,Pixel Pair 2
+Supermax1,Supermax7,Solitary Confinment,7,260,226
+Supermax2,Supermax7,Solitary Confinment,7,396,226
+Supermax3,Supermax7,Solitary Confinment,7,488,226
+Supermax4,Supermax7,Solitary Confinment,7,240,347
+Supermax5,Supermax7,Solitary Confinment,7,384,348
+Supermax6,Supermax7,Solitary Confinment,7,480,348
+Supermax7,"Supermax1,Supermax2,Supermax3,Supermax4,Supermax5,Supermax6,Supermax41",Solitary Confinment,7,301,285
+Supermax8,Supermax10,High Security,5,710,111
+Supermax9,Supermax10,High Security,5,639,174
+Supermax10,"Supermax8,Supermax9,Supermax11,Supermax12",High Security,5,717,174
+Supermax11,Supermax10,High Security,5,797,174
+Supermax12,"Supermax10,Supermax36",High Security,5,719,243
+Supermax13,"Supermax16,Supermax17",Low Security,5,892,208
+Supermax14,Supermax16,Low Security,5,1074,127
+Supermax15,"Supermax16,Supermax17",Low Security,5,1010,299
+Supermax16,"Supermax13,Supermax14,Supermax15,Supermax17",Low Security,5,981,219
+Supermax17,"Supermax13,Supermax15,Supermax16,Supermax37",Low Security,5,904,295
+Supermax18,Supermax22,Death Row,6,1056,473
+Supermax19,Supermax22,Death Row,6,1137,542
+Supermax20,Supermax22,Death Row,6,1271,671
+Supermax21,Supermax22,Death Row,6,1208,747
+Supermax22,"Supermax18,Supermax19,Supermax20,Supermax21,Supermax23",Death Row,6,1147,698
+Supermax23,"Supermax22,Supermax38",Death Row,6,921,499
+Supermax24,"Supermax29,Supermax39",Max Security,6,763,562
+Supermax25,Supermax29,Max Security,6,699,632
+Supermax26,Supermax29,Max Security,6,702,798
+Supermax27,Supermax29,Max Security,6,831,632
+Supermax28,Supermax29,Max Security,6,840,798
+Supermax29,"Supermax24,Supermax25,Supermax26,Supermax27,Supermax28",Max Security,6,766,632
+Supermax30,"Supermax31,Supermax35",General Population,6,432,494
+Supermax31,"Supermax40,Supermax30,Supermax34,Supermax35",General Population,6,592,498
+Supermax32,Supermax35,General Population,6,414,602
+Supermax33,Supermax35,General Population,6,498,683
+Supermax34,"Supermax31,Supermax35",General Population,6,594,609
+Supermax35,"Supermax30,Supermax31,Supermax32,Supermax33,Supermax34",General Population,6,497,588
+Supermax36,"Supermax12,Supermax41,Supermax42,Supermax37",Admin,9,753,305
+Supermax37,"Supermax17,Supermax36,Supermax38,Supermax42",Admin,9,847,343
+Supermax38,"Supermax23,Supermax37,Supermax39,Supermax42",Admin,9,850,445
+Supermax39,"Supermax24,Supermax38,Supermax40,Supermax42",Admin,9,759,488
+Supermax40,"Supermax31,Supermax39,Supermax41,Supermax42",Admin,9,658,440
+Supermax41,"Supermax7,Supermax36,Supermax40,Supermax42",Admin,9,658,345
+Supermax42,"Supermax36,Supermax37,Supermax38,Supermax39,Supermax40,Supermax41",Admin,9,756,390
