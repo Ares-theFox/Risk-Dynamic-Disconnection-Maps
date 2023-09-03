@@ -558,10 +558,104 @@ function calculateCloseness(tableData) {
     calculateColor(tableData, "Closeness", closenessStats);
 }
 
+function eye(n) {
+    let I = [];
+    for (let i = 0; i < n; i++) {
+        I[i] = [];
+        for (let j = 0; j < n; j++) {
+            I[i][j] = (i === j) ? 1 : 0;
+        }
+    }
+    return I;
+}
+
+function matAdd(A, B) {
+    let C = [];
+    for (let i = 0; i < A.length; i++) {
+        C[i] = [];
+        for (let j = 0; j < A[0].length; j++) {
+            C[i][j] = A[i][j] + B[i][j];
+        }
+    }
+    return C;
+}
+
+function matInv(A, B) {
+    let C = [];
+    for (let i = 0; i < A.length; i++) {
+        C[i] = [];
+        for (let j = 0; j < A[0].length; j++) {
+            C[i][j] = A[i][j] - B[i][j];
+        }
+    }
+    return C;
+}
+
+function matMul(A, B) {
+    let C = [];
+    for (let i = 0; i < A.length; i++) {
+        C[i] = [];
+        for (let j = 0; j < B[0].length; j++) {
+            C[i][j] = 0;
+            for (let k = 0; k < B.length; k++) {
+                C[i][j] += A[i][k] * B[k][j];
+            }
+        }
+    }
+    return C;
+}
+
+function expm1(A) {
+    let n = A.length;
+    let A2 = matMul(A, A);
+    let A4 = matMul(A2, A2);
+    let A6 = matMul(A4, A2);
+    let A8 = matMul(A6, A2);
+    let u = matAdd(matAdd(matMul(17643225600, A8), matMul(8821612800, A6)), matAdd(matMul(2075673600, A4), matMul(302702400, A2)));
+    let v = matAdd(matAdd(matMul(17643225600, A8), matMul(70572902400, A6)), matAdd(matMul(40874803200, A4), matAdd(matMul(9609600000, A2), matMul(163459296000, eye(n)))));
+    let S = matInv(v, u);
+    S = matMul(S, S);
+    S = matMul(S, S);
+    S = matMul(S, S);
+    return S;
+}
+
+function calculateSubgraph(tableData) {
+    // Create an adjacency matrix representing the graph
+    let territories = tableData.map(row => row["Territory"]);
+    let adjacencyMatrix = [];
+    tableData.forEach((row, i) => {
+        let connections = row["Connections"].split(",");
+        adjacencyMatrix[i] = [];
+        territories.forEach((territory, j) => {
+            adjacencyMatrix[i][j] = connections.includes(territory) ? 1 : 0;
+        });
+    });
+
+    // Calculate the matrix exponential of the adjacency matrix
+    let expm = expm1(adjacencyMatrix);
+
+    // Calculate the subgraph centrality for each node
+    let subgraphCentralityValues = [];
+    tableData.forEach((row, i) => {
+        let subgraphCentrality = expm[i][i];
+        row["Subgraph"] = subgraphCentrality;
+	    row["Subgraph Rounded"] = Math.round(subgraphCentrality * 1000) / 10;
+        subgraphCentralityValues.push(subgraphCentrality);
+    });
+
+    // Calculate the average and standard deviation of the "Subgraph Centrality" values
+    let subgraphCentralityStats = stats(subgraphCentralityValues);
+
+    // Calculate the hex color for each row based on the "Subgraph Centrality" value
+    calculateColor(tableData, "Subgraph", subgraphCentralityStats);
+}
+
 function calculateCentrality(tableData) {
     calculateEigenvector(tableData);
     calculateBetweenness(tableData);
     calculateCloseness(tableData);
+    calculateSubgraph(tableData);
 }  
 
 // Generate the map
@@ -668,6 +762,9 @@ function generateMap() {
 	// Eigenvector = closeness centrality value
 	// Eigenvector Color = the color for that node
 	// Eigenvector Border Color = the border color for that node
+	// Subgraph = closeness centrality value
+	// Subgraph Color = the color for that node
+	// Subgraph Border Color = the border color for that node
 	
   // Set font size of indirect connections
   var fontSizeInput = document.getElementById("fontSizeInput");
@@ -701,6 +798,9 @@ function generateMap() {
 	  } else if (centralityMenu.value === "closeness") {
 	    var color = tableData[i]["Closeness Color"];
 	    var border_color = tableData[i]["Closeness Border Color"];
+	  } else if (centralityMenu.value === "subgraph") {
+	    var color = tableData[i]["Subgraph Color"];
+	    var border_color = tableData[i]["Subgraph Border Color"];
 	  } else if (centralityMenu.value === "capConnections") {
 	    var color = colorDictionary[Math.min(tableData[i]["Number of Cap Connections"], 12)];
 	    var border_color = colorDarktionary[Math.min(tableData[i]["Number of Cap Connections"], 12)];
@@ -738,9 +838,10 @@ function generateMap() {
 	let condition2 = centralityMenu.value === "eigenvector" && tableData[i]["Eigenvector Above STDEV"] === 1;
 	let condition3 = centralityMenu.value === "betweenness" && tableData[i]["Betweenness Above STDEV"] === 1;
 	let condition4 = centralityMenu.value === "closeness" && tableData[i]["Closeness Above STDEV"] === 1;
-	let condition5 = centralityMenu.value === "capConnections" && tableData[i]["Number of Cap Connections"] >= 11;
+	let condition5 = centralityMenu.value === "subgraph" && tableData[i]["Subgraph Above STDEV"] === 1;
+	let condition6 = centralityMenu.value === "capConnections" && tableData[i]["Number of Cap Connections"] >= 11;
 		
-	  if (condition1 || condition2 || condition3 || condition4 || condition5) {
+	  if (condition1 || condition2 || condition3 || condition4 || condition5 || condition6) {
 	    text.setAttribute("fill", "white");
 	  } else {
 	    text.setAttribute("fill", "black");
@@ -754,6 +855,8 @@ function generateMap() {
 	    text.textContent = tableData[i]["Betweenness Rounded"];
 	  } else if (centralityMenu.value === "closeness") {
 	    text.textContent = tableData[i]["Closeness Rounded"];
+	  } else if (centralityMenu.value === "subgraph") {
+	    text.textContent = tableData[i]["Subgraph Rounded"];
 	  } else if (centralityMenu.value === "capConnections") {
 	    text.textContent = tableData[i]["Number of Cap Connections"];
 	  }
@@ -1048,6 +1151,8 @@ const mouseoutHandler = function () {
       border_color = tableData.find(row => row['Territory'] === this.id)['Betweenness Border Color'];
     } else if (centralityMenu.value === "closeness") {
       border_color = tableData.find(row => row['Territory'] === this.id)['Closeness Border Color'];
+    } else if (centralityMenu.value === "subgraph") {
+      border_color = tableData.find(row => row['Territory'] === this.id)['Subgraph Border Color'];
     } else if (centralityMenu.value === "capConnections") {
       let value = tableData.find(row => row['Territory'] === this.id)['Number of Cap Connections'];
       border_color = colorDarktionary[Math.min(value, 12)];
@@ -1272,6 +1377,8 @@ function addPortals() {
 	      border_color = tableData.find(row => row['Territory'] === this.id)['Betweenness Border Color'];
 	    } else if (centralityMenu.value === "closeness") {
 	      border_color = tableData.find(row => row['Territory'] === this.id)['Closeness Border Color'];
+	    } else if (centralityMenu.value === "subgraph") {
+	      border_color = tableData.find(row => row['Territory'] === this.id)['Subgraph Border Color'];
 	    } else if (centralityMenu.value === "capConnections") {
 	      let value = tableData.find(row => row['Territory'] === this.id)['Number of Cap Connections'];
 	      border_color = colorDarktionary[Math.min(value, 12)];
@@ -1457,6 +1564,8 @@ function eraser() {
 	        border_color = tableData.find(row => row['Territory'] === this.id)['Betweenness Border Color'];
 	      } else if (centralityMenu.value === "closeness") {
 	        border_color = tableData.find(row => row['Territory'] === this.id)['Closeness Border Color'];
+	      } else if (centralityMenu.value === "subgraph") {
+	        border_color = tableData.find(row => row['Territory'] === this.id)['Subgraph Border Color'];
 	      } else if (centralityMenu.value === "capConnections") {
 	        let value = tableData.find(row => row['Territory'] === this.id)['Number of Cap Connections'];
 	        border_color = colorDarktionary[Math.min(value, 12)];
