@@ -617,6 +617,7 @@ function expm1(A) {
     S = matMul(S, S);
     S = matMul(S, S);
     S = matMul(S, S);
+	console.log('S:', S);
     return S;
 }
 
@@ -633,13 +634,15 @@ function calculateSubgraph(tableData) {
     });
 
     // Calculate the matrix exponential of the adjacency matrix
-	console.log('adjacencyMatrix:', adjacencyMatrix);
     let expm = expm1(adjacencyMatrix);
+	console.log('expm:', expm);
 
     // Calculate the subgraph centrality for each node
     let subgraphCentralityValues = [];
     tableData.forEach((row, i) => {
+	    console.log('i:', i);
         let subgraphCentrality = expm[i][i];
+	    console.log('subgraphCentrality:', subgraphCentrality);
         row["Subgraph"] = subgraphCentrality;
 	    row["Subgraph Rounded"] = Math.round(subgraphCentrality * 1000) / 10;
         subgraphCentralityValues.push(subgraphCentrality);
