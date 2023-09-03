@@ -487,41 +487,74 @@ function calculateBetweenness(tableData) {
 }
 
 function calculateCloseness(tableData) {
-    // Create an adjacency matrix representing the graph
-    let territories = tableData.map(row => row["Territory"]);
+    // Create a list of unique territories
+    let territories = [];
+    for (let i = 0; i < tableData.length; i++) {
+        if (tableData[i]['Connections'] !== '' && !territories.includes(tableData[i]['Territory'])) {
+            territories.push(tableData[i]['Territory']);
+        }
+    }
+    // Create an empty adjacency matrix
     let adjacencyMatrix = [];
-    tableData.forEach((row, i) => {
-        let connections = row["Connections"].split(",");
-        adjacencyMatrix[i] = [];
-        territories.forEach((territory, j) => {
-            adjacencyMatrix[i][j] = connections.includes(territory) ? 1 : Infinity;
-        });
-    });
-
-    // Calculate the shortest path lengths between all pairs of nodes using the Floyd-Warshall algorithm
-    let distanceMatrix = adjacencyMatrix.map(row => row.slice());
-    for (let k = 0; k < territories.length; k++) {
-        for (let i = 0; i < territories.length; i++) {
-            for (let j = 0; j < territories.length; j++) {
-                if (distanceMatrix[i][k] + distanceMatrix[k][j] < distanceMatrix[i][j]) {
-                    distanceMatrix[i][j] = distanceMatrix[i][k] + distanceMatrix[k][j];
+    for (let i = 0; i < territories.length; i++) {
+        adjacencyMatrix.push(new Array(territories.length).fill(0));
+    }
+    // Populate the adjacency matrix
+    for (let i = 0; i < tableData.length; i++) {
+        if (tableData[i]['Connections'] !== undefined && tableData[i]['Connections'] !== '') {
+            let territory = tableData[i]['Territory'];
+            let connections = tableData[i]['Connections'].split(',');
+            for (let j = 0; j < connections.length; j++) {
+                let connection = connections[j];
+                if (connection !== '') {
+                    let index1 = territories.indexOf(territory);
+                    let index2 = territories.indexOf(connection);
+                    adjacencyMatrix[index1][index2] = 1;
                 }
             }
         }
     }
-
-    // Calculate the closeness centrality for each node
-    let closenessValues = [];
-    tableData.forEach((row, i) => {
-        let totalDistance = distanceMatrix[i].reduce((a, b) => a + b);
-        let closeness = (territories.length - 1) / totalDistance;
-        row["Closeness"] = closeness;
-	    row["Closeness Rounded"] = Math.round(closeness * 1000) / 10;
-        closenessValues.push(closeness);
-    });
-
+    // Calculate the shortest paths between all pairs of nodes using the Floyd-Warshall algorithm
+    let dist = [];
+    for (let i = 0; i < adjacencyMatrix.length; i++) {
+        dist[i] = [];
+        for (let j = 0; j < adjacencyMatrix.length; j++) {
+            if (i === j) {
+                dist[i][j] = 0;
+            } else if (adjacencyMatrix[i][j]) {
+                dist[i][j] = adjacencyMatrix[i][j];
+            } else {
+                dist[i][j] = Infinity;
+            }
+        }
+    }
+    for (let k = 0; k < adjacencyMatrix.length; k++) {
+        for (let i = 0; i < adjacencyMatrix.length; i++) {
+            for (let j = 0; j < adjacencyMatrix.length; j++) {
+                if (dist[i][k] + dist[k][j] < dist[i][j]) {
+                    dist[i][j] = dist[i][k] + dist[k][j];
+                }
+            }
+        }
+    }
+    // Calculate the closeness centrality of each node
+	let closenessValues= {};
+	for(let i=0;i<territories.length;i++){
+		let sumOfDistances=0;
+		for(let j=0;j<territories.length;j++){
+			sumOfDistances+=dist[i][j];
+		}
+		closenessValues[territories[i]]=(1/sumOfDistances);
+	}
+	for(let key in closenessValues){
+		closenessValues[key]=Math.round(closenessValues[key]*10000)/10;
+	}
+	tableData.forEach((row, i) => {
+	    row["Closeness"] = closenessValues[row["Territory"]];
+	    row["Closeness Rounded"] = Math.round(row["Closeness"] * 10000) / 10;
+	});
     // Calculate the hex color for each row based on the "Closeness" value
-    let closenessStats = stats(closenessValues);
+    let closenessStats = stats(Object.values(closenessValues));
     calculateColor(tableData, "Closeness", closenessStats);
 }
 
@@ -738,18 +771,23 @@ function generateMap() {
   });
 	// Find the maximum number of direct connections
 	var maxConnections = Math.max(...tableData.map((row) => row["Number of Direct Connections"]));
+	var maxCapConnections = Math.min(12, Math.max(...tableData.map((row) => row["Number of Cap Connections"])));
 
 	// Get the base image element & define base URL
 	var baseImage = document.getElementById("map");
 	var baseURL = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/";
 
-	// Decide which image to display based on the maximum value in column F
+	// Decide which image to display
 	if (centralityMenu.value !== "standard" && centralityMenu.value !== "capConnections") {
 	    baseImage.src = baseURL + colorLegend + "%20Heatmap.png"
-	} else if (maxConnections < 3) {
+	} else if (centralityMenu.value === "standard" && maxConnections < 3) {
 	    baseImage.src = baseURL + colorLegend + ".png";
-	} else {
+	} else if (centralityMenu.value === "capConnections" && maxCapConnections < 3) {
+	    baseImage.src = baseURL + colorLegend + ".png";
+	} else if (centralityMenu.value === "standard" && maxConnections >= 3) {
 	    baseImage.src = baseURL + colorLegend + "%20" + maxConnections + ".png";
+	} else if (centralityMenu.value === "capConnections" && maxCapConnections >= 3) {
+	    baseImage.src = baseURL + colorLegend + "%20" + maxCapConnections + ".png";
 	}
 	
 // Create a mapping of node names to indices
