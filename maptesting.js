@@ -448,7 +448,7 @@ function calculateEigenvector(tableData) {
             G.addEdge(row["Territory"], connection);
         });
     });
-    let ec = jsnx.eigenvectorCentrality(G);
+    let ec = jsnx.eigenvectorCentrality(G,{maxIter:500});
     let eigenvectorValues = [];
     tableData.forEach((row, i) => {
         let eigenvector = ec.get(row["Territory"]);
