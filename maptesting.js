@@ -593,6 +593,8 @@ function matInv(A, B) {
 }
 
 function matMul(A, B, instance) {
+    console.log(instance + ' A:', A);
+    console.log(instance + ' B:', B);
     let C = [];
     for (let i = 0; i < A.length; i++) {
         C[i] = [];
