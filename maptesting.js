@@ -551,7 +551,7 @@ function calculateCloseness(tableData) {
 	}
 	tableData.forEach((row, i) => {
 	    row["Closeness"] = closenessValues[row["Territory"]];
-	    row["Closeness Rounded"] = Math.round(row["Closeness"] * 10000) / 10;
+	    row["Closeness Rounded"] = Math.round(row["Closeness"] * 10) / 10;
 	});
     // Calculate the hex color for each row based on the "Closeness" value
     let closenessStats = stats(Object.values(closenessValues));
