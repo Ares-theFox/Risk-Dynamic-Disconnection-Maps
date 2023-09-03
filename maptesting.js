@@ -439,6 +439,31 @@ function calculateColor(tableData, columnName, stats) {
     });
 }
 
+function calculateEigenvector(tableData) {
+    let G = new jsnx.Graph();
+    tableData.forEach((row, i) => {
+        G.addNode(row["Territory"]);
+        let connections = row["Connections"].split(",");
+        connections.forEach(connection => {
+            G.addEdge(row["Territory"], connection);
+        });
+    });
+    let ec = jsnx.eigenvectorCentrality(G);
+    let eigenvectorValues = [];
+    tableData.forEach((row, i) => {
+        let eigenvector = ec.get(row["Territory"]);
+        row["Eigenvector"] = eigenvector;
+	    row["Eigenvector Rounded"] = Math.round(eigenvector * 1000) / 10;
+        eigenvectorValues.push(eigenvector);
+    });
+
+    // Calculate the average and standard deviation of the "Eigenvector" values
+    let eigenvectorStats = stats(eigenvectorValues);
+
+    // Calculate the hex color for each row based on the "Eigenvector" value
+    calculateColor(tableData, "Eigenvector", eigenvectorStats);
+}
+
 function calculateBetweenness(tableData) {
     let G = new jsnx.Graph();
     tableData.forEach((row, i) => {
@@ -462,28 +487,46 @@ function calculateBetweenness(tableData) {
 }
 
 function calculateCloseness(tableData) {
-    let G = new jsnx.Graph();
+    // Create an adjacency matrix representing the graph
+    let territories = tableData.map(row => row["Territory"]);
+    let adjacencyMatrix = [];
     tableData.forEach((row, i) => {
-        G.addNode(row["Territory"]);
         let connections = row["Connections"].split(",");
-        connections.forEach(connection => {
-            G.addEdge(row["Territory"], connection);
+        adjacencyMatrix[i] = [];
+        territories.forEach((territory, j) => {
+            adjacencyMatrix[i][j] = connections.includes(territory) ? 1 : 0;
         });
     });
-    let cc = jsnx.closenessCentrality(G);
+
+    // Calculate the shortest path lengths between all pairs of nodes using the Floyd-Warshall algorithm
+    let distanceMatrix = adjacencyMatrix.map(row => row.slice());
+    for (let k = 0; k < territories.length; k++) {
+        for (let i = 0; i < territories.length; i++) {
+            for (let j = 0; j < territories.length; j++) {
+                if (distanceMatrix[i][k] + distanceMatrix[k][j] < distanceMatrix[i][j]) {
+                    distanceMatrix[i][j] = distanceMatrix[i][k] + distanceMatrix[k][j];
+                }
+            }
+        }
+    }
+
+    // Calculate the closeness centrality for each node
     let closenessValues = [];
     tableData.forEach((row, i) => {
-        let closeness = cc.get(row["Territory"]);
+        let totalDistance = distanceMatrix[i].reduce((a, b) => a + b);
+        let closeness = (territories.length - 1) / totalDistance;
         row["Closeness"] = closeness;
 	    row["Closeness Rounded"] = Math.round(closeness * 1000) / 10;
         closenessValues.push(closeness);
     });
+
     // Calculate the hex color for each row based on the "Closeness" value
     let closenessStats = stats(closenessValues);
     calculateColor(tableData, "Closeness", closenessStats);
 }
 
 function calculateCentrality(tableData) {
+    calculateEigenvector(tableData);
     calculateBetweenness(tableData);
     calculateCloseness(tableData);
 }  
@@ -585,6 +628,9 @@ function generateMap() {
 	// Closeness = closeness centrality value
 	// Closeness Color = the color for that node
 	// Closeness Border Color = the border color for that node
+	// Eigenvector = closeness centrality value
+	// Eigenvector Color = the color for that node
+	// Eigenvector Border Color = the border color for that node
 	
   // Set font size of indirect connections
   var fontSizeInput = document.getElementById("fontSizeInput");
@@ -609,6 +655,9 @@ function generateMap() {
 	  if (centralityMenu.value === "standard") {
 	    var color = colorDictionary[tableData[i]["Number of Direct Connections"]];
 	    var border_color = colorDarktionary[tableData[i]["Number of Direct Connections"]];
+	  } else if (centralityMenu.value === "eigenvector") {
+	    var color = tableData[i]["Eigenvector Color"];
+	    var border_color = tableData[i]["Eigenvector Border Color"];
 	  } else if (centralityMenu.value === "betweenness") {
 	    var color = tableData[i]["Betweenness Color"];
 	    var border_color = tableData[i]["Betweenness Border Color"];
@@ -649,11 +698,12 @@ function generateMap() {
           text.setAttribute("font-weight", "bold");
 
 	let condition1 = centralityMenu.value === "standard" && tableData[i]["Number of Direct Connections"] >= 11;
-	let condition2 = centralityMenu.value === "betweenness" && tableData[i]["Betweenness Above STDEV"] === 1;
-	let condition3 = centralityMenu.value === "closeness" && tableData[i]["Closeness Above STDEV"] === 1;
-	let condition4 = centralityMenu.value === "capConnections" && tableData[i]["Number of Cap Connections"] >= 11;
+	let condition2 = centralityMenu.value === "eigenvector" && tableData[i]["Eigenvector Above STDEV"] === 1;
+	let condition3 = centralityMenu.value === "betweenness" && tableData[i]["Betweenness Above STDEV"] === 1;
+	let condition4 = centralityMenu.value === "closeness" && tableData[i]["Closeness Above STDEV"] === 1;
+	let condition5 = centralityMenu.value === "capConnections" && tableData[i]["Number of Cap Connections"] >= 11;
 		
-	  if (condition1 || condition2 || condition3 || condition4) {
+	  if (condition1 || condition2 || condition3 || condition4 || condition5) {
 	    text.setAttribute("fill", "white");
 	  } else {
 	    text.setAttribute("fill", "black");
@@ -661,10 +711,12 @@ function generateMap() {
 		
 	  if (centralityMenu.value === "standard") {
 	    text.textContent = tableData[i]["Number of Indirect Connections"];
+	  } else if (centralityMenu.value === "eigenvector") {
+	    text.textContent = tableData[i]["Eigenvector Rounded"];
 	  } else if (centralityMenu.value === "betweenness") {
-	    text.textContent = tableData[i]["Betweenness"];
+	    text.textContent = tableData[i]["Betweenness Rounded"];
 	  } else if (centralityMenu.value === "closeness") {
-	    text.textContent = tableData[i]["Closeness"];
+	    text.textContent = tableData[i]["Closeness Rounded"];
 	  } else if (centralityMenu.value === "capConnections") {
 	    text.textContent = tableData[i]["Number of Cap Connections"];
 	  }
@@ -948,6 +1000,8 @@ const mouseoutHandler = function () {
     if (centralityMenu.value === "standard") {
       let value = tableData.find(row => row['Territory'] === this.id)['Number of Direct Connections'];
       border_color = colorDarktionary[value];
+    } else if (centralityMenu.value === "eigenvector") {
+      border_color = tableData.find(row => row['Territory'] === this.id)['Eigenvector Border Color'];
     } else if (centralityMenu.value === "betweenness") {
       border_color = tableData.find(row => row['Territory'] === this.id)['Betweenness Border Color'];
     } else if (centralityMenu.value === "closeness") {
@@ -1170,6 +1224,8 @@ function addPortals() {
 	    if (centralityMenu.value === "standard") {
 	      let value = tableData.find(row => row['Territory'] === this.id)['Number of Direct Connections'];
 	      border_color = colorDarktionary[value];
+	    } else if (centralityMenu.value === "eigenvector") {
+	      border_color = tableData.find(row => row['Territory'] === this.id)['Eigenvector Border Color'];
 	    } else if (centralityMenu.value === "betweenness") {
 	      border_color = tableData.find(row => row['Territory'] === this.id)['Betweenness Border Color'];
 	    } else if (centralityMenu.value === "closeness") {
@@ -1353,6 +1409,8 @@ function eraser() {
 	      if (centralityMenu.value === "standard") {
 	        let value = tableData.find(row => row['Territory'] === this.id)['Number of Direct Connections'];
 	        border_color = colorDarktionary[value];
+	      } else if (centralityMenu.value === "eigenvector") {
+	        border_color = tableData.find(row => row['Territory'] === this.id)['Eigenvector Border Color'];
 	      } else if (centralityMenu.value === "betweenness") {
 	        border_color = tableData.find(row => row['Territory'] === this.id)['Betweenness Border Color'];
 	      } else if (centralityMenu.value === "closeness") {
