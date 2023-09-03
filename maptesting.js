@@ -569,7 +569,7 @@ function eye(n) {
     return I;
 }
 
-function matAdd(A, B) {
+function matAdd(A, B, instance) {
     let C = [];
     for (let i = 0; i < A.length; i++) {
         C[i] = [];
@@ -577,7 +577,7 @@ function matAdd(A, B) {
             C[i][j] = A[i][j] + B[i][j];
         }
     }
-    console.log('C:', C);
+    console.log(instance + ' C:', C);
     return C;
 }
 
@@ -592,7 +592,7 @@ function matInv(A, B) {
     return C;
 }
 
-function matMul(A, B) {
+function matMul(A, B, instance) {
     let C = [];
     for (let i = 0; i < A.length; i++) {
         C[i] = [];
@@ -603,7 +603,7 @@ function matMul(A, B) {
             }
         }
     }
-    console.log('C:', C);
+    console.log(instance + ' C:', C);
     return C;
 }
 
@@ -613,10 +613,8 @@ function expm1(A) {
     let A4 = matMul(A2, A2);
     let A6 = matMul(A4, A2);
     let A8 = matMul(A6, A2);
-    let u = matAdd(matAdd(matMul(17643225600, A8), matMul(8821612800, A6)), matAdd(matMul(2075673600, A4), matMul(302702400, A2)));
-    console.log('u:', u);
-    let v = matAdd(matAdd(matMul(17643225600, A8), matMul(70572902400, A6)), matAdd(matMul(40874803200, A4), matAdd(matMul(9609600000, A2), matMul(163459296000, eye(n)))));
-    console.log('v:', v);
+    let u = matAdd(matAdd(matMul(17643225600, A8, 'A8'), matMul(8821612800, A6, 'A6'), 'u1'), matAdd(matMul(2075673600, A4, 'A4'), matMul(302702400, A2, 'A2'), 'u2'), 'u');
+    let v = matAdd(matAdd(matMul(17643225600, A8, 'A8'), matMul(70572902400, A6, 'A6'), 'v1'), matAdd(matMul(40874803200, A4, 'A4'), matAdd(matMul(9609600000, A2, 'A2'), matMul(163459296000, eye(n), 'eye(n)'), 'v2'), 'v3'), 'v');
     let S = matInv(v, u);
     console.log('S:', S);
     S = matMul(S, S);
