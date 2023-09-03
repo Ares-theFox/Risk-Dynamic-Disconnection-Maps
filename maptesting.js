@@ -494,7 +494,7 @@ function calculateCloseness(tableData) {
         let connections = row["Connections"].split(",");
         adjacencyMatrix[i] = [];
         territories.forEach((territory, j) => {
-            adjacencyMatrix[i][j] = connections.includes(territory) ? 1 : 0;
+            adjacencyMatrix[i][j] = connections.includes(territory) ? 1 : Infinity;
         });
     });
 
@@ -572,7 +572,7 @@ function generateMap() {
     // Calculate new columns
     tableData.forEach((row) => {
       // Non-Unique Indirect Connections: vlookup Connections values and add them + current Territory & Connections
-      if (row["Blizzard"] === 0) {
+      if (row["Blizzard"] === 0 && row["Connections"] !== "") {
         const searchValues = row["Connections"].split(",");
         let searchResults = [];
         for (const searchValue of searchValues) {
@@ -589,12 +589,16 @@ function generateMap() {
       }
 
     // Unique Indirect Connections: Remove duplicate values and Territory from Non-Unique Indirect Connections
+    if (row["Non-Unique Indirect Connections"] === "" || row["Non-Unique Indirect Connections"] === 0) {
+        row["Unique Indirect Connections"] = 0;
+    } else {
     row["Unique Indirect Connections"] = [...new Set(row["Non-Unique Indirect Connections"].split(","))]
-      .filter((value) => value !== row["Territory"])
-      .join(",");
+        .filter((value) => value !== row["Territory"])
+        .join(",");
+    }
 	  
     // Number of Direct Connections: Count how many comma-separated values are in column Connections
-    if (row["Blizzard"] === 0) {
+    if (row["Blizzard"] === 0 && row["Connections"] !== "") {
       const direct = row["Connections"].split(",");
       const indirect = row["Unique Indirect Connections"].split(",");
       row["Number of Direct Connections"] = Math.min(direct.length, 12);
