@@ -45,17 +45,6 @@
 	background-color: #800000;
 	}
 
-	#selfpick {
-	width: 100px;
-	text-align: center;
-	background-color: #66FF00;
-	color: black;
-	}
-
-	#selfpick:hover {
-	background-color: #338000;
-	}
-
 	#portalButton {
 	width: 180px;
 	text-align: center;
