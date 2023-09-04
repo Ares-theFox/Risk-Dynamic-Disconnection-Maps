@@ -149,7 +149,7 @@ var mapDirectoryButton = document.getElementById("mapDirectoryButton");
 // Add an event listener to the button that listens for the "click" event
 mapDirectoryButton.addEventListener("click", function() {
   // Open the URL in a new tab when the button is clicked
-  window.open("https://ares-thefox.github.io/Risk-Dynamic-Disconnection-Maps/testingpage.html", "_blank");
+  window.open("https://ares-thefox.github.io/Risk-Dynamic-Disconnection-Maps/", "_blank");
 });
 
 var images = [
