@@ -5,7 +5,7 @@ if (urlParams.has('map')) {
 	mapselected = urlParams.get('map');
 	console.log(urlParams.get('map'));
 }
-console.log("1515151"
+console.log("1515151")
 
 const mapUrls = {
 	"boston": {
