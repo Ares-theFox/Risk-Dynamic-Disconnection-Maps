@@ -4,6 +4,7 @@ let mapselected = "test";
 if (urlParams.has('map')) {
 	mapselected = urlParams.get('map');
 	console.log(urlParams.get('map'));
+	console.log("9/4 update")
 }
 
 const mapUrls = {
@@ -167,9 +168,11 @@ var images = [
   "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox12.png"
 ];
 
-// Preload the blizzard pattern
+// Preload the fog and blizzard patterns
 var blizzardPatternImage = new Image();
 blizzardPatternImage.src = mapUrls[mapselected].blizzardPatternImage;
+var fogPatternImage = new Image();
+fogPatternImage.src = mapUrls[mapselected].fogPatternImage;
 
 window.onload = function() {
   var img = document.querySelector("header img");
@@ -182,11 +185,12 @@ var colorLegend = mapUrls[mapselected].prettyname;
 var csvData = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "%20Master%20File.csv";
 var SVG = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "%20Paths.svg";
 var BlizzardPattern = blizzardPatternImage.src;
+var FogPattern = fogPatternImage.src;
 var totalBlizzards = mapUrls[mapselected].totalBlizzards;
 var totalPortals = mapUrls[mapselected].totalPortals;
-let blizzardArray = []
-let portalArray = []
-let clickedPathsBlizzardsPortals = []
+let blizzardArray = [];
+let portalArray = [];
+let clickedPathsBlizzardsPortals = [];
 const colorDictionary = {
   0: "#ffffff",
   1: "#eb3337",
