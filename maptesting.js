@@ -4,7 +4,7 @@ let mapselected = "test";
 if (urlParams.has('map')) {
 	mapselected = urlParams.get('map');
 	console.log(urlParams.get('map'));
-	console.log("232433242342")
+	console.log("1111111111")
 }
 	console.log("mapselected:", mapselected);
 
@@ -125,7 +125,6 @@ const mapUrls = {
 		"prettyname": "United States",
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20blizzard%20pattern.png",
-		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20fog%20pattern.png",
 		"totalBlizzards": 3,
 		"totalPortals": 5
 	},
