@@ -28,23 +28,23 @@
 	}
 
 	#opponentpick {
-	text-align: center;
-	background-color: #FF0000;
-	color: black;
+	    text-align: center;
+	    background-color: #FF0000;
+	    color: black;
 	}
-
+	
 	#opponentpick:hover {
-	background-color: #800000;
+	    background-color: #800000;
 	}
-
-	#selfpick‎ {
-	text-align: center;
-	background-color: #66FF00;
-	color: black;
+	
+	#selfpick {
+	    text-align: center;
+	    background-color: #66FF00;
+	    color: black;
 	}
-
-	#selfpick‎:hover {
-	background-color: #338000;
+	
+	#selfpick:hover {
+	    background-color: #338000;
 	}
 
 	#portalButton {
