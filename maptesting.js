@@ -4,7 +4,7 @@ let mapselected = "test";
 if (urlParams.has('map')) {
 	mapselected = urlParams.get('map');
 	console.log(urlParams.get('map'));
-	console.log("789798")
+	console.log("asdfasdfasd")
 }
 
 const mapUrls = {
@@ -184,10 +184,6 @@ var images = [
   "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox12.png"
 ];
 
-// Preload the fog and blizzard patterns
-var fogPatternImage = new Image();
-fogPatternImage.src = mapUrls[mapselected].fogPatternImage;
-
 var blizzardPatternImage = new Image();
 blizzardPatternImage.src = mapUrls[mapselected].blizzardPatternImage;
 
@@ -201,7 +197,6 @@ window.onload = function() {
 var colorLegend = mapUrls[mapselected].prettyname;
 var csvData = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "%20Master%20File.csv";
 var SVG = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "%20Paths.svg";
-var FogPattern = fogPatternImage.src;
 var BlizzardPattern = blizzardPatternImage.src;
 var totalBlizzards = mapUrls[mapselected].totalBlizzards;
 var totalPortals = mapUrls[mapselected].totalPortals;
