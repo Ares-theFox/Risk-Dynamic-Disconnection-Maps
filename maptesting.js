@@ -609,14 +609,25 @@ function matMul(A, B, instance) {
     return C;
 }
 
+function matScalarMul(scalar, A) {
+    let C = [];
+    for (let i = 0; i < A.length; i++) {
+        C[i] = [];
+        for (let j = 0; j < A[0].length; j++) {
+            C[i][j] = scalar * A[i][j];
+        }
+    }
+    return C;
+}
+
 function expm1(A) {
     let n = A.length;
     let A2 = matMul(A, A);
     let A4 = matMul(A2, A2);
     let A6 = matMul(A4, A2);
     let A8 = matMul(A6, A2);
-    let u = matAdd(matAdd(matMul(17643225600, A8, 'A8'), matMul(8821612800, A6, 'A6'), 'u1'), matAdd(matMul(2075673600, A4, 'A4'), matMul(302702400, A2, 'A2'), 'u2'), 'u');
-    let v = matAdd(matAdd(matMul(17643225600, A8, 'A8'), matMul(70572902400, A6, 'A6'), 'v1'), matAdd(matMul(40874803200, A4, 'A4'), matAdd(matMul(9609600000, A2, 'A2'), matMul(163459296000, eye(n), 'eye(n)'), 'v2'), 'v3'), 'v');
+    let u = matAdd(matAdd(matScalarMul(17643225600, A8), matScalarMul(8821612800, A6)), matAdd(matScalarMul(2075673600, A4), matScalarMul(302702400, A2)));
+    let v = matAdd(matAdd(matScalarMul(17643225600, A8), matScalarMul(70572902400, A6)), matAdd(matScalarMul(40874803200, A4), matAdd(matScalarMul(9609600000, A2), matScalarMul(163459296000, eye(n)))));
     let S = matInv(v, u);
     console.log('S:', S);
     S = matMul(S, S);
