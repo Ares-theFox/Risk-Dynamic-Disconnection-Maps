@@ -5,13 +5,14 @@ if (urlParams.has('map')) {
 	mapselected = urlParams.get('map');
 	console.log(urlParams.get('map'));
 }
-console.log("1515151")
+console.log("9/4 please work omg i can't take this anymore")
 
 const mapUrls = {
 	"boston": {
 		"prettyname": "Boston",
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Boston.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Boston%20blizzard%20pattern.png",
+		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Boston%20fog%20pattern.png",
 		"totalBlizzards": 3,
 		"totalPortals": 5
 	},
