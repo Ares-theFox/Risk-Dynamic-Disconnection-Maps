@@ -4,8 +4,9 @@ let mapselected = "test";
 if (urlParams.has('map')) {
 	mapselected = urlParams.get('map');
 	console.log(urlParams.get('map'));
-	console.log("asdfasdfasd")
+	console.log("232433242342")
 }
+	console.log("mapselected:", mapselected);
 
 const mapUrls = {
 	"boston": {
@@ -40,14 +41,6 @@ const mapUrls = {
 		"totalBlizzards": 3,
 		"totalPortals": 5
 	},
-	"dino_canyon": {
-		"prettyname": "Dino Canyon",
-		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Dino%20Canyon.png",
-		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Dino%20Canyon%20blizzard%20pattern.png",
-		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Dino%20Canyon%20fog%20pattern.png",
-		"totalBlizzards": 3,
-		"totalPortals": 5
-	},
 	"dicey_trajectories": {
 		"prettyname": "Dicey Trajectories",
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Dicey%20Trajectories.png",
@@ -55,6 +48,14 @@ const mapUrls = {
 		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Dicey%20Trajectories%20fog%20pattern.png",
 		"totalBlizzards": 2,
 		"totalPortals": 4
+	},
+	"dino_canyon": {
+		"prettyname": "Dino Canyon",
+		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Dino%20Canyon.png",
+		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Dino%20Canyon%20blizzard%20pattern.png",
+		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Dino%20Canyon%20fog%20pattern.png",
+		"totalBlizzards": 3,
+		"totalPortals": 5
 	},
 	"dino_world": {
 		"prettyname": "Dino World",
@@ -128,18 +129,12 @@ const mapUrls = {
 		"totalBlizzards": 3,
 		"totalPortals": 5
 	},
-	"united_states": {
-		"prettyname": "United States",
-		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States.png",
-		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20blizzard%20pattern.png",
-		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20fog%20pattern.png",
-		"totalBlizzards": 3,
-		"totalPortals": 5
-	},
 }
 
 let imgElement = document.getElementById("map");
+	console.log("imgElement:", imgElement);
 imgElement.src = mapUrls[mapselected].baseurl;
+	console.log("mapUrls[mapselected].baseurl:", mapUrls[mapselected].baseurl);
 
 let title = document.getElementById("mapnametitle");
 title.textContent = mapUrls[mapselected].prettyname;
