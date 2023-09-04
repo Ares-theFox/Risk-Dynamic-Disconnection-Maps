@@ -16,13 +16,6 @@
         width: 35px;
       }
 	  	/* Add some basic styles to the button */
-	button {
-	font-size: 16px;
-	padding: 8px 16px;
-	border: none;
-	cursor: pointer;
-	}
-
 	#blizzardButton {
 	width: 180px;
 	text-align: center;
@@ -124,4 +117,11 @@
 		
 	#zoomOutButton:hover {
 	background-color: #ababab;
+	}
+
+	button {
+	font-size: 16px;
+	padding: 8px 16px;
+	border: none;
+	cursor: pointer;
 	}
