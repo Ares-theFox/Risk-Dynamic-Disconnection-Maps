@@ -6,7 +6,6 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 	console.log("1111111111")
 }
-	console.log("mapselected:", mapselected);
 
 const mapUrls = {
 	"boston": {
@@ -117,9 +116,7 @@ const mapUrls = {
 }
 
 let imgElement = document.getElementById("map");
-	console.log("imgElement:", imgElement);
 imgElement.src = mapUrls[mapselected].baseurl;
-	console.log("mapUrls[mapselected].baseurl:", mapUrls[mapselected].baseurl);
 
 let title = document.getElementById("mapnametitle");
 title.textContent = mapUrls[mapselected].prettyname;
