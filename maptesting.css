@@ -51,6 +51,14 @@
 	    color: white;
 	}
 
+	label[for="treatSelfPicksAsBlizzards"] {
+	  width: 218px;
+	}
+
+	label[for="treatOpponentPicksAsBlizzards"] {
+	  width: 218px;
+	}
+
 	#portalButton {
 	width: 180px;
 	text-align: center;
