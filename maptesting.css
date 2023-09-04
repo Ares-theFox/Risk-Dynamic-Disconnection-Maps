@@ -35,6 +35,7 @@
 	
 	#opponentpick:hover {
 	    background-color: #800000;
+	    color: white;
 	}
 	
 	#selfpick {
@@ -45,6 +46,7 @@
 	
 	#selfpick:hover {
 	    background-color: #338000;
+	    color: white;
 	}
 
 	#portalButton {
