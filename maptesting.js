@@ -5,7 +5,7 @@ if (urlParams.has('map')) {
 	mapselected = urlParams.get('map');
 	console.log(urlParams.get('map'));
 }
-console.log("9/4 PLEASE CONTINUE WORKING")
+console.log("9/4 yay")
 
 const mapUrls = {
 	"boston": {
@@ -278,7 +278,6 @@ sequence.forEach(function (item) {
 	selectMenuContainer.style.display = "";
 	// Set the flag to true once the sequence is completed
 	sequenceCompleted = true;
-	stopEditing();
       }
     }
   };
