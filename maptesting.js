@@ -558,44 +558,10 @@ function calculateCloseness(tableData) {
     calculateColor(tableData, "Closeness", closenessStats);
 }
 
-function calculateInformationFlow(tableData) {
-    let G = new jsnx.Graph();
-    tableData.forEach((row, i) => {
-        G.addNode(row["Territory"]);
-        let connections = row["Connections"].split(",");
-        connections.forEach(connection => {
-            G.addEdge(row["Territory"], connection);
-        });
-    });
-    let n = G.numberOfNodes();
-    let centrality = {};
-    G.nodes().forEach(v => {
-        let C = 0;
-        G.nodes().forEach(s => {
-            if (s !== v) {
-                let sp = jsnx.shortestPath(G, {source: s, target: v});
-                C += sp.length;
-            }
-        });
-        centrality[v] = (n - 1) / C;
-    });
-    let currentFlowClosenessValues = [];
-    tableData.forEach((row, i) => {
-        let currentFlowCloseness = centrality[row["Territory"]];
-        row["Information Flow"] = currentFlowCloseness;
-	    row["Information Flow Rounded"] = Math.round(currentFlowCloseness * 1000) / 10;
-        currentFlowClosenessValues.push(currentFlowCloseness);
-    });
-    // Calculate the hex color for each row based on the "Current Flow Closeness" value
-    let currentFlowClosenessStats = stats(currentFlowClosenessValues);
-    calculateColor(tableData, "Information Flow", currentFlowClosenessStats);
-}
-
 function calculateCentrality(tableData) {
     calculateEigenvector(tableData);
     calculateBetweenness(tableData);
     calculateCloseness(tableData);
-    calculateInformationFlow(tableData);
 }  
 
 // Generate the map
@@ -702,9 +668,6 @@ function generateMap() {
 	// Eigenvector = centrality value
 	// Eigenvector Color = the color for that node
 	// Eigenvector Border Color = the border color for that node
-	// Information Flow = centrality value
-	// Information Flow Color = the color for that node
-	// Information Flow Border Color = the border color for that node
 	
   // Set font size of indirect connections
   var fontSizeInput = document.getElementById("fontSizeInput");
@@ -738,9 +701,6 @@ function generateMap() {
 	  } else if (centralityMenu.value === "closeness") {
 	    var color = tableData[i]["Closeness Color"];
 	    var border_color = tableData[i]["Closeness Border Color"];
-	  } else if (centralityMenu.value === "informationflow") {
-	    var color = tableData[i]["Information Flow Color"];
-	    var border_color = tableData[i]["Information Flow Border Color"];
 	  } else if (centralityMenu.value === "capConnections") {
 	    var color = colorDictionary[Math.min(tableData[i]["Number of Cap Connections"], 12)];
 	    var border_color = colorDarktionary[Math.min(tableData[i]["Number of Cap Connections"], 12)];
@@ -778,10 +738,9 @@ function generateMap() {
 	let condition2 = centralityMenu.value === "eigenvector" && tableData[i]["Eigenvector Above STDEV"] === 1;
 	let condition3 = centralityMenu.value === "betweenness" && tableData[i]["Betweenness Above STDEV"] === 1;
 	let condition4 = centralityMenu.value === "closeness" && tableData[i]["Closeness Above STDEV"] === 1;
-	let condition5 = centralityMenu.value === "informationflow" && tableData[i]["Information Flow Above STDEV"] === 1;
-	let condition6 = centralityMenu.value === "capConnections" && tableData[i]["Number of Cap Connections"] >= 11;
+	let condition5 = centralityMenu.value === "capConnections" && tableData[i]["Number of Cap Connections"] >= 11;
 		
-	  if (condition1 || condition2 || condition3 || condition4 || condition5 || condition6) {
+	  if (condition1 || condition2 || condition3 || condition4 || condition5) {
 	    text.setAttribute("fill", "white");
 	  } else {
 	    text.setAttribute("fill", "black");
@@ -795,8 +754,6 @@ function generateMap() {
 	    text.textContent = tableData[i]["Betweenness Rounded"];
 	  } else if (centralityMenu.value === "closeness") {
 	    text.textContent = tableData[i]["Closeness Rounded"];
-	  } else if (centralityMenu.value === "informationflow") {
-	    text.textContent = tableData[i]["Information Flow Rounded"];
 	  } else if (centralityMenu.value === "capConnections") {
 	    text.textContent = tableData[i]["Number of Cap Connections"];
 	  }
@@ -1091,8 +1048,6 @@ const mouseoutHandler = function () {
       border_color = tableData.find(row => row['Territory'] === this.id)['Betweenness Border Color'];
     } else if (centralityMenu.value === "closeness") {
       border_color = tableData.find(row => row['Territory'] === this.id)['Closeness Border Color'];
-    } else if (centralityMenu.value === "informationflow") {
-      border_color = tableData.find(row => row['Territory'] === this.id)['Information Flow Border Color'];
     } else if (centralityMenu.value === "capConnections") {
       let value = tableData.find(row => row['Territory'] === this.id)['Number of Cap Connections'];
       border_color = colorDarktionary[Math.min(value, 12)];
@@ -1317,8 +1272,6 @@ function addPortals() {
 	      border_color = tableData.find(row => row['Territory'] === this.id)['Betweenness Border Color'];
 	    } else if (centralityMenu.value === "closeness") {
 	      border_color = tableData.find(row => row['Territory'] === this.id)['Closeness Border Color'];
-	    } else if (centralityMenu.value === "informationflow") {
-	      border_color = tableData.find(row => row['Territory'] === this.id)['Information Flow Border Color'];
 	    } else if (centralityMenu.value === "capConnections") {
 	      let value = tableData.find(row => row['Territory'] === this.id)['Number of Cap Connections'];
 	      border_color = colorDarktionary[Math.min(value, 12)];
@@ -1504,8 +1457,6 @@ function eraser() {
 	        border_color = tableData.find(row => row['Territory'] === this.id)['Betweenness Border Color'];
 	      } else if (centralityMenu.value === "closeness") {
 	        border_color = tableData.find(row => row['Territory'] === this.id)['Closeness Border Color'];
-	      } else if (centralityMenu.value === "informationflow") {
-	        border_color = tableData.find(row => row['Territory'] === this.id)['Information Flow Border Color'];
 	      } else if (centralityMenu.value === "capConnections") {
 	        let value = tableData.find(row => row['Territory'] === this.id)['Number of Cap Connections'];
 	        border_color = colorDarktionary[Math.min(value, 12)];
