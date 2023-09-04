@@ -13,7 +13,6 @@ const mapUrls = {
 		"prettyname": "Boston",
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Boston.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Boston%20blizzard%20pattern.png",
-		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Boston%20fog%20pattern.png",
 		"totalBlizzards": 3,
 		"totalPortals": 5
 	},
@@ -21,7 +20,6 @@ const mapUrls = {
 		"prettyname": "Brazil",
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Brazil.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Brazil%20blizzard%20pattern.png",
-		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Brazil%20fog%20pattern.png",
 		"totalBlizzards": 2,
 		"totalPortals": 4
 	},
@@ -29,7 +27,6 @@ const mapUrls = {
 		"prettyname": "Castle",
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Castle.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Castle%20blizzard%20pattern.png",
-		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Castle%20fog%20pattern.png",
 		"totalBlizzards": 2,
 		"totalPortals": 4
 	},
@@ -37,7 +34,6 @@ const mapUrls = {
 		"prettyname": "Classic",
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Classic.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Classic%20blizzard%20pattern.png",
-		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Classic%20fog%20pattern.png",
 		"totalBlizzards": 3,
 		"totalPortals": 5
 	},
@@ -45,7 +41,6 @@ const mapUrls = {
 		"prettyname": "Dicey Trajectories",
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Dicey%20Trajectories.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Dicey%20Trajectories%20blizzard%20pattern.png",
-		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Dicey%20Trajectories%20fog%20pattern.png",
 		"totalBlizzards": 2,
 		"totalPortals": 4
 	},
@@ -53,7 +48,6 @@ const mapUrls = {
 		"prettyname": "Dino Canyon",
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Dino%20Canyon.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Dino%20Canyon%20blizzard%20pattern.png",
-		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Dino%20Canyon%20fog%20pattern.png",
 		"totalBlizzards": 3,
 		"totalPortals": 5
 	},
@@ -61,7 +55,6 @@ const mapUrls = {
 		"prettyname": "Dino World",
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Dino%20World.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Dino%20World%20blizzard%20pattern.png",
-		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Dino%20World%20fog%20pattern.png",
 		"totalBlizzards": 2,
 		"totalPortals": 4
 	},
@@ -69,7 +62,6 @@ const mapUrls = {
 		"prettyname": "France",
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/France.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/France%20blizzard%20pattern.png",
-		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/France%20fog%20pattern.png",
 		"totalBlizzards": 2,
 		"totalPortals": 4
 	},
@@ -77,7 +69,6 @@ const mapUrls = {
 		"prettyname": "Jules Verne",
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20blizzard%20pattern.png",
-		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20fog%20pattern.png",
 		"totalBlizzards": 3,
 		"totalPortals": 5
 	},
@@ -85,7 +76,6 @@ const mapUrls = {
 		"prettyname": "Mother of all Boards",
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Mother%20of%20all%20Boards.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Mother%20of%20all%20Boards%20blizzard%20pattern.png",
-		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Mother%20of%20all%20Boards%20fog%20pattern.png",
 		"totalBlizzards": 2,
 		"totalPortals": 4
 	},
@@ -93,7 +83,6 @@ const mapUrls = {
 		"prettyname": "Nan Madol",
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Nan%20Madol.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Nan%20Madol%20blizzard%20pattern.png",
-		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Nan%20Madol%20fog%20pattern.png",
 		"totalBlizzards": 3,
 		"totalPortals": 5
 	},
@@ -101,7 +90,6 @@ const mapUrls = {
 		"prettyname": "Roman Empire",
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Roman%20Empire.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Roman%20Empire%20blizzard%20pattern.png",
-		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Roman%20Empire%20fog%20pattern.png",
 		"totalBlizzards": 3,
 		"totalPortals": 5
 	},
@@ -109,7 +97,6 @@ const mapUrls = {
 		"prettyname": "Simple World",
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Simple%20World.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Simple%20World%20blizzard%20pattern.png",
-		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Simple%20World%20fog%20pattern.png",
 		"totalBlizzards": 2,
 		"totalPortals": 4
 	},
@@ -117,7 +104,6 @@ const mapUrls = {
 		"prettyname": "Supermax Prison",
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Supermax%20Prison.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Supermax%20Prison%20blizzard%20pattern.png",
-		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Supermax%20Prison%20fog%20pattern.png",
 		"totalBlizzards": 3,
 		"totalPortals": 5
 	},
