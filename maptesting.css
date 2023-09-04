@@ -52,10 +52,12 @@
 	}
 
 	label[for="treatSelfPicksAsBlizzards"] {
+  	  display: inline-block;
 	  width: 218px;
 	}
 
 	label[for="treatOpponentPicksAsBlizzards"] {
+  	  display: inline-block;
 	  width: 218px;
 	}
 
