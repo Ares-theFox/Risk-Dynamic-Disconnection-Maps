@@ -4,7 +4,6 @@ let mapselected = "test";
 if (urlParams.has('map')) {
 	mapselected = urlParams.get('map');
 	console.log(urlParams.get('map'));
-	console.log("1111111111")
 }
 
 const mapUrls = {
@@ -36,19 +35,19 @@ const mapUrls = {
 		"totalBlizzards": 3,
 		"totalPortals": 5
 	},
-	"dicey_trajectories": {
-		"prettyname": "Dicey Trajectories",
-		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Dicey%20Trajectories.png",
-		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Dicey%20Trajectories%20blizzard%20pattern.png",
-		"totalBlizzards": 2,
-		"totalPortals": 4
-	},
 	"dino_canyon": {
 		"prettyname": "Dino Canyon",
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Dino%20Canyon.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Dino%20Canyon%20blizzard%20pattern.png",
 		"totalBlizzards": 3,
 		"totalPortals": 5
+	},
+	"dicey_trajectories": {
+		"prettyname": "Dicey Trajectories",
+		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Dicey%20Trajectories.png",
+		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Dicey%20Trajectories%20blizzard%20pattern.png",
+		"totalBlizzards": 2,
+		"totalPortals": 4
 	},
 	"dino_world": {
 		"prettyname": "Dino World",
@@ -113,6 +112,13 @@ const mapUrls = {
 		"totalBlizzards": 3,
 		"totalPortals": 5
 	},
+	"united_states": {
+		"prettyname": "United States",
+		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States.png",
+		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20blizzard%20pattern.png",
+		"totalBlizzards": 3,
+		"totalPortals": 5
+	},
 }
 
 let imgElement = document.getElementById("map");
@@ -161,6 +167,7 @@ var images = [
   "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox12.png"
 ];
 
+// Preload the blizzard pattern
 var blizzardPatternImage = new Image();
 blizzardPatternImage.src = mapUrls[mapselected].blizzardPatternImage;
 
@@ -177,12 +184,9 @@ var SVG = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnect
 var BlizzardPattern = blizzardPatternImage.src;
 var totalBlizzards = mapUrls[mapselected].totalBlizzards;
 var totalPortals = mapUrls[mapselected].totalPortals;
-let blizzardArray = [];
-let portalArray = [];
-let clickedPathsBlizzardsPortals = [];
-let opponentArray = [];
-let selfArray = [];
-let pickArray = [];
+let blizzardArray = []
+let portalArray = []
+let clickedPathsBlizzardsPortals = []
 const colorDictionary = {
   0: "#ffffff",
   1: "#eb3337",
