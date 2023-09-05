@@ -5,7 +5,7 @@ if (urlParams.has('map')) {
 	mapselected = urlParams.get('map');
 	console.log(urlParams.get('map'));
 }
-console.log("111111111111111111")
+console.log("222")
 
 const mapUrls = {
 	"boston": {
@@ -758,8 +758,8 @@ function generateMap() {
         // Color in the map
         if (tableData[i]["Blizzard"] === 0) {
 	  if (selfpickArray.includes(tableData[i]["Territory"]) && treatSelfPicksAsBlizzards.checked && (centralityMenu.value === "standard" || centralityMenu.value === "capConnections")) {
-	    var color = #356781
-	    var border_color = #1B3441
+	    var color = "#356781";
+	    var border_color = "#1B3441";
 	  } else if (centralityMenu.value === "standard") {
 	    var color = colorDictionary[tableData[i]["Number of Direct Connections"]];
 	    var border_color = colorDarktionary[tableData[i]["Number of Direct Connections"]];
