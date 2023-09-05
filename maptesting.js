@@ -5,7 +5,7 @@ if (urlParams.has('map')) {
 	mapselected = urlParams.get('map');
 	console.log(urlParams.get('map'));
 }
-console.log("mMMMMMmmmmmmm")
+console.log("oooooooooooooooooooboy")
 
 const mapUrls = {
 	"boston": {
@@ -815,6 +815,9 @@ function generateMap() {
 	    text.textContent = tableData[i]["Closeness Rounded"];
 	  } else if (centralityMenu.value === "capConnections") {
 	    text.textContent = tableData[i]["Number of Cap Connections"];
+	  }
+	  if (text.textContent === "0") {
+	    text.textContent = "";
 	  }
 		
           // Adjust x and y coordinates to position midpoint of text at specified coordinates
@@ -1894,7 +1897,7 @@ const mouseoverHandler = function () {
     history.push({ type: 'addOpponentPick', pathId: this.id });
 	    
     // Change the fill opacity of the clicked path to 50%
-    this.style.setProperty("fill-opacity", "0.5", "important");
+    this.style.setProperty("fill-opacity", "0.3", "important");
 
     // Check if size of opponentpickArray is greater than or equal to mapsize
     if (opponentpickArray.length >= mapsize) {
@@ -1980,7 +1983,7 @@ function addOpponentPick_pathID(pathID) {
   picksAndBlizzardsArray.push(pathID);
   
   // Change the fill opacity of the clicked path to 50%
-  this.style.setProperty("fill-opacity", "0.5", "important");
+  this.style.setProperty("fill-opacity", "0.3", "important");
 
    // Execute generateMap function
    generateMap();
