@@ -645,7 +645,7 @@ function generateMap() {
 	  } else if (opponentpickArray.includes(row["Territory"]) && treatOpponentPicksAsBlizzards.checked) {
 	    row["Connections"] = "";
 	  }
-	}
+	});
 	
     // Calculate new columns
     tableData.forEach((row) => {
