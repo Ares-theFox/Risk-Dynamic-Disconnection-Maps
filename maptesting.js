@@ -468,28 +468,38 @@ function calculateColor(tableData, columnName, stats) {
 }
 
 function calculateEigenvector(tableData) {
-    let G = new jsnx.Graph();
-    tableData.forEach((row, i) => {
-        G.addNode(row["Territory"]);
-        let connections = row["Connections"].split(",");
-        connections.forEach(connection => {
-            G.addEdge(row["Territory"], connection);
-        });
+  let G = new jsnx.Graph();
+  tableData.forEach((row, i) => {
+    G.addNode(row["Territory"]);
+    let connections = row["Connections"].split(",");
+    connections.forEach(connection => {
+      G.addEdge(row["Territory"], connection);
     });
-    let ec = jsnx.eigenvectorCentrality(G,{maxIter:500});
-    let eigenvectorValues = [];
+  });
+
+  let ec;
+  try {
+    ec = jsnx.eigenvectorCentrality(G, { maxIter: 500 });
+  } catch (e) {
+    // Power iteration failed to converge, set eigenvector values to 0
     tableData.forEach((row, i) => {
-        let eigenvector = ec.get(row["Territory"]);
-        row["Eigenvector"] = eigenvector;
-	    row["Eigenvector Rounded"] = Math.round(eigenvector * 1000) / 10;
-        eigenvectorValues.push(eigenvector);
+      row["Eigenvector"] = 0;
+      row["Eigenvector Rounded"] = 0;
     });
+    return;
+  }
 
-    // Calculate the average and standard deviation of the "Eigenvector" values
-    let eigenvectorStats = stats(eigenvectorValues);
+  let eigenvectorValues = [];
+  tableData.forEach((row, i) => {
+    let eigenvector = ec.get(row["Territory"]);
+    row["Eigenvector"] = eigenvector;
+    row["Eigenvector Rounded"] = Math.round(eigenvector * 1000) / 10;
+    eigenvectorValues.push(eigenvector);
+  });
 
-    // Calculate the hex color for each row based on the "Eigenvector" value
-    calculateColor(tableData, "Eigenvector", eigenvectorStats);
+  // Calculate the hex color for each row based on the "Eigenvector" value
+  let eigenvectorStats = stats(eigenvectorValues);
+  calculateColor(tableData, "Eigenvector", eigenvectorStats);
 }
 
 function calculateBetweenness(tableData) {
@@ -797,7 +807,7 @@ function generateMap() {
 	let condition3 = centralityMenu.value === "betweenness" && tableData[i]["Betweenness Above STDEV"] === 1;
 	let condition4 = centralityMenu.value === "closeness" && tableData[i]["Closeness Above STDEV"] === 1;
 	let condition5 = centralityMenu.value === "capConnections" && tableData[i]["Number of Cap Connections"] >= 11;
-	let condition6 = treatOpponentPicksAsBlizzards.checked && opponentpickArray.includes(tableData[i]["Territory"]);
+	let condition6 = opponentpickArray.includes(tableData[i]["Territory"]);
 		
 	  if (condition1 || condition2 || condition3 || condition4 || condition5 || condition6) {
 	    text.setAttribute("fill", "white");
@@ -816,7 +826,11 @@ function generateMap() {
 	  } else if (centralityMenu.value === "capConnections") {
 	    text.textContent = tableData[i]["Number of Cap Connections"];
 	  }
-	  if (text.textContent === "0") {
+
+	let conditionA = opponentpickArray.includes(tableData[i]["Territory"]) && treatOpponentPicksAsBlizzards.checked
+	let conditionB = selfpickArray.includes(tableData[i]["Territory"]) && treatSelfPicksAsBlizzards.checked
+
+	  if (conditionA || conditionB) {
 	    text.textContent = "";
 	  }
 		
@@ -1519,21 +1533,6 @@ function addPortals_pathID(pathID) {
    return;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function addSelfPick() {
   let shouldReturn = false;
   document.getElementById("stopButton").innerHTML = "Stop Adding Self Picks";
@@ -1755,15 +1754,6 @@ function addSelfPick_pathID(pathID) {
    return;
 }
 
-
-
-
-
-
-
-
-
-
 function addOpponentPick() {
   let shouldReturn = false;
   document.getElementById("stopButton").innerHTML = "Stop Adding Opponent Picks";
@@ -1896,8 +1886,8 @@ const mouseoverHandler = function () {
     picksAndBlizzardsArray.push(this.id);
     history.push({ type: 'addOpponentPick', pathId: this.id });
 	    
-    // Change the fill opacity of the clicked path to 50%
-    this.style.setProperty("fill-opacity", "0.15", "important");
+    // Change the fill opacity of the clicked path to 0%
+    this.style.setProperty("fill-opacity", "0", "important");
 
     // Check if size of opponentpickArray is greater than or equal to mapsize
     if (opponentpickArray.length >= mapsize) {
@@ -1982,21 +1972,13 @@ function addOpponentPick_pathID(pathID) {
   opponentpickArray.push(pathID);
   picksAndBlizzardsArray.push(pathID);
   
-  // Change the fill opacity of the clicked path to 50%
-  this.style.setProperty("fill-opacity", "0.15", "important");
+  // Change the fill opacity of the clicked path to 0%
+  this.style.setProperty("fill-opacity", "0", "important");
 
    // Execute generateMap function
    generateMap();
    return;
 }
-
-
-
-
-
-
-
-
 
 	
 function button_StopEditing() {
