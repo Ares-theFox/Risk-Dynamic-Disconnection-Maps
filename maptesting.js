@@ -757,7 +757,10 @@ function generateMap() {
       if (tableData[i]["Territory"] === pathId) {
         // Color in the map
         if (tableData[i]["Blizzard"] === 0) {
-	  if (centralityMenu.value === "standard") {
+	  if (selfpickArray.includes(tableData[i]["Territory"]) && treatSelfPicksAsBlizzards.checked && (centralityMenu.value === "standard" || centralityMenu.value === "capConnections")) {
+	    var color = #356781
+	    var border_color = #1B3441
+	  } else if (centralityMenu.value === "standard") {
 	    var color = colorDictionary[tableData[i]["Number of Direct Connections"]];
 	    var border_color = colorDarktionary[tableData[i]["Number of Direct Connections"]];
 	  } else if (centralityMenu.value === "eigenvector") {
