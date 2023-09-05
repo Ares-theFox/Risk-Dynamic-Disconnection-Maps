@@ -5,7 +5,7 @@ if (urlParams.has('map')) {
 	mapselected = urlParams.get('map');
 	console.log(urlParams.get('map'));
 }
-console.log("oooooooooooooooooooboy")
+console.log("mmmmmmMMMMMmmMMMMMDSfksdfjasldflasdfa")
 
 const mapUrls = {
 	"boston": {
@@ -1897,7 +1897,7 @@ const mouseoverHandler = function () {
     history.push({ type: 'addOpponentPick', pathId: this.id });
 	    
     // Change the fill opacity of the clicked path to 50%
-    this.style.setProperty("fill-opacity", "0.3", "important");
+    this.style.setProperty("fill-opacity", "0.15", "important");
 
     // Check if size of opponentpickArray is greater than or equal to mapsize
     if (opponentpickArray.length >= mapsize) {
@@ -1983,7 +1983,7 @@ function addOpponentPick_pathID(pathID) {
   picksAndBlizzardsArray.push(pathID);
   
   // Change the fill opacity of the clicked path to 50%
-  this.style.setProperty("fill-opacity", "0.3", "important");
+  this.style.setProperty("fill-opacity", "0.15", "important");
 
    // Execute generateMap function
    generateMap();
