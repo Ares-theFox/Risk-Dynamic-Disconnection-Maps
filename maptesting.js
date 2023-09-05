@@ -5,7 +5,7 @@ if (urlParams.has('map')) {
 	mapselected = urlParams.get('map');
 	console.log(urlParams.get('map'));
 }
-console.log("please just work without extra work pleeeeeeeeeease")
+console.log("mmmmmmmmmmmmmmmmmmmmmmmmmmmm")
 
 const mapUrls = {
 	"boston": {
@@ -117,14 +117,6 @@ const mapUrls = {
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Supermax%20Prison.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Supermax%20Prison%20blizzard%20pattern.png",
 		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Supermax%20Prison%20fog%20pattern.png",
-		"totalBlizzards": 3,
-		"totalPortals": 5
-	},
-	"united_states": {
-		"prettyname": "United States",
-		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States.png",
-		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20blizzard%20pattern.png",
-		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20fog%20pattern.png",
 		"totalBlizzards": 3,
 		"totalPortals": 5
 	},
@@ -638,14 +630,37 @@ function generateMap() {
 	  }
 	});
 
-  	// Remove everything contained in the selfpick and opponentpick arrays
-	tableData.forEach((row) => {
-	  if (selfpickArray.includes(row["Territory"]) && treatSelfPicksAsBlizzards.checked) {
-	    row["Connections"] = "";
-	  } else if (opponentpickArray.includes(row["Territory"]) && treatOpponentPicksAsBlizzards.checked) {
-	    row["Connections"] = "";
-	  }
-	});
+  	// Remove everything contained in the selfpick array
+	if (treatSelfPicksAsBlizzards.checked) {
+	  // Remove everything contained in the selfpick array
+	  tableData.forEach((row) => {
+	    if (selfpickArray.includes(row["Territory"])) {
+	      row["Connections"] = "";
+	    } else {
+	      if (row["Connections"]) {
+	        let values = row["Connections"].split(",");
+	        values = values.filter((value) => !selfpickArray.includes(value));
+	        row["Connections"] = values.join(",");
+	      }
+	    }
+	  });
+	}
+
+  	// Remove everything contained in the opponentpick array
+	if (treatOpponentPicksAsBlizzards.checked) {
+	  // Remove everything contained in the opponentpick array
+	  tableData.forEach((row) => {
+	    if (opponentpick.includes(row["Territory"])) {
+	      row["Connections"] = "";
+	    } else {
+	      if (row["Connections"]) {
+	        let values = row["Connections"].split(",");
+	        values = values.filter((value) => !opponentpick.includes(value));
+	        row["Connections"] = values.join(",");
+	      }
+	    }
+	  });
+	}
 	
     // Calculate new columns
     tableData.forEach((row) => {
@@ -1079,7 +1094,7 @@ const mouseoverHandler = function () {
   if (shouldReturn) {
     return;
   }
-  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
+  if (!clickedPathsBlizzardsPortals.includes(this.id) && !picksAndBlizzardsArray.includes(this.id)) {
     // Change stroke color to white and stroke width to 3
     this.style.setProperty("stroke", "white", "important");
     this.style.setProperty("stroke-width", "3", "important");
@@ -1090,7 +1105,7 @@ const mouseoverHandler = function () {
 	  if (shouldReturn) {
 	    return;
 	  }
-	  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
+	  if (!clickedPathsBlizzardsPortals.includes(this.id) && !picksAndBlizzardsArray.includes(this.id)) {
 	    // Reset stroke color and width according to the selected centrality measure
 	    let border_color;
 	    if (centralityMenu.value === "standard") {
@@ -1114,8 +1129,8 @@ const mouseoverHandler = function () {
     if (shouldReturn) {
       return;
     }
-    // Check if path is NOT in clickedPathsBlizzardsPortals array
-    if (!clickedPathsBlizzardsPortals.includes(this.id)) {
+    // Check if path is NOT in arrays
+    if (!clickedPathsBlizzardsPortals.includes(this.id) && !picksAndBlizzardsArray.includes(this.id)) {
 	// Create a clipPath element and set its id
 	var clipPath = document.createElementNS(
 	  "http://www.w3.org/2000/svg",
@@ -1160,6 +1175,7 @@ const mouseoverHandler = function () {
     // Add clicked path to arrays; push to history
     blizzardArray.push(this.id);
     clickedPathsBlizzardsPortals.push(this.id);
+    picksAndBlizzardsArray.push(this.id);
     history.push({ type: 'addBlizzard', pathId: this.id });
 	    
     // Change the fill of the clicked path to transparent
@@ -1784,7 +1800,7 @@ function addOpponentPick() {
   document.getElementById("selfpick").addEventListener("click", selfPickClick);
   document.getElementById("opponentpick").addEventListener("click", opponentPickClick);
 
-  // Check if size of selfpickArray is greater than or equal to total territories/2, rounded up
+  // Check if size of blizzardArray is greater than or equal to totalBlizzards
   var mapsize = Math.ceil(tableData.filter(row => row["Territory"] !== undefined).length / 2);
   if (opponentpickArray.length >= mapsize) {
     // Return early from the function
@@ -1831,7 +1847,7 @@ const mouseoverHandler = function () {
     if (shouldReturn) {
       return;
     }
-    // Check if path is NOT in picksAndBlizzardsArray
+    // Check if path is NOT in arrays
     if (!picksAndBlizzardsArray.includes(this.id)) {
 	// Create a clipPath element and set its id
 	var clipPath = document.createElementNS(
@@ -1878,6 +1894,9 @@ const mouseoverHandler = function () {
     opponentpickArray.push(this.id);
     picksAndBlizzardsArray.push(this.id);
     history.push({ type: 'addOpponentPick', pathId: this.id });
+	    
+    // Change the fill opacity of the clicked path to 50%
+    this.style.setProperty("fill-opacity", "0.5", "important");
 
     // Check if size of opponentpickArray is greater than or equal to mapsize
     if (opponentpickArray.length >= mapsize) {
@@ -1961,6 +1980,9 @@ function addOpponentPick_pathID(pathID) {
   // Add clicked path to arrays; push to history
   opponentpickArray.push(pathID);
   picksAndBlizzardsArray.push(pathID);
+  
+  // Change the fill opacity of the clicked path to 50%
+  this.style.setProperty("fill-opacity", "0.5", "important");
 
    // Execute generateMap function
    generateMap();
