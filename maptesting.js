@@ -5,7 +5,7 @@ if (urlParams.has('map')) {
 	mapselected = urlParams.get('map');
 	console.log(urlParams.get('map'));
 }
-console.log("mmmmmmmmmmmmmmmmmmmmmmmmmmmm")
+console.log("mMMMMMmmmmmmm")
 
 const mapUrls = {
 	"boston": {
@@ -632,7 +632,6 @@ function generateMap() {
 
   	// Remove everything contained in the selfpick array
 	if (treatSelfPicksAsBlizzards.checked) {
-	  // Remove everything contained in the selfpick array
 	  tableData.forEach((row) => {
 	    if (selfpickArray.includes(row["Territory"])) {
 	      row["Connections"] = "";
@@ -646,16 +645,15 @@ function generateMap() {
 	  });
 	}
 
-  	// Remove everything contained in the opponentpick array
+  	// Remove everything contained in the opponentpickArray
 	if (treatOpponentPicksAsBlizzards.checked) {
-	  // Remove everything contained in the opponentpick array
 	  tableData.forEach((row) => {
-	    if (opponentpick.includes(row["Territory"])) {
+	    if (opponentpickArray.includes(row["Territory"])) {
 	      row["Connections"] = "";
 	    } else {
 	      if (row["Connections"]) {
 	        let values = row["Connections"].split(",");
-	        values = values.filter((value) => !opponentpick.includes(value));
+	        values = values.filter((value) => !opponentpickArray.includes(value));
 	        row["Connections"] = values.join(",");
 	      }
 	    }
