@@ -5,7 +5,7 @@ if (urlParams.has('map')) {
 	mapselected = urlParams.get('map');
 	console.log(urlParams.get('map'));
 }
-console.log("mmmmmmMMMMMmmMMMMMDSfksdfjasldflasdfa")
+console.log("111111111111111111")
 
 const mapUrls = {
 	"boston": {
@@ -1627,7 +1627,7 @@ function addSelfPick() {
 	image.setAttributeNS(
 	  "http://www.w3.org/1999/xlink",
 	  "href",
-	  "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox6.png"
+	  "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/puck.png"
 	);
 
 	// Set a custom attribute to store the id of the clicked path
@@ -1712,7 +1712,7 @@ function addSelfPick_pathID(pathID) {
   image.setAttributeNS(
     "http://www.w3.org/1999/xlink",
     "href",
-    "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox6.png"
+    "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/puck.png"
   );
 
   // Set a custom attribute to store the id of the clicked path
