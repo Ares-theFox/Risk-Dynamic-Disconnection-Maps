@@ -5,14 +5,12 @@ if (urlParams.has('map')) {
 	mapselected = urlParams.get('map');
 	console.log(urlParams.get('map'));
 }
-console.log("222")
 
 const mapUrls = {
 	"boston": {
 		"prettyname": "Boston",
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Boston.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Boston%20blizzard%20pattern.png",
-		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Boston%20fog%20pattern.png",
 		"totalBlizzards": 3,
 		"totalPortals": 5
 	},
@@ -20,7 +18,6 @@ const mapUrls = {
 		"prettyname": "Brazil",
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Brazil.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Brazil%20blizzard%20pattern.png",
-		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Brazil%20fog%20pattern.png",
 		"totalBlizzards": 2,
 		"totalPortals": 4
 	},
@@ -28,7 +25,6 @@ const mapUrls = {
 		"prettyname": "Castle",
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Castle.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Castle%20blizzard%20pattern.png",
-		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Castle%20fog%20pattern.png",
 		"totalBlizzards": 2,
 		"totalPortals": 4
 	},
@@ -36,7 +32,6 @@ const mapUrls = {
 		"prettyname": "Classic",
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Classic.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Classic%20blizzard%20pattern.png",
-		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Classic%20fog%20pattern.png",
 		"totalBlizzards": 3,
 		"totalPortals": 5
 	},
@@ -44,7 +39,6 @@ const mapUrls = {
 		"prettyname": "Dino Canyon",
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Dino%20Canyon.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Dino%20Canyon%20blizzard%20pattern.png",
-		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Dino%20Canyon%20fog%20pattern.png",
 		"totalBlizzards": 3,
 		"totalPortals": 5
 	},
@@ -52,7 +46,6 @@ const mapUrls = {
 		"prettyname": "Dicey Trajectories",
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Dicey%20Trajectories.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Dicey%20Trajectories%20blizzard%20pattern.png",
-		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Dicey%20Trajectories%20fog%20pattern.png",
 		"totalBlizzards": 2,
 		"totalPortals": 4
 	},
@@ -60,7 +53,6 @@ const mapUrls = {
 		"prettyname": "Dino World",
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Dino%20World.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Dino%20World%20blizzard%20pattern.png",
-		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Dino%20World%20fog%20pattern.png",
 		"totalBlizzards": 2,
 		"totalPortals": 4
 	},
@@ -68,7 +60,6 @@ const mapUrls = {
 		"prettyname": "France",
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/France.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/France%20blizzard%20pattern.png",
-		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/France%20fog%20pattern.png",
 		"totalBlizzards": 2,
 		"totalPortals": 4
 	},
@@ -76,7 +67,6 @@ const mapUrls = {
 		"prettyname": "Jules Verne",
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20blizzard%20pattern.png",
-		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Jules%20Verne%20fog%20pattern.png",
 		"totalBlizzards": 3,
 		"totalPortals": 5
 	},
@@ -84,7 +74,6 @@ const mapUrls = {
 		"prettyname": "Mother of all Boards",
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Mother%20of%20all%20Boards.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Mother%20of%20all%20Boards%20blizzard%20pattern.png",
-		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Mother%20of%20all%20Boards%20fog%20pattern.png",
 		"totalBlizzards": 2,
 		"totalPortals": 4
 	},
@@ -92,7 +81,6 @@ const mapUrls = {
 		"prettyname": "Nan Madol",
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Nan%20Madol.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Nan%20Madol%20blizzard%20pattern.png",
-		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Nan%20Madol%20fog%20pattern.png",
 		"totalBlizzards": 3,
 		"totalPortals": 5
 	},
@@ -100,7 +88,6 @@ const mapUrls = {
 		"prettyname": "Roman Empire",
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Roman%20Empire.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Roman%20Empire%20blizzard%20pattern.png",
-		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Roman%20Empire%20fog%20pattern.png",
 		"totalBlizzards": 3,
 		"totalPortals": 5
 	},
@@ -108,7 +95,6 @@ const mapUrls = {
 		"prettyname": "Simple World",
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Simple%20World.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Simple%20World%20blizzard%20pattern.png",
-		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Simple%20World%20fog%20pattern.png",
 		"totalBlizzards": 2,
 		"totalPortals": 4
 	},
@@ -116,7 +102,6 @@ const mapUrls = {
 		"prettyname": "Supermax Prison",
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Supermax%20Prison.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Supermax%20Prison%20blizzard%20pattern.png",
-		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Supermax%20Prison%20fog%20pattern.png",
 		"totalBlizzards": 3,
 		"totalPortals": 5
 	},
@@ -124,7 +109,6 @@ const mapUrls = {
 		"prettyname": "United States",
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20blizzard%20pattern.png",
-		"fogPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20fog%20pattern.png",
 		"totalBlizzards": 3,
 		"totalPortals": 5
 	},
@@ -165,7 +149,7 @@ var mapDirectoryButton = document.getElementById("mapDirectoryButton");
 // Add an event listener to the button that listens for the "click" event
 mapDirectoryButton.addEventListener("click", function() {
   // Open the URL in a new tab when the button is clicked
-  window.open("https://ares-thefox.github.io/Risk-Dynamic-Disconnection-Maps/testingpage.html", "_blank");
+  window.open("https://ares-thefox.github.io/Risk-Dynamic-Disconnection-Maps/", "_blank");
 });
 
 var images = [
@@ -183,11 +167,9 @@ var images = [
   "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox12.png"
 ];
 
-// Preload the fog and blizzard patterns
+// Preload the blizzard pattern
 var blizzardPatternImage = new Image();
 blizzardPatternImage.src = mapUrls[mapselected].blizzardPatternImage;
-var fogPatternImage = new Image();
-fogPatternImage.src = mapUrls[mapselected].fogPatternImage;
 
 window.onload = function() {
   var img = document.querySelector("header img");
@@ -199,19 +181,12 @@ window.onload = function() {
 var colorLegend = mapUrls[mapselected].prettyname;
 var csvData = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "%20Master%20File.csv";
 var SVG = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "%20Paths.svg";
-var FogPattern = fogPatternImage.src;
 var BlizzardPattern = blizzardPatternImage.src;
 var totalBlizzards = mapUrls[mapselected].totalBlizzards;
 var totalPortals = mapUrls[mapselected].totalPortals;
-
-let blizzardArray = [];
-let portalArray = [];
-let clickedPathsBlizzardsPortals = [];
-
-let selfpickArray = [];
-let opponentpickArray = [];
-let picksAndBlizzardsArray = [];
-
+let blizzardArray = []
+let portalArray = []
+let clickedPathsBlizzardsPortals = []
 const colorDictionary = {
   0: "#ffffff",
   1: "#eb3337",
@@ -243,21 +218,11 @@ const colorDarktionary = {
 12: "#000000"
 };
 
-// Centrality menu stuff
+// Menu stuff
 var selectMenuContainer = document.getElementById("selectMenuContainer");
 selectMenuContainer.style.display = "none";
 centralityMenu = document.getElementById("centralityType");
 centralityMenu.addEventListener("change", function() {
-  generateMap();
-});
-
-// Pick menu stuff
-var treatSelfPicksAsBlizzards = document.getElementById("treatSelfPicksAsBlizzards");
-var treatOpponentPicksAsBlizzards = document.getElementById("treatOpponentPicksAsBlizzards");
-treatSelfPicksAsBlizzards.addEventListener("change", function() {
-  generateMap();
-});
-treatOpponentPicksAsBlizzards.addEventListener("change", function() {
   generateMap();
 });
 
@@ -475,38 +440,28 @@ function calculateColor(tableData, columnName, stats) {
 }
 
 function calculateEigenvector(tableData) {
-  let G = new jsnx.Graph();
-  tableData.forEach((row, i) => {
-    G.addNode(row["Territory"]);
-    let connections = row["Connections"].split(",");
-    connections.forEach(connection => {
-      G.addEdge(row["Territory"], connection);
-    });
-  });
-
-  let ec;
-  try {
-    ec = jsnx.eigenvectorCentrality(G, { maxIter: 500 });
-  } catch (e) {
-    // Power iteration failed to converge, set eigenvector values to 0
+    let G = new jsnx.Graph();
     tableData.forEach((row, i) => {
-      row["Eigenvector"] = 0;
-      row["Eigenvector Rounded"] = 0;
+        G.addNode(row["Territory"]);
+        let connections = row["Connections"].split(",");
+        connections.forEach(connection => {
+            G.addEdge(row["Territory"], connection);
+        });
     });
-    return;
-  }
+    let ec = jsnx.eigenvectorCentrality(G,{maxIter:500});
+    let eigenvectorValues = [];
+    tableData.forEach((row, i) => {
+        let eigenvector = ec.get(row["Territory"]);
+        row["Eigenvector"] = eigenvector;
+	    row["Eigenvector Rounded"] = Math.round(eigenvector * 1000) / 10;
+        eigenvectorValues.push(eigenvector);
+    });
 
-  let eigenvectorValues = [];
-  tableData.forEach((row, i) => {
-    let eigenvector = ec.get(row["Territory"]);
-    row["Eigenvector"] = eigenvector;
-    row["Eigenvector Rounded"] = Math.round(eigenvector * 1000) / 10;
-    eigenvectorValues.push(eigenvector);
-  });
+    // Calculate the average and standard deviation of the "Eigenvector" values
+    let eigenvectorStats = stats(eigenvectorValues);
 
-  // Calculate the hex color for each row based on the "Eigenvector" value
-  let eigenvectorStats = stats(eigenvectorValues);
-  calculateColor(tableData, "Eigenvector", eigenvectorStats);
+    // Calculate the hex color for each row based on the "Eigenvector" value
+    calculateColor(tableData, "Eigenvector", eigenvectorStats);
 }
 
 function calculateBetweenness(tableData) {
@@ -647,36 +602,6 @@ function generateMap() {
 	  }
 	});
 
-  	// Remove everything contained in the selfpick array
-	if (treatSelfPicksAsBlizzards.checked) {
-	  tableData.forEach((row) => {
-	    if (selfpickArray.includes(row["Territory"])) {
-	      row["Connections"] = "";
-	    } else {
-	      if (row["Connections"]) {
-	        let values = row["Connections"].split(",");
-	        values = values.filter((value) => !selfpickArray.includes(value));
-	        row["Connections"] = values.join(",");
-	      }
-	    }
-	  });
-	}
-
-  	// Remove everything contained in the opponentpickArray
-	if (treatOpponentPicksAsBlizzards.checked) {
-	  tableData.forEach((row) => {
-	    if (opponentpickArray.includes(row["Territory"])) {
-	      row["Connections"] = "";
-	    } else {
-	      if (row["Connections"]) {
-	        let values = row["Connections"].split(",");
-	        values = values.filter((value) => !opponentpickArray.includes(value));
-	        row["Connections"] = values.join(",");
-	      }
-	    }
-	  });
-	}
-	
     // Calculate new columns
     tableData.forEach((row) => {
       // Non-Unique Indirect Connections: vlookup Connections values and add them + current Territory & Connections
@@ -764,10 +689,7 @@ function generateMap() {
       if (tableData[i]["Territory"] === pathId) {
         // Color in the map
         if (tableData[i]["Blizzard"] === 0) {
-	  if (selfpickArray.includes(tableData[i]["Territory"]) && treatSelfPicksAsBlizzards.checked && (centralityMenu.value === "standard" || centralityMenu.value === "capConnections")) {
-	    var color = "#356781";
-	    var border_color = "#1B3441";
-	  } else if (centralityMenu.value === "standard") {
+	  if (centralityMenu.value === "standard") {
 	    var color = colorDictionary[tableData[i]["Number of Direct Connections"]];
 	    var border_color = colorDarktionary[tableData[i]["Number of Direct Connections"]];
 	  } else if (centralityMenu.value === "eigenvector") {
@@ -817,9 +739,8 @@ function generateMap() {
 	let condition3 = centralityMenu.value === "betweenness" && tableData[i]["Betweenness Above STDEV"] === 1;
 	let condition4 = centralityMenu.value === "closeness" && tableData[i]["Closeness Above STDEV"] === 1;
 	let condition5 = centralityMenu.value === "capConnections" && tableData[i]["Number of Cap Connections"] >= 11;
-	let condition6 = opponentpickArray.includes(tableData[i]["Territory"]);
 		
-	  if (condition1 || condition2 || condition3 || condition4 || condition5 || condition6) {
+	  if (condition1 || condition2 || condition3 || condition4 || condition5) {
 	    text.setAttribute("fill", "white");
 	  } else {
 	    text.setAttribute("fill", "black");
@@ -835,13 +756,6 @@ function generateMap() {
 	    text.textContent = tableData[i]["Closeness Rounded"];
 	  } else if (centralityMenu.value === "capConnections") {
 	    text.textContent = tableData[i]["Number of Cap Connections"];
-	  }
-
-	let conditionA = opponentpickArray.includes(tableData[i]["Territory"]) && treatOpponentPicksAsBlizzards.checked
-	let conditionB = selfpickArray.includes(tableData[i]["Territory"]) && treatSelfPicksAsBlizzards.checked
-
-	  if (conditionA || conditionB) {
-	    text.textContent = "";
 	  }
 		
           // Adjust x and y coordinates to position midpoint of text at specified coordinates
@@ -1094,19 +1008,11 @@ function addBlizzards() {
   const stopButtonClick = function () {
     shouldReturn = true;
   };
-  const selfPickClick = function () {
-    shouldReturn = true;
-  };
-  const opponentPickClick = function () {
-    shouldReturn = true;
-  };
 	
   document.getElementById("blizzardButton").addEventListener("click", blizzardButtonClick);
   document.getElementById("portalButton").addEventListener("click", portalButtonClick);
   document.getElementById("eraserButton").addEventListener("click", eraserButtonClick);
   document.getElementById("stopButton").addEventListener("click", stopButtonClick);
-  document.getElementById("selfpick").addEventListener("click", selfPickClick);
-  document.getElementById("opponentpick").addEventListener("click", opponentPickClick);
 
   // Check if size of blizzardArray is greater than or equal to totalBlizzards
   if (blizzardArray.length >= totalBlizzards) {
@@ -1119,43 +1025,43 @@ const mouseoverHandler = function () {
   if (shouldReturn) {
     return;
   }
-  if (!clickedPathsBlizzardsPortals.includes(this.id) && !picksAndBlizzardsArray.includes(this.id)) {
+  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
     // Change stroke color to white and stroke width to 3
     this.style.setProperty("stroke", "white", "important");
     this.style.setProperty("stroke-width", "3", "important");
   }
 };
 	
-	const mouseoutHandler = function () {
-	  if (shouldReturn) {
-	    return;
-	  }
-	  if (!clickedPathsBlizzardsPortals.includes(this.id) && !picksAndBlizzardsArray.includes(this.id)) {
-	    // Reset stroke color and width according to the selected centrality measure
-	    let border_color;
-	    if (centralityMenu.value === "standard") {
-	      let value = tableData.find(row => row['Territory'] === this.id)['Number of Direct Connections'];
-	      border_color = colorDarktionary[value];
-	    } else if (centralityMenu.value === "eigenvector") {
-	      border_color = tableData.find(row => row['Territory'] === this.id)['Eigenvector Border Color'];
-	    } else if (centralityMenu.value === "betweenness") {
-	      border_color = tableData.find(row => row['Territory'] === this.id)['Betweenness Border Color'];
-	    } else if (centralityMenu.value === "closeness") {
-	      border_color = tableData.find(row => row['Territory'] === this.id)['Closeness Border Color'];
-	    } else if (centralityMenu.value === "capConnections") {
-	      let value = tableData.find(row => row['Territory'] === this.id)['Number of Cap Connections'];
-	      border_color = colorDarktionary[Math.min(value, 12)];
-	    }
-		this.style.setProperty("stroke", border_color, "important");
-		this.style.setProperty("stroke-width", "2", "important");
-	  }
-	}
+const mouseoutHandler = function () {
+  if (shouldReturn) {
+    return;
+  }
+  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
+    // Reset stroke color and width according to the selected centrality measure
+    let border_color;
+    if (centralityMenu.value === "standard") {
+      let value = tableData.find(row => row['Territory'] === this.id)['Number of Direct Connections'];
+      border_color = colorDarktionary[value];
+    } else if (centralityMenu.value === "eigenvector") {
+      border_color = tableData.find(row => row['Territory'] === this.id)['Eigenvector Border Color'];
+    } else if (centralityMenu.value === "betweenness") {
+      border_color = tableData.find(row => row['Territory'] === this.id)['Betweenness Border Color'];
+    } else if (centralityMenu.value === "closeness") {
+      border_color = tableData.find(row => row['Territory'] === this.id)['Closeness Border Color'];
+    } else if (centralityMenu.value === "capConnections") {
+      let value = tableData.find(row => row['Territory'] === this.id)['Number of Cap Connections'];
+      border_color = colorDarktionary[Math.min(value, 12)];
+    }
+	this.style.setProperty("stroke", border_color, "important");
+	this.style.setProperty("stroke-width", "2", "important");
+  }
+}
   const clickHandler = function () {
     if (shouldReturn) {
       return;
     }
-    // Check if path is NOT in arrays
-    if (!clickedPathsBlizzardsPortals.includes(this.id) && !picksAndBlizzardsArray.includes(this.id)) {
+    // Check if path is NOT in clickedPathsBlizzardsPortals array
+    if (!clickedPathsBlizzardsPortals.includes(this.id)) {
 	// Create a clipPath element and set its id
 	var clipPath = document.createElementNS(
 	  "http://www.w3.org/2000/svg",
@@ -1200,7 +1106,6 @@ const mouseoverHandler = function () {
     // Add clicked path to arrays; push to history
     blizzardArray.push(this.id);
     clickedPathsBlizzardsPortals.push(this.id);
-    picksAndBlizzardsArray.push(this.id);
     history.push({ type: 'addBlizzard', pathId: this.id });
 	    
     // Change the fill of the clicked path to transparent
@@ -1328,19 +1233,11 @@ function addPortals() {
   const stopButtonClick = function () {
     shouldReturn = true;
   };
-  const selfPickClick = function () {
-    shouldReturn = true;
-  };
-  const opponentPickClick = function () {
-    shouldReturn = true;
-  };
 	
   document.getElementById("blizzardButton").addEventListener("click", blizzardButtonClick);
   document.getElementById("portalButton").addEventListener("click", portalButtonClick);
   document.getElementById("eraserButton").addEventListener("click", eraserButtonClick);
   document.getElementById("stopButton").addEventListener("click", stopButtonClick);
-  document.getElementById("selfpick").addEventListener("click", selfPickClick);
-  document.getElementById("opponentpick").addEventListener("click", opponentPickClick);
 
   // Check if size of portalArray is greater than or equal to totalPortals
   if (portalArray.length >= totalPortals) {
@@ -1479,6 +1376,167 @@ function addPortals() {
   });
 }
 
+function button_StopEditing() {
+  stopEditing();
+}
+
+function button_Undo() {
+  undo();
+}
+	
+function button_AddBlizzards() {
+  addBlizzards();
+}
+
+function button_AddPortals() {
+  addPortals();
+}
+	
+function eraser() {
+  // Immediately return if the size of the clickedPathsBlizzardsPortals array is empty
+  if (clickedPathsBlizzardsPortals.length === 0) {
+    return;
+  }
+  let shouldReturn = false;
+  document.getElementById("stopButton").innerHTML = "Stop Erasing";
+	// Set the regular background color to green
+	document.getElementById("stopButton").style.backgroundColor = "#4caf50";
+	// Set the hover background color to dark green
+	var styleElement = document.createElement("style");
+	styleElement.id = "stopButtonHoverStyle";
+	styleElement.textContent = "#stopButton:hover { background-color: #3e8e41 !important; }";
+	document.head.appendChild(styleElement);
+
+  const blizzardButtonClick = function () {
+    shouldReturn = true;
+  };
+  const portalButtonClick = function () {
+    shouldReturn = true;
+  };
+  const eraserButtonClick = function () {
+    shouldReturn = true;
+  };
+  const stopButtonClick = function () {
+    shouldReturn = true;
+  };
+	
+  document.getElementById("blizzardButton").addEventListener("click", blizzardButtonClick);
+  document.getElementById("portalButton").addEventListener("click", portalButtonClick);
+  document.getElementById("eraserButton").addEventListener("click", eraserButtonClick);
+  document.getElementById("stopButton").addEventListener("click", stopButtonClick);
+
+	// Define mouseover, mouseout, and click event handlers
+	const mouseoverHandler = function () {
+	  if (shouldReturn) {
+	    return;
+	  }
+	  if (clickedPathsBlizzardsPortals.includes(this.id)) {
+	    // Change stroke color to #ff1111 and stroke width to 4
+	    this.style.setProperty("stroke", "#ff1111", "important");
+	    this.style.setProperty("stroke-width", "4", "important");
+	  }
+	};
+	const mouseoutHandler = function () {
+	  if (shouldReturn) {
+	    return;
+	  }
+	  if (clickedPathsBlizzardsPortals.includes(this.id)) {
+	    if (blizzardArray.includes(this.id)) {
+	      // Change stroke color to white and stroke width to 1
+	      this.style.setProperty("stroke", "white", "important");
+	      this.style.setProperty("stroke-width", "1", "important");
+	    } else if (portalArray.includes(this.id)) {
+	      // Reset stroke color and width according to the selected centrality measure
+	      let border_color;
+	      if (centralityMenu.value === "standard") {
+	        let value = tableData.find(row => row['Territory'] === this.id)['Number of Direct Connections'];
+	        border_color = colorDarktionary[value];
+	      } else if (centralityMenu.value === "eigenvector") {
+	        border_color = tableData.find(row => row['Territory'] === this.id)['Eigenvector Border Color'];
+	      } else if (centralityMenu.value === "betweenness") {
+	        border_color = tableData.find(row => row['Territory'] === this.id)['Betweenness Border Color'];
+	      } else if (centralityMenu.value === "closeness") {
+	        border_color = tableData.find(row => row['Territory'] === this.id)['Closeness Border Color'];
+	      } else if (centralityMenu.value === "capConnections") {
+	        let value = tableData.find(row => row['Territory'] === this.id)['Number of Cap Connections'];
+	        border_color = colorDarktionary[Math.min(value, 12)];
+	      }
+	      this.style.setProperty("stroke", border_color, "important");
+	      this.style.setProperty("stroke-width", "2", "important");
+	    }
+	  }
+	};
+  const clickHandler = function () {
+    if (shouldReturn) {
+      return;
+    }
+    // Check if path is in clickedPathsBlizzardsPortals array
+    if (clickedPathsBlizzardsPortals.includes(this.id)) {
+      // Remove clicked path from clickedPathsBlizzardsPortals array
+      clickedPathsBlizzardsPortals = clickedPathsBlizzardsPortals.filter(
+        (path) => path !== this.id
+      );
+
+      // Check if path is in blizzardArray
+      if (blizzardArray.includes(this.id)) {
+        // Remove clicked path from blizzardArray; push to history
+        blizzardArray = blizzardArray.filter((path) => path !== this.id);
+	history.push({ type: 'eraseBlizzard', pathId: this.id });
+
+        // Remove blizzard fill from clicked path
+        var clipPathId = "blizzard-clip-" + this.id;
+        var clipPath = document.getElementById(clipPathId);
+        if (clipPath) {
+          clipPath.remove();
+        }
+      }
+
+      // Check if path is in portalArray
+      if (portalArray.includes(this.id)) {
+        // Remove clicked path from portalArray; push to history
+        portalArray = portalArray.filter((path) => path !== this.id);
+	history.push({ type: 'erasePortal', pathId: this.id });
+
+        // Store the value of this.id in a variable
+        var clickedPathId = this.id;
+
+        // Remove portal image overlay from clicked path
+        var images = svgElement.querySelectorAll("image");
+        images.forEach(function (image) {
+          // Check if the data-path-id attribute of the image matches the id of the clicked path
+          if (image.getAttribute("data-path-id") === clickedPathId) {
+            // Remove the image
+            image.remove();
+          }
+        });
+      }
+
+      // Call generateMap function
+      generateMap();
+
+      // Check if clickedPathsBlizzardsPortals array is empty
+      if (clickedPathsBlizzardsPortals.length === 0) {
+	document.getElementById("stopButton").innerHTML = "Stop Editing";
+	// Set the regular background color to white
+	document.getElementById("stopButton").style.backgroundColor = "white";
+	// Set the hover background color to white
+	var styleElement = document.createElement("style");
+	styleElement.id = "stopButtonHoverStyle";
+	styleElement.textContent = "#stopButton:hover { background-color: white !important; }";
+	document.head.appendChild(styleElement);
+        return;
+      }
+    }
+  };
+
+  // Add event listeners to elements in paths array
+  paths.forEach(function (path) {
+    path.addEventListener("mouseover", mouseoverHandler);
+    path.addEventListener("mouseout", mouseoutHandler);
+    path.addEventListener("click", clickHandler);
+  });
+}
+
 function addPortals_pathID(pathID) {
   // Find the path element with the specified pathID
   let path = Array.from(paths).find((path) => path.getAttribute("id") === pathID);
@@ -1541,668 +1599,6 @@ function addPortals_pathID(pathID) {
    // Execute generateMap function
    generateMap();
    return;
-}
-
-function addSelfPick() {
-  let shouldReturn = false;
-  document.getElementById("stopButton").innerHTML = "Stop Adding Self Picks";
-	// Set the regular background color to green
-	document.getElementById("stopButton").style.backgroundColor = "#4caf50";
-	// Set the hover background color to dark green
-	var styleElement = document.createElement("style");
-	styleElement.id = "stopButtonHoverStyle";
-	styleElement.textContent = "#stopButton:hover { background-color: #3e8e41 !important; }";
-	document.head.appendChild(styleElement);
-
-  const blizzardButtonClick = function () {
-    shouldReturn = true;
-  };
-  const portalButtonClick = function () {
-    shouldReturn = true;
-  };
-  const eraserButtonClick = function () {
-    shouldReturn = true;
-  };
-  const stopButtonClick = function () {
-    shouldReturn = true;
-  };
-  const selfPickClick = function () {
-    shouldReturn = true;
-  };
-  const opponentPickClick = function () {
-    shouldReturn = true;
-  };
-	
-  document.getElementById("blizzardButton").addEventListener("click", blizzardButtonClick);
-  document.getElementById("portalButton").addEventListener("click", portalButtonClick);
-  document.getElementById("eraserButton").addEventListener("click", eraserButtonClick);
-  document.getElementById("stopButton").addEventListener("click", stopButtonClick);
-  document.getElementById("selfpick").addEventListener("click", selfPickClick);
-  document.getElementById("opponentpick").addEventListener("click", opponentPickClick);
-
-  // Check if size of selfpickArray is greater than or equal to total territories/2, rounded up
-  var mapsize = Math.ceil(tableData.filter(row => row["Territory"] !== undefined).length / 2);
-  if (selfpickArray.length >= mapsize) {
-    // Return early from the function
-    return;
-  }
-
-	// Define mouseover, mouseout, and click event handlers
-	const mouseoverHandler = function () {
-	  if (shouldReturn) {
-	    return;
-	  }
-	  if (!picksAndBlizzardsArray.includes(this.id)) {
-	    // Change stroke color to white and stroke width to 3
-	    this.style.setProperty("stroke", "white", "important");
-	    this.style.setProperty("stroke-width", "3", "important");
-	  }
-	};
-	const mouseoutHandler = function () {
-	  if (shouldReturn) {
-	    return;
-	  }
-	  if (!picksAndBlizzardsArray.includes(this.id)) {
-	    // Reset stroke color and width according to the selected centrality measure
-	    let border_color;
-	    if (centralityMenu.value === "standard") {
-	      let value = tableData.find(row => row['Territory'] === this.id)['Number of Direct Connections'];
-	      border_color = colorDarktionary[value];
-	    } else if (centralityMenu.value === "eigenvector") {
-	      border_color = tableData.find(row => row['Territory'] === this.id)['Eigenvector Border Color'];
-	    } else if (centralityMenu.value === "betweenness") {
-	      border_color = tableData.find(row => row['Territory'] === this.id)['Betweenness Border Color'];
-	    } else if (centralityMenu.value === "closeness") {
-	      border_color = tableData.find(row => row['Territory'] === this.id)['Closeness Border Color'];
-	    } else if (centralityMenu.value === "capConnections") {
-	      let value = tableData.find(row => row['Territory'] === this.id)['Number of Cap Connections'];
-	      border_color = colorDarktionary[Math.min(value, 12)];
-	    }
-		this.style.setProperty("stroke", border_color, "important");
-		this.style.setProperty("stroke-width", "2", "important");
-	  }
-	}
-  const clickHandler = function () {
-    if (shouldReturn) {
-      return;
-    }
-    // Check if path is NOT in picksAndBlizzardsArray
-    if (!picksAndBlizzardsArray.includes(this.id)) {
-	// Create an image element and set its attributes
-	var image = document.createElementNS(
-	  "http://www.w3.org/2000/svg",
-	  "image"
-	);
-	image.setAttributeNS(
-	  "http://www.w3.org/1999/xlink",
-	  "href",
-	  "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/puck.png"
-	);
-
-	// Set a custom attribute to store the id of the clicked path
-	image.setAttribute("data-path-id", this.id);
-
-	// Store the value of this.id in a variable
-	var pathId = this.id;
-
-	// Find matching row in CSV data
-	var coordinates = tableData.find(function (row) {
-	  return row["Territory"] === pathId;
-	});
-
-      // Get coordinates from CSV data
-      var x = coordinates["Pixel Pair 1"];
-      var y = coordinates["Pixel Pair 2"];
-
-      // Set pointer-events attribute of the image element to none
-      image.setAttribute("pointer-events", "none");
-
-      // Append the image to the SVG
-      svgElement.appendChild(image);
-
-      // Add an event listener to the image element to update its x and y attributes after it has been loaded
-      image.addEventListener("load", function() {
-        // Get the bounding box of the image element
-        var bbox = image.getBBox();
-
-        // Update the x and y attributes of the image element to center it over the clicked area
-        image.setAttribute("x", x - bbox.width / 2);
-        image.setAttribute("y", y - bbox.height / 2);
-      });
-
-      // Add clicked path to arrays; push to history
-      selfpickArray.push(this.id);
-      picksAndBlizzardsArray.push(this.id);
-      history.push({ type: 'addSelfPick', pathId: this.id });
-
-       // Check if size of selfpickArray is greater than or equal to mapsize
-       if (selfpickArray.length >= mapsize) {
-         // Remove existing event listeners from elements in paths array
-         paths.forEach(function (path) {
-           path.removeEventListener("mouseover", mouseoverHandler);
-           path.removeEventListener("mouseout", mouseoutHandler);
-           path.removeEventListener("click", clickHandler);
-         });
-     	       document.getElementById("stopButton").innerHTML = "Stop Editing";
-		// Set the regular background color to white
-		document.getElementById("stopButton").style.backgroundColor = "white";
-		// Set the hover background color to white
-		var styleElement = document.createElement("style");
-		styleElement.id = "stopButtonHoverStyle";
-		styleElement.textContent = "#stopButton:hover { background-color: white !important; }";
-		document.head.appendChild(styleElement);
-
-	       generateMap();
-	       return;
-       }
-
-       // Execute generateMap function
-       generateMap();
-    }
-  };
-
-  // Add event listeners to elements in paths array
-  paths.forEach(function (path) {
-    path.addEventListener("mouseover", mouseoverHandler);
-    path.addEventListener("mouseout", mouseoutHandler);
-    path.addEventListener("click", clickHandler);
-  });
-}
-
-function addSelfPick_pathID(pathID) {
-  // Find the path element with the specified pathID
-  let path = Array.from(paths).find((path) => path.getAttribute("id") === pathID);
-
-  // Create an image element and set its attributes
-  var image = document.createElementNS(
-    "http://www.w3.org/2000/svg",
-    "image"
-  );
-  image.setAttributeNS(
-    "http://www.w3.org/1999/xlink",
-    "href",
-    "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/puck.png"
-  );
-
-  // Set a custom attribute to store the id of the clicked path
-  image.setAttribute("data-path-id", pathID);
-
-  // Store the value of pathID in a variable
-  var clickedPathId = pathID;
-
-  // Find matching row in CSV data
-  var coordinates = tableData.find(function (row) {
-    return row["Territory"] === clickedPathId;
-  });
-
-  // Get coordinates from CSV data
-  var x = coordinates["Pixel Pair 1"];
-  var y = coordinates["Pixel Pair 2"];
-
-  // Set pointer-events attribute of the image element to none
-  image.setAttribute("pointer-events", "none");
-
-  // Append the image to the SVG
-  svgElement.appendChild(image);
-
-  // Add an event listener to the image element to update its x and y attributes after it has been loaded
-  image.addEventListener("load", function () {
-    // Get the bounding box of the image element
-    var bbox = image.getBBox();
-
-    // Update the x and y attributes of the image element to center it over the clicked area
-    image.setAttribute("x", x - bbox.width / 2);
-    image.setAttribute("y", y - bbox.height / 2);
-  });
-
-   // Add clicked path to arrays; push to history
-   selfpickArray.push(pathID);
-   picksAndBlizzardsArray.push(pathID);
-
-   // Execute generateMap function
-   generateMap();
-   return;
-}
-
-function addOpponentPick() {
-  let shouldReturn = false;
-  document.getElementById("stopButton").innerHTML = "Stop Adding Opponent Picks";
-	// Set the regular background color to green
-	document.getElementById("stopButton").style.backgroundColor = "#4caf50";
-	// Set the hover background color to dark green
-	var styleElement = document.createElement("style");
-	styleElement.id = "stopButtonHoverStyle";
-	styleElement.textContent = "#stopButton:hover { background-color: #3e8e41 !important; }";
-	document.head.appendChild(styleElement);
-
-  const blizzardButtonClick = function () {
-    shouldReturn = true;
-  };
-  const portalButtonClick = function () {
-    shouldReturn = true;
-  };
-  const eraserButtonClick = function () {
-    shouldReturn = true;
-  };
-  const stopButtonClick = function () {
-    shouldReturn = true;
-  };
-  const selfPickClick = function () {
-    shouldReturn = true;
-  };
-  const opponentPickClick = function () {
-    shouldReturn = true;
-  };
-	
-  document.getElementById("blizzardButton").addEventListener("click", blizzardButtonClick);
-  document.getElementById("portalButton").addEventListener("click", portalButtonClick);
-  document.getElementById("eraserButton").addEventListener("click", eraserButtonClick);
-  document.getElementById("stopButton").addEventListener("click", stopButtonClick);
-  document.getElementById("selfpick").addEventListener("click", selfPickClick);
-  document.getElementById("opponentpick").addEventListener("click", opponentPickClick);
-
-  // Check if size of blizzardArray is greater than or equal to totalBlizzards
-  var mapsize = Math.ceil(tableData.filter(row => row["Territory"] !== undefined).length / 2);
-  if (opponentpickArray.length >= mapsize) {
-    // Return early from the function
-    return;
-  }
-
-// Define mouseover, mouseout, and click event handlers
-const mouseoverHandler = function () {
-  if (shouldReturn) {
-    return;
-  }
-  if (!picksAndBlizzardsArray.includes(this.id)) {
-    // Change stroke color to white and stroke width to 3
-    this.style.setProperty("stroke", "white", "important");
-    this.style.setProperty("stroke-width", "3", "important");
-  }
-};
-	
-	const mouseoutHandler = function () {
-	  if (shouldReturn) {
-	    return;
-	  }
-	  if (!picksAndBlizzardsArray.includes(this.id)) {
-	    // Reset stroke color and width according to the selected centrality measure
-	    let border_color;
-	    if (centralityMenu.value === "standard") {
-	      let value = tableData.find(row => row['Territory'] === this.id)['Number of Direct Connections'];
-	      border_color = colorDarktionary[value];
-	    } else if (centralityMenu.value === "eigenvector") {
-	      border_color = tableData.find(row => row['Territory'] === this.id)['Eigenvector Border Color'];
-	    } else if (centralityMenu.value === "betweenness") {
-	      border_color = tableData.find(row => row['Territory'] === this.id)['Betweenness Border Color'];
-	    } else if (centralityMenu.value === "closeness") {
-	      border_color = tableData.find(row => row['Territory'] === this.id)['Closeness Border Color'];
-	    } else if (centralityMenu.value === "capConnections") {
-	      let value = tableData.find(row => row['Territory'] === this.id)['Number of Cap Connections'];
-	      border_color = colorDarktionary[Math.min(value, 12)];
-	    }
-		this.style.setProperty("stroke", border_color, "important");
-		this.style.setProperty("stroke-width", "2", "important");
-	  }
-	}
-  const clickHandler = function () {
-    if (shouldReturn) {
-      return;
-    }
-    // Check if path is NOT in arrays
-    if (!picksAndBlizzardsArray.includes(this.id)) {
-	// Create a clipPath element and set its id
-	var clipPath = document.createElementNS(
-	  "http://www.w3.org/2000/svg",
-	  "clipPath"
-	);
-	clipPath.setAttribute("id", "clip-" + this.id);
-
-	// Clone the clicked path and append it to the clipPath
-	var clonedPath = this.cloneNode(true);
-	clipPath.appendChild(clonedPath);
-
-	// Append the clipPath to the defs element
-	var defs =
-	  svgElement.querySelector("defs") ||
-	  svgElement.insertBefore(
-	    document.createElementNS("http://www.w3.org/2000/svg", "defs"),
-	    svgElement.firstChild
-	  );
-	defs.appendChild(clipPath);
-
-	// Create an image element and set its attributes
-	var image = document.createElementNS(
-	  "http://www.w3.org/2000/svg",
-	  "image"
-	);
-	image.setAttributeNS(
-	  "http://www.w3.org/1999/xlink",
-	  "href",
-	  FogPattern
-	);
-	image.setAttribute("width", "100%");
-	image.setAttribute("height", "100%");
-	image.setAttribute("clip-path", "url(#clip-" + this.id + ")");
-	image.setAttribute("pointer-events", "none");
-
-	// Append the image to the SVG
-	svgElement.appendChild(image);
-
-	// Move the image behind the path element
-	svgElement.insertBefore(image, svgElement.firstChild);
-	    
-    // Add clicked path to arrays; push to history
-    opponentpickArray.push(this.id);
-    picksAndBlizzardsArray.push(this.id);
-    history.push({ type: 'addOpponentPick', pathId: this.id });
-	    
-    // Change the fill opacity of the clicked path to 0%
-    this.style.setProperty("fill-opacity", "0", "important");
-
-    // Check if size of opponentpickArray is greater than or equal to mapsize
-    if (opponentpickArray.length >= mapsize) {
-      // Remove existing event listeners from elements in paths array
-      paths.forEach(function (path) {
-        path.removeEventListener("mouseover", mouseoverHandler);
-        path.removeEventListener("mouseout", mouseoutHandler);
-        path.removeEventListener("click", clickHandler);
-      });
-      document.getElementById("stopButton").innerHTML = "Stop Editing";
-	// Set the regular background color to white
-	document.getElementById("stopButton").style.backgroundColor = "white";
-	// Set the hover background color to white
-	var styleElement = document.createElement("style");
-	styleElement.id = "stopButtonHoverStyle";
-	styleElement.textContent = "#stopButton:hover { background-color: white !important; }";
-	document.head.appendChild(styleElement);
-
-      generateMap();
-      return;
-    }
-
-    // Execute generateMap function
-    generateMap();
-    }
-    };
-
-  // Add event listeners to elements in paths array
-  paths.forEach(function (path) {
-    path.addEventListener("mouseover", mouseoverHandler);
-    path.addEventListener("mouseout", mouseoutHandler);
-    path.addEventListener("click", clickHandler);
-  });
-}
-	
-function addOpponentPick_pathID(pathID) {
-  // Find the path element with the specified pathID
-  let path = Array.from(paths).find((path) => path.getAttribute("id") === pathID);
-
-  // Create a clipPath element and set its id
-  var clipPath = document.createElementNS(
-    "http://www.w3.org/2000/svg",
-    "clipPath"
-  );
-  clipPath.setAttribute("id", "clip-" + pathID);
-
-  // Clone the clicked path and append it to the clipPath
-  var clonedPath = path.cloneNode(true);
-  clipPath.appendChild(clonedPath);
-
-  // Append the clipPath to the defs element
-  var defs =
-    svgElement.querySelector("defs") ||
-    svgElement.insertBefore(
-      document.createElementNS("http://www.w3.org/2000/svg", "defs"),
-      svgElement.firstChild
-    );
-  defs.appendChild(clipPath);
-
-  // Create an image element and set its attributes
-  var image = document.createElementNS(
-    "http://www.w3.org/2000/svg",
-    "image"
-  );
-  image.setAttributeNS(
-    "http://www.w3.org/1999/xlink",
-    "href",
-    FogPattern
-  );
-  image.setAttribute("width", "100%");
-  image.setAttribute("height", "100%");
-  image.setAttribute("clip-path", "url(#clip-" + pathID + ")");
-  image.setAttribute("pointer-events", "none");
-
-  // Append the image to the SVG
-  svgElement.appendChild(image);
-
-  // Move the image behind the path element
-  svgElement.insertBefore(image, svgElement.firstChild);
-
-  // Add clicked path to arrays; push to history
-  opponentpickArray.push(pathID);
-  picksAndBlizzardsArray.push(pathID);
-  
-  // Change the fill opacity of the clicked path to 0%
-  this.style.setProperty("fill-opacity", "0", "important");
-
-   // Execute generateMap function
-   generateMap();
-   return;
-}
-
-	
-function button_StopEditing() {
-  stopEditing();
-}
-
-function button_Undo() {
-  undo();
-}
-	
-function button_AddBlizzards() {
-  addBlizzards();
-}
-
-function button_AddPortals() {
-  addPortals();
-}
-
-function button_AddSelfPick() {
-  addSelfPick();
-}
-
-function button_AddOpponentPick() {
-  addOpponentPick();
-}
-	
-function eraser() {
-  // Immediately return if the size of the clickedPathsBlizzardsPortals array and picksAndBlizzardsArray are empty
-  if (clickedPathsBlizzardsPortals.length === 0 && picksAndBlizzardsArray.length === 0) {
-    return;
-  }
-  let shouldReturn = false;
-  document.getElementById("stopButton").innerHTML = "Stop Erasing";
-	// Set the regular background color to green
-	document.getElementById("stopButton").style.backgroundColor = "#4caf50";
-	// Set the hover background color to dark green
-	var styleElement = document.createElement("style");
-	styleElement.id = "stopButtonHoverStyle";
-	styleElement.textContent = "#stopButton:hover { background-color: #3e8e41 !important; }";
-	document.head.appendChild(styleElement);
-
-  const blizzardButtonClick = function () {
-    shouldReturn = true;
-  };
-  const portalButtonClick = function () {
-    shouldReturn = true;
-  };
-  const eraserButtonClick = function () {
-    shouldReturn = true;
-  };
-  const stopButtonClick = function () {
-    shouldReturn = true;
-  };
-  const selfPickClick = function () {
-    shouldReturn = true;
-  };
-  const opponentPickClick = function () {
-    shouldReturn = true;
-  };
-	
-  document.getElementById("blizzardButton").addEventListener("click", blizzardButtonClick);
-  document.getElementById("portalButton").addEventListener("click", portalButtonClick);
-  document.getElementById("eraserButton").addEventListener("click", eraserButtonClick);
-  document.getElementById("stopButton").addEventListener("click", stopButtonClick);
-  document.getElementById("selfpick").addEventListener("click", selfPickClick);
-  document.getElementById("opponentpick").addEventListener("click", opponentPickClick);
-
-	// Define mouseover, mouseout, and click event handlers
-	const mouseoverHandler = function () {
-	  if (shouldReturn) {
-	    return;
-	  }
-	  if (clickedPathsBlizzardsPortals.includes(this.id) || picksAndBlizzardsArray.includes(this.id)) {
-	    // Change stroke color to #ff1111 and stroke width to 4
-	    this.style.setProperty("stroke", "#ff1111", "important");
-	    this.style.setProperty("stroke-width", "4", "important");
-	  }
-	};
-	const mouseoutHandler = function () {
-	  if (shouldReturn) {
-	    return;
-	  }
-	  if (clickedPathsBlizzardsPortals.includes(this.id) || picksAndBlizzardsArray.includes(this.id)) {
-	    if (blizzardArray.includes(this.id)) {
-	      // Change stroke color to white and stroke width to 1
-	      this.style.setProperty("stroke", "white", "important");
-	      this.style.setProperty("stroke-width", "1", "important");
-	    } else {
-	      // Reset stroke color and width according to the selected centrality measure
-	      let border_color;
-	      if (centralityMenu.value === "standard") {
-	        let value = tableData.find(row => row['Territory'] === this.id)['Number of Direct Connections'];
-	        border_color = colorDarktionary[value];
-	      } else if (centralityMenu.value === "eigenvector") {
-	        border_color = tableData.find(row => row['Territory'] === this.id)['Eigenvector Border Color'];
-	      } else if (centralityMenu.value === "betweenness") {
-	        border_color = tableData.find(row => row['Territory'] === this.id)['Betweenness Border Color'];
-	      } else if (centralityMenu.value === "closeness") {
-	        border_color = tableData.find(row => row['Territory'] === this.id)['Closeness Border Color'];
-	      } else if (centralityMenu.value === "capConnections") {
-	        let value = tableData.find(row => row['Territory'] === this.id)['Number of Cap Connections'];
-	        border_color = colorDarktionary[Math.min(value, 12)];
-	      }
-	      this.style.setProperty("stroke", border_color, "important");
-	      this.style.setProperty("stroke-width", "2", "important");
-	    }
-	  }
-	};
-  const clickHandler = function () {
-    if (shouldReturn) {
-      return;
-    }
-    // Check if path is in arrays
-    if (clickedPathsBlizzardsPortals.includes(this.id) || picksAndBlizzardsArray.includes(this.id)) {    
-      // Remove clicked path from combined arrays
-      clickedPathsBlizzardsPortals = clickedPathsBlizzardsPortals.filter(
-        (path) => path !== this.id
-      );
-      picksAndBlizzardsArray = picksAndBlizzardsArray.filter(
-        (path) => path !== this.id
-      );
-
-      // Check if path is in blizzardArray
-      if (blizzardArray.includes(this.id)) {
-        // Remove clicked path from blizzardArray; push to history
-        blizzardArray = blizzardArray.filter((path) => path !== this.id);
-	history.push({ type: 'eraseBlizzard', pathId: this.id });
-
-        // Remove blizzard fill from clicked path
-        var clipPathId = "blizzard-clip-" + this.id;
-        var clipPath = document.getElementById(clipPathId);
-        if (clipPath) {
-          clipPath.remove();
-        }
-      }
-
-      // Check if path is in opponentpickArray
-      if (opponentpickArray.includes(this.id)) {
-        // Remove clicked path from opponentpickArray; push to history
-        opponentpickArray = opponentpickArray.filter((path) => path !== this.id);
-	history.push({ type: 'eraseOpponentPick', pathId: this.id });
-
-        // Remove fog fill from clicked path
-        var clipPathId = "fog-clip-" + this.id;
-        var clipPath = document.getElementById(clipPathId);
-        if (clipPath) {
-          clipPath.remove();
-        }
-      }
-
-      // Check if path is in portalArray
-      if (portalArray.includes(this.id)) {
-        // Remove clicked path from portalArray; push to history
-        portalArray = portalArray.filter((path) => path !== this.id);
-	history.push({ type: 'erasePortal', pathId: this.id });
-
-        // Store the value of this.id in a variable
-        var clickedPathId = this.id;
-
-        // Remove portal image overlay from clicked path
-        var images = svgElement.querySelectorAll("image");
-        images.forEach(function (image) {
-          // Check if the data-path-id attribute of the image matches the id of the clicked path
-          if (image.getAttribute("data-path-id") === clickedPathId) {
-            // Remove the image
-            image.remove();
-          }
-        });
-      }
-
-      // Check if path is in selfpickArray
-      if (selfpickArray.includes(this.id)) {
-        // Remove clicked path from selfpickArray; push to history
-        selfpickArray = selfpickArray.filter((path) => path !== this.id);
-	history.push({ type: 'eraseSelfPick', pathId: this.id });
-
-        // Store the value of this.id in a variable
-        var clickedPathId = this.id;
-
-        // Remove image overlay from clicked path
-        var images = svgElement.querySelectorAll("image");
-        images.forEach(function (image) {
-          // Check if the data-path-id attribute of the image matches the id of the clicked path
-          if (image.getAttribute("data-path-id") === clickedPathId) {
-            // Remove the image
-            image.remove();
-          }
-        });
-      }
-
-      // Call generateMap function
-      generateMap();
-
-      // Check if arrays empty
-      if (clickedPathsBlizzardsPortals.length === 0 && picksAndBlizzardsArray.length === 0) {
-	document.getElementById("stopButton").innerHTML = "Stop Editing";
-	// Set the regular background color to white
-	document.getElementById("stopButton").style.backgroundColor = "white";
-	// Set the hover background color to white
-	var styleElement = document.createElement("style");
-	styleElement.id = "stopButtonHoverStyle";
-	styleElement.textContent = "#stopButton:hover { background-color: white !important; }";
-	document.head.appendChild(styleElement);
-        return;
-      }
-    }
-  };
-
-  // Add event listeners to elements in paths array
-  paths.forEach(function (path) {
-    path.addEventListener("mouseover", mouseoverHandler);
-    path.addEventListener("mouseout", mouseoutHandler);
-    path.addEventListener("click", clickHandler);
-  });
 }
 	
 // Update button text on page load
@@ -2284,47 +1680,6 @@ function undo() {
 	  addBlizzards_pathID(lastAction.pathId);
     } else if (lastAction.type === 'erasePortal') {
 	  addPortals_pathID(lastAction.pathId);
-    } else if (lastAction.type === 'addOpponentPick') {
-      // Remove the last fog from the opponentpickArray
-      opponentpickArray.pop();
-
-      // Remove the last fog fill from the map
-      let clipPathId = 'fog-clip-' + lastAction.pathId;
-      let clipPath = document.getElementById(clipPathId);
-      if (clipPath) {
-        clipPath.remove();
-      }
-
-      // Remove the id of the undone path from the picksAndBlizzardsArray
-      let index = picksAndBlizzardsArray.indexOf(lastAction.pathId);
-      if (index !== -1) {
-        picksAndBlizzardsArray.splice(index, 1);
-      }
-	  generateMap();
-    } else if (lastAction.type === 'addSelfPick') {
-      // Remove the last portal from the selfpickArray
-      selfpickArray.pop();
-
-      // Remove the last image from the map
-      let images = svgElement.querySelectorAll('image');
-      images.forEach(function(image) {
-        // Check if the data-path-id attribute of the image matches the id of the last portal
-        if (image.getAttribute('data-path-id') === lastAction.pathId) {
-          // Remove the image
-          image.remove();
-        }
-      });
-
-      // Remove the id of the undone path from the picksAndBlizzardsArray
-      let index = picksAndBlizzardsArray.indexOf(lastAction.pathId);
-      if (index !== -1) {
-        picksAndBlizzardsArray.splice(index, 1);
-      }
-	  generateMap();
-    } else if (lastAction.type === 'eraseSelfPick') {
-	  addSelfPick_pathID(lastAction.pathId);
-    } else if (lastAction.type === 'eraseOpponentPick') {
-	  addOpponentPick_pathID(lastAction.pathId);
     }
   }
 }
