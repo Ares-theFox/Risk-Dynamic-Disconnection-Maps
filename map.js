@@ -112,10 +112,10 @@ const mapUrls = {
 		"totalBlizzards": 3,
 		"totalPortals": 5
 	},
-	"united_states": {
-		"prettyname": "United States",
-		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States.png",
-		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/United%20States%20blizzard%20pattern.png",
+	"world_conquest": {
+		"prettyname": "World Conquest",
+		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/World%20Conquest.png",
+		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/World%20Conquest%20blizzard%20pattern.png",
 		"totalBlizzards": 3,
 		"totalPortals": 5
 	},
