@@ -128,6 +128,13 @@ const mapUrls = {
 		"totalBlizzards": 3,
 		"totalPortals": 5
 	},
+	"world_conquest": {
+		"prettyname": "World Conquest",
+		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/World%20Conquest.png",
+		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/World%20Conquest%20blizzard%20pattern.png",
+		"totalBlizzards": 3,
+		"totalPortals": 5
+	},
 }
 
 let imgElement = document.getElementById("map");
