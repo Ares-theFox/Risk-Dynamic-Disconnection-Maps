@@ -16,6 +16,13 @@
         width: 35px;
       }
 	  	/* Add some basic styles to the button */
+	button {
+	font-size: 16px;
+	padding: 8px 16px;
+	border: none;
+	cursor: pointer;
+	}
+
 	#blizzardButton {
 	width: 180px;
 	text-align: center;
@@ -25,40 +32,6 @@
 
 	#blizzardButton:hover {
 	background-color: grey;
-	}
-
-	#opponentpick {
-	    width: 137px;
-	    text-align: center;
-	    background-color: #FF0000;
-	    color: black;
-	}
-	
-	#opponentpick:hover {
-	    background-color: #800000;
-	    color: white;
-	}
-	
-	#selfpick {
-	    width: 137px;
-	    text-align: center;
-	    background-color: #66FF00;
-	    color: black;
-	}
-	
-	#selfpick:hover {
-	    background-color: #338000;
-	    color: white;
-	}
-
-	label[for="treatSelfPicksAsBlizzards"] {
-  	  display: inline-block;
-	  width: 218px;
-	}
-
-	label[for="treatOpponentPicksAsBlizzards"] {
-  	  display: inline-block;
-	  width: 218px;
 	}
 
 	#portalButton {
@@ -131,11 +104,4 @@
 		
 	#zoomOutButton:hover {
 	background-color: #ababab;
-	}
-
-	button {
-	font-size: 16px;
-	padding: 8px 16px;
-	border: none;
-	cursor: pointer;
 	}
