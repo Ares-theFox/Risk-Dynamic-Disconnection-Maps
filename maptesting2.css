@@ -105,3 +105,23 @@
 	#zoomOutButton:hover {
 	background-color: #ababab;
 	}
+
+	#assignOwnership {
+	text-align: center;
+	background-color: #3399FF;
+	color: black;
+	}
+
+	#assignOwnership:hover {
+	background-color: #2A7DD1;
+	}
+
+	#assignTroops {
+	text-align: center;
+	background-color: #CC9900;
+	color: black;
+	}
+
+	#assignTroops:hover {
+	background-color: #A77D00;
+	}
