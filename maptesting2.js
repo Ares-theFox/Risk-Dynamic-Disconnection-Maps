@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 14 pass")
+console.log("Testing 70% pathing 15 pass")
 
 const mapUrls = {
 	"boston": {
@@ -1183,6 +1183,7 @@ paths.forEach(function (path) {
 	    text.textContent = tableData[i]["Closeness Rounded"];
 	  } else if (centralityMenu.value === "capConnections") {
 	    text.textContent = tableData[i]["Number of Cap Connections"];
+		  console.log("text: " + text.textContent);
 	  } else if (centralityMenu.value === "seventy") {
 	    text.textContent = tableData[i]["TroopCount"];
 		  console.log("text: " + text.textContent);
