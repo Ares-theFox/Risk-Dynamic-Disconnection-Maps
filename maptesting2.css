@@ -127,3 +127,13 @@
 	#assignTroops:hover {
 	background-color: #A77D00;
 	}
+
+	#runOriginButton {
+	text-align: center;
+	background-color: #4caf50;
+	color: black;
+	}
+
+	#runOriginButton:hover {
+	background-color: #3e8e41;
+	}
