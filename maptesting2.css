@@ -137,3 +137,13 @@
 	#runOriginButton:hover {
 	background-color: #3e8e41;
 	}
+
+	#clearRunOriginButton {
+	text-align: center;
+	background-color: white;
+	color: black;
+	}
+
+	#clearRunOriginButton:hover {
+	background-color: grey;
+	}
