@@ -30,14 +30,44 @@
   <button id="resetButton">Reset Map</button>
   <button id="mapDirectoryButton">Map Directory</button>
   <div id="selectMenuContainer" style="display: inline-block;">
-    <label for="centralityType">Centrality:</label>
+    <label for="centralityType">Metric:</label>
     <select id="centralityType" name="centralityType">
       <option value="standard">Direct Connections</option>
       <option value="eigenvector">Eigenvector</option>
       <option value="betweenness">Betweenness</option>
       <option value="closeness">Closeness</option>
       <option value="capConnections">Cap Connections</option>
+      <option value="seventy">70% Domination</option>
     </select>
+  </div>
+  <div id="seventyMenuContainer" style="display: inline-block;">
+    <label for="selfColor">Self Color:</label>
+    <select id="selfColor" name="selfColor">
+      <option value="white">White</option>
+      <option value="black">Black</option>
+      <option value="red">Red</option>
+      <option value="pink">Pink</option>
+      <option value="purple">Purple</option>
+      <option value="blue">Blue</option>
+      <option value="green">Green</option>
+      <option value="yellow">Yellow</option>
+      <option value="orange">Orange</option>
+     <br>
+    <button id="assignOwnership">Assign Ownership using Color</button>
+    <select id="assignOwnership" name="assignOwnership">
+      <option value="white">White</option>
+      <option value="black">Black</option>
+      <option value="red">Red</option>
+      <option value="pink">Pink</option>
+      <option value="purple">Purple</option>
+      <option value="blue">Blue</option>
+      <option value="green">Green</option>
+      <option value="yellow">Yellow</option>
+      <option value="orange">Orange</option>
+    </select>
+    <br>
+    <button id="assignTroops">Assign Troops using Value</button>
+    <input type="number" id="troopCountInput" name="troopCountInput" value="1" min="1" max="9999">
   </div>
 </div>	  
     <img id="map" src=""/>
