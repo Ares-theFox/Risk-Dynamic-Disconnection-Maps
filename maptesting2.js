@@ -504,7 +504,6 @@ const mouseoutHandler = function () {
 	  } else if (ownershipMenu.value === "orange") {
 	    orangeNodes.push(this.id);
 	  }
-	}
 
     // Check if size of blizzardArray is greater than or equal to totalBlizzards
     if (blizzardArray.length >= 999) {
