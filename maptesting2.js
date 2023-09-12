@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 36 pass")
+console.log("Testing 70% pathing 38 pass")
 
 const mapUrls = {
 	"boston": {
@@ -822,6 +822,7 @@ var pathBorderColors = {
 
 // Get the select element
 let selfColorElement = document.getElementById('selfColor');
+var pathBorderColor;
 
 // Add an event listener for the change event
 selfColorElement.addEventListener('change', function() {
@@ -829,7 +830,7 @@ selfColorElement.addEventListener('change', function() {
     let selfColor = this.value;
 
     // Get the border color for the selected selfColor
-    let pathBorderColor = pathBorderColors[selfColor];
+    pathBorderColor = pathBorderColors[selfColor];
 
     // Now you can use borderColor in your function
     clearRunOrigin();
