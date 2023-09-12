@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 35 pass")
+console.log("Testing 70% pathing 36 pass")
 
 const mapUrls = {
 	"boston": {
@@ -808,7 +808,7 @@ const mouseoutHandler = function () {
 
 
 // Define the border colors for each selfColor
-var borderColors = {
+var pathBorderColors = {
     "white": "#808080",
     "black": "#000000",
     "red": "#641D1D",
@@ -829,7 +829,7 @@ selfColorElement.addEventListener('change', function() {
     let selfColor = this.value;
 
     // Get the border color for the selected selfColor
-    let borderColor = borderColors[selfColor];
+    let pathBorderColor = pathBorderColors[selfColor];
 
     // Now you can use borderColor in your function
     clearRunOrigin();
@@ -1343,7 +1343,7 @@ paths.forEach(function (path) {
             border_color = "transparent";
           } else {
             color = tableData[i]["Ownership Color"];
-            border_color = pathArray.includes(pathId) ? borderColor : tableData[i]["Ownership Border Color"];
+            border_color = pathArray.includes(pathId) ? pathBorderColor : tableData[i]["Ownership Border Color"];
           }
         }
         path.style.setProperty("fill", color, "important");
