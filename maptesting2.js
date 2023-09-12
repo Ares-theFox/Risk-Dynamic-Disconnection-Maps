@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 11 pass")
+console.log("Testing 70% pathing 12 pass")
 
 const mapUrls = {
 	"boston": {
@@ -468,21 +468,23 @@ const mouseoutHandler = function () {
 	// Check if path is NOT in clickedPathsBlizzardsPortals array
 	if (!blizzardArray.includes(this.id)) {
 	
-	  // Helper function to clear this.id from an array
-	  function clearIdFromArray(array) {
-	    return array.filter(item => item !== this.id);
-	  }
+		function removeFromArray(array, item) {
+		  var index = array.indexOf(item);
+		  if (index !== -1) {
+		    array.splice(index, 1);
+		  }
+		}
 	
 	  // Clear this.id from all arrays
-	  whiteNodes = clearIdFromArray(whiteNodes);
-	  blackNodes = clearIdFromArray(blackNodes);
-	  redNodes = clearIdFromArray(redNodes);
-	  pinkNodes = clearIdFromArray(pinkNodes);
-	  purpleNodes = clearIdFromArray(purpleNodes);
-	  blueNodes = clearIdFromArray(blueNodes);
-	  greenNodes = clearIdFromArray(greenNodes);
-	  yellowNodes = clearIdFromArray(yellowNodes);
-	  orangeNodes = clearIdFromArray(orangeNodes);
+	  removeFromArray(whiteNodes, this.id);
+	  removeFromArray(blackNodes, this.id);
+	  removeFromArray(redNodes, this.id);
+	  removeFromArray(pinkNodes, this.id);
+	  removeFromArray(purpleNodes, this.id);
+	  removeFromArray(blueNodes, this.id);
+	  removeFromArray(greenNodes, this.id);
+	  removeFromArray(yellowNodes, this.id);
+	  removeFromArray(orangeNodes, this.id);
 	
 	  // Add this.id to the appropriate array
 	  if (ownershipMenu.value === "white") {
@@ -504,6 +506,16 @@ const mouseoutHandler = function () {
 	  } else if (ownershipMenu.value === "orange") {
 	    orangeNodes.push(this.id);
 	  }
+
+		console.log("white: " + whiteNodes);
+		console.log("black: " + blackNodes);
+		console.log("red: " + redNodes);
+		console.log("pink: " + pinkNodes);
+		console.log("purple: " + purpleNodes);
+		console.log("blue: " + blueNodes);
+		console.log("green: " + greenNodes);
+		console.log("yellow: " + yellowNodes);
+		console.log("orange: " + orangeNodes);
 
     // Check if size of blizzardArray is greater than or equal to totalBlizzards
     if (blizzardArray.length >= 999) {
@@ -615,15 +627,17 @@ const mouseoutHandler = function () {
 	if (!blizzardArray.includes(this.id)) {
 	  // Get the current value of troopCountInput
 	  var troopCount = document.getElementById("troopCountInput").value;
+	  console.log("troopCountInput: " + troopCount);
 	
-	  // Iterate over the tableData array
-	  tableData.forEach(function(row) {
-	    // Check if the Territory property of the current object matches this.id
-	    if (row.Territory === this.id) {
-	      // If it does, create the TroopCount property and set its value to troopCount
-	      row.TroopCount = troopCount;
+	  // Iterate over tableData
+	  for (var i = 0; i < tableData.length; i++) {
+	    // Check if Territory matches this.id
+	    if (tableData[i]["Territory"] === this.id) {
+	      // Update TroopCount
+	      tableData[i]["TroopCount"] = troopCount;
+	      break;  // Exit loop since we found the matching Territory
 	    }
-	  });
+	  }
 		
     // Check if size of blizzardArray is greater than or equal to totalBlizzards
     if (blizzardArray.length >= 999) {
@@ -1085,37 +1099,41 @@ function generateMap() {
     debouncedGenerateMap();
   });
 
-  // Color in the map and add indirect connections
-  paths.forEach(function (path) {
-    var pathId = path.getAttribute("id");
-    for (var i = 0; i < tableData.length; i++) {
-      if (tableData[i]["Territory"] === pathId) {
-        // Color in the map
-        if (tableData[i]["Blizzard"] === 0) {
-	  if (centralityMenu.value === "standard") {
-	    var color = colorDictionary[tableData[i]["Number of Direct Connections"]];
-	    var border_color = colorDarktionary[tableData[i]["Number of Direct Connections"]];
-	  } else if (centralityMenu.value === "eigenvector") {
-	    var color = tableData[i]["Eigenvector Color"];
-	    var border_color = tableData[i]["Eigenvector Border Color"];
-	  } else if (centralityMenu.value === "betweenness") {
-	    var color = tableData[i]["Betweenness Color"];
-	    var border_color = tableData[i]["Betweenness Border Color"];
-	  } else if (centralityMenu.value === "closeness") {
-	    var color = tableData[i]["Closeness Color"];
-	    var border_color = tableData[i]["Closeness Border Color"];
-	  } else if (centralityMenu.value === "capConnections") {
-	    var color = colorDictionary[Math.min(tableData[i]["Number of Cap Connections"], 12)];
-	    var border_color = colorDarktionary[Math.min(tableData[i]["Number of Cap Connections"], 12)];
-	  } else if (centralityMenu.value === "seventy") {
-	    var color = tableData[i]["Ownership Color"];
-	    var border_color = tableData[i]["Ownership Border Color"];
-	  }
-          path.style.setProperty("fill", color, "important");
-          path.setAttribute("stroke-opacity", "100");
-          path.style.setProperty("stroke", border_color, "important");
-          path.style.setProperty("stroke-width", "2", "important");
+// Color in the map and add indirect connections
+paths.forEach(function (path) {
+  var pathId = path.getAttribute("id");
+  for (var i = 0; i < tableData.length; i++) {
+    if (tableData[i]["Territory"] === pathId) {
+      // Color in the map
+      if (tableData[i]["Blizzard"] === 0) {
+        // Initial color and border color
+        var color = "white";
+        var border_color = "#808080";
+        // Set color and border color according to tableData
+        if (centralityMenu.value === "standard") {
+          color = colorDictionary[tableData[i]["Number of Direct Connections"]];
+          border_color = colorDarktionary[tableData[i]["Number of Direct Connections"]];
+        } else if (centralityMenu.value === "eigenvector") {
+          color = tableData[i]["Eigenvector Color"];
+          border_color = tableData[i]["Eigenvector Border Color"];
+        } else if (centralityMenu.value === "betweenness") {
+          color = tableData[i]["Betweenness Color"];
+          border_color = tableData[i]["Betweenness Border Color"];
+        } else if (centralityMenu.value === "closeness") {
+          color = tableData[i]["Closeness Color"];
+          border_color = tableData[i]["Closeness Border Color"];
+        } else if (centralityMenu.value === "capConnections") {
+          color = colorDictionary[Math.min(tableData[i]["Number of Cap Connections"], 12)];
+          border_color = colorDarktionary[Math.min(tableData[i]["Number of Cap Connections"], 12)];
+        } else if (centralityMenu.value === "seventy") {
+          color = tableData[i]["Ownership Color"];
+          border_color = tableData[i]["Ownership Border Color"];
         }
+        path.style.setProperty("fill", color, "important");
+        path.setAttribute("stroke-opacity", "100");
+        path.style.setProperty("stroke", border_color, "important");
+        path.style.setProperty("stroke-width", "2", "important");
+      }
 
         // Add text to the specified location from tableData
         if (tableData[i]["Blizzard"] === 0) {
