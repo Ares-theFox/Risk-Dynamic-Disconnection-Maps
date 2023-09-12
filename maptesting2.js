@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 33 pass")
+console.log("Testing 70% pathing 35 pass")
 
 const mapUrls = {
 	"boston": {
@@ -852,7 +852,7 @@ function findOptimalPath(tableData, selfColor, runOrigin, pathArray) {
     let minTroopCount = Infinity;
 
     // Helper function for finding paths
-    function findPaths(node, path, troopCount) {
+    function findPaths(territory, path, troopCount) {
         // If we've reached the desired length and this path is better than the current optimal path, update it
         if (path.length === nodesToCapture && troopCount < minTroopCount) {
             optimalPath = path;
@@ -861,23 +861,28 @@ function findOptimalPath(tableData, selfColor, runOrigin, pathArray) {
 
         // If we can add more nodes to the path, explore all possible next nodes
         if (path.length < nodesToCapture) {
-            let nextNodes = tableData[node].Connections.split(',');
-            nextNodes.forEach(nextNode => {
-                if (!path.includes(nextNode) && tableData[nextNode][selfColor + 'Owned'] !== 1 && tableData[nextNode].Blizzard !== 1) {
-                    findPaths(nextNode, [...path, nextNode], troopCount + tableData[nextNode].TroopCount);
+            let currentRow = tableData.find(row => row.Territory === territory);
+            let nextTerritories = currentRow.Connections.split(',');
+            nextTerritories.forEach(nextTerritory => {
+                if (!path.includes(nextTerritory)) {
+                    let nextRow = tableData.find(row => row.Territory === nextTerritory);
+                    if (nextRow[selfColor + 'Owned'] !== 1 && nextRow.Blizzard !== 1) {
+                        findPaths(nextTerritory, [...path, nextTerritory], troopCount + nextRow.TroopCount);
+                    }
                 }
             });
         }
     }
 
-    // Start finding paths from each of the nodes in runOrigin
-    runOrigin.forEach(node => findPaths(node, [], 0));
+    // Start finding paths from each of the territories in runOrigin
+    runOrigin.forEach(territory => findPaths(territory, [], 0));
 
-    // Push the nodes along the optimal path into pathArray
-    optimalPath.forEach(node => pathArray.push(node));
+    // Push the territories along the optimal path into pathArray
+    optimalPath.forEach(territory => pathArray.push(territory));
 
     return pathArray;
 }
+
 
 
 
