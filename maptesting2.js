@@ -464,27 +464,47 @@ const mouseoutHandler = function () {
     if (shouldReturn) {
       return;
     }
-    // Check if path is NOT in clickedPathsBlizzardsPortals array
-    if (!blizzardArray.includes(this.id)) {
-	    if (ownershipMenu.value === "white") {
-		    whiteNodes.push(this.id);
-	    } else if (ownershipMenu.value === "black") {
-		    blackNodes.push(this.id);
-	    } else if (ownershipMenu.value === "red") {
-		    redNodes.push(this.id);
-	    } else if (ownershipMenu.value === "pink") {
-		    pinkNodes.push(this.id);
-	    } else if (ownershipMenu.value === "purple") {
-		    purpleNodes.push(this.id);
-	    } else if (ownershipMenu.value === "blue") {
-		    blueNodes.push(this.id);
-	    } else if (ownershipMenu.value === "green") {
-		    greenNodes.push(this.id);
-	    } else if (ownershipMenu.value === "yellow") {
-		    yellowNodes.push(this.id);
-	    } else if (ownershipMenu.value === "orange") {
-		    orangeNodes.push(this.id);
-	    }
+	  
+	// Check if path is NOT in clickedPathsBlizzardsPortals array
+	if (!blizzardArray.includes(this.id)) {
+	
+	  // Helper function to clear this.id from an array
+	  function clearIdFromArray(array) {
+	    return array.filter(item => item !== this.id);
+	  }
+	
+	  // Clear this.id from all arrays
+	  whiteNodes = clearIdFromArray(whiteNodes);
+	  blackNodes = clearIdFromArray(blackNodes);
+	  redNodes = clearIdFromArray(redNodes);
+	  pinkNodes = clearIdFromArray(pinkNodes);
+	  purpleNodes = clearIdFromArray(purpleNodes);
+	  blueNodes = clearIdFromArray(blueNodes);
+	  greenNodes = clearIdFromArray(greenNodes);
+	  yellowNodes = clearIdFromArray(yellowNodes);
+	  orangeNodes = clearIdFromArray(orangeNodes);
+	
+	  // Add this.id to the appropriate array
+	  if (ownershipMenu.value === "white") {
+	    whiteNodes.push(this.id);
+	  } else if (ownershipMenu.value === "black") {
+	    blackNodes.push(this.id);
+	  } else if (ownershipMenu.value === "red") {
+	    redNodes.push(this.id);
+	  } else if (ownershipMenu.value === "pink") {
+	    pinkNodes.push(this.id);
+	  } else if (ownershipMenu.value === "purple") {
+	    purpleNodes.push(this.id);
+	  } else if (ownershipMenu.value === "blue") {
+	    blueNodes.push(this.id);
+	  } else if (ownershipMenu.value === "green") {
+	    greenNodes.push(this.id);
+	  } else if (ownershipMenu.value === "yellow") {
+	    yellowNodes.push(this.id);
+	  } else if (ownershipMenu.value === "orange") {
+	    orangeNodes.push(this.id);
+	  }
+	}
 
     // Check if size of blizzardArray is greater than or equal to totalBlizzards
     if (blizzardArray.length >= 999) {
@@ -598,16 +618,14 @@ const mouseoutHandler = function () {
 	  var troopCount = document.getElementById("troopCountInput").value;
 	
 	  // Iterate over the tableData array
-	  for (var i = 0; i < tableData.length; i++) {
+	  tableData.forEach(function(row) {
 	    // Check if the Territory property of the current object matches this.id
-	    if (tableData[i].Territory === this.id) {
+	    if (row.Territory === this.id) {
 	      // If it does, create the TroopCount property and set its value to troopCount
-	      tableData[i].TroopCount = troopCount;
-	      // You can break the loop here if you know that Territory values are unique
-	      break;
+	      row.TroopCount = troopCount;
 	    }
-	  }
-
+	  });
+		
     // Check if size of blizzardArray is greater than or equal to totalBlizzards
     if (blizzardArray.length >= 999) {
       // Remove existing event listeners from elements in paths array
