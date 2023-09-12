@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 24 pass")
+console.log("Testing 70% pathing 31 pass")
 
 const mapUrls = {
 	"boston": {
@@ -190,6 +190,10 @@ var totalPortals = mapUrls[mapselected].totalPortals;
 let blizzardArray = []
 let portalArray = []
 let clickedPathsBlizzardsPortals = []
+
+let runOrigin = []
+let pathArray = []
+
 let whiteNodes = []
 let blackNodes = []
 let redNodes = []
@@ -394,6 +398,126 @@ function stopEditing() {
 
 
 
+// FUNCTION: assign run origin nodes
+function clearRunOrigin() {
+   runOrigin.length = 0;
+}
+
+
+
+
+// FUNCTION: assign run origin nodes
+function runOriginFunction() {
+  let shouldReturn = false;
+  document.getElementById("stopButton").innerHTML = "Stop Assigning Run Origin";
+	// Set the regular background color to green
+	document.getElementById("stopButton").style.backgroundColor = "#4caf50";
+	// Set the hover background color to dark green
+	var styleElement = document.createElement("style");
+	styleElement.id = "stopButtonHoverStyle";
+	styleElement.textContent = "#stopButton:hover { background-color: #3e8e41 !important; }";
+	document.head.appendChild(styleElement);
+
+  const blizzardButtonClick = function () {
+    shouldReturn = true;
+  };
+  const portalButtonClick = function () {
+    shouldReturn = true;
+  };
+  const eraserButtonClick = function () {
+    shouldReturn = true;
+  };
+  const stopButtonClick = function () {
+    shouldReturn = true;
+  };
+  const assignOwnershipClick = function () {
+    shouldReturn = true;
+  };
+  const assignTroopsClick = function () {
+    shouldReturn = true;
+  };
+  const runOriginButtonClick = function () {
+    shouldReturn = true;
+  };
+	
+  document.getElementById("blizzardButton").addEventListener("click", blizzardButtonClick);
+  document.getElementById("portalButton").addEventListener("click", portalButtonClick);
+  document.getElementById("eraserButton").addEventListener("click", eraserButtonClick);
+  document.getElementById("stopButton").addEventListener("click", stopButtonClick);
+  document.getElementById("assignOwnership").addEventListener("click", assignOwnershipClick);
+  document.getElementById("assignTroops").addEventListener("click", assignTroopsClick);
+  document.getElementById("runOriginButton").addEventListener("click", runOriginButtonClick);
+	
+// Define mouseover, mouseout, and click event handlers
+const mouseoverHandler = function () {
+  if (shouldReturn) {
+    return;
+  }
+  if (!blizzardArray.includes(this.id)) {
+    // Change stroke color to white and stroke width to 3
+    this.style.setProperty("stroke", "white", "important");
+    this.style.setProperty("stroke-width", "3", "important");
+  }
+};
+	
+const mouseoutHandler = function () {
+  if (shouldReturn) {
+    return;
+  }
+  if (!blizzardArray.includes(this.id)) {
+    // Reset stroke color and width according to the selected centrality measure
+    let border_color = tableData.find(row => row['Territory'] === this.id)['Ownership Border Color']
+	this.style.setProperty("stroke", border_color, "important");
+	this.style.setProperty("stroke-width", "2", "important");
+  }
+}
+  const clickHandler = function () {
+    if (shouldReturn) {
+      return;
+    }
+	  
+	// Check if path is NOT in array
+	if (!blizzardArray.includes(this.id)) {
+	runOrigin.push(this.id);
+
+    // Check if size of blizzardArray is greater than or equal to totalBlizzards
+    if (blizzardArray.length >= 999) {
+      // Remove existing event listeners from elements in paths array
+      paths.forEach(function (path) {
+        path.removeEventListener("mouseover", mouseoverHandler);
+        path.removeEventListener("mouseout", mouseoutHandler);
+        path.removeEventListener("click", clickHandler);
+      });
+      document.getElementById("stopButton").innerHTML = "Stop Editing";
+	// Set the regular background color to white
+	document.getElementById("stopButton").style.backgroundColor = "white";
+	// Set the hover background color to white
+	var styleElement = document.createElement("style");
+	styleElement.id = "stopButtonHoverStyle";
+	styleElement.textContent = "#stopButton:hover { background-color: white !important; }";
+	document.head.appendChild(styleElement);
+
+      generateMap();
+      return;
+    }
+
+    // Execute generateMap function
+    generateMap();
+    }
+    };
+
+  // Add event listeners to elements in paths array
+  paths.forEach(function (path) {
+    path.addEventListener("mouseover", mouseoverHandler);
+    path.addEventListener("mouseout", mouseoutHandler);
+    path.addEventListener("click", clickHandler);
+  });
+}
+
+
+
+
+
 
 
 
@@ -429,6 +553,9 @@ function assignOwnershipFunction() {
   const assignTroopsClick = function () {
     shouldReturn = true;
   };
+  const runOriginButtonClick = function () {
+    shouldReturn = true;
+  };
 	
   document.getElementById("blizzardButton").addEventListener("click", blizzardButtonClick);
   document.getElementById("portalButton").addEventListener("click", portalButtonClick);
@@ -436,6 +563,7 @@ function assignOwnershipFunction() {
   document.getElementById("stopButton").addEventListener("click", stopButtonClick);
   document.getElementById("assignOwnership").addEventListener("click", assignOwnershipClick);
   document.getElementById("assignTroops").addEventListener("click", assignTroopsClick);
+  document.getElementById("runOriginButton").addEventListener("click", runOriginButtonClick);
 	
 // Define mouseover, mouseout, and click event handlers
 const mouseoverHandler = function () {
@@ -587,6 +715,9 @@ function assignTroopsFunction() {
   const assignTroopsClick = function () {
     shouldReturn = true;
   };
+  const runOriginButtonClick = function () {
+    shouldReturn = true;
+  };
 	
   document.getElementById("blizzardButton").addEventListener("click", blizzardButtonClick);
   document.getElementById("portalButton").addEventListener("click", portalButtonClick);
@@ -594,6 +725,7 @@ function assignTroopsFunction() {
   document.getElementById("stopButton").addEventListener("click", stopButtonClick);
   document.getElementById("assignOwnership").addEventListener("click", assignOwnershipClick);
   document.getElementById("assignTroops").addEventListener("click", assignTroopsClick);
+  document.getElementById("runOriginButton").addEventListener("click", runOriginButtonClick);
 	
 // Define mouseover, mouseout, and click event handlers
 const mouseoverHandler = function () {
@@ -672,6 +804,77 @@ const mouseoutHandler = function () {
     path.addEventListener("mouseout", mouseoutHandler);
     path.addEventListener("click", clickHandler);
   });
+}
+
+
+// Define the border colors for each selfColor
+var borderColors = {
+    "white": "#808080",
+    "black": "#000000",
+    "red": "#641D1D",
+    "pink": "#652251",
+    "purple": "#3D1E6B",
+    "blue": "#1E496B",
+    "green": "#475F2C",
+    "yellow": "#7F6D07",
+    "orange": "#6B3719"
+};
+
+// Get the select element
+let selfColorElement = document.getElementById('selfColor');
+
+// Add an event listener for the change event
+selfColorElement.addEventListener('change', function() {
+    // Get the value of the selected option
+    let selfColor = this.value;
+
+    // Get the border color for the selected selfColor
+    let borderColor = borderColors[selfColor];
+
+    // Now you can use borderColor in your function
+});
+
+
+function findOptimalPath(tableData, selfColor, runOrigin, pathArray) {
+    // Clear the pathArray
+    pathArray.length = 0;
+
+    // Calculate the number of nodes required to win the game
+    let totalNodes = tableData.filter(row => row.Blizzard !== 1).length;
+    let seventy = Math.ceil(totalNodes * 0.7);
+    let ownedNodes = tableData.filter(row => row[selfColor + 'Owned'] === 1).length;
+    let nodesToCapture = seventy - ownedNodes;
+
+    // Placeholder for the optimal path and its total troop count
+    let optimalPath = [];
+    let minTroopCount = Infinity;
+
+    // Helper function for finding paths
+    function findPaths(node, path, troopCount) {
+        // If we've reached the desired length and this path is better than the current optimal path, update it
+        if (path.length === nodesToCapture && troopCount < minTroopCount) {
+            optimalPath = path;
+            minTroopCount = troopCount;
+        }
+
+        // If we can add more nodes to the path, explore all possible next nodes
+        if (path.length < nodesToCapture) {
+            let nextNodes = tableData[node].Connections.split(',');
+            nextNodes.forEach(nextNode => {
+                if (!path.includes(nextNode) && tableData[nextNode][selfColor + 'Owned'] !== 1 && tableData[nextNode].Blizzard !== 1) {
+                    findPaths(nextNode, [...path, nextNode], troopCount + tableData[nextNode].TroopCount);
+                }
+            });
+        }
+    }
+
+    // Start finding paths from each of the nodes in runOrigin
+    runOrigin.forEach(node => findPaths(node, [], 0));
+
+    // Push the nodes along the optimal path into pathArray
+    optimalPath.forEach(node => pathArray.push(node));
+
+    return pathArray;
 }
 
 
@@ -1133,7 +1336,7 @@ paths.forEach(function (path) {
             border_color = "transparent";
           } else {
             color = tableData[i]["Ownership Color"];
-            border_color = tableData[i]["Ownership Border Color"];
+            border_color = pathArray.includes(pathId) ? borderColor : tableData[i]["Ownership Border Color"];
           }
         }
         path.style.setProperty("fill", color, "important");
@@ -1453,6 +1656,9 @@ function addBlizzards() {
   const assignTroopsClick = function () {
     shouldReturn = true;
   };
+  const runOriginButtonClick = function () {
+    shouldReturn = true;
+  };
 	
   document.getElementById("blizzardButton").addEventListener("click", blizzardButtonClick);
   document.getElementById("portalButton").addEventListener("click", portalButtonClick);
@@ -1460,6 +1666,7 @@ function addBlizzards() {
   document.getElementById("stopButton").addEventListener("click", stopButtonClick);
   document.getElementById("assignOwnership").addEventListener("click", assignOwnershipClick);
   document.getElementById("assignTroops").addEventListener("click", assignTroopsClick);
+  document.getElementById("runOriginButton").addEventListener("click", runOriginButtonClick);
 
   // Check if size of blizzardArray is greater than or equal to totalBlizzards
   if (blizzardArray.length >= totalBlizzards) {
@@ -1686,6 +1893,9 @@ function addPortals() {
   const assignTroopsClick = function () {
     shouldReturn = true;
   };
+  const runOriginButtonClick = function () {
+    shouldReturn = true;
+  };
 	
   document.getElementById("blizzardButton").addEventListener("click", blizzardButtonClick);
   document.getElementById("portalButton").addEventListener("click", portalButtonClick);
@@ -1693,6 +1903,7 @@ function addPortals() {
   document.getElementById("stopButton").addEventListener("click", stopButtonClick);
   document.getElementById("assignOwnership").addEventListener("click", assignOwnershipClick);
   document.getElementById("assignTroops").addEventListener("click", assignTroopsClick);
+  document.getElementById("runOriginButton").addEventListener("click", runOriginButtonClick);
 
   // Check if size of portalArray is greater than or equal to totalPortals
   if (portalArray.length >= totalPortals) {
@@ -1854,7 +2065,15 @@ function button_AssignOwnership() {
 function button_AssignTroops() {
   assignTroopsFunction();
 }
-	
+
+function button_runOrigin() {
+  runOriginFunction();
+}
+
+function button_clearRunOrigin() {
+  clearRunOrigin();
+}
+
 function eraser() {
   // Immediately return if the size of the clickedPathsBlizzardsPortals array is empty
   if (clickedPathsBlizzardsPortals.length === 0) {
@@ -1888,6 +2107,9 @@ function eraser() {
   const assignTroopsClick = function () {
     shouldReturn = true;
   };
+  const runOriginButtonClick = function () {
+    shouldReturn = true;
+  };
 	
   document.getElementById("blizzardButton").addEventListener("click", blizzardButtonClick);
   document.getElementById("portalButton").addEventListener("click", portalButtonClick);
@@ -1895,6 +2117,7 @@ function eraser() {
   document.getElementById("stopButton").addEventListener("click", stopButtonClick);
   document.getElementById("assignOwnership").addEventListener("click", assignOwnershipClick);
   document.getElementById("assignTroops").addEventListener("click", assignTroopsClick);
+  document.getElementById("runOriginButton").addEventListener("click", runOriginButtonClick);
 
 	// Define mouseover, mouseout, and click event handlers
 	const mouseoverHandler = function () {
