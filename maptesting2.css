@@ -147,3 +147,13 @@
 	#clearRunOriginButton:hover {
 	background-color: grey;
 	}
+
+	#runSeventyButton {
+	text-align: center;
+	background-color: black;
+	color: white;
+	}
+
+	#runSeventyButton:hover {
+	background-color: grey;
+	}
