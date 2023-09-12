@@ -607,7 +607,6 @@ const mouseoutHandler = function () {
 	      break;
 	    }
 	  }
-	}
 
     // Check if size of blizzardArray is greater than or equal to totalBlizzards
     if (blizzardArray.length >= 999) {
