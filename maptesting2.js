@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 13 pass")
+console.log("Testing 70% pathing 14 pass")
 
 const mapUrls = {
 	"boston": {
@@ -1185,6 +1185,7 @@ paths.forEach(function (path) {
 	    text.textContent = tableData[i]["Number of Cap Connections"];
 	  } else if (centralityMenu.value === "seventy") {
 	    text.textContent = tableData[i]["TroopCount"];
+		  console.log("text: " + text.textContent);
 	  }
 		
           // Adjust x and y coordinates to position midpoint of text at specified coordinates
