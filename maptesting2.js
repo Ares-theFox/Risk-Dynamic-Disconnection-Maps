@@ -218,12 +218,19 @@ const colorDarktionary = {
 12: "#000000"
 };
 
-// Menu stuff
+// Centrality Menu
+var seventyMenuContainer = document.getElementById("seventyMenuContainer");
+seventyMenuContainer.style.display = "none";
 var selectMenuContainer = document.getElementById("selectMenuContainer");
 selectMenuContainer.style.display = "none";
 centralityMenu = document.getElementById("centralityType");
 centralityMenu.addEventListener("change", function() {
   generateMap();
+  if (centralityMenu.value === "seventy") {
+    seventyMenuContainer.style.display = "";
+  } else {
+    seventyMenuContainer.style.display = "none";
+  }
 });
 
 // Hidden menu shenanigans
