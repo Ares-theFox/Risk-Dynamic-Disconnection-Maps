@@ -198,7 +198,7 @@ let purpleNodes = []
 let blueNodes = []
 let greenNodes = []
 let yellowNodes = []
-let orangeNodes = []
+let orangeNodes = [];
 
 const colorDictionary = {
   0: "#ffffff",
