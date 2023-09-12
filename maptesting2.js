@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 31 pass")
+console.log("Testing 70% pathing 32 pass")
 
 const mapUrls = {
 	"boston": {
@@ -453,7 +453,7 @@ const mouseoverHandler = function () {
   if (shouldReturn) {
     return;
   }
-  if (!blizzardArray.includes(this.id)) {
+  if (!blizzardArray.includes(this.id) && !runOrigin.includes(this.id)) {
     // Change stroke color to white and stroke width to 3
     this.style.setProperty("stroke", "white", "important");
     this.style.setProperty("stroke-width", "3", "important");
@@ -464,7 +464,7 @@ const mouseoutHandler = function () {
   if (shouldReturn) {
     return;
   }
-  if (!blizzardArray.includes(this.id)) {
+  if (!blizzardArray.includes(this.id) && !runOrigin.includes(this.id)) {
     // Reset stroke color and width according to the selected centrality measure
     let border_color = tableData.find(row => row['Territory'] === this.id)['Ownership Border Color']
 	this.style.setProperty("stroke", border_color, "important");
@@ -477,7 +477,7 @@ const mouseoutHandler = function () {
     }
 	  
 	// Check if path is NOT in array
-	if (!blizzardArray.includes(this.id)) {
+	if (!blizzardArray.includes(this.id) && !runOrigin.includes(this.id)) {
 	runOrigin.push(this.id);
 
     // Check if size of blizzardArray is greater than or equal to totalBlizzards
@@ -1267,6 +1267,11 @@ function generateMap() {
 
   // Call centrality function
   calculateCentrality(tableData);
+
+	// Call pathing function
+	if (centralityMenu.value === "seventy") {
+	    findOptimalPath(tableData, selfColor, runOrigin, pathArray)
+	}
 
 	// Columns at this point:
 	// Territory = nodes
