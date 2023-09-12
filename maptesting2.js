@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 32 pass")
+console.log("Testing 70% pathing 33 pass")
 
 const mapUrls = {
 	"boston": {
@@ -832,6 +832,8 @@ selfColorElement.addEventListener('change', function() {
     let borderColor = borderColors[selfColor];
 
     // Now you can use borderColor in your function
+    clearRunOrigin();
+	generateMap();
 });
 
 
@@ -1267,11 +1269,6 @@ function generateMap() {
 
   // Call centrality function
   calculateCentrality(tableData);
-
-	// Call pathing function
-	if (centralityMenu.value === "seventy") {
-	    findOptimalPath(tableData, selfColor, runOrigin, pathArray)
-	}
 
 	// Columns at this point:
 	// Territory = nodes
@@ -2047,6 +2044,15 @@ function addPortals() {
   });
 }
 
+
+
+function runSeventyFunction() {
+    findOptimalPath(tableData, selfColor, runOrigin, pathArray);
+    generateMap();
+}
+
+
+
 function button_StopEditing() {
   stopEditing();
 }
@@ -2077,6 +2083,10 @@ function button_runOrigin() {
 
 function button_clearRunOrigin() {
   clearRunOrigin();
+}
+
+function button_runSeventy() {
+  runSeventyFunction();
 }
 
 function eraser() {
