@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 23 pass")
+console.log("Testing 70% pathing 24 pass")
 
 const mapUrls = {
 	"boston": {
