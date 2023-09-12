@@ -6,6 +6,8 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
+console.log("Testing 70% pathing first pass")
+
 const mapUrls = {
 	"boston": {
 		"prettyname": "Boston",
@@ -184,9 +186,20 @@ var SVG = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnect
 var BlizzardPattern = blizzardPatternImage.src;
 var totalBlizzards = mapUrls[mapselected].totalBlizzards;
 var totalPortals = mapUrls[mapselected].totalPortals;
+
 let blizzardArray = []
 let portalArray = []
 let clickedPathsBlizzardsPortals = []
+let whiteNodes = []
+let blackNodes = []
+let redNodes = []
+let pinkNodes = []
+let purpleNodes = []
+let blueNodes = []
+let greenNodes = []
+let yellowNodes = []
+let orangeNodes = []
+
 const colorDictionary = {
   0: "#ffffff",
   1: "#eb3337",
@@ -218,9 +231,32 @@ const colorDarktionary = {
 12: "#000000"
 };
 
+var custom_white = "#ffffff"
+var custom_black = "#000000"
+var custom_red = "#c73a3a"
+var custom_pink = "#c944a2"
+var custom_purple = "#7a3bd6"
+var custom_blue = "#3b91d6"
+var custom_green = "#8dbd57"
+var custom_yellow = "#FDDA0D"
+var custom_orange = "#d56e32"
+
+var customBorder_white = "#808080"
+var customBorder_black = "#000000"
+var customBorder_red = "#641D1D"
+var customBorder_pink = "#652251"
+var customBorder_purple = "#3D1E6B"
+var customBorder_blue = "#1E496B"
+var customBorder_green = "#475F2C"
+var customBorder_yellow = "#7F6D07"
+var customBorder_orange = "#6B3719"
+
+
 // Centrality Menu
 var seventyMenuContainer = document.getElementById("seventyMenuContainer");
 seventyMenuContainer.style.display = "none";
+ownershipMenu = document.getElementById("assignOwnershipSelect");
+
 var selectMenuContainer = document.getElementById("selectMenuContainer");
 selectMenuContainer.style.display = "none";
 centralityMenu = document.getElementById("centralityType");
@@ -352,6 +388,266 @@ function stopEditing() {
 	document.head.appendChild(styleElement);
 	return;
 }
+
+
+
+
+
+
+
+
+
+
+
+// FUNCTION: assign ownership
+function assignOwnershipFunction() {
+  let shouldReturn = false;
+  document.getElementById("stopButton").innerHTML = "Stop Assigning Ownership";
+	// Set the regular background color to green
+	document.getElementById("stopButton").style.backgroundColor = "#4caf50";
+	// Set the hover background color to dark green
+	var styleElement = document.createElement("style");
+	styleElement.id = "stopButtonHoverStyle";
+	styleElement.textContent = "#stopButton:hover { background-color: #3e8e41 !important; }";
+	document.head.appendChild(styleElement);
+
+  const blizzardButtonClick = function () {
+    shouldReturn = true;
+  };
+  const portalButtonClick = function () {
+    shouldReturn = true;
+  };
+  const eraserButtonClick = function () {
+    shouldReturn = true;
+  };
+  const stopButtonClick = function () {
+    shouldReturn = true;
+  };
+  const assignOwnershipClick = function () {
+    shouldReturn = true;
+  };
+  const assignTroopsClick = function () {
+    shouldReturn = true;
+  };
+	
+  document.getElementById("blizzardButton").addEventListener("click", blizzardButtonClick);
+  document.getElementById("portalButton").addEventListener("click", portalButtonClick);
+  document.getElementById("eraserButton").addEventListener("click", eraserButtonClick);
+  document.getElementById("stopButton").addEventListener("click", stopButtonClick);
+  document.getElementById("assignOwnership").addEventListener("click", assignOwnershipClick);
+  document.getElementById("assignTroops").addEventListener("click", assignTroopsClick);
+	
+// Define mouseover, mouseout, and click event handlers
+const mouseoverHandler = function () {
+  if (shouldReturn) {
+    return;
+  }
+  if (!blizzardArray.includes(this.id)) {
+    // Change stroke color to white and stroke width to 3
+    this.style.setProperty("stroke", "white", "important");
+    this.style.setProperty("stroke-width", "3", "important");
+  }
+};
+	
+const mouseoutHandler = function () {
+  if (shouldReturn) {
+    return;
+  }
+  if (!blizzardArray.includes(this.id)) {
+    // Reset stroke color and width according to the selected centrality measure
+    let border_color = tableData.find(row => row['Territory'] === this.id)['Ownership Border Color']
+	this.style.setProperty("stroke", border_color, "important");
+	this.style.setProperty("stroke-width", "2", "important");
+  }
+}
+  const clickHandler = function () {
+    if (shouldReturn) {
+      return;
+    }
+    // Check if path is NOT in clickedPathsBlizzardsPortals array
+    if (!blizzardArray.includes(this.id)) {
+	    if (ownershipMenu.value === "white") {
+		    whiteNodes.push(this.id);
+	    } else if (ownershipMenu.value === "black") {
+		    blackNodes.push(this.id);
+	    } else if (ownershipMenu.value === "red") {
+		    redNodes.push(this.id);
+	    } else if (ownershipMenu.value === "pink") {
+		    pinkNodes.push(this.id);
+	    } else if (ownershipMenu.value === "purple") {
+		    purpleNodes.push(this.id);
+	    } else if (ownershipMenu.value === "blue") {
+		    blueNodes.push(this.id);
+	    } else if (ownershipMenu.value === "green") {
+		    greenNodes.push(this.id);
+	    } else if (ownershipMenu.value === "yellow") {
+		    yellowNodes.push(this.id);
+	    } else if (ownershipMenu.value === "orange") {
+		    orangeNodes.push(this.id);
+	    }
+
+    // Check if size of blizzardArray is greater than or equal to totalBlizzards
+    if (blizzardArray.length >= 999) {
+      // Remove existing event listeners from elements in paths array
+      paths.forEach(function (path) {
+        path.removeEventListener("mouseover", mouseoverHandler);
+        path.removeEventListener("mouseout", mouseoutHandler);
+        path.removeEventListener("click", clickHandler);
+      });
+      document.getElementById("stopButton").innerHTML = "Stop Editing";
+	// Set the regular background color to white
+	document.getElementById("stopButton").style.backgroundColor = "white";
+	// Set the hover background color to white
+	var styleElement = document.createElement("style");
+	styleElement.id = "stopButtonHoverStyle";
+	styleElement.textContent = "#stopButton:hover { background-color: white !important; }";
+	document.head.appendChild(styleElement);
+
+      generateMap();
+      return;
+    }
+
+    // Execute generateMap function
+    generateMap();
+    }
+    };
+
+  // Add event listeners to elements in paths array
+  paths.forEach(function (path) {
+    path.addEventListener("mouseover", mouseoverHandler);
+    path.addEventListener("mouseout", mouseoutHandler);
+    path.addEventListener("click", clickHandler);
+  });
+}
+	
+
+
+
+
+
+
+// FUNCTION: assign ownership
+function assignTroopsFunction() {
+  let shouldReturn = false;
+  document.getElementById("stopButton").innerHTML = "Stop Assigning Troops";
+	// Set the regular background color to green
+	document.getElementById("stopButton").style.backgroundColor = "#4caf50";
+	// Set the hover background color to dark green
+	var styleElement = document.createElement("style");
+	styleElement.id = "stopButtonHoverStyle";
+	styleElement.textContent = "#stopButton:hover { background-color: #3e8e41 !important; }";
+	document.head.appendChild(styleElement);
+
+  const blizzardButtonClick = function () {
+    shouldReturn = true;
+  };
+  const portalButtonClick = function () {
+    shouldReturn = true;
+  };
+  const eraserButtonClick = function () {
+    shouldReturn = true;
+  };
+  const stopButtonClick = function () {
+    shouldReturn = true;
+  };
+  const assignOwnershipClick = function () {
+    shouldReturn = true;
+  };
+  const assignTroopsClick = function () {
+    shouldReturn = true;
+  };
+	
+  document.getElementById("blizzardButton").addEventListener("click", blizzardButtonClick);
+  document.getElementById("portalButton").addEventListener("click", portalButtonClick);
+  document.getElementById("eraserButton").addEventListener("click", eraserButtonClick);
+  document.getElementById("stopButton").addEventListener("click", stopButtonClick);
+  document.getElementById("assignOwnership").addEventListener("click", assignOwnershipClick);
+  document.getElementById("assignTroops").addEventListener("click", assignTroopsClick);
+	
+// Define mouseover, mouseout, and click event handlers
+const mouseoverHandler = function () {
+  if (shouldReturn) {
+    return;
+  }
+  if (!blizzardArray.includes(this.id)) {
+    // Change stroke color to white and stroke width to 3
+    this.style.setProperty("stroke", "white", "important");
+    this.style.setProperty("stroke-width", "3", "important");
+  }
+};
+	
+const mouseoutHandler = function () {
+  if (shouldReturn) {
+    return;
+  }
+  if (!blizzardArray.includes(this.id)) {
+    // Reset stroke color and width according to the selected centrality measure
+    let border_color = tableData.find(row => row['Territory'] === this.id)['Ownership Border Color']
+	this.style.setProperty("stroke", border_color, "important");
+	this.style.setProperty("stroke-width", "2", "important");
+  }
+}
+  const clickHandler = function () {
+    if (shouldReturn) {
+      return;
+    }
+	  
+	// Check if path is NOT in array
+	if (!blizzardArray.includes(this.id)) {
+	  // Get the current value of troopCountInput
+	  var troopCount = document.getElementById("troopCountInput").value;
+	
+	  // Iterate over the tableData array
+	  for (var i = 0; i < tableData.length; i++) {
+	    // Check if the Territory property of the current object matches this.id
+	    if (tableData[i].Territory === this.id) {
+	      // If it does, create the TroopCount property and set its value to troopCount
+	      tableData[i].TroopCount = troopCount;
+	      // You can break the loop here if you know that Territory values are unique
+	      break;
+	    }
+	  }
+	}
+
+    // Check if size of blizzardArray is greater than or equal to totalBlizzards
+    if (blizzardArray.length >= 999) {
+      // Remove existing event listeners from elements in paths array
+      paths.forEach(function (path) {
+        path.removeEventListener("mouseover", mouseoverHandler);
+        path.removeEventListener("mouseout", mouseoutHandler);
+        path.removeEventListener("click", clickHandler);
+      });
+      document.getElementById("stopButton").innerHTML = "Stop Editing";
+	// Set the regular background color to white
+	document.getElementById("stopButton").style.backgroundColor = "white";
+	// Set the hover background color to white
+	var styleElement = document.createElement("style");
+	styleElement.id = "stopButtonHoverStyle";
+	styleElement.textContent = "#stopButton:hover { background-color: white !important; }";
+	document.head.appendChild(styleElement);
+
+      generateMap();
+      return;
+    }
+
+    // Execute generateMap function
+    generateMap();
+    }
+    };
+
+  // Add event listeners to elements in paths array
+  paths.forEach(function (path) {
+    path.addEventListener("mouseover", mouseoverHandler);
+    path.addEventListener("mouseout", mouseoutHandler);
+    path.addEventListener("click", clickHandler);
+  });
+}
+
+
+
+
+
+
 
 // FUNCTION: calculate centrality
 function stats(values) {
@@ -571,6 +867,14 @@ function calculateCentrality(tableData) {
     calculateCloseness(tableData);
 }  
 
+
+
+
+
+
+
+
+
 // Generate the map
 function generateMap() {
   // Update buttons
@@ -608,6 +912,82 @@ function generateMap() {
 	      .join(",");
 	  }
 	});
+
+	// Add everything contained in the color arrays
+	tableData.forEach((row) => {
+	  if (whiteNodes.includes(row["Territory"])) {
+	    row["whiteOwned"] = 1;
+		  row["Ownership Border Color"] = customBorder_white;
+		  row["Ownership Color"] = custom_white;
+	  } else {
+	    row["whiteOwned"] = 0;
+	  }
+	
+	  if (blackNodes.includes(row["Territory"])) {
+	    row["blackOwned"] = 1;
+		  row["Ownership Border Color"] = customBorder_black;
+		  row["Ownership Color"] = custom_black;
+	  } else {
+	    row["blackOwned"] = 0;
+	  }
+
+	  if (redNodes.includes(row["Territory"])) {
+	    row["redOwned"] = 1;
+		  row["Ownership Border Color"] = customBorder_red;
+		  row["Ownership Color"] = custom_red;
+	  } else {
+	    row["redOwned"] = 0;
+	  }
+
+	  if (pinkNodes.includes(row["Territory"])) {
+	    row["pinkOwned"] = 1;
+		  row["Ownership Border Color"] = customBorder_pink;
+		  row["Ownership Color"] = custom_pink;
+	  } else {
+	    row["pinkOwned"] = 0;
+	  }
+
+	  if (purpleNodes.includes(row["Territory"])) {
+	    row["purpleOwned"] = 1;
+		  row["Ownership Border Color"] = customBorder_purple;
+		  row["Ownership Color"] = custom_purple;
+	  } else {
+	    row["purpleOwned"] = 0;
+	  }
+
+	  if (blueNodes.includes(row["Territory"])) {
+	    row["blueOwned"] = 1;
+		  row["Ownership Border Color"] = customBorder_blue;
+		  row["Ownership Color"] = custom_blue;
+	  } else {
+	    row["blueOwned"] = 0;
+	  }
+
+	  if (greenNodes.includes(row["Territory"])) {
+	    row["greenOwned"] = 1;
+		  row["Ownership Border Color"] = customBorder_green;
+		  row["Ownership Color"] = custom_green;
+	  } else {
+	    row["greenOwned"] = 0;
+	  }
+
+	  if (yellowNodes.includes(row["Territory"])) {
+	    row["yellowOwned"] = 1;
+		  row["Ownership Border Color"] = customBorder_yellow;
+		  row["Ownership Color"] = custom_yellow;
+	  } else {
+	    row["yellowOwned"] = 0;
+	  }
+
+	  if (orangeNodes.includes(row["Territory"])) {
+	    row["orangeOwned"] = 1;
+		  row["Ownership Border Color"] = customBorder_orange;
+		  row["Ownership Color"] = custom_orange;
+	  } else {
+	    row["orangeOwned"] = 0;
+	  }
+	});
+
 
     // Calculate new columns
     tableData.forEach((row) => {
@@ -711,6 +1091,9 @@ function generateMap() {
 	  } else if (centralityMenu.value === "capConnections") {
 	    var color = colorDictionary[Math.min(tableData[i]["Number of Cap Connections"], 12)];
 	    var border_color = colorDarktionary[Math.min(tableData[i]["Number of Cap Connections"], 12)];
+	  } else if (centralityMenu.value === "seventy") {
+	    var color = tableData[i]["Ownership Color"];
+	    var border_color = tableData[i]["Ownership Border Color"];
 	  }
           path.style.setProperty("fill", color, "important");
           path.setAttribute("stroke-opacity", "100");
@@ -746,8 +1129,10 @@ function generateMap() {
 	let condition3 = centralityMenu.value === "betweenness" && tableData[i]["Betweenness Above STDEV"] === 1;
 	let condition4 = centralityMenu.value === "closeness" && tableData[i]["Closeness Above STDEV"] === 1;
 	let condition5 = centralityMenu.value === "capConnections" && tableData[i]["Number of Cap Connections"] >= 11;
-		
-	  if (condition1 || condition2 || condition3 || condition4 || condition5) {
+	let condition6 = centralityMenu.value === "seventy" && tableData[i]["blackOwned"] === 1;
+	let condition7 = centralityMenu.value === "seventy" && tableData[i]["purpleOwned"] === 1;
+
+	  if (condition1 || condition2 || condition3 || condition4 || condition5 || condition6 || condition7) {
 	    text.setAttribute("fill", "white");
 	  } else {
 	    text.setAttribute("fill", "black");
@@ -763,6 +1148,8 @@ function generateMap() {
 	    text.textContent = tableData[i]["Closeness Rounded"];
 	  } else if (centralityMenu.value === "capConnections") {
 	    text.textContent = tableData[i]["Number of Cap Connections"];
+	  } else if (centralityMenu.value === "seventy") {
+	    text.textContent = tableData[i]["TroopCount"];
 	  }
 		
           // Adjust x and y coordinates to position midpoint of text at specified coordinates
@@ -785,7 +1172,7 @@ function generateMap() {
 	var baseURL = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/";
 
 	// Decide which image to display
-	if (centralityMenu.value !== "standard" && centralityMenu.value !== "capConnections") {
+	if (centralityMenu.value !== "standard" && centralityMenu.value !== "capConnections" && centralityMenu.value !== "seventy" ) {
 	    baseImage.src = baseURL + colorLegend + "%20Heatmap.png"
 	} else if (centralityMenu.value === "standard" && maxConnections < 3) {
 	    baseImage.src = baseURL + colorLegend + ".png";
@@ -795,6 +1182,8 @@ function generateMap() {
 	    baseImage.src = baseURL + colorLegend + "%20" + maxConnections + ".png";
 	} else if (centralityMenu.value === "capConnections" && maxCapConnections >= 3) {
 	    baseImage.src = baseURL + colorLegend + "%20" + maxCapConnections + ".png";
+	} else {
+	    baseImage.src = baseURL + colorLegend + ".png";
 	}
 	
 // Create a mapping of node names to indices
@@ -1015,11 +1404,19 @@ function addBlizzards() {
   const stopButtonClick = function () {
     shouldReturn = true;
   };
+  const assignOwnershipClick = function () {
+    shouldReturn = true;
+  };
+  const assignTroopsClick = function () {
+    shouldReturn = true;
+  };
 	
   document.getElementById("blizzardButton").addEventListener("click", blizzardButtonClick);
   document.getElementById("portalButton").addEventListener("click", portalButtonClick);
   document.getElementById("eraserButton").addEventListener("click", eraserButtonClick);
   document.getElementById("stopButton").addEventListener("click", stopButtonClick);
+  document.getElementById("assignOwnership").addEventListener("click", assignOwnershipClick);
+  document.getElementById("assignTroops").addEventListener("click", assignTroopsClick);
 
   // Check if size of blizzardArray is greater than or equal to totalBlizzards
   if (blizzardArray.length >= totalBlizzards) {
@@ -1240,11 +1637,19 @@ function addPortals() {
   const stopButtonClick = function () {
     shouldReturn = true;
   };
+  const assignOwnershipClick = function () {
+    shouldReturn = true;
+  };
+  const assignTroopsClick = function () {
+    shouldReturn = true;
+  };
 	
   document.getElementById("blizzardButton").addEventListener("click", blizzardButtonClick);
   document.getElementById("portalButton").addEventListener("click", portalButtonClick);
   document.getElementById("eraserButton").addEventListener("click", eraserButtonClick);
   document.getElementById("stopButton").addEventListener("click", stopButtonClick);
+  document.getElementById("assignOwnership").addEventListener("click", assignOwnershipClick);
+  document.getElementById("assignTroops").addEventListener("click", assignTroopsClick);
 
   // Check if size of portalArray is greater than or equal to totalPortals
   if (portalArray.length >= totalPortals) {
@@ -1426,11 +1831,19 @@ function eraser() {
   const stopButtonClick = function () {
     shouldReturn = true;
   };
+  const assignOwnershipClick = function () {
+    shouldReturn = true;
+  };
+  const assignTroopsClick = function () {
+    shouldReturn = true;
+  };
 	
   document.getElementById("blizzardButton").addEventListener("click", blizzardButtonClick);
   document.getElementById("portalButton").addEventListener("click", portalButtonClick);
   document.getElementById("eraserButton").addEventListener("click", eraserButtonClick);
   document.getElementById("stopButton").addEventListener("click", stopButtonClick);
+  document.getElementById("assignOwnership").addEventListener("click", assignOwnershipClick);
+  document.getElementById("assignTroops").addEventListener("click", assignTroopsClick);
 
 	// Define mouseover, mouseout, and click event handlers
 	const mouseoverHandler = function () {
