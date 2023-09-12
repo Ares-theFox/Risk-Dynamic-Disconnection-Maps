@@ -1802,6 +1802,14 @@ function button_AddBlizzards() {
 function button_AddPortals() {
   addPortals();
 }
+
+function button_AssignOwnership() {
+  assignOwnershipFunction();
+}
+
+function button_AssignTroops() {
+  assignTroopsFunction();
+}
 	
 function eraser() {
   // Immediately return if the size of the clickedPathsBlizzardsPortals array is empty
