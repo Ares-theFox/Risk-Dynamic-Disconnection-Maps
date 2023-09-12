@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 12 pass")
+console.log("Testing 70% pathing 13 pass")
 
 const mapUrls = {
 	"boston": {
@@ -635,6 +635,7 @@ const mouseoutHandler = function () {
 	    if (tableData[i]["Territory"] === this.id) {
 	      // Update TroopCount
 	      tableData[i]["TroopCount"] = troopCount;
+		    console.log("TroopCount: " + tableData[i]["TroopCount"])
 	      break;  // Exit loop since we found the matching Territory
 	    }
 	  }
