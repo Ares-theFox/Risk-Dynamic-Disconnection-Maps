@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 22 pass")
+console.log("Testing 70% pathing 23 pass")
 
 const mapUrls = {
 	"boston": {
@@ -1128,14 +1128,13 @@ paths.forEach(function (path) {
           color = colorDictionary[Math.min(tableData[i]["Number of Cap Connections"], 12)];
           border_color = colorDarktionary[Math.min(tableData[i]["Number of Cap Connections"], 12)];
         } else if (centralityMenu.value === "seventy") {
-		if (redNodes.length === 0) {
-	        path.style.setProperty("fill", color, "important");
-	        path.setAttribute("stroke-opacity", "100");
-	        path.style.setProperty("stroke", border_color, "important");
-	        path.style.setProperty("stroke-width", "2", "important");
-		}	
-          color = tableData[i]["Ownership Color"];
-          border_color = tableData[i]["Ownership Border Color"];
+          if (whiteNodes.length === 0 && blackNodes.length === 0 && redNodes.length === 0 && pinkNodes.length === 0 && purpleNodes.length === 0 && blueNodes.length === 0 && greenNodes.length === 0 && yellowNodes.length === 0 && orangeNodes.length === 0) {
+            color = "transparent";
+            border_color = "transparent";
+          } else {
+            color = tableData[i]["Ownership Color"];
+            border_color = tableData[i]["Ownership Border Color"];
+          }
         }
         path.style.setProperty("fill", color, "important");
         path.setAttribute("stroke-opacity", "100");
