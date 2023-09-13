@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 82 pass")
+console.log("Testing 70% pathing 84 pass")
 
 const mapUrls = {
 	"boston": {
@@ -1026,6 +1026,21 @@ function findOptimalPath(tableData, selfColor, runOrigin, pathArray, forcePath) 
 	    return result;
 	}
 
+    // Helper function to check if a node connects to runOrigin nodes or any node in the current optimal combination
+    function isConnected(combination) {
+        let connectedNodes = [...runOrigin];
+        for (let i = 0; i < combination.length; i++) {
+            let node = combination[i];
+            let connections = node.Connections.split(',');
+            if (connections.some(connection => connectedNodes.includes(connection))) {
+                connectedNodes.push(node.Territory);
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
     // Placeholder for the optimal combination and its total troop count
     let optimalCombination = [];
     let minTroopCount = Infinity;
@@ -1077,6 +1092,7 @@ function findOptimalPath(tableData, selfColor, runOrigin, pathArray, forcePath) 
 
 	return pathArray;
 }
+
 
 
 
