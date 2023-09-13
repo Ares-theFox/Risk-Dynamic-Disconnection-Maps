@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 58 pass")
+console.log("Testing 70% pathing 62 pass")
 
 const mapUrls = {
 	"boston": {
@@ -400,6 +400,7 @@ function stopEditing() {
 // FUNCTION: assign run origin nodes
 function clearRunOrigin() {
    runOrigin.length = 0;
+	pathArray.length = 0;
 	generateMap();
 }
 
@@ -981,19 +982,33 @@ function findOptimalPath(tableData, selfColor, runOrigin, pathArray, forcePath) 
     let totalNodes = tableData.filter(row => row.Blizzard !== 1).length;
     let seventy = Math.ceil(totalNodes * 0.7);
     let ownedNodes = tableData.filter(row => row[selfColor + 'Owned'] === 1).length;
-    let nodesToCapture = seventy - ownedNodes - forcePath.length;
+    let nodesToCapture = seventy - ownedNodes;
 
-    // Get all non-selfColor-owned nodes
-    let candidateNodes = tableData.filter(row => row[selfColor + 'Owned'] !== 1 && row.Blizzard !== 1 && !forcePath.includes(row.Territory));
+    // Get all non-selfColor-owned nodes and not in runOrigin
+    let candidateNodes = tableData.filter(row => row[selfColor + 'Owned'] !== 1 && row.Blizzard !== 1 && !runOrigin.includes(row.Territory));
+
+    // Sort candidateNodes by TroopCount in ascending order
+    candidateNodes.sort((a, b) => a.TroopCount - b.TroopCount);
 
     // Helper function to generate a random combination of a certain size
     function getRandomCombination(nodes, size) {
-        var result = [];
+        var result = [...forcePath];
+        let lowerHalf = nodes.slice(0, Math.floor(nodes.length / 2));
+        let upperHalf = nodes.slice(Math.floor(nodes.length / 2));
         while (result.length < size) {
-            let randomIndex = Math.floor(Math.random() * nodes.length);
-            let node = nodes[randomIndex];
+            // Select more nodes from the lower half
+            let randomIndex = Math.floor(Math.random() * lowerHalf.length);
+            let node = lowerHalf[randomIndex];
             if (!result.includes(node)) {
                 result.push(node);
+            }
+            // Select fewer nodes from the upper half
+            if (result.length < size) {
+                randomIndex = Math.floor(Math.random() * upperHalf.length);
+                node = upperHalf[randomIndex];
+                if (!result.includes(node)) {
+                    result.push(node);
+                }
             }
         }
         return result;
@@ -1040,13 +1055,11 @@ function findOptimalPath(tableData, selfColor, runOrigin, pathArray, forcePath) 
     // Push the territories in the optimal combination into pathArray
     optimalCombination.forEach(row => pathArray.push(row.Territory));
     
-    // Add forced path territories to pathArray
-    forcePath.forEach(territory => pathArray.push(territory));
-
 	console.log("Path Array: " + pathArray)
 	
 	return pathArray;
 }
+
 
 
 
