@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 78 pass")
+console.log("Testing 70% pathing 80 pass")
 
 const mapUrls = {
 	"boston": {
@@ -1033,7 +1033,7 @@ function findOptimalPath(tableData, selfColor, runOrigin, pathArray, forcePath) 
 
     // Check combinations up to the limit of 500,000 operations
     for (let i = 0; i < 500000; i++) {
-	    if (i % 10 === 0) {
+	    if (i % 20 === 0) {
 	        console.log('Considering set', i + 1);
 	    }
 	    
@@ -1060,8 +1060,6 @@ function findOptimalPath(tableData, selfColor, runOrigin, pathArray, forcePath) 
 	console.log("70%: " + seventy)
 	console.log("Number of Owned nodes: " + ownedNodes)
 	console.log("Number of Nodes to Capture: " + nodesToCapture)
-	console.log("Candidate nodes: " + candidateNodes)
-	console.log("Red nodes: " + redNodes)
 	
 	return pathArray;
 }
@@ -1510,6 +1508,7 @@ paths.forEach(function (path) {
         // Initial color and border color
         var color = "white";
         var border_color = "#808080";
+	var stroke_width = "2"
 
         // Set color and border color according to tableData
         if (centralityMenu.value === "standard") {
@@ -1534,12 +1533,13 @@ paths.forEach(function (path) {
           } else {
             color = tableData[i]["Ownership Color"];
             border_color = pathArray.includes(pathId) ? pathBorderColor : tableData[i]["Ownership Border Color"];
+	    stroke_width = pathArray.includes(pathId) ? "5" : "2";
           }
         }
         path.style.setProperty("fill", color, "important");
         path.setAttribute("stroke-opacity", "100");
         path.style.setProperty("stroke", border_color, "important");
-        path.style.setProperty("stroke-width", "2", "important");
+        path.style.setProperty("stroke-width", stroke_width, "important");
       }
 
         // Add text to the specified location from tableData
