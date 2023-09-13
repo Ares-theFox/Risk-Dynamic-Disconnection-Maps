@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 72 pass")
+console.log("Testing 70% pathing 74 pass")
 
 const mapUrls = {
 	"boston": {
@@ -988,29 +988,29 @@ function findOptimalPath(tableData, selfColor, runOrigin, pathArray, forcePath) 
     // Sort candidateNodes by TroopCount in ascending order
     candidateNodes.sort((a, b) => a.TroopCount - b.TroopCount);
 
-    // Helper function to generate a random combination of a certain size
-    function getRandomCombination(nodes, size) {
-        var result = [...forcePath];
-        let lowerHalf = nodes.slice(0, Math.floor(nodes.length / 2));
-        let upperHalf = nodes.slice(Math.floor(nodes.length / 2));
-        while (result.length < size) {
-            // Select more nodes from the lower half
-            let randomIndex = Math.floor(Math.random() * lowerHalf.length);
-            let node = lowerHalf[randomIndex];
-            if (!result.includes(node)) {
-                result.push(node);
-            }
-            // Select fewer nodes from the upper half
-            if (result.length < size) {
-                randomIndex = Math.floor(Math.random() * upperHalf.length);
-                node = upperHalf[randomIndex];
-                if (!result.includes(node)) {
-                    result.push(node);
-                }
-            }
-        }
-        return result;
-    }
+	// Helper function to generate a random combination of a certain size
+	function getRandomCombination(nodes, size) {
+	    var result = forcePath.map(name => nodes.find(node => node.Territory === name));
+	    let lowerHalf = nodes.slice(0, Math.floor(nodes.length / 2));
+	    let upperHalf = nodes.slice(Math.floor(nodes.length / 2));
+	    while (result.length < size) {
+	        // Select more nodes from the lower half
+	        let randomIndex = Math.floor(Math.random() * lowerHalf.length);
+	        let node = lowerHalf[randomIndex];
+	        if (!result.includes(node)) {
+	            result.push(node);
+	        }
+	        // Select fewer nodes from the upper half
+	        if (result.length < size) {
+	            randomIndex = Math.floor(Math.random() * upperHalf.length);
+	            node = upperHalf[randomIndex];
+	            if (!result.includes(node)) {
+	                result.push(node);
+	            }
+	        }
+	    }
+	    return result;
+	}
 
     // Placeholder for the optimal combination and its total troop count
     let optimalCombination = [];
