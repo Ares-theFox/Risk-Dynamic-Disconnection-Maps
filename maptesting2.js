@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 66 pass")
+console.log("Testing 70% pathing 68 pass")
 
 const mapUrls = {
 	"boston": {
@@ -981,7 +981,7 @@ function findOptimalPath(tableData, selfColor, runOrigin, pathArray, forcePath) 
     // Calculate the number of nodes required to win the game
     let totalNodes = tableData.filter(row => row.Blizzard !== 1).length;
     let seventy = Math.ceil(totalNodes * 0.7);
-    let ownedNodes = tableData.filter(row => row[selfColor + 'Owned'] === 1).length;
+    let ownedNodes = tableData.reduce((sum, row) => sum + row[selfColor + 'Owned'], 0);
     let nodesToCapture = seventy - ownedNodes;
 
     // Get all non-selfColor-owned nodes and not in runOrigin
