@@ -157,3 +157,13 @@
 	#runSeventyButton:hover {
 	background-color: grey;
 	}
+
+	#forcePathButton {
+	text-align: center;
+	background-color: aqua;
+	color: white;
+	}
+
+	#forcePathButton:hover {
+	background-color: navy;
+	}
