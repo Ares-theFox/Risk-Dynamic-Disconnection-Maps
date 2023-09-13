@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 64 pass")
+console.log("Testing 70% pathing 66 pass")
 
 const mapUrls = {
 	"boston": {
@@ -1061,6 +1061,7 @@ function findOptimalPath(tableData, selfColor, runOrigin, pathArray, forcePath) 
 	console.log("Number of Owned nodes: " + ownedNodes)
 	console.log("Number of Nodes to Capture: " + nodesToCapture)
 	console.log("Candidate nodes: " + candidateNodes)
+	console.log("Red nodes: " + redNodes
 	
 	return pathArray;
 }
