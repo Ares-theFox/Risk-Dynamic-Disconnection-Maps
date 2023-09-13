@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 40 pass")
+console.log("Testing 70% pathing 42 pass")
 
 const mapUrls = {
 	"boston": {
@@ -401,6 +401,7 @@ function stopEditing() {
 // FUNCTION: assign run origin nodes
 function clearRunOrigin() {
    runOrigin.length = 0;
+	generateMap();
 }
 
 
@@ -635,16 +636,6 @@ const mouseoutHandler = function () {
 	    orangeNodes.push(this.id);
 	  }
 
-		console.log("white: " + whiteNodes);
-		console.log("black: " + blackNodes);
-		console.log("red: " + redNodes);
-		console.log("pink: " + pinkNodes);
-		console.log("purple: " + purpleNodes);
-		console.log("blue: " + blueNodes);
-		console.log("green: " + greenNodes);
-		console.log("yellow: " + yellowNodes);
-		console.log("orange: " + orangeNodes);
-
     // Check if size of blizzardArray is greater than or equal to totalBlizzards
     if (blizzardArray.length >= 999) {
       // Remove existing event listeners from elements in paths array
@@ -759,7 +750,6 @@ const mouseoutHandler = function () {
 	if (!blizzardArray.includes(this.id)) {
 	  // Get the current value of troopCountInput
 	  var troopCount = document.getElementById("troopCountInput").value;
-	  console.log("troopCountInput: " + troopCount);
 	
 	  // Iterate over tableData
 	  for (var i = 0; i < tableData.length; i++) {
@@ -767,7 +757,6 @@ const mouseoutHandler = function () {
 	    if (tableData[i]["Territory"] === this.id) {
 	      // Update TroopCount
 	      tableDataClone[i]["TroopCount"] = troopCount;
-		    console.log("TroopCount: " + tableDataClone[i]["TroopCount"])
 	      break;  // Exit loop since we found the matching Territory
 	    }
 	  }
@@ -847,41 +836,60 @@ function findOptimalPath(tableData, selfColor, runOrigin, pathArray) {
     let ownedNodes = tableData.filter(row => row[selfColor + 'Owned'] === 1).length;
     let nodesToCapture = seventy - ownedNodes;
 
-    // Placeholder for the optimal path and its total troop count
-    let optimalPath = [];
-    let minTroopCount = Infinity;
+    // Get all non-selfColor-owned nodes
+    let candidateNodes = tableData.filter(row => row[selfColor + 'Owned'] !== 1 && row.Blizzard !== 1);
 
-    // Helper function for finding paths
-    function findPaths(territory, path, troopCount) {
-        // If we've reached the desired length and this path is better than the current optimal path, update it
-        if (path.length === nodesToCapture && troopCount < minTroopCount) {
-            optimalPath = path;
-            minTroopCount = troopCount;
-        }
-
-        // If we can add more nodes to the path, explore all possible next nodes
-        if (path.length < nodesToCapture) {
-            let currentRow = tableData.find(row => row.Territory === territory);
-            let nextTerritories = currentRow.Connections.split(',');
-            nextTerritories.forEach(nextTerritory => {
-                if (!path.includes(nextTerritory)) {
-                    let nextRow = tableData.find(row => row.Territory === nextTerritory);
-                    if (nextRow[selfColor + 'Owned'] !== 1 && nextRow.Blizzard !== 1) {
-                        findPaths(nextTerritory, [...path, nextTerritory], troopCount + nextRow.TroopCount);
-                    }
+    // Helper function to generate all combinations of a certain size
+    function getCombinations(nodes, size) {
+        var result = [], combination = [];
+        function combine(start) {
+            if (combination.length === size) {
+                result.push(combination.slice());
+            } else {
+                for (let i = start; i < nodes.length; ++i) {
+                    combination.push(nodes[i]);
+                    combine(i + 1);
+                    combination.pop();
                 }
-            });
+            }
         }
+        combine(0);
+        return result;
     }
 
-    // Start finding paths from each of the territories in runOrigin
-    runOrigin.forEach(territory => findPaths(territory, [], 0));
+    // Generate all combinations of nodesToCapture nodes
+    let combinations = getCombinations(candidateNodes, nodesToCapture);
 
-    // Push the territories along the optimal path into pathArray
-    optimalPath.forEach(territory => pathArray.push(territory));
+    // Placeholder for the optimal combination and its total troop count
+    let optimalCombination = [];
+    let minTroopCount = Infinity;
+
+    // Helper function to check if a node connects to runOrigin nodes
+    function isConnected(node) {
+        let connections = node.Connections.split(',');
+        return connections.some(connection => runOrigin.includes(connection)) ||
+               connections.some(connection => optimalCombination.map(row => row.Territory).includes(connection));
+    }
+
+    // Check each combination
+    combinations.forEach((combination, index) => {
+        console.log('Considering set', index + 1);
+
+        if (combination.every(isConnected)) {
+            let troopCount = combination.reduce((sum, node) => sum + node.TroopCount, 0);
+            if (troopCount < minTroopCount) {
+                optimalCombination = combination;
+                minTroopCount = troopCount;
+            }
+        }
+    });
+
+    // Push the territories in the optimal combination into pathArray
+    optimalCombination.forEach(row => pathArray.push(row.Territory));
 
     return pathArray;
 }
+
 
 
 
@@ -1399,10 +1407,8 @@ paths.forEach(function (path) {
 	    text.textContent = tableData[i]["Closeness Rounded"];
 	  } else if (centralityMenu.value === "capConnections") {
 	    text.textContent = tableData[i]["Number of Cap Connections"];
-		  console.log("text: " + text.textContent);
 	  } else if (centralityMenu.value === "seventy") {
 	    text.textContent = tableData[i]["TroopCount"];
-		  console.log("text: " + text.textContent);
 	  }
 		
           // Adjust x and y coordinates to position midpoint of text at specified coordinates
