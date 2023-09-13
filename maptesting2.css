@@ -167,3 +167,13 @@
 	#forcePathButton:hover {
 	background-color: navy;
 	}
+
+	#clearForcePathButton {
+	text-align: center;
+	background-color: navy;
+	color: white;
+	}
+
+	#clearForcePathButton:hover {
+	background-color: aqua;
+	}
