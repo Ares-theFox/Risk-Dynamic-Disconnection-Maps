@@ -1061,7 +1061,7 @@ function findOptimalPath(tableData, selfColor, runOrigin, pathArray, forcePath) 
 	console.log("Number of Owned nodes: " + ownedNodes)
 	console.log("Number of Nodes to Capture: " + nodesToCapture)
 	console.log("Candidate nodes: " + candidateNodes)
-	console.log("Red nodes: " + redNodes
+	console.log("Red nodes: " + redNodes)
 	
 	return pathArray;
 }
