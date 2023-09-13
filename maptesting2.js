@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 62 pass")
+console.log("Testing 70% pathing 64 pass")
 
 const mapUrls = {
 	"boston": {
@@ -1056,6 +1056,11 @@ function findOptimalPath(tableData, selfColor, runOrigin, pathArray, forcePath) 
     optimalCombination.forEach(row => pathArray.push(row.Territory));
     
 	console.log("Path Array: " + pathArray)
+	console.log("Total Number of Nodes: " + totalNodes)
+	console.log("70%: " + seventy)
+	console.log("Number of Owned nodes: " + ownedNodes)
+	console.log("Number of Nodes to Capture: " + nodesToCapture)
+	console.log("Candidate nodes: " + candidateNodes)
 	
 	return pathArray;
 }
