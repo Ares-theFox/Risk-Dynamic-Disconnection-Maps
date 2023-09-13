@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 38 pass")
+console.log("Testing 70% pathing 40 pass")
 
 const mapUrls = {
 	"boston": {
@@ -806,18 +806,17 @@ const mouseoutHandler = function () {
   });
 }
 
-
 // Define the border colors for each selfColor
 var pathBorderColors = {
-    "white": "#808080",
-    "black": "#000000",
-    "red": "#641D1D",
-    "pink": "#652251",
-    "purple": "#3D1E6B",
-    "blue": "#1E496B",
-    "green": "#475F2C",
-    "yellow": "#7F6D07",
-    "orange": "#6B3719"
+    "white": custom_white,
+    "black": custom_black,
+    "red": custom_red,
+    "pink": custom_pink,
+    "purple": custom_purple,
+    "blue": custom_blue,
+    "green": custom_green,
+    "yellow": custom_yellow,
+    "orange": custom_orange
 };
 
 // Get the select element
