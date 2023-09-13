@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 88 pass")
+console.log("Testing 70% pathing 90 pass")
 
 const mapUrls = {
 	"boston": {
@@ -992,10 +992,11 @@ function findOptimalPath(tableData, selfColor, runOrigin, pathArray, forcePath) 
     // Divide candidateNodes into lower half and upper half
     let lowerHalf = candidateNodes.slice(0, Math.floor(candidateNodes.length / 2));
     let upperHalf = candidateNodes.slice(Math.floor(candidateNodes.length / 2));
-
+    let runOriginNodes = runOrigin.map(name => tableData.find(row => row.Territory === name));
+	
     // Helper function to check if a node connects to runOrigin nodes or any node in the current optimal combination
     function isConnected(combination) {
-        let connectedNodes = [...runOrigin];
+        let connectedNodes = [...runOriginNodes];
         for (let i = 0; i < combination.length; i++) {
             let node = combination[i];
             let connections = node.Connections.split(',');
@@ -1014,7 +1015,7 @@ function findOptimalPath(tableData, selfColor, runOrigin, pathArray, forcePath) 
 
     // Check combinations up to the limit of maxOperations
     for (let i = 0; i < maxOperations; i++) {
-        if (i % 100 === 0) {
+        if (i % 500 === 0) {
             console.log('Considering set', i + 1);
         }
 
@@ -1052,6 +1053,7 @@ function findOptimalPath(tableData, selfColor, runOrigin, pathArray, forcePath) 
     // Push the territories in the optimal combination into pathArray
     optimalCombination.forEach(row => pathArray.push(row.Territory));
 
+	console.log("Run Origin: " + runOrigin)
 	console.log("Path Array: " + pathArray)
 	console.log("Total Number of Nodes: " + totalNodes)
 	console.log("70%: " + seventy)
