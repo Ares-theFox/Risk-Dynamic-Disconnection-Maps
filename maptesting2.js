@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 90 pass")
+console.log("Testing 70% pathing 92 pass")
 
 const mapUrls = {
 	"boston": {
@@ -989,14 +989,37 @@ function findOptimalPath(tableData, selfColor, runOrigin, pathArray, forcePath) 
     // Sort candidateNodes by TroopCount in ascending order
     candidateNodes.sort((a, b) => a.TroopCount - b.TroopCount);
 
-    // Divide candidateNodes into lower half and upper half
-    let lowerHalf = candidateNodes.slice(0, Math.floor(candidateNodes.length / 2));
-    let upperHalf = candidateNodes.slice(Math.floor(candidateNodes.length / 2));
-    let runOriginNodes = runOrigin.map(name => tableData.find(row => row.Territory === name));
-	
+	// Helper function to generate a random combination of a certain size
+	function getRandomCombination(nodes, size) {
+	    var result = forcePath.map(name => nodes.find(node => node.Territory === name));
+	    let lowerHalf = nodes.slice(0, Math.floor(nodes.length / 2));
+	    let upperHalf = nodes.slice(Math.floor(nodes.length / 2));
+	    while (result.length < size) {
+	        // Select more nodes from the lower half
+	        let randomIndex = Math.floor(Math.random() * lowerHalf.length);
+	        let node = lowerHalf[randomIndex];
+	        if (!result.includes(node)) {
+	            result.push(node);
+	        }
+	        // Select fewer nodes from the upper half
+	        if (result.length < size) {
+	            randomIndex = Math.floor(Math.random() * upperHalf.length);
+	            node = upperHalf[randomIndex];
+	            if (!result.includes(node)) {
+	                result.push(node);
+	            }
+	        }
+	    }
+	    return result;
+	}
+
+    // Placeholder for the optimal combination and its total troop count
+    let optimalCombination = [];
+    let minTroopCount = Infinity;
+
     // Helper function to check if a node connects to runOrigin nodes or any node in the current optimal combination
     function isConnected(combination) {
-        let connectedNodes = [...runOriginNodes];
+        let connectedNodes = [...runOrigin];
         for (let i = 0; i < combination.length; i++) {
             let node = combination[i];
             let connections = node.Connections.split(',');
@@ -1009,38 +1032,15 @@ function findOptimalPath(tableData, selfColor, runOrigin, pathArray, forcePath) 
         return true;
     }
 
-    // Placeholder for the optimal combination and its total troop count
-    let optimalCombination = [];
-    let minTroopCount = Infinity;
+    // Check combinations up to the limit of 500,000 operations
+    for (let i = 0; i < 1000000; i++) {
+	    if (i % 20 === 0) {
+	        console.log('Considering set', i + 1);
+	    }
+	    
+        // Generate a random combination of nodesToCapture nodes
+        let combination = getRandomCombination(candidateNodes, nodesToCapture);
 
-    // Check combinations up to the limit of maxOperations
-    for (let i = 0; i < maxOperations; i++) {
-        if (i % 500 === 0) {
-            console.log('Considering set', i + 1);
-        }
-
-        // Generate a combination of nodesToCapture nodes
-        let combination = [...forcePath]; // Start with forcePath nodes
-
-        // Add half of the lower-half nodes
-        for (let j = 0; j < Math.floor(lowerHalf.length / 2); j++) {
-            combination.push(lowerHalf[j]);
-        }
-
-        // Fill the rest of the combination with random nodes from both halves
-        while (combination.length < nodesToCapture) {
-            let node;
-            if (Math.random() < 0.5) { // With 50% probability
-                node = lowerHalf[Math.floor(Math.random() * lowerHalf.length)];
-            } else {
-                node = upperHalf[Math.floor(Math.random() * upperHalf.length)];
-            }
-            if (!combination.includes(node)) {
-                combination.push(node);
-            }
-        }
-
-        // If this combination is connected and has a lower troop count, update optimalCombination and minTroopCount
         if (isConnected(combination)) {
             let troopCount = combination.reduce((sum, node) => sum + node.TroopCount, 0);
             if (troopCount < minTroopCount) {
@@ -1048,25 +1048,22 @@ function findOptimalPath(tableData, selfColor, runOrigin, pathArray, forcePath) 
                 minTroopCount = troopCount;
             }
         }
+        
+        // If we've reached the limit of combinations, break out of the loop
+        if (i >= 999999) break;
     }
 
     // Push the territories in the optimal combination into pathArray
     optimalCombination.forEach(row => pathArray.push(row.Territory));
-
-	console.log("Run Origin: " + runOrigin)
+    
 	console.log("Path Array: " + pathArray)
 	console.log("Total Number of Nodes: " + totalNodes)
 	console.log("70%: " + seventy)
 	console.log("Number of Owned nodes: " + ownedNodes)
 	console.log("Number of Nodes to Capture: " + nodesToCapture)
-
+	
 	return pathArray;
 }
-
-
-
-
-
 
 
 
@@ -1535,7 +1532,7 @@ paths.forEach(function (path) {
           } else {
             color = tableData[i]["Ownership Color"];
             border_color = pathArray.includes(pathId) ? pathBorderColor : tableData[i]["Ownership Border Color"];
-	    stroke_width = pathArray.includes(pathId) ? "5" : "2";
+	    stroke_width = pathArray.includes(pathId) ? "3" : "2";
           }
         }
         path.style.setProperty("fill", color, "important");
