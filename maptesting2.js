@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 50 pass")
+console.log("Testing 70% pathing 54 pass")
 
 const mapUrls = {
 	"boston": {
@@ -1029,7 +1029,7 @@ function findOptimalPath(tableData, selfColor, runOrigin, pathArray, forcePath) 
         }
         
         // If we've reached the limit of combinations, break out of the loop
-        if (index >= 499999) return false;
+        if (index >= 499999) return;
     });
 
     // Push the territories in the optimal combination into pathArray
@@ -1037,9 +1037,10 @@ function findOptimalPath(tableData, selfColor, runOrigin, pathArray, forcePath) 
     
     // Add forced path territories to pathArray
     forcePath.forEach(territory => pathArray.push(territory));
-
+	console.log("Path Array: " + pathArray)
     return pathArray;
 }
+
 
 
 
