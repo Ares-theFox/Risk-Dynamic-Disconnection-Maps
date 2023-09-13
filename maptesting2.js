@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 68 pass")
+console.log("Testing 70% pathing 70 pass")
 
 const mapUrls = {
 	"boston": {
@@ -956,11 +956,12 @@ var pathBorderColors = {
 // Get the select element
 let selfColorElement = document.getElementById('selfColor');
 var pathBorderColor;
+let selfColor;
 
 // Add an event listener for the change event
 selfColorElement.addEventListener('change', function() {
     // Get the value of the selected option
-    let selfColor = this.value;
+    selfColor = this.value;
 
     // Get the border color for the selected selfColor
     pathBorderColor = pathBorderColors[selfColor];
