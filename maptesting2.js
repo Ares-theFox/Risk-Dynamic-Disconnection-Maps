@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 70 pass")
+console.log("Testing 70% pathing 72 pass")
 
 const mapUrls = {
 	"boston": {
@@ -607,11 +607,8 @@ const mouseoutHandler = function () {
 	  
 	// Check if path is NOT in array
 	if (!blizzardArray.includes(this.id) && !runOrigin.includes(this.id)) {
-    // Reset stroke color and width according to the selected centrality measure
-    let border_color = pathBorderColor
-	this.style.setProperty("stroke", border_color, "important");
-	this.style.setProperty("stroke-width", "2", "important");
 	forcePath.push(this.id);
+		console.log("Forced Paths: " + forcePath)
 
     // Check if size of blizzardArray is greater than or equal to totalBlizzards
     if (blizzardArray.length >= 999) {
