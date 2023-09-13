@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 74 pass")
+console.log("Testing 70% pathing 76 pass")
 
 const mapUrls = {
 	"boston": {
@@ -975,6 +975,7 @@ selfColorElement.addEventListener('change', function() {
 function findOptimalPath(tableData, selfColor, runOrigin, pathArray, forcePath) {
     // Clear the pathArray
     pathArray.length = 0;
+	  var maxOperations = document.getElementById("maxOperations");
 
     // Calculate the number of nodes required to win the game
     let totalNodes = tableData.filter(row => row.Blizzard !== 1).length;
@@ -1032,9 +1033,11 @@ function findOptimalPath(tableData, selfColor, runOrigin, pathArray, forcePath) 
     }
 
     // Check combinations up to the limit of 500,000 operations
-    for (let i = 0; i < 500000; i++) {
-        console.log('Considering set', i + 1);
-
+    for (let i = 0; i < maxOperations; i++) {
+	    if (i % 10 === 0) {
+	        console.log('Considering set', i + 1);
+	    }
+	    
         // Generate a random combination of nodesToCapture nodes
         let combination = getRandomCombination(candidateNodes, nodesToCapture);
 
@@ -1047,7 +1050,7 @@ function findOptimalPath(tableData, selfColor, runOrigin, pathArray, forcePath) 
         }
         
         // If we've reached the limit of combinations, break out of the loop
-        if (i >= 499999) break;
+        if (i >= (maxOperations-1)) break;
     }
 
     // Push the territories in the optimal combination into pathArray
