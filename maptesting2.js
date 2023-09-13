@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 54 pass")
+console.log("Testing 70% pathing 58 pass")
 
 const mapUrls = {
 	"boston": {
@@ -970,6 +970,9 @@ selfColorElement.addEventListener('change', function() {
 });
 
 
+
+
+
 function findOptimalPath(tableData, selfColor, runOrigin, pathArray, forcePath) {
     // Clear the pathArray
     pathArray.length = 0;
@@ -983,44 +986,46 @@ function findOptimalPath(tableData, selfColor, runOrigin, pathArray, forcePath) 
     // Get all non-selfColor-owned nodes
     let candidateNodes = tableData.filter(row => row[selfColor + 'Owned'] !== 1 && row.Blizzard !== 1 && !forcePath.includes(row.Territory));
 
-    // Helper function to generate all combinations of a certain size
-    function getCombinations(nodes, size) {
-        var result = [], combination = [];
-        function combine(start) {
-            if (combination.length === size) {
-                result.push(combination.slice());
-                if (result.length >= 500000) return true; // Limit to 500,000 combinations
-            } else {
-                for (let i = start; i < nodes.length; ++i) {
-                    combination.push(nodes[i]);
-                    if (combine(i + 1)) return true;
-                    combination.pop();
-                }
+    // Helper function to generate a random combination of a certain size
+    function getRandomCombination(nodes, size) {
+        var result = [];
+        while (result.length < size) {
+            let randomIndex = Math.floor(Math.random() * nodes.length);
+            let node = nodes[randomIndex];
+            if (!result.includes(node)) {
+                result.push(node);
             }
         }
-        combine(0);
         return result;
     }
-
-    // Generate all combinations of nodesToCapture nodes
-    let combinations = getCombinations(candidateNodes, nodesToCapture);
 
     // Placeholder for the optimal combination and its total troop count
     let optimalCombination = [];
     let minTroopCount = Infinity;
 
-    // Helper function to check if a node connects to runOrigin nodes
-    function isConnected(node) {
-        let connections = node.Connections.split(',');
-        return connections.some(connection => runOrigin.includes(connection)) ||
-               connections.some(connection => optimalCombination.map(row => row.Territory).includes(connection));
+    // Helper function to check if a node connects to runOrigin nodes or any node in the current optimal combination
+    function isConnected(combination) {
+        let connectedNodes = [...runOrigin];
+        for (let i = 0; i < combination.length; i++) {
+            let node = combination[i];
+            let connections = node.Connections.split(',');
+            if (connections.some(connection => connectedNodes.includes(connection))) {
+                connectedNodes.push(node.Territory);
+            } else {
+                return false;
+            }
+        }
+        return true;
     }
 
-    // Check each combination
-    combinations.forEach((combination, index) => {
-        console.log('Considering set', index + 1);
+    // Check combinations up to the limit of 500,000 operations
+    for (let i = 0; i < 500000; i++) {
+        console.log('Considering set', i + 1);
 
-        if (combination.every(isConnected)) {
+        // Generate a random combination of nodesToCapture nodes
+        let combination = getRandomCombination(candidateNodes, nodesToCapture);
+
+        if (isConnected(combination)) {
             let troopCount = combination.reduce((sum, node) => sum + node.TroopCount, 0);
             if (troopCount < minTroopCount) {
                 optimalCombination = combination;
@@ -1029,17 +1034,21 @@ function findOptimalPath(tableData, selfColor, runOrigin, pathArray, forcePath) 
         }
         
         // If we've reached the limit of combinations, break out of the loop
-        if (index >= 499999) return;
-    });
+        if (i >= 499999) break;
+    }
 
     // Push the territories in the optimal combination into pathArray
     optimalCombination.forEach(row => pathArray.push(row.Territory));
     
     // Add forced path territories to pathArray
     forcePath.forEach(territory => pathArray.push(territory));
+
 	console.log("Path Array: " + pathArray)
-    return pathArray;
+	
+	return pathArray;
 }
+
+
 
 
 
