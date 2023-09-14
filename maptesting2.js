@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 50 pass")
+console.log("Testing 70% pathing 48 pass")
 
 const mapUrls = {
 	"boston": {
@@ -1518,7 +1518,7 @@ paths.forEach(function (path) {
           } else {
             color = tableData[i]["Ownership Color"];
             border_color = pathArray.includes(pathId) ? pathBorderColor : tableData[i]["Ownership Border Color"];
-	    stroke_width = pathArray.includes(pathId) ? "3" : "2";
+	    stroke_width = pathArray.includes(pathId) ? "5" : "2";
           }
         }
         path.style.setProperty("fill", color, "important");
