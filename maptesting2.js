@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 98 pass")
+console.log("Testing 70% pathing 100 pass")
 
 const mapUrls = {
 	"boston": {
@@ -969,13 +969,11 @@ selfColorElement.addEventListener('change', function() {
 });
 
 
-
-var maxOperations = document.getElementById("maxOperations").value;
-maxOperations = Number(maxOperations); // Convert the value to a number
-
 function findOptimalPath(tableData, selfColor, runOrigin, pathArray, forcePath) {
     // Clear the pathArray
     pathArray.length = 0;
+	var maxOperations = document.getElementById("maxOperations").value;
+	maxOperations = Number(maxOperations); // Convert the value to a number
 
     // Calculate the number of nodes required to win the game
     let totalNodes = tableData.filter(row => row.Blizzard !== 1).length;
