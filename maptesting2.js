@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 1 pass")
+console.log("Testing 70% pathing 2 pass")
 
 const mapUrls = {
 	"boston": {
@@ -1034,7 +1034,7 @@ function findOptimalPath(tableData, selfColor, runOrigin, pathArray, forcePath) 
 
     // Check combinations up to the limit of operations
     for (let i = 0; i < maxOperations; i++) {
-	    if (i % 10000 === 0) {
+	    if (i % 100000 === 0) {
 	        console.log('Considering set', i + 1);
 	    }
 	    
@@ -1063,6 +1063,7 @@ function findOptimalPath(tableData, selfColor, runOrigin, pathArray, forcePath) 
 	console.log("Number of Nodes to Capture: " + nodesToCapture)
 	
 	return pathArray;
+	generateMap();
 }
 
 
@@ -2287,7 +2288,6 @@ function addPortals() {
 
 function runSeventyFunction() {
     findOptimalPath(tableData, selfColor, runOrigin, pathArray, forcePath);
-    generateMap();
 }
 
 
