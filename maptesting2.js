@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 4 pass")
+console.log("Testing 70% pathing 5 pass")
 
 const mapUrls = {
 	"boston": {
@@ -1021,7 +1021,7 @@ function findOptimalPath(tableData, selfColor, runOrigin, pathArray, forcePath) 
 
     // Check combinations up to the limit of operations
     for (let i = 0; i < maxOperations; i++) {
-	    if (i % 500 === 0) {
+	    if (i % 10000 === 0) {
 	        console.log('Considering set', i + 1);
 	    }
 	    
@@ -1517,7 +1517,7 @@ paths.forEach(function (path) {
           } else {
             color = tableData[i]["Ownership Color"];
             border_color = pathArray.includes(pathId) ? pathBorderColor : tableData[i]["Ownership Border Color"];
-	    stroke_width = pathArray.includes(pathId) ? "3" : "2";
+	    stroke_width = pathArray.includes(pathId) ? "5" : "2";
           }
         }
         path.style.setProperty("fill", color, "important");
