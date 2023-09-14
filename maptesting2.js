@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 100 pass")
+console.log("Testing 70% pathing 1 pass")
 
 const mapUrls = {
 	"boston": {
@@ -1034,7 +1034,7 @@ function findOptimalPath(tableData, selfColor, runOrigin, pathArray, forcePath) 
 
     // Check combinations up to the limit of operations
     for (let i = 0; i < maxOperations; i++) {
-	    if (i % 1000 === 0) {
+	    if (i % 10000 === 0) {
 	        console.log('Considering set', i + 1);
 	    }
 	    
@@ -1298,6 +1298,39 @@ function calculateCentrality(tableData) {
 
 
 
+function addCirclesToPaths(pathArray, pathBorderColor) {
+    // Get the SVG element
+    var svgElement_circle = document.querySelector('svg');
+
+    // Remove any existing circles
+    var existingCircles_circle = svgElement_circle.querySelectorAll('circle');
+    existingCircles_circle.forEach(function(circle) {
+        svgElement_circle.removeChild(circle);
+    });
+
+    // Iterate over each path ID in the array
+    for (let i = 0; i < pathArray.length; i++) {
+        // Get the path element by ID
+        var pathElement_circle = document.getElementById(pathArray[i]);
+
+        // Calculate the center of the path
+        var bbox_circle = pathElement_circle.getBBox();
+        var centerX_circle = bbox_circle.x + bbox_circle.width/2;
+        var centerY_circle = bbox_circle.y + bbox_circle.height/2;
+
+        // Create a new circle element
+        var newCircle_circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+
+        // Set the attributes of the circle
+        newCircle_circle.setAttribute('cx', centerX_circle);
+        newCircle_circle.setAttribute('cy', centerY_circle);
+        newCircle_circle.setAttribute('r', 10); // radius of the dot
+        newCircle_circle.setAttribute('fill', pathBorderColor); // color of the dot
+
+        // Append the circle to the SVG
+        svgElement_circle.appendChild(newCircle_circle);
+    }
+}
 
 
 
@@ -1307,6 +1340,7 @@ function calculateCentrality(tableData) {
 function generateMap() {
   // Update buttons
   updateButtonText();
+	addCirclesToPaths(pathArray, pathBorderColor);
   // Reset tableData to its original values
   tableData = JSON.parse(JSON.stringify(tableDataClone));
   // Remove existing text elements
@@ -1531,8 +1565,7 @@ paths.forEach(function (path) {
             border_color = "transparent";
           } else {
             color = tableData[i]["Ownership Color"];
-            border_color = pathArray.includes(pathId) ? pathBorderColor : tableData[i]["Ownership Border Color"];
-	    stroke_width = pathArray.includes(pathId) ? "3" : "2";
+            border_color = tableData[i]["Ownership Border Color"];
           }
         }
         path.style.setProperty("fill", color, "important");
