@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 94 pass")
+console.log("Testing 70% pathing 98 pass")
 
 const mapUrls = {
 	"boston": {
@@ -994,22 +994,24 @@ function findOptimalPath(tableData, selfColor, runOrigin, pathArray, forcePath) 
 	    var result = forcePath.map(name => nodes.find(node => node.Territory === name));
 	    let lowerHalf = nodes.slice(0, Math.floor(nodes.length / 2));
 	    let upperHalf = nodes.slice(Math.floor(nodes.length / 2));
-	    while (result.length < size) {
-	        // Select more nodes from the lower half
-	        let randomIndex = Math.floor(Math.random() * lowerHalf.length);
-	        let node = lowerHalf[randomIndex];
+	
+	    // Select half of the nodes from the lower half
+	    for (let i = 0; i < Math.floor(lowerHalf.length / 2); i++) {
+	        let node = lowerHalf[i];
 	        if (!result.includes(node)) {
 	            result.push(node);
 	        }
-	        // Select fewer nodes from the upper half
-	        if (result.length < size) {
-	            randomIndex = Math.floor(Math.random() * upperHalf.length);
-	            node = upperHalf[randomIndex];
-	            if (!result.includes(node)) {
-	                result.push(node);
-	            }
+	    }
+	
+	    // Fill the rest of the combination with random nodes from both halves
+	    while (result.length < size) {
+	        let randomIndex = Math.floor(Math.random() * nodes.length);
+	        let node = nodes[randomIndex];
+	        if (!result.includes(node)) {
+	            result.push(node);
 	        }
 	    }
+	
 	    return result;
 	}
 
@@ -1034,7 +1036,7 @@ function findOptimalPath(tableData, selfColor, runOrigin, pathArray, forcePath) 
 
     // Check combinations up to the limit of operations
     for (let i = 0; i < maxOperations; i++) {
-	    if (i % 500 === 0) {
+	    if (i % 1000 === 0) {
 	        console.log('Considering set', i + 1);
 	    }
 	    
