@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("Testing 70% pathing 48 pass")
+console.log("Testing 70% pathing 49 pass")
 
 const mapUrls = {
 	"boston": {
@@ -989,14 +989,24 @@ function findOptimalPath(tableData, selfColor, runOrigin, pathArray, forcePath) 
 
 	// Helper function to generate a random combination of a certain size
 	function getRandomCombination(nodes, size) {
+	    // Start with the forcePath nodes and the nodes from the lower third
 	    var result = forcePath.map(name => nodes.find(node => node.Territory === name));
+	    var lowerThird = Math.floor(nodes.length / 3);
+	    for (let i = 0; i < lowerThird; i++) {
+	        if (!result.includes(nodes[i])) {
+	            result.push(nodes[i]);
+	        }
+	    }
+	
+	    // Fill the rest of the combination with random nodes from the middle and upper third
 	    while (result.length < size) {
-	        let randomIndex = Math.floor(Math.random() * nodes.length);
+	        let randomIndex = lowerThird + Math.floor(Math.random() * (nodes.length - lowerThird));
 	        let node = nodes[randomIndex];
 	        if (!result.includes(node)) {
 	            result.push(node);
 	        }
 	    }
+	
 	    return result;
 	}
 
