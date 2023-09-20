@@ -6,6 +6,8 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
+console.log("total overhaul")
+
 const mapUrls = {
 	"boston": {
 		"prettyname": "Boston",
@@ -186,6 +188,7 @@ var totalBlizzards = mapUrls[mapselected].totalBlizzards;
 var totalPortals = mapUrls[mapselected].totalPortals;
 let blizzardArray = [];
 let portalArray = [];
+let history = [];
 const colorDictionary = {
   0: "#ffffff",
   1: "#eb3337",
@@ -347,7 +350,25 @@ xhr.onload = function () {
 };
 xhr.send();
 
+// Function to update button text
+function updateButtonText() {
+  // Update "Add Blizzards" button text
+  if (totalBlizzards - blizzardArray.length <= 0) {
+    document.getElementById("blizzardButton").innerHTML = "Added all Blizzards";
+  } else {
+    document.getElementById("blizzardButton").innerHTML = "Add Blizzards (" + (totalBlizzards - blizzardArray.length) + " left)";
+  }
 
+  // Update "Add Portals" button text
+  if (totalPortals - portalArray.length <= 0) {
+    document.getElementById("portalButton").innerHTML = "Added all Portals";
+  } else {
+    document.getElementById("portalButton").innerHTML = "Add Portals (" + (totalPortals - portalArray.length) + " left)";
+  }
+}
+
+// Update button text on page load
+updateButtonText();
 
 // FUNCTION: stop editing
 function stopEditing() {
@@ -363,8 +384,6 @@ function stopEditing() {
   
   return;
 }
-
-
 
 // FUNCTION: calculate centrality
 function stats(values) {
@@ -929,6 +948,126 @@ function addPortals() {
   });
 }
 
+// FUNCTION: Eraser
+function eraser() {
+  // Immediately return if the blizzard and portal arrays are empty
+  if (blizzardArray.length === 0 && portalArray.length === 0) {
+    return;
+  }
+
+  document.getElementById("stopButton").innerHTML = "Stop Erasing";
+  document.getElementById("stopButton").style.backgroundColor = "#4caf50";
+
+  var styleElement = document.createElement("style");
+  styleElement.id = "stopButtonHoverStyle";
+  styleElement.textContent = "#stopButton:hover { background-color: #3e8e41 !important; }";
+  document.head.appendChild(styleElement);
+
+  let shouldReturn = setupButtonClicks();
+
+  // Define mouseover, mouseout, and click event handlers
+  const mouseoverHandler = function () {
+    if (shouldReturn) {
+      return;
+    }
+    if (blizzardArray.includes(this.id) || portalArray.includes(this.id)) {
+      this.style.setProperty("stroke", "#ff1111", "important");
+      this.style.setProperty("stroke-width", "4", "important");
+    }
+  };
+
+  const mouseoutHandler = function () {
+    if (shouldReturn) {
+      return;
+    }
+    if (blizzardArray.includes(this.id)) {
+      this.style.setProperty("stroke", "white", "important");
+      this.style.setProperty("stroke-width", "1", "important");
+    } else if (portalArray.includes(this.id)) {
+      resetStroke(this, centralityMenu, tableData, colorDarktionary);
+    }
+  };
+
+  const clickHandler = function () {
+    if (shouldReturn) {
+      return;
+    }
+    if (blizzardArray.includes(this.id)) {
+      blizzardArray = blizzardArray.filter((path) => path !== this.id);
+      history.push({ type: 'eraseBlizzard', pathId: this.id });
+      generateMap();
+    } else if (portalArray.includes(this.id)) {
+      portalArray = portalArray.filter((path) => path !== this.id);
+      history.push({ type: 'erasePortal', pathId: this.id });
+      generateMap();
+    }
+
+    // Check if size of blizzardArray is greater than or equal to totalBlizzards
+    if (blizzardArray.length === 0 && portalArray.length === 0) {
+      // Remove existing event listeners from elements in paths array
+      paths.forEach(function (path) {
+        path.removeEventListener("mouseover", mouseoverHandler);
+        path.removeEventListener("mouseout", mouseoutHandler);
+        path.removeEventListener("click", clickHandler);
+      });
+
+      document.getElementById("stopButton").innerHTML = "Stop Editing";
+      document.getElementById("stopButton").style.backgroundColor = "white";
+
+      var styleElement = document.createElement("style");
+      styleElement.id = "stopButtonHoverStyle";
+      styleElement.textContent = "#stopButton:hover { background-color: white !important; }";
+      document.head.appendChild(styleElement);
+
+      return;
+    }
+  };
+
+  // Add event listeners to elements in paths array
+  paths.forEach(function (path) {
+    path.addEventListener("mouseover", mouseoverHandler);
+    path.addEventListener("mouseout", mouseoutHandler);
+    path.addEventListener("click", clickHandler);
+  });
+}
+
+// FUNCTION: undo
+function undo() {
+  // Check if the history array is not empty
+  if (history.length > 0) {
+    // Get the last action from the history array
+    let lastAction = history.pop();
+
+    // Check the type of the last action
+    if (lastAction.type === 'addBlizzard') {
+      // Remove the last blizzard from the blizzardArray
+      blizzardArray.pop();
+      generateMap();
+    } else if (lastAction.type === 'addPortal') {
+      // Remove the last portal from the portalArray
+      portalArray.pop();
+      generateMap();
+    } else if (lastAction.type === 'eraseBlizzard') {
+      // Add the erased path back to the blizzard array
+      blizzardArray.push(lastAction.pathId);
+      generateMap();
+    } else if (lastAction.type === 'erasePortal') {
+      // Add the erased path back to the portal array
+      portalArray.push(lastAction.pathId);
+      generateMap();
+    }
+  }
+}
+
+// Add an event listener for the keydown event to the document object
+document.addEventListener('keydown', function(event) {
+  // Check if the ctrlKey property is true and if the key property is equal to 'z'
+  if (event.ctrlKey && event.key === 'z') {
+    // Call the undo function
+    undo();
+  }
+});
+	
 // Generate the map
 function generateMap() {
   // Update buttons
@@ -1346,303 +1485,3 @@ function debounce(func, wait) {
 }
 
 const debouncedGenerateMap = debounce(generateMap, 500);
-
-
-
-
-
-	
-
-
-	
-function eraser() {
-  // Immediately return if the size of the clickedPathsBlizzardsPortals array is empty
-  if (clickedPathsBlizzardsPortals.length === 0) {
-    return;
-  }
-  let shouldReturn = false;
-  document.getElementById("stopButton").innerHTML = "Stop Erasing";
-	// Set the regular background color to green
-	document.getElementById("stopButton").style.backgroundColor = "#4caf50";
-	// Set the hover background color to dark green
-	var styleElement = document.createElement("style");
-	styleElement.id = "stopButtonHoverStyle";
-	styleElement.textContent = "#stopButton:hover { background-color: #3e8e41 !important; }";
-	document.head.appendChild(styleElement);
-
-  const blizzardButtonClick = function () {
-    shouldReturn = true;
-  };
-  const portalButtonClick = function () {
-    shouldReturn = true;
-  };
-  const eraserButtonClick = function () {
-    shouldReturn = true;
-  };
-  const stopButtonClick = function () {
-    shouldReturn = true;
-  };
-	
-  document.getElementById("blizzardButton").addEventListener("click", blizzardButtonClick);
-  document.getElementById("portalButton").addEventListener("click", portalButtonClick);
-  document.getElementById("eraserButton").addEventListener("click", eraserButtonClick);
-  document.getElementById("stopButton").addEventListener("click", stopButtonClick);
-
-	// Define mouseover, mouseout, and click event handlers
-	const mouseoverHandler = function () {
-	  if (shouldReturn) {
-	    return;
-	  }
-	  if (clickedPathsBlizzardsPortals.includes(this.id)) {
-	    // Change stroke color to #ff1111 and stroke width to 4
-	    this.style.setProperty("stroke", "#ff1111", "important");
-	    this.style.setProperty("stroke-width", "4", "important");
-	  }
-	};
-	const mouseoutHandler = function () {
-	  if (shouldReturn) {
-	    return;
-	  }
-	  if (clickedPathsBlizzardsPortals.includes(this.id)) {
-	    if (blizzardArray.includes(this.id)) {
-	      // Change stroke color to white and stroke width to 1
-	      this.style.setProperty("stroke", "white", "important");
-	      this.style.setProperty("stroke-width", "1", "important");
-	    } else if (portalArray.includes(this.id)) {
-	      // Reset stroke color and width according to the selected centrality measure
-	      let border_color;
-	      if (centralityMenu.value === "standard") {
-	        let value = tableData.find(row => row['Territory'] === this.id)['Number of Direct Connections'];
-	        border_color = colorDarktionary[value];
-	      } else if (centralityMenu.value === "eigenvector") {
-	        border_color = tableData.find(row => row['Territory'] === this.id)['Eigenvector Border Color'];
-	      } else if (centralityMenu.value === "betweenness") {
-	        border_color = tableData.find(row => row['Territory'] === this.id)['Betweenness Border Color'];
-	      } else if (centralityMenu.value === "closeness") {
-	        border_color = tableData.find(row => row['Territory'] === this.id)['Closeness Border Color'];
-	      } else if (centralityMenu.value === "capConnections") {
-	        let value = tableData.find(row => row['Territory'] === this.id)['Number of Cap Connections'];
-	        border_color = colorDarktionary[Math.min(value, 12)];
-	      }
-	      this.style.setProperty("stroke", border_color, "important");
-	      this.style.setProperty("stroke-width", "2", "important");
-	    }
-	  }
-	};
-  const clickHandler = function () {
-    if (shouldReturn) {
-      return;
-    }
-    // Check if path is in clickedPathsBlizzardsPortals array
-    if (clickedPathsBlizzardsPortals.includes(this.id)) {
-      // Remove clicked path from clickedPathsBlizzardsPortals array
-      clickedPathsBlizzardsPortals = clickedPathsBlizzardsPortals.filter(
-        (path) => path !== this.id
-      );
-
-      // Check if path is in blizzardArray
-      if (blizzardArray.includes(this.id)) {
-        // Remove clicked path from blizzardArray; push to history
-        blizzardArray = blizzardArray.filter((path) => path !== this.id);
-	history.push({ type: 'eraseBlizzard', pathId: this.id });
-
-        // Remove blizzard fill from clicked path
-        var clipPathId = "blizzard-clip-" + this.id;
-        var clipPath = document.getElementById(clipPathId);
-        if (clipPath) {
-          clipPath.remove();
-        }
-      }
-
-      // Check if path is in portalArray
-      if (portalArray.includes(this.id)) {
-        // Remove clicked path from portalArray; push to history
-        portalArray = portalArray.filter((path) => path !== this.id);
-	history.push({ type: 'erasePortal', pathId: this.id });
-
-        // Store the value of this.id in a variable
-        var clickedPathId = this.id;
-
-        // Remove portal image overlay from clicked path
-        var images = svgElement.querySelectorAll("image");
-        images.forEach(function (image) {
-          // Check if the data-path-id attribute of the image matches the id of the clicked path
-          if (image.getAttribute("data-path-id") === clickedPathId) {
-            // Remove the image
-            image.remove();
-          }
-        });
-      }
-
-      // Call generateMap function
-      generateMap();
-
-      // Check if clickedPathsBlizzardsPortals array is empty
-      if (clickedPathsBlizzardsPortals.length === 0) {
-	document.getElementById("stopButton").innerHTML = "Stop Editing";
-	// Set the regular background color to white
-	document.getElementById("stopButton").style.backgroundColor = "white";
-	// Set the hover background color to white
-	var styleElement = document.createElement("style");
-	styleElement.id = "stopButtonHoverStyle";
-	styleElement.textContent = "#stopButton:hover { background-color: white !important; }";
-	document.head.appendChild(styleElement);
-        return;
-      }
-    }
-  };
-
-  // Add event listeners to elements in paths array
-  paths.forEach(function (path) {
-    path.addEventListener("mouseover", mouseoverHandler);
-    path.addEventListener("mouseout", mouseoutHandler);
-    path.addEventListener("click", clickHandler);
-  });
-}
-
-function addPortals_pathID(pathID) {
-  // Find the path element with the specified pathID
-  let path = Array.from(paths).find((path) => path.getAttribute("id") === pathID);
-
-  // Create an image element and set its attributes
-  var image = document.createElementNS(
-    "http://www.w3.org/2000/svg",
-    "image"
-  );
-  image.setAttributeNS(
-    "http://www.w3.org/1999/xlink",
-    "href",
-    "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/portal.png"
-  );
-
-  // Set a custom attribute to store the id of the clicked path
-  image.setAttribute("data-path-id", pathID);
-
-  // Store the value of pathID in a variable
-  var clickedPathId = pathID;
-
-  // Find matching row in CSV data
-  var coordinates = tableData.find(function (row) {
-    return row["Territory"] === clickedPathId;
-  });
-
-  // Get coordinates from CSV data
-  var x = coordinates["Pixel Pair 1"];
-  var y = coordinates["Pixel Pair 2"];
-
-  // Set pointer-events attribute of the image element to none
-  image.setAttribute("pointer-events", "none");
-
-  // Append the image to the SVG
-  svgElement.appendChild(image);
-
-  // Add an event listener to the image element to update its x and y attributes after it has been loaded
-  image.addEventListener("load", function () {
-    // Get the bounding box of the image element
-    var bbox = image.getBBox();
-
-    // Update the x and y attributes of the image element to center it over the clicked area
-    image.setAttribute("x", x - bbox.width / 2);
-    image.setAttribute("y", y - bbox.height / 2);
-
-    // Rotate the image a random number of degrees between 0 and 359 around its center point
-    var angle = Math.floor(Math.random() * 360);
-    var cx = x;
-    var cy = y;
-    image.setAttribute(
-      "transform",
-      "rotate(" + angle + " " + cx + " " + cy + ")"
-    );
-  });
-
-   // Add clicked path to arrays; push to history
-   portalArray.push(pathID);
-   clickedPathsBlizzardsPortals.push(pathID);
-
-   // Execute generateMap function
-   generateMap();
-   return;
-}
-	
-// Update button text on page load
-updateButtonText();
-
-function updateButtonText() {
-    // Update "Add Blizzards" button text
-    if (totalBlizzards - blizzardArray.length <= 0) {
-        document.getElementById("blizzardButton").innerHTML = "Added all Blizzards";
-    } else {
-        document.getElementById("blizzardButton").innerHTML = "Add Blizzards (" + (totalBlizzards - blizzardArray.length) + " left)";
-    }
-
-    // Update "Add Portals" button text
-    if (totalPortals - portalArray.length <= 0) {
-        document.getElementById("portalButton").innerHTML = "Added all Portals";
-    } else {
-        document.getElementById("portalButton").innerHTML = "Add Portals (" + (totalPortals - portalArray.length) + " left)";
-    }
-}
-
-// Create an array to store the history of actions
-let history = [];
-
-// Add an event listener for the keydown event to the document object
-document.addEventListener('keydown', function(event) {
-  // Check if the ctrlKey property is true and if the key property is equal to 'z'
-  if (event.ctrlKey && event.key === 'z') {
-    // Call the undo function
-    undo();
-  }
-});
-
-function undo() {
-  // Check if the history array is not empty
-  if (history.length > 0) {
-    // Get the last action from the history array
-    let lastAction = history.pop();
-
-    // Check the type of the last action
-    if (lastAction.type === 'addBlizzard') {
-      // Remove the last blizzard from the blizzardArray
-      blizzardArray.pop();
-
-      // Remove the last blizzard fill from the map
-      let clipPathId = 'blizzard-clip-' + lastAction.pathId;
-      let clipPath = document.getElementById(clipPathId);
-      if (clipPath) {
-        clipPath.remove();
-      }
-
-      // Remove the id of the undone path from the clickedPathsBlizzardsPortals array
-      let index = clickedPathsBlizzardsPortals.indexOf(lastAction.pathId);
-      if (index !== -1) {
-        clickedPathsBlizzardsPortals.splice(index, 1);
-      }
-	  generateMap();
-    } else if (lastAction.type === 'addPortal') {
-      // Remove the last portal from the portalArray
-      portalArray.pop();
-
-      // Remove the last portal image from the map
-      let images = svgElement.querySelectorAll('image');
-      images.forEach(function(image) {
-        // Check if the data-path-id attribute of the image matches the id of the last portal
-        if (image.getAttribute('data-path-id') === lastAction.pathId) {
-          // Remove the image
-          image.remove();
-        }
-      });
-
-      // Remove the id of the undone path from the clickedPathsBlizzardsPortals array
-      let index = clickedPathsBlizzardsPortals.indexOf(lastAction.pathId);
-      if (index !== -1) {
-        clickedPathsBlizzardsPortals.splice(index, 1);
-      }
-	  generateMap();
-    } else if (lastAction.type === 'eraseBlizzard') {
-	  addBlizzards_pathID(lastAction.pathId);
-    } else if (lastAction.type === 'erasePortal') {
-	  addPortals_pathID(lastAction.pathId);
-    }
-  }
-}
