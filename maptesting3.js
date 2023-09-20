@@ -184,9 +184,8 @@ var SVG = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnect
 var BlizzardPattern = blizzardPatternImage.src;
 var totalBlizzards = mapUrls[mapselected].totalBlizzards;
 var totalPortals = mapUrls[mapselected].totalPortals;
-let blizzardArray = []
-let portalArray = []
-let clickedPathsBlizzardsPortals = []
+let blizzardArray = [];
+let portalArray = [];
 const colorDictionary = {
   0: "#ffffff",
   1: "#eb3337",
@@ -564,10 +563,28 @@ function calculateCentrality(tableData) {
     calculateCloseness(tableData);
 }  
 
+
+
+
+
 // Generate the map
 function generateMap() {
   // Update buttons
   updateButtonText();
+     // Remove all clipPaths
+	// Select all clipPath elements
+	var clipPaths = svgElement.querySelectorAll('clipPath');
+	// Loop through each clipPath and remove it
+	clipPaths.forEach(function(clipPath) {
+	  clipPath.parentNode.removeChild(clipPath);
+	});
+     // Remove all images
+	// Select all image elements
+	var images = svgElement.querySelectorAll('image');
+	// Loop through each image and remove it
+	images.forEach(function(image) {
+	  image.parentNode.removeChild(image);
+	});
   // Reset tableData to its original values
   tableData = JSON.parse(JSON.stringify(tableDataClone));
   // Remove existing text elements
@@ -591,6 +608,7 @@ function generateMap() {
   	// Add everything contained in the portal array
 	tableData.forEach((row) => {
 	  if (portalArray.includes(row["Territory"])) {
+	    row["Portal"] = 1;
 	    row["Connections"] = [
 	      ...new Set([
 		...(row["Connections"] ? row["Connections"].split(",") : []),
@@ -599,6 +617,8 @@ function generateMap() {
 	    ]
 	      .filter((value) => value !== row["Territory"])
 	      .join(",");
+	  } else {
+	    row["Portal"] = 0;
 	  }
 	});
 
@@ -689,27 +709,17 @@ function generateMap() {
       if (tableData[i]["Territory"] === pathId) {
         // Color in the map
         if (tableData[i]["Blizzard"] === 0) {
-	  if (centralityMenu.value === "standard") {
-	    var color = colorDictionary[tableData[i]["Number of Direct Connections"]];
-	    var border_color = colorDarktionary[tableData[i]["Number of Direct Connections"]];
-	  } else if (centralityMenu.value === "eigenvector") {
-	    var color = tableData[i]["Eigenvector Color"];
-	    var border_color = tableData[i]["Eigenvector Border Color"];
-	  } else if (centralityMenu.value === "betweenness") {
-	    var color = tableData[i]["Betweenness Color"];
-	    var border_color = tableData[i]["Betweenness Border Color"];
-	  } else if (centralityMenu.value === "closeness") {
-	    var color = tableData[i]["Closeness Color"];
-	    var border_color = tableData[i]["Closeness Border Color"];
-	  } else if (centralityMenu.value === "capConnections") {
-	    var color = colorDictionary[Math.min(tableData[i]["Number of Cap Connections"], 12)];
-	    var border_color = colorDarktionary[Math.min(tableData[i]["Number of Cap Connections"], 12)];
-	  }
+	  var {color, border_color, textContent} = getColorAndTextContent(centralityMenu, tableData, i);
           path.style.setProperty("fill", color, "important");
           path.setAttribute("stroke-opacity", "100");
           path.style.setProperty("stroke", border_color, "important");
           path.style.setProperty("stroke-width", "2", "important");
-        }
+        } else {
+          executeBlizzards(path, svgElement, BlizzardPattern, tableData);
+	}
+	if (tableData[i]["Portal"] === 1) {
+	  executePortals(path, svgElement, tableData);
+	}
 
         // Add text to the specified location from tableData
         if (tableData[i]["Blizzard"] === 0) {
@@ -746,17 +756,7 @@ function generateMap() {
 	    text.setAttribute("fill", "black");
 	  }
 		
-	  if (centralityMenu.value === "standard") {
-	    text.textContent = tableData[i]["Number of Indirect Connections"];
-	  } else if (centralityMenu.value === "eigenvector") {
-	    text.textContent = tableData[i]["Eigenvector Rounded"];
-	  } else if (centralityMenu.value === "betweenness") {
-	    text.textContent = tableData[i]["Betweenness Rounded"];
-	  } else if (centralityMenu.value === "closeness") {
-	    text.textContent = tableData[i]["Closeness Rounded"];
-	  } else if (centralityMenu.value === "capConnections") {
-	    text.textContent = tableData[i]["Number of Cap Connections"];
-	  }
+	  text.textContent = textContent;
 		
           // Adjust x and y coordinates to position midpoint of text at specified coordinates
           var bbox = text.getBBox();
@@ -985,34 +985,211 @@ function debounce(func, wait) {
 
 const debouncedGenerateMap = debounce(generateMap, 500);
 
-function addBlizzards() {
-  let shouldReturn = false;
-  document.getElementById("stopButton").innerHTML = "Stop Adding Blizzards";
-	// Set the regular background color to green
-	document.getElementById("stopButton").style.backgroundColor = "#4caf50";
-	// Set the hover background color to dark green
-	var styleElement = document.createElement("style");
-	styleElement.id = "stopButtonHoverStyle";
-	styleElement.textContent = "#stopButton:hover { background-color: #3e8e41 !important; }";
-	document.head.appendChild(styleElement);
 
-  const blizzardButtonClick = function () {
+
+// Function to handle shouldReturn for button clicks
+function setupButtonClicks() {
+  let shouldReturn = false;
+
+  const buttonClick = function () {
     shouldReturn = true;
   };
-  const portalButtonClick = function () {
-    shouldReturn = true;
-  };
-  const eraserButtonClick = function () {
-    shouldReturn = true;
-  };
-  const stopButtonClick = function () {
-    shouldReturn = true;
-  };
+
+  document.getElementById("blizzardButton").addEventListener("click", buttonClick);
+  document.getElementById("portalButton").addEventListener("click", buttonClick);
+  document.getElementById("eraserButton").addEventListener("click", buttonClick);
+  document.getElementById("stopButton").addEventListener("click", buttonClick);
+
+  return shouldReturn;
+}
+
+
+
+// Function to change stroke color and width upon mouseover
+const highlightStroke = function(element) {
+  element.style.setProperty("stroke", "white", "important");
+  element.style.setProperty("stroke-width", "3", "important");
+};
+
+
+
+// Function to reset stroke color and width according to the selected centrality measure
+const resetStroke = function(element, centralityMenu, tableData, colorDarktionary) {
+  let border_color;
+  if (centralityMenu.value === "standard") {
+    let value = tableData.find(row => row['Territory'] === element.id)['Number of Direct Connections'];
+    border_color = colorDarktionary[value];
+  } else if (centralityMenu.value === "eigenvector") {
+    border_color = tableData.find(row => row['Territory'] === element.id)['Eigenvector Border Color'];
+  } else if (centralityMenu.value === "betweenness") {
+    border_color = tableData.find(row => row['Territory'] === element.id)['Betweenness Border Color'];
+  } else if (centralityMenu.value === "closeness") {
+    border_color = tableData.find(row => row['Territory'] === element.id)['Closeness Border Color'];
+  } else if (centralityMenu.value === "capConnections") {
+    let value = tableData.find(row => row['Territory'] === element.id)['Number of Cap Connections'];
+    border_color = colorDarktionary[Math.min(value, 12)];
+  }
+  element.style.setProperty("stroke", border_color, "important");
+  element.style.setProperty("stroke-width", "2", "important");
+};
+
+
+
+// Function to add blizzard pattern and snowflake image
+function executeBlizzards(path, svgElement, BlizzardPattern, tableData) {
+  // Create a clipPath element and set its id
+  var clipPath = document.createElementNS("http://www.w3.org/2000/svg", "clipPath");
+  clipPath.setAttribute("id", "clip-" + path.id);
+
+  // Clone the clicked path and append it to the clipPath
+  var clonedPath = path.cloneNode(true);
+  clipPath.appendChild(clonedPath);
+
+  // Append the clipPath to the defs element
+  var defs = svgElement.querySelector("defs") || svgElement.insertBefore(
+    document.createElementNS("http://www.w3.org/2000/svg", "defs"),
+    svgElement.firstChild
+  );
+  defs.appendChild(clipPath);
+
+  // Create an image element and set its attributes
+  var image = document.createElementNS("http://www.w3.org/2000/svg", "image");
+  image.setAttributeNS("http://www.w3.org/1999/xlink", "href", BlizzardPattern);
+  image.setAttribute("width", "100%");
+  image.setAttribute("height", "100%");
+  image.setAttribute("clip-path", "url(#clip-" + path.id + ")");
+  image.setAttribute("pointer-events", "none");
+
+  // Append the image to the SVG
+  svgElement.appendChild(image);
+
+  // Move the image behind the path element
+  svgElement.insertBefore(image, svgElement.firstChild);
+
+  // Create an image element and set its attributes
+  var snowflakeImage = document.createElementNS("http://www.w3.org/2000/svg", "image");
+  snowflakeImage.setAttributeNS("http://www.w3.org/1999/xlink", "href", "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/snowflake.png");
+
+  // Set a custom attribute to store the id of the clicked path
+  snowflakeImage.setAttribute("data-path-id", path.id);
+
+  // Find matching row in CSV data
+  var coordinates = tableData.find(function (row) {
+    return row["Territory"] === path.id;
+  });
+
+  // Get coordinates from CSV data
+  var x = coordinates["Pixel Pair 1"];
+  var y = coordinates["Pixel Pair 2"];
+
+  // Set pointer-events attribute of the image element to none
+  snowflakeImage.setAttribute("pointer-events", "none");
+
+  // Append the image to the SVG
+  svgElement.appendChild(snowflakeImage);
+
+  // Add an event listener to the image element to update its x and y attributes after it has been loaded
+  snowflakeImage.addEventListener("load", function() {
+    // Get the bounding box of the image element
+    var bbox = snowflakeImage.getBBox();
+
+    // Update the x and y attributes of the image element to center it over the clicked area
+    snowflakeImage.setAttribute("x", x - bbox.width / 2);
+    snowflakeImage.setAttribute("y", y - bbox.height / 2);
+    
+    return {image, snowflakeImage};
+});
+
+
+
+// Function to define color, border color, and text for function generateMap
+function getColorAndTextContent(centralityMenu, tableData, i) {
+  var color, border_color, textContent;
+
+  if (centralityMenu.value === "standard") {
+    color = colorDictionary[tableData[i]["Number of Direct Connections"]];
+    border_color = colorDarktionary[tableData[i]["Number of Direct Connections"]];
+    textContent = tableData[i]["Number of Indirect Connections"];
+  } else if (centralityMenu.value === "eigenvector") {
+    color = tableData[i]["Eigenvector Color"];
+    border_color = tableData[i]["Eigenvector Border Color"];
+    textContent = tableData[i]["Eigenvector Rounded"];
+  } else if (centralityMenu.value === "betweenness") {
+    color = tableData[i]["Betweenness Color"];
+    border_color = tableData[i]["Betweenness Border Color"];
+    textContent = tableData[i]["Betweenness Rounded"];
+  } else if (centralityMenu.value === "closeness") {
+    color = tableData[i]["Closeness Color"];
+    border_color = tableData[i]["Closeness Border Color"];
+    textContent = tableData[i]["Closeness Rounded"];
+  } else if (centralityMenu.value === "capConnections") {
+    color = colorDictionary[Math.min(tableData[i]["Number of Cap Connections"], 12)];
+    border_color = colorDarktionary[Math.min(tableData[i]["Number of Cap Connections"], 12)];
+    textContent = tableData[i]["Number of Cap Connections"];
+  }
+
+  return {color, border_color, textContent};
+}
+
 	
-  document.getElementById("blizzardButton").addEventListener("click", blizzardButtonClick);
-  document.getElementById("portalButton").addEventListener("click", portalButtonClick);
-  document.getElementById("eraserButton").addEventListener("click", eraserButtonClick);
-  document.getElementById("stopButton").addEventListener("click", stopButtonClick);
+	
+// Function to add portal image
+function executePortals(path, svgElement, tableData) {
+  // Create an image element and set its attributes
+  var image = document.createElementNS("http://www.w3.org/2000/svg", "image");
+  image.setAttributeNS("http://www.w3.org/1999/xlink", "href", "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/portal.png");
+
+  // Set a custom attribute to store the id of the clicked path
+  image.setAttribute("data-path-id", path.id);
+
+  // Find matching row in CSV data
+  var coordinates = tableData.find(function (row) {
+    return row["Territory"] === path.id;
+  });
+
+  // Get coordinates from CSV data
+  var x = coordinates["Pixel Pair 1"];
+  var y = coordinates["Pixel Pair 2"];
+
+  // Set pointer-events attribute of the image element to none
+  image.setAttribute("pointer-events", "none");
+
+  // Append the image to the SVG
+  svgElement.appendChild(image);
+
+  // Add an event listener to the image element to update its x and y attributes after it has been loaded
+  image.addEventListener("load", function() {
+    // Get the bounding box of the image element
+    var bbox = image.getBBox();
+
+    // Update the x and y attributes of the image element to center it over the clicked area
+    image.setAttribute("x", x - bbox.width / 2);
+    image.setAttribute("y", y - bbox.height / 2);
+
+    // Rotate the image a random number of degrees between 0 and 359 around its center point
+    var angle = Math.floor(Math.random() * 360);
+    var cx = x;
+    var cy = y;
+    image.setAttribute(
+      "transform",
+      "rotate(" + angle + " " + cx + " " + cy + ")"
+    );
+    
+    return image;
+});
+
+
+	
+// Function to handle user-added blizzards
+function addBlizzards() {
+  document.getElementById("stopButton").innerHTML = "Stop Adding Blizzards";
+  document.getElementById("stopButton").style.backgroundColor = "#4caf50";
+  var styleElement = document.createElement("style");
+  styleElement.id = "stopButtonHoverStyle";
+  styleElement.textContent = "#stopButton:hover { background-color: #3e8e41 !important; }";
+  document.head.appendChild(styleElement);
+
+  let shouldReturn = setupButtonClicks();
 
   // Check if size of blizzardArray is greater than or equal to totalBlizzards
   if (blizzardArray.length >= totalBlizzards) {
@@ -1025,10 +1202,8 @@ const mouseoverHandler = function () {
   if (shouldReturn) {
     return;
   }
-  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
-    // Change stroke color to white and stroke width to 3
-    this.style.setProperty("stroke", "white", "important");
-    this.style.setProperty("stroke-width", "3", "important");
+  if (!blizzardArray.includes(this.id) && !portalArray.includes(this.id)) {
+    highlightStroke(this);
   }
 };
 	
@@ -1036,82 +1211,21 @@ const mouseoutHandler = function () {
   if (shouldReturn) {
     return;
   }
-  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
-    // Reset stroke color and width according to the selected centrality measure
-    let border_color;
-    if (centralityMenu.value === "standard") {
-      let value = tableData.find(row => row['Territory'] === this.id)['Number of Direct Connections'];
-      border_color = colorDarktionary[value];
-    } else if (centralityMenu.value === "eigenvector") {
-      border_color = tableData.find(row => row['Territory'] === this.id)['Eigenvector Border Color'];
-    } else if (centralityMenu.value === "betweenness") {
-      border_color = tableData.find(row => row['Territory'] === this.id)['Betweenness Border Color'];
-    } else if (centralityMenu.value === "closeness") {
-      border_color = tableData.find(row => row['Territory'] === this.id)['Closeness Border Color'];
-    } else if (centralityMenu.value === "capConnections") {
-      let value = tableData.find(row => row['Territory'] === this.id)['Number of Cap Connections'];
-      border_color = colorDarktionary[Math.min(value, 12)];
-    }
-	this.style.setProperty("stroke", border_color, "important");
-	this.style.setProperty("stroke-width", "2", "important");
+  if (!blizzardArray.includes(this.id) && !portalArray.includes(this.id)) {
+    resetStroke(this, centralityMenu, tableData, colorDarktionary);
   }
-}
+};
+	
   const clickHandler = function () {
     if (shouldReturn) {
       return;
     }
-    // Check if path is NOT in clickedPathsBlizzardsPortals array
-    if (!clickedPathsBlizzardsPortals.includes(this.id)) {
-	// Create a clipPath element and set its id
-	var clipPath = document.createElementNS(
-	  "http://www.w3.org/2000/svg",
-	  "clipPath"
-	);
-	clipPath.setAttribute("id", "clip-" + this.id);
-
-	// Clone the clicked path and append it to the clipPath
-	var clonedPath = this.cloneNode(true);
-	clipPath.appendChild(clonedPath);
-
-	// Append the clipPath to the defs element
-	var defs =
-	  svgElement.querySelector("defs") ||
-	  svgElement.insertBefore(
-	    document.createElementNS("http://www.w3.org/2000/svg", "defs"),
-	    svgElement.firstChild
-	  );
-	defs.appendChild(clipPath);
-
-	// Create an image element and set its attributes
-	var image = document.createElementNS(
-	  "http://www.w3.org/2000/svg",
-	  "image"
-	);
-	image.setAttributeNS(
-	  "http://www.w3.org/1999/xlink",
-	  "href",
-	  BlizzardPattern
-	);
-	image.setAttribute("width", "100%");
-	image.setAttribute("height", "100%");
-	image.setAttribute("clip-path", "url(#clip-" + this.id + ")");
-	image.setAttribute("pointer-events", "none");
-
-	// Append the image to the SVG
-	svgElement.appendChild(image);
-
-	// Move the image behind the path element
-	svgElement.insertBefore(image, svgElement.firstChild);
-	    
-    // Add clicked path to arrays; push to history
+    if (!blizzardArray.includes(this.id) && !portalArray.includes(this.id)) {
     blizzardArray.push(this.id);
-    clickedPathsBlizzardsPortals.push(this.id);
     history.push({ type: 'addBlizzard', pathId: this.id });
 	    
-    // Change the fill of the clicked path to transparent
+    // Change fill and stroke color/width
     this.style.setProperty("fill", "transparent", "important");
-
-    // Change stroke color and stroke width
     this.style.setProperty("stroke", "white", "important");
     this.style.setProperty("stroke-width", "1", "important");
 	    
