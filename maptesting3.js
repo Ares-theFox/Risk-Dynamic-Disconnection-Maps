@@ -623,7 +623,7 @@ function setupButtonClicks() {
 const highlightStroke = function(element) {
   element.style.setProperty("stroke", "white", "important");
   element.style.setProperty("stroke-width", "3", "important");
-};
+}
 
 // Function to reset stroke color and width according to the selected centrality measure
 const resetStroke = function(element, centralityMenu, tableData, colorDarktionary) {
@@ -643,7 +643,7 @@ const resetStroke = function(element, centralityMenu, tableData, colorDarktionar
   }
   element.style.setProperty("stroke", border_color, "important");
   element.style.setProperty("stroke-width", "2", "important");
-};
+}
 
 // Function to define color, border color, and text for function generateMap
 function getColorAndTextContent(centralityMenu, tableData, i) {
@@ -789,6 +789,7 @@ function executePortals(path, svgElement, tableData) {
     
     return image;
 });
+}
 
 // Function to handle user-added blizzards
 function addBlizzards() {
