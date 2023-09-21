@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("total overhaul")
+console.log("fixing blizzies issue")
 
 const mapUrls = {
 	"boston": {
@@ -603,22 +603,6 @@ function calculateCentrality(tableData) {
     calculateCloseness(tableData);
 }  
 
-// Function to handle shouldReturn for button clicks
-function setupButtonClicks() {
-  let shouldReturn = false;
-
-  const buttonClick = function () {
-    shouldReturn = true;
-  };
-
-  document.getElementById("blizzardButton").addEventListener("click", buttonClick);
-  document.getElementById("portalButton").addEventListener("click", buttonClick);
-  document.getElementById("eraserButton").addEventListener("click", buttonClick);
-  document.getElementById("stopButton").addEventListener("click", buttonClick);
-
-  return shouldReturn;
-}
-
 // Function to change stroke color and width upon mouseover
 const highlightStroke = function(element) {
   element.style.setProperty("stroke", "white", "important");
@@ -801,7 +785,16 @@ function addBlizzards() {
   styleElement.textContent = "#stopButton:hover { background-color: #3e8e41 !important; }";
   document.head.appendChild(styleElement);
 
-  let shouldReturn = setupButtonClicks();
+  let shouldReturn = false;
+	
+  const buttonClick = function () {
+    shouldReturn = true;
+  };
+
+  document.getElementById("blizzardButton").addEventListener("click", buttonClick);
+  document.getElementById("portalButton").addEventListener("click", buttonClick);
+  document.getElementById("eraserButton").addEventListener("click", buttonClick);
+  document.getElementById("stopButton").addEventListener("click", buttonClick);
 
   // Check if size of blizzardArray is greater than or equal to totalBlizzards
   if (blizzardArray.length >= totalBlizzards) {
@@ -880,8 +873,17 @@ function addPortals() {
   styleElement.textContent = "#stopButton:hover { background-color: #3e8e41 !important; }";
   document.head.appendChild(styleElement);
 
-  let shouldReturn = setupButtonClicks();
+  let shouldReturn = false;
+	
+  const buttonClick = function () {
+    shouldReturn = true;
+  };
 
+  document.getElementById("blizzardButton").addEventListener("click", buttonClick);
+  document.getElementById("portalButton").addEventListener("click", buttonClick);
+  document.getElementById("eraserButton").addEventListener("click", buttonClick);
+  document.getElementById("stopButton").addEventListener("click", buttonClick);
+	
   // Check if size of blizzardArray is greater than or equal to totalBlizzards
   if (portalArray.length >= totalPortals) {
     // Return early from the function
@@ -964,8 +966,17 @@ function eraser() {
   styleElement.textContent = "#stopButton:hover { background-color: #3e8e41 !important; }";
   document.head.appendChild(styleElement);
 
-  let shouldReturn = setupButtonClicks();
+  let shouldReturn = false;
+	
+  const buttonClick = function () {
+    shouldReturn = true;
+  };
 
+  document.getElementById("blizzardButton").addEventListener("click", buttonClick);
+  document.getElementById("portalButton").addEventListener("click", buttonClick);
+  document.getElementById("eraserButton").addEventListener("click", buttonClick);
+  document.getElementById("stopButton").addEventListener("click", buttonClick);
+	
   // Define mouseover, mouseout, and click event handlers
   const mouseoverHandler = function () {
     if (shouldReturn) {
@@ -1216,7 +1227,7 @@ function generateMap() {
           path.setAttribute("stroke-opacity", "100");
           path.style.setProperty("stroke", border_color, "important");
           path.style.setProperty("stroke-width", "2", "important");
-        } else {
+        } else if (tableData[i]["Blizzard"] === 1) {
           executeBlizzards(path, svgElement, BlizzardPattern, tableData);
 	}
 	if (tableData[i]["Portal"] === 1) {
