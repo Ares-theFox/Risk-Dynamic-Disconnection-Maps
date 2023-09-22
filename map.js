@@ -6,6 +6,8 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
+console.log("completely new backend structure")
+
 const mapUrls = {
 	"boston": {
 		"prettyname": "Boston",
@@ -20,13 +22,6 @@ const mapUrls = {
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Brazil%20blizzard%20pattern.png",
 		"totalBlizzards": 2,
 		"totalPortals": 4
-	},
-	"brazil_advanced": {
-		"prettyname": "Brazil Advanced",
-		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Brazil%20Advanced.png",
-		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Brazil%20Advanced%20blizzard%20pattern.png",
-		"totalBlizzards": 5,
-		"totalPortals": 6
 	},
 	"castle": {
 		"prettyname": "Castle",
@@ -191,9 +186,9 @@ var SVG = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnect
 var BlizzardPattern = blizzardPatternImage.src;
 var totalBlizzards = mapUrls[mapselected].totalBlizzards;
 var totalPortals = mapUrls[mapselected].totalPortals;
-let blizzardArray = []
-let portalArray = []
-let clickedPathsBlizzardsPortals = []
+let blizzardArray = [];
+let portalArray = [];
+let history = [];
 const colorDictionary = {
   0: "#ffffff",
   1: "#eb3337",
@@ -224,6 +219,20 @@ const colorDarktionary = {
 11: "#23002b",
 12: "#000000"
 };
+
+// Button functions
+function button_AddBlizzards() {
+  addBlizzards();
+}
+function button_AddPortals() {
+  addPortals();
+}
+function button_StopEditing() {
+  stopEditing();
+}
+function button_Undo() {
+  undo();
+}	
 
 // Menu stuff
 var selectMenuContainer = document.getElementById("selectMenuContainer");
@@ -341,16 +350,39 @@ xhr.onload = function () {
 };
 xhr.send();
 
+// Function to update button text
+function updateButtonText() {
+  // Update "Add Blizzards" button text
+  if (totalBlizzards - blizzardArray.length <= 0) {
+    document.getElementById("blizzardButton").innerHTML = "Added all Blizzards";
+  } else {
+    document.getElementById("blizzardButton").innerHTML = "Add Blizzards (" + (totalBlizzards - blizzardArray.length) + " left)";
+  }
+
+  // Update "Add Portals" button text
+  if (totalPortals - portalArray.length <= 0) {
+    document.getElementById("portalButton").innerHTML = "Added all Portals";
+  } else {
+    document.getElementById("portalButton").innerHTML = "Add Portals (" + (totalPortals - portalArray.length) + " left)";
+  }
+}
+
+// Update button text on page load
+updateButtonText();
+
 // FUNCTION: stop editing
 function stopEditing() {
-	// Set the regular background color to white
-	document.getElementById("stopButton").style.backgroundColor = "white";
-	// Set the hover background color to white
-	var styleElement = document.createElement("style");
-	styleElement.id = "stopButtonHoverStyle";
-	styleElement.textContent = "#stopButton:hover { background-color: white !important; }";
-	document.head.appendChild(styleElement);
-	return;
+  // Set the regular background color to white
+  document.getElementById("stopButton").style.backgroundColor = "white";
+  
+  // Set the hover background color to white
+  var styleElement = document.createElement("style");
+  styleElement.id = "stopButtonHoverStyle";
+  styleElement.textContent = "#stopButton:hover { background-color: white !important; }";
+  
+  document.head.appendChild(styleElement);
+  
+  return;
 }
 
 // FUNCTION: calculate centrality
@@ -571,10 +603,501 @@ function calculateCentrality(tableData) {
     calculateCloseness(tableData);
 }  
 
+// Function to change stroke color and width upon mouseover
+const highlightStroke = function(element) {
+  element.style.setProperty("stroke", "white", "important");
+  element.style.setProperty("stroke-width", "3", "important");
+}
+
+// Function to reset stroke color and width according to the selected centrality measure
+const resetStroke = function(element, centralityMenu, tableData, colorDarktionary) {
+  let border_color;
+  if (centralityMenu.value === "standard") {
+    let value = tableData.find(row => row['Territory'] === element.id)['Number of Direct Connections'];
+    border_color = colorDarktionary[value];
+  } else if (centralityMenu.value === "eigenvector") {
+    border_color = tableData.find(row => row['Territory'] === element.id)['Eigenvector Border Color'];
+  } else if (centralityMenu.value === "betweenness") {
+    border_color = tableData.find(row => row['Territory'] === element.id)['Betweenness Border Color'];
+  } else if (centralityMenu.value === "closeness") {
+    border_color = tableData.find(row => row['Territory'] === element.id)['Closeness Border Color'];
+  } else if (centralityMenu.value === "capConnections") {
+    let value = tableData.find(row => row['Territory'] === element.id)['Number of Cap Connections'];
+    border_color = colorDarktionary[Math.min(value, 12)];
+  }
+  element.style.setProperty("stroke", border_color, "important");
+  element.style.setProperty("stroke-width", "2", "important");
+}
+
+// Function to define color, border color, and text for function generateMap
+function getColorAndTextContent(centralityMenu, tableData, i) {
+  var color, border_color, textContent;
+
+  if (centralityMenu.value === "standard") {
+    color = colorDictionary[tableData[i]["Number of Direct Connections"]];
+    border_color = colorDarktionary[tableData[i]["Number of Direct Connections"]];
+    textContent = tableData[i]["Number of Indirect Connections"];
+  } else if (centralityMenu.value === "eigenvector") {
+    color = tableData[i]["Eigenvector Color"];
+    border_color = tableData[i]["Eigenvector Border Color"];
+    textContent = tableData[i]["Eigenvector Rounded"];
+  } else if (centralityMenu.value === "betweenness") {
+    color = tableData[i]["Betweenness Color"];
+    border_color = tableData[i]["Betweenness Border Color"];
+    textContent = tableData[i]["Betweenness Rounded"];
+  } else if (centralityMenu.value === "closeness") {
+    color = tableData[i]["Closeness Color"];
+    border_color = tableData[i]["Closeness Border Color"];
+    textContent = tableData[i]["Closeness Rounded"];
+  } else if (centralityMenu.value === "capConnections") {
+    color = colorDictionary[Math.min(tableData[i]["Number of Cap Connections"], 12)];
+    border_color = colorDarktionary[Math.min(tableData[i]["Number of Cap Connections"], 12)];
+    textContent = tableData[i]["Number of Cap Connections"];
+  }
+
+  return {color, border_color, textContent};
+}
+
+// Function to add blizzard pattern and snowflake image
+function executeBlizzards(path, svgElement, BlizzardPattern, tableData) {
+  // Create a clipPath element and set its id
+  var clipPath = document.createElementNS("http://www.w3.org/2000/svg", "clipPath");
+  clipPath.setAttribute("id", "clip-" + path.id);
+
+  // Clone the clicked path and append it to the clipPath
+  var clonedPath = path.cloneNode(true);
+  clipPath.appendChild(clonedPath);
+
+  // Append the clipPath to the defs element
+  var defs = svgElement.querySelector("defs") || svgElement.insertBefore(
+    document.createElementNS("http://www.w3.org/2000/svg", "defs"),
+    svgElement.firstChild
+  );
+  defs.appendChild(clipPath);
+
+  // Create an image element and set its attributes
+  var image = document.createElementNS("http://www.w3.org/2000/svg", "image");
+  image.setAttributeNS("http://www.w3.org/1999/xlink", "href", BlizzardPattern);
+  image.setAttribute("width", "100%");
+  image.setAttribute("height", "100%");
+  image.setAttribute("clip-path", "url(#clip-" + path.id + ")");
+  image.setAttribute("pointer-events", "none");
+
+  // Append the image to the SVG
+  svgElement.appendChild(image);
+
+  // Move the image behind the path element
+  svgElement.insertBefore(image, svgElement.firstChild);
+
+  // Create an image element and set its attributes
+  var snowflakeImage = document.createElementNS("http://www.w3.org/2000/svg", "image");
+  snowflakeImage.setAttributeNS("http://www.w3.org/1999/xlink", "href", "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/snowflake.png");
+
+  // Set a custom attribute to store the id of the clicked path
+  snowflakeImage.setAttribute("data-path-id", path.id);
+
+  // Find matching row in CSV data
+  var coordinates = tableData.find(function (row) {
+    return row["Territory"] === path.id;
+  });
+
+  // Get coordinates from CSV data
+  var x = coordinates["Pixel Pair 1"];
+  var y = coordinates["Pixel Pair 2"];
+
+  // Set pointer-events attribute of the image element to none
+  snowflakeImage.setAttribute("pointer-events", "none");
+
+  // Append the image to the SVG
+  svgElement.appendChild(snowflakeImage);
+
+  // Add an event listener to the image element to update its x and y attributes after it has been loaded
+  snowflakeImage.addEventListener("load", function() {
+    // Get the bounding box of the image element
+    var bbox = snowflakeImage.getBBox();
+
+    // Update the x and y attributes of the image element to center it over the clicked area
+    snowflakeImage.setAttribute("x", x - bbox.width / 2);
+    snowflakeImage.setAttribute("y", y - bbox.height / 2);
+    
+    return {image, snowflakeImage};
+});
+
+// Set path styles
+path.style.setProperty("fill", "transparent", "important");
+path.style.setProperty("stroke", "white", "important");
+path.style.setProperty("stroke-width", "1", "important");
+}
+	
+// Function to add portal image
+function executePortals(path, svgElement, tableData) {
+  // Create an image element and set its attributes
+  var image = document.createElementNS("http://www.w3.org/2000/svg", "image");
+  image.setAttributeNS("http://www.w3.org/1999/xlink", "href", "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/portal.png");
+
+  // Set a custom attribute to store the id of the clicked path
+  image.setAttribute("data-path-id", path.id);
+
+  // Find matching row in CSV data
+  var coordinates = tableData.find(function (row) {
+    return row["Territory"] === path.id;
+  });
+
+  // Get coordinates from CSV data
+  var x = coordinates["Pixel Pair 1"];
+  var y = coordinates["Pixel Pair 2"];
+
+  // Set pointer-events attribute of the image element to none
+  image.setAttribute("pointer-events", "none");
+
+  // Append the image to the SVG
+  svgElement.appendChild(image);
+
+  // Add an event listener to the image element to update its x and y attributes after it has been loaded
+  image.addEventListener("load", function() {
+    // Get the bounding box of the image element
+    var bbox = image.getBBox();
+
+    // Update the x and y attributes of the image element to center it over the clicked area
+    image.setAttribute("x", x - bbox.width / 2);
+    image.setAttribute("y", y - bbox.height / 2);
+
+    // Rotate the image a random number of degrees between 0 and 359 around its center point
+    var angle = Math.floor(Math.random() * 360);
+    var cx = x;
+    var cy = y;
+    image.setAttribute(
+      "transform",
+      "rotate(" + angle + " " + cx + " " + cy + ")"
+    );
+    
+    return image;
+});
+}
+
+// Function to handle user-added blizzards
+function addBlizzards() {
+  document.getElementById("stopButton").innerHTML = "Stop Adding Blizzards";
+  document.getElementById("stopButton").style.backgroundColor = "#4caf50";
+  
+  var styleElement = document.createElement("style");
+  styleElement.id = "stopButtonHoverStyle";
+  styleElement.textContent = "#stopButton:hover { background-color: #3e8e41 !important; }";
+  document.head.appendChild(styleElement);
+
+  let shouldReturn = false;
+	
+  const buttonClick = function () {
+    shouldReturn = true;
+  };
+
+  document.getElementById("blizzardButton").addEventListener("click", buttonClick);
+  document.getElementById("portalButton").addEventListener("click", buttonClick);
+  document.getElementById("eraserButton").addEventListener("click", buttonClick);
+  document.getElementById("stopButton").addEventListener("click", buttonClick);
+
+  // Check if size of blizzardArray is greater than or equal to totalBlizzards
+  if (blizzardArray.length >= totalBlizzards) {
+    // Return early from the function
+    return;
+  }
+
+  // Define mouseover, mouseout, and click event handlers
+  const mouseoverHandler = function () {
+    if (shouldReturn) {
+      return;
+    }
+    if (!blizzardArray.includes(this.id) && !portalArray.includes(this.id)) {
+      highlightStroke(this);
+    }
+  };
+	
+  const mouseoutHandler = function () {
+    if (shouldReturn) {
+      return;
+    }
+    if (!blizzardArray.includes(this.id) && !portalArray.includes(this.id)) {
+      resetStroke(this, centralityMenu, tableData, colorDarktionary);
+    }
+  };
+	
+  const clickHandler = function () {
+    if (shouldReturn) {
+      return;
+    }
+    if (!blizzardArray.includes(this.id) && !portalArray.includes(this.id)) {
+      blizzardArray.push(this.id);
+      history.push({ type: 'addBlizzard', pathId: this.id });
+	    
+      // Check if size of blizzardArray is greater than or equal to totalBlizzards
+      if (blizzardArray.length >= totalBlizzards) {
+        // Remove existing event listeners from elements in paths array
+        paths.forEach(function (path) {
+          path.removeEventListener("mouseover", mouseoverHandler);
+          path.removeEventListener("mouseout", mouseoutHandler);
+          path.removeEventListener("click", clickHandler);
+        });
+
+        document.getElementById("stopButton").innerHTML = "Stop Editing";
+	document.getElementById("stopButton").style.backgroundColor = "white"
+	      
+	var styleElement = document.createElement("style");
+	styleElement.id = "stopButtonHoverStyle";
+	styleElement.textContent = "#stopButton:hover { background-color: white !important; }";
+	document.head.appendChild(styleElement);
+
+        generateMap();
+        return;
+      }
+
+      // Execute generateMap function
+      generateMap();
+    }
+  };
+
+  // Add event listeners to elements in paths array
+  paths.forEach(function (path) {
+    path.addEventListener("mouseover", mouseoverHandler);
+    path.addEventListener("mouseout", mouseoutHandler);
+    path.addEventListener("click", clickHandler);
+  });
+}
+
+// Function to handle user-added portals
+function addPortals() {
+  document.getElementById("stopButton").innerHTML = "Stop Adding Portals";
+  document.getElementById("stopButton").style.backgroundColor = "#4caf50";
+  
+  var styleElement = document.createElement("style");
+  styleElement.id = "stopButtonHoverStyle";
+  styleElement.textContent = "#stopButton:hover { background-color: #3e8e41 !important; }";
+  document.head.appendChild(styleElement);
+
+  let shouldReturn = false;
+	
+  const buttonClick = function () {
+    shouldReturn = true;
+  };
+
+  document.getElementById("blizzardButton").addEventListener("click", buttonClick);
+  document.getElementById("portalButton").addEventListener("click", buttonClick);
+  document.getElementById("eraserButton").addEventListener("click", buttonClick);
+  document.getElementById("stopButton").addEventListener("click", buttonClick);
+	
+  // Check if size of blizzardArray is greater than or equal to totalBlizzards
+  if (portalArray.length >= totalPortals) {
+    // Return early from the function
+    return;
+  }
+
+  // Define mouseover, mouseout, and click event handlers
+  const mouseoverHandler = function () {
+    if (shouldReturn) {
+      return;
+    }
+    if (!blizzardArray.includes(this.id) && !portalArray.includes(this.id)) {
+      highlightStroke(this);
+    }
+  };
+	
+  const mouseoutHandler = function () {
+    if (shouldReturn) {
+      return;
+    }
+    if (!blizzardArray.includes(this.id) && !portalArray.includes(this.id)) {
+      resetStroke(this, centralityMenu, tableData, colorDarktionary);
+    }
+  };
+	
+  const clickHandler = function () {
+    if (shouldReturn) {
+      return;
+    }
+    if (!blizzardArray.includes(this.id) && !portalArray.includes(this.id)) {
+      portalArray.push(this.id);
+      history.push({ type: 'addPortal', pathId: this.id });
+	    
+      // Check if size of portalArray is greater than or equal to totalPortals
+      if (portalArray.length >= totalPortals) {
+        // Remove existing event listeners from elements in paths array
+        paths.forEach(function (path) {
+          path.removeEventListener("mouseover", mouseoverHandler);
+          path.removeEventListener("mouseout", mouseoutHandler);
+          path.removeEventListener("click", clickHandler);
+        });
+
+        document.getElementById("stopButton").innerHTML = "Stop Editing";
+	document.getElementById("stopButton").style.backgroundColor = "white"
+	      
+	var styleElement = document.createElement("style");
+	styleElement.id = "stopButtonHoverStyle";
+	styleElement.textContent = "#stopButton:hover { background-color: white !important; }";
+	document.head.appendChild(styleElement);
+
+        generateMap();
+        return;
+      }
+
+      // Execute generateMap function
+      generateMap();
+    }
+  };
+
+  // Add event listeners to elements in paths array
+  paths.forEach(function (path) {
+    path.addEventListener("mouseover", mouseoverHandler);
+    path.addEventListener("mouseout", mouseoutHandler);
+    path.addEventListener("click", clickHandler);
+  });
+}
+
+// FUNCTION: Eraser
+function eraser() {
+  // Immediately return if the blizzard and portal arrays are empty
+  if (blizzardArray.length === 0 && portalArray.length === 0) {
+    return;
+  }
+
+  document.getElementById("stopButton").innerHTML = "Stop Erasing";
+  document.getElementById("stopButton").style.backgroundColor = "#4caf50";
+
+  var styleElement = document.createElement("style");
+  styleElement.id = "stopButtonHoverStyle";
+  styleElement.textContent = "#stopButton:hover { background-color: #3e8e41 !important; }";
+  document.head.appendChild(styleElement);
+
+  let shouldReturn = false;
+	
+  const buttonClick = function () {
+    shouldReturn = true;
+  };
+
+  document.getElementById("blizzardButton").addEventListener("click", buttonClick);
+  document.getElementById("portalButton").addEventListener("click", buttonClick);
+  document.getElementById("eraserButton").addEventListener("click", buttonClick);
+  document.getElementById("stopButton").addEventListener("click", buttonClick);
+	
+  // Define mouseover, mouseout, and click event handlers
+  const mouseoverHandler = function () {
+    if (shouldReturn) {
+      return;
+    }
+    if (blizzardArray.includes(this.id) || portalArray.includes(this.id)) {
+      this.style.setProperty("stroke", "#ff1111", "important");
+      this.style.setProperty("stroke-width", "4", "important");
+    }
+  };
+
+  const mouseoutHandler = function () {
+    if (shouldReturn) {
+      return;
+    }
+    if (blizzardArray.includes(this.id)) {
+      this.style.setProperty("stroke", "white", "important");
+      this.style.setProperty("stroke-width", "1", "important");
+    } else if (portalArray.includes(this.id)) {
+      resetStroke(this, centralityMenu, tableData, colorDarktionary);
+    }
+  };
+
+  const clickHandler = function () {
+    if (shouldReturn) {
+      return;
+    }
+    if (blizzardArray.includes(this.id)) {
+      blizzardArray = blizzardArray.filter((path) => path !== this.id);
+      history.push({ type: 'eraseBlizzard', pathId: this.id });
+      generateMap();
+    } else if (portalArray.includes(this.id)) {
+      portalArray = portalArray.filter((path) => path !== this.id);
+      history.push({ type: 'erasePortal', pathId: this.id });
+      generateMap();
+    }
+
+    // Check if size of blizzardArray is greater than or equal to totalBlizzards
+    if (blizzardArray.length === 0 && portalArray.length === 0) {
+      // Remove existing event listeners from elements in paths array
+      paths.forEach(function (path) {
+        path.removeEventListener("mouseover", mouseoverHandler);
+        path.removeEventListener("mouseout", mouseoutHandler);
+        path.removeEventListener("click", clickHandler);
+      });
+
+      document.getElementById("stopButton").innerHTML = "Stop Editing";
+      document.getElementById("stopButton").style.backgroundColor = "white";
+
+      var styleElement = document.createElement("style");
+      styleElement.id = "stopButtonHoverStyle";
+      styleElement.textContent = "#stopButton:hover { background-color: white !important; }";
+      document.head.appendChild(styleElement);
+
+      return;
+    }
+  };
+
+  // Add event listeners to elements in paths array
+  paths.forEach(function (path) {
+    path.addEventListener("mouseover", mouseoverHandler);
+    path.addEventListener("mouseout", mouseoutHandler);
+    path.addEventListener("click", clickHandler);
+  });
+}
+
+// FUNCTION: undo
+function undo() {
+  // Check if the history array is not empty
+  if (history.length > 0) {
+    // Get the last action from the history array
+    let lastAction = history.pop();
+
+    // Check the type of the last action
+    if (lastAction.type === 'addBlizzard') {
+      // Remove the last blizzard from the blizzardArray
+      blizzardArray.pop();
+      generateMap();
+    } else if (lastAction.type === 'addPortal') {
+      // Remove the last portal from the portalArray
+      portalArray.pop();
+      generateMap();
+    } else if (lastAction.type === 'eraseBlizzard') {
+      // Add the erased path back to the blizzard array
+      blizzardArray.push(lastAction.pathId);
+      generateMap();
+    } else if (lastAction.type === 'erasePortal') {
+      // Add the erased path back to the portal array
+      portalArray.push(lastAction.pathId);
+      generateMap();
+    }
+  }
+}
+
+// Add an event listener for the keydown event to the document object
+document.addEventListener('keydown', function(event) {
+  // Check if the ctrlKey property is true and if the key property is equal to 'z'
+  if (event.ctrlKey && event.key === 'z') {
+    // Call the undo function
+    undo();
+  }
+});
+	
 // Generate the map
 function generateMap() {
   // Update buttons
   updateButtonText();
+     // Remove all clipPaths
+	// Select all clipPath elements
+	var clipPaths = svgElement.querySelectorAll('clipPath');
+	// Loop through each clipPath and remove it
+	clipPaths.forEach(function(clipPath) {
+	  clipPath.parentNode.removeChild(clipPath);
+	});
+     // Remove all images
+	// Select all image elements
+	var images = svgElement.querySelectorAll('image');
+	// Loop through each image and remove it
+	images.forEach(function(image) {
+	  image.parentNode.removeChild(image);
+	});
   // Reset tableData to its original values
   tableData = JSON.parse(JSON.stringify(tableDataClone));
   // Remove existing text elements
@@ -598,6 +1121,7 @@ function generateMap() {
   	// Add everything contained in the portal array
 	tableData.forEach((row) => {
 	  if (portalArray.includes(row["Territory"])) {
+	    row["Portal"] = 1;
 	    row["Connections"] = [
 	      ...new Set([
 		...(row["Connections"] ? row["Connections"].split(",") : []),
@@ -606,6 +1130,8 @@ function generateMap() {
 	    ]
 	      .filter((value) => value !== row["Territory"])
 	      .join(",");
+	  } else {
+	    row["Portal"] = 0;
 	  }
 	});
 
@@ -696,27 +1222,17 @@ function generateMap() {
       if (tableData[i]["Territory"] === pathId) {
         // Color in the map
         if (tableData[i]["Blizzard"] === 0) {
-	  if (centralityMenu.value === "standard") {
-	    var color = colorDictionary[tableData[i]["Number of Direct Connections"]];
-	    var border_color = colorDarktionary[tableData[i]["Number of Direct Connections"]];
-	  } else if (centralityMenu.value === "eigenvector") {
-	    var color = tableData[i]["Eigenvector Color"];
-	    var border_color = tableData[i]["Eigenvector Border Color"];
-	  } else if (centralityMenu.value === "betweenness") {
-	    var color = tableData[i]["Betweenness Color"];
-	    var border_color = tableData[i]["Betweenness Border Color"];
-	  } else if (centralityMenu.value === "closeness") {
-	    var color = tableData[i]["Closeness Color"];
-	    var border_color = tableData[i]["Closeness Border Color"];
-	  } else if (centralityMenu.value === "capConnections") {
-	    var color = colorDictionary[Math.min(tableData[i]["Number of Cap Connections"], 12)];
-	    var border_color = colorDarktionary[Math.min(tableData[i]["Number of Cap Connections"], 12)];
-	  }
+	  var {color, border_color, textContent} = getColorAndTextContent(centralityMenu, tableData, i);
           path.style.setProperty("fill", color, "important");
           path.setAttribute("stroke-opacity", "100");
           path.style.setProperty("stroke", border_color, "important");
           path.style.setProperty("stroke-width", "2", "important");
-        }
+        } else if (tableData[i]["Blizzard"] === 1) {
+          executeBlizzards(path, svgElement, BlizzardPattern, tableData);
+	}
+	if (tableData[i]["Portal"] === 1) {
+	  executePortals(path, svgElement, tableData);
+	}
 
         // Add text to the specified location from tableData
         if (tableData[i]["Blizzard"] === 0) {
@@ -753,17 +1269,7 @@ function generateMap() {
 	    text.setAttribute("fill", "black");
 	  }
 		
-	  if (centralityMenu.value === "standard") {
-	    text.textContent = tableData[i]["Number of Indirect Connections"];
-	  } else if (centralityMenu.value === "eigenvector") {
-	    text.textContent = tableData[i]["Eigenvector Rounded"];
-	  } else if (centralityMenu.value === "betweenness") {
-	    text.textContent = tableData[i]["Betweenness Rounded"];
-	  } else if (centralityMenu.value === "closeness") {
-	    text.textContent = tableData[i]["Closeness Rounded"];
-	  } else if (centralityMenu.value === "capConnections") {
-	    text.textContent = tableData[i]["Number of Cap Connections"];
-	  }
+	  text.textContent = textContent;
 		
           // Adjust x and y coordinates to position midpoint of text at specified coordinates
           var bbox = text.getBBox();
@@ -991,702 +1497,3 @@ function debounce(func, wait) {
 }
 
 const debouncedGenerateMap = debounce(generateMap, 500);
-
-function addBlizzards() {
-  let shouldReturn = false;
-  document.getElementById("stopButton").innerHTML = "Stop Adding Blizzards";
-	// Set the regular background color to green
-	document.getElementById("stopButton").style.backgroundColor = "#4caf50";
-	// Set the hover background color to dark green
-	var styleElement = document.createElement("style");
-	styleElement.id = "stopButtonHoverStyle";
-	styleElement.textContent = "#stopButton:hover { background-color: #3e8e41 !important; }";
-	document.head.appendChild(styleElement);
-
-  const blizzardButtonClick = function () {
-    shouldReturn = true;
-  };
-  const portalButtonClick = function () {
-    shouldReturn = true;
-  };
-  const eraserButtonClick = function () {
-    shouldReturn = true;
-  };
-  const stopButtonClick = function () {
-    shouldReturn = true;
-  };
-	
-  document.getElementById("blizzardButton").addEventListener("click", blizzardButtonClick);
-  document.getElementById("portalButton").addEventListener("click", portalButtonClick);
-  document.getElementById("eraserButton").addEventListener("click", eraserButtonClick);
-  document.getElementById("stopButton").addEventListener("click", stopButtonClick);
-
-  // Check if size of blizzardArray is greater than or equal to totalBlizzards
-  if (blizzardArray.length >= totalBlizzards) {
-    // Return early from the function
-    return;
-  }
-
-// Define mouseover, mouseout, and click event handlers
-const mouseoverHandler = function () {
-  if (shouldReturn) {
-    return;
-  }
-  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
-    // Change stroke color to white and stroke width to 3
-    this.style.setProperty("stroke", "white", "important");
-    this.style.setProperty("stroke-width", "3", "important");
-  }
-};
-	
-const mouseoutHandler = function () {
-  if (shouldReturn) {
-    return;
-  }
-  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
-    // Reset stroke color and width according to the selected centrality measure
-    let border_color;
-    if (centralityMenu.value === "standard") {
-      let value = tableData.find(row => row['Territory'] === this.id)['Number of Direct Connections'];
-      border_color = colorDarktionary[value];
-    } else if (centralityMenu.value === "eigenvector") {
-      border_color = tableData.find(row => row['Territory'] === this.id)['Eigenvector Border Color'];
-    } else if (centralityMenu.value === "betweenness") {
-      border_color = tableData.find(row => row['Territory'] === this.id)['Betweenness Border Color'];
-    } else if (centralityMenu.value === "closeness") {
-      border_color = tableData.find(row => row['Territory'] === this.id)['Closeness Border Color'];
-    } else if (centralityMenu.value === "capConnections") {
-      let value = tableData.find(row => row['Territory'] === this.id)['Number of Cap Connections'];
-      border_color = colorDarktionary[Math.min(value, 12)];
-    }
-	this.style.setProperty("stroke", border_color, "important");
-	this.style.setProperty("stroke-width", "2", "important");
-  }
-}
-  const clickHandler = function () {
-    if (shouldReturn) {
-      return;
-    }
-    // Check if path is NOT in clickedPathsBlizzardsPortals array
-    if (!clickedPathsBlizzardsPortals.includes(this.id)) {
-	// Create a clipPath element and set its id
-	var clipPath = document.createElementNS(
-	  "http://www.w3.org/2000/svg",
-	  "clipPath"
-	);
-	clipPath.setAttribute("id", "clip-" + this.id);
-
-	// Clone the clicked path and append it to the clipPath
-	var clonedPath = this.cloneNode(true);
-	clipPath.appendChild(clonedPath);
-
-	// Append the clipPath to the defs element
-	var defs =
-	  svgElement.querySelector("defs") ||
-	  svgElement.insertBefore(
-	    document.createElementNS("http://www.w3.org/2000/svg", "defs"),
-	    svgElement.firstChild
-	  );
-	defs.appendChild(clipPath);
-
-	// Create an image element and set its attributes
-	var image = document.createElementNS(
-	  "http://www.w3.org/2000/svg",
-	  "image"
-	);
-	image.setAttributeNS(
-	  "http://www.w3.org/1999/xlink",
-	  "href",
-	  BlizzardPattern
-	);
-	image.setAttribute("width", "100%");
-	image.setAttribute("height", "100%");
-	image.setAttribute("clip-path", "url(#clip-" + this.id + ")");
-	image.setAttribute("pointer-events", "none");
-
-	// Append the image to the SVG
-	svgElement.appendChild(image);
-
-	// Move the image behind the path element
-	svgElement.insertBefore(image, svgElement.firstChild);
-	    
-    // Add clicked path to arrays; push to history
-    blizzardArray.push(this.id);
-    clickedPathsBlizzardsPortals.push(this.id);
-    history.push({ type: 'addBlizzard', pathId: this.id });
-	    
-    // Change the fill of the clicked path to transparent
-    this.style.setProperty("fill", "transparent", "important");
-
-    // Change stroke color and stroke width
-    this.style.setProperty("stroke", "white", "important");
-    this.style.setProperty("stroke-width", "1", "important");
-	    
-    // Check if size of blizzardArray is greater than or equal to totalBlizzards
-    if (blizzardArray.length >= totalBlizzards) {
-      // Remove existing event listeners from elements in paths array
-      paths.forEach(function (path) {
-        path.removeEventListener("mouseover", mouseoverHandler);
-        path.removeEventListener("mouseout", mouseoutHandler);
-        path.removeEventListener("click", clickHandler);
-      });
-      document.getElementById("stopButton").innerHTML = "Stop Editing";
-	// Set the regular background color to white
-	document.getElementById("stopButton").style.backgroundColor = "white";
-	// Set the hover background color to white
-	var styleElement = document.createElement("style");
-	styleElement.id = "stopButtonHoverStyle";
-	styleElement.textContent = "#stopButton:hover { background-color: white !important; }";
-	document.head.appendChild(styleElement);
-
-      generateMap();
-      return;
-    }
-
-    // Execute generateMap function
-    generateMap();
-    }
-    };
-
-  // Add event listeners to elements in paths array
-  paths.forEach(function (path) {
-    path.addEventListener("mouseover", mouseoverHandler);
-    path.addEventListener("mouseout", mouseoutHandler);
-    path.addEventListener("click", clickHandler);
-  });
-}
-	
-function addBlizzards_pathID(pathID) {
-  // Find the path element with the specified pathID
-  let path = Array.from(paths).find((path) => path.getAttribute("id") === pathID);
-
-  // Create a clipPath element and set its id
-  var clipPath = document.createElementNS(
-    "http://www.w3.org/2000/svg",
-    "clipPath"
-  );
-  clipPath.setAttribute("id", "clip-" + pathID);
-
-  // Clone the clicked path and append it to the clipPath
-  var clonedPath = path.cloneNode(true);
-  clipPath.appendChild(clonedPath);
-
-  // Append the clipPath to the defs element
-  var defs =
-    svgElement.querySelector("defs") ||
-    svgElement.insertBefore(
-      document.createElementNS("http://www.w3.org/2000/svg", "defs"),
-      svgElement.firstChild
-    );
-  defs.appendChild(clipPath);
-
-  // Create an image element and set its attributes
-  var image = document.createElementNS(
-    "http://www.w3.org/2000/svg",
-    "image"
-  );
-  image.setAttributeNS(
-    "http://www.w3.org/1999/xlink",
-    "href",
-    BlizzardPattern
-  );
-  image.setAttribute("width", "100%");
-  image.setAttribute("height", "100%");
-  image.setAttribute("clip-path", "url(#clip-" + pathID + ")");
-  image.setAttribute("pointer-events", "none");
-
-  // Append the image to the SVG
-  svgElement.appendChild(image);
-
-  // Move the image behind the path element
-  svgElement.insertBefore(image, svgElement.firstChild);
-
-  // Add clicked path to arrays; push to history
-  blizzardArray.push(pathID);
-  clickedPathsBlizzardsPortals.push(pathID);
-  
-  // Change the fill of the clicked path to transparent
-  path.style.setProperty("fill", "transparent", "important");
-
-  // Change stroke color and stroke width
-  path.style.setProperty("stroke", "white", "important");
-  path.style.setProperty("stroke-width", "1", "important");
-
-   // Execute generateMap function
-   generateMap();
-   return;
-}
-
-function addPortals() {
-  let shouldReturn = false;
-  document.getElementById("stopButton").innerHTML = "Stop Adding Portals";
-	// Set the regular background color to green
-	document.getElementById("stopButton").style.backgroundColor = "#4caf50";
-	// Set the hover background color to dark green
-	var styleElement = document.createElement("style");
-	styleElement.id = "stopButtonHoverStyle";
-	styleElement.textContent = "#stopButton:hover { background-color: #3e8e41 !important; }";
-	document.head.appendChild(styleElement);
-
-  const blizzardButtonClick = function () {
-    shouldReturn = true;
-  };
-  const portalButtonClick = function () {
-    shouldReturn = true;
-  };
-  const eraserButtonClick = function () {
-    shouldReturn = true;
-  };
-  const stopButtonClick = function () {
-    shouldReturn = true;
-  };
-	
-  document.getElementById("blizzardButton").addEventListener("click", blizzardButtonClick);
-  document.getElementById("portalButton").addEventListener("click", portalButtonClick);
-  document.getElementById("eraserButton").addEventListener("click", eraserButtonClick);
-  document.getElementById("stopButton").addEventListener("click", stopButtonClick);
-
-  // Check if size of portalArray is greater than or equal to totalPortals
-  if (portalArray.length >= totalPortals) {
-    // Return early from the function
-    return;
-  }
-
-	// Define mouseover, mouseout, and click event handlers
-	const mouseoverHandler = function () {
-	  if (shouldReturn) {
-	    return;
-	  }
-	  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
-	    // Change stroke color to white and stroke width to 3
-	    this.style.setProperty("stroke", "white", "important");
-	    this.style.setProperty("stroke-width", "3", "important");
-	  }
-	};
-	const mouseoutHandler = function () {
-	  if (shouldReturn) {
-	    return;
-	  }
-	  if (!clickedPathsBlizzardsPortals.includes(this.id)) {
-	    // Reset stroke color and width according to the selected centrality measure
-	    let border_color;
-	    if (centralityMenu.value === "standard") {
-	      let value = tableData.find(row => row['Territory'] === this.id)['Number of Direct Connections'];
-	      border_color = colorDarktionary[value];
-	    } else if (centralityMenu.value === "eigenvector") {
-	      border_color = tableData.find(row => row['Territory'] === this.id)['Eigenvector Border Color'];
-	    } else if (centralityMenu.value === "betweenness") {
-	      border_color = tableData.find(row => row['Territory'] === this.id)['Betweenness Border Color'];
-	    } else if (centralityMenu.value === "closeness") {
-	      border_color = tableData.find(row => row['Territory'] === this.id)['Closeness Border Color'];
-	    } else if (centralityMenu.value === "capConnections") {
-	      let value = tableData.find(row => row['Territory'] === this.id)['Number of Cap Connections'];
-	      border_color = colorDarktionary[Math.min(value, 12)];
-	    }
-		this.style.setProperty("stroke", border_color, "important");
-		this.style.setProperty("stroke-width", "2", "important");
-	  }
-	}
-  const clickHandler = function () {
-    if (shouldReturn) {
-      return;
-    }
-    // Check if path is NOT in clickedPathsBlizzardsPortals array
-    if (!clickedPathsBlizzardsPortals.includes(this.id)) {
-	// Create an image element and set its attributes
-	var image = document.createElementNS(
-	  "http://www.w3.org/2000/svg",
-	  "image"
-	);
-	image.setAttributeNS(
-	  "http://www.w3.org/1999/xlink",
-	  "href",
-	  "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/portal.png"
-	);
-
-	// Set a custom attribute to store the id of the clicked path
-	image.setAttribute("data-path-id", this.id);
-
-	// Store the value of this.id in a variable
-	var pathId = this.id;
-
-	// Find matching row in CSV data
-	var coordinates = tableData.find(function (row) {
-	  return row["Territory"] === pathId;
-	});
-
-      // Get coordinates from CSV data
-      var x = coordinates["Pixel Pair 1"];
-      var y = coordinates["Pixel Pair 2"];
-
-      // Set pointer-events attribute of the image element to none
-      image.setAttribute("pointer-events", "none");
-
-      // Append the image to the SVG
-      svgElement.appendChild(image);
-
-      // Add an event listener to the image element to update its x and y attributes after it has been loaded
-      image.addEventListener("load", function() {
-        // Get the bounding box of the image element
-        var bbox = image.getBBox();
-
-        // Update the x and y attributes of the image element to center it over the clicked area
-        image.setAttribute("x", x - bbox.width / 2);
-        image.setAttribute("y", y - bbox.height / 2);
-
-        // Rotate the image a random number of degrees between 0 and 359 around its center point
-        var angle = Math.floor(Math.random() * 360);
-        var cx = x;
-        var cy = y;
-        image.setAttribute(
-          "transform",
-          "rotate(" + angle + " " + cx + " " + cy + ")"
-        );
-      });
-
-      // Add clicked path to arrays; push to history
-      portalArray.push(this.id);
-      clickedPathsBlizzardsPortals.push(this.id);
-      history.push({ type: 'addPortal', pathId: this.id });
-
-       // Check if size of blizzardArray is greater than or equal to totalBlizzards
-       if (portalArray.length >= totalPortals) {
-         // Remove existing event listeners from elements in paths array
-         paths.forEach(function (path) {
-           path.removeEventListener("mouseover", mouseoverHandler);
-           path.removeEventListener("mouseout", mouseoutHandler);
-           path.removeEventListener("click", clickHandler);
-         });
-     	       document.getElementById("stopButton").innerHTML = "Stop Editing";
-		// Set the regular background color to white
-		document.getElementById("stopButton").style.backgroundColor = "white";
-		// Set the hover background color to white
-		var styleElement = document.createElement("style");
-		styleElement.id = "stopButtonHoverStyle";
-		styleElement.textContent = "#stopButton:hover { background-color: white !important; }";
-		document.head.appendChild(styleElement);
-
-	       generateMap();
-	       return;
-       }
-
-       // Execute generateMap function
-       generateMap();
-    }
-  };
-
-  // Add event listeners to elements in paths array
-  paths.forEach(function (path) {
-    path.addEventListener("mouseover", mouseoverHandler);
-    path.addEventListener("mouseout", mouseoutHandler);
-    path.addEventListener("click", clickHandler);
-  });
-}
-
-function button_StopEditing() {
-  stopEditing();
-}
-
-function button_Undo() {
-  undo();
-}
-	
-function button_AddBlizzards() {
-  addBlizzards();
-}
-
-function button_AddPortals() {
-  addPortals();
-}
-	
-function eraser() {
-  // Immediately return if the size of the clickedPathsBlizzardsPortals array is empty
-  if (clickedPathsBlizzardsPortals.length === 0) {
-    return;
-  }
-  let shouldReturn = false;
-  document.getElementById("stopButton").innerHTML = "Stop Erasing";
-	// Set the regular background color to green
-	document.getElementById("stopButton").style.backgroundColor = "#4caf50";
-	// Set the hover background color to dark green
-	var styleElement = document.createElement("style");
-	styleElement.id = "stopButtonHoverStyle";
-	styleElement.textContent = "#stopButton:hover { background-color: #3e8e41 !important; }";
-	document.head.appendChild(styleElement);
-
-  const blizzardButtonClick = function () {
-    shouldReturn = true;
-  };
-  const portalButtonClick = function () {
-    shouldReturn = true;
-  };
-  const eraserButtonClick = function () {
-    shouldReturn = true;
-  };
-  const stopButtonClick = function () {
-    shouldReturn = true;
-  };
-	
-  document.getElementById("blizzardButton").addEventListener("click", blizzardButtonClick);
-  document.getElementById("portalButton").addEventListener("click", portalButtonClick);
-  document.getElementById("eraserButton").addEventListener("click", eraserButtonClick);
-  document.getElementById("stopButton").addEventListener("click", stopButtonClick);
-
-	// Define mouseover, mouseout, and click event handlers
-	const mouseoverHandler = function () {
-	  if (shouldReturn) {
-	    return;
-	  }
-	  if (clickedPathsBlizzardsPortals.includes(this.id)) {
-	    // Change stroke color to #ff1111 and stroke width to 4
-	    this.style.setProperty("stroke", "#ff1111", "important");
-	    this.style.setProperty("stroke-width", "4", "important");
-	  }
-	};
-	const mouseoutHandler = function () {
-	  if (shouldReturn) {
-	    return;
-	  }
-	  if (clickedPathsBlizzardsPortals.includes(this.id)) {
-	    if (blizzardArray.includes(this.id)) {
-	      // Change stroke color to white and stroke width to 1
-	      this.style.setProperty("stroke", "white", "important");
-	      this.style.setProperty("stroke-width", "1", "important");
-	    } else if (portalArray.includes(this.id)) {
-	      // Reset stroke color and width according to the selected centrality measure
-	      let border_color;
-	      if (centralityMenu.value === "standard") {
-	        let value = tableData.find(row => row['Territory'] === this.id)['Number of Direct Connections'];
-	        border_color = colorDarktionary[value];
-	      } else if (centralityMenu.value === "eigenvector") {
-	        border_color = tableData.find(row => row['Territory'] === this.id)['Eigenvector Border Color'];
-	      } else if (centralityMenu.value === "betweenness") {
-	        border_color = tableData.find(row => row['Territory'] === this.id)['Betweenness Border Color'];
-	      } else if (centralityMenu.value === "closeness") {
-	        border_color = tableData.find(row => row['Territory'] === this.id)['Closeness Border Color'];
-	      } else if (centralityMenu.value === "capConnections") {
-	        let value = tableData.find(row => row['Territory'] === this.id)['Number of Cap Connections'];
-	        border_color = colorDarktionary[Math.min(value, 12)];
-	      }
-	      this.style.setProperty("stroke", border_color, "important");
-	      this.style.setProperty("stroke-width", "2", "important");
-	    }
-	  }
-	};
-  const clickHandler = function () {
-    if (shouldReturn) {
-      return;
-    }
-    // Check if path is in clickedPathsBlizzardsPortals array
-    if (clickedPathsBlizzardsPortals.includes(this.id)) {
-      // Remove clicked path from clickedPathsBlizzardsPortals array
-      clickedPathsBlizzardsPortals = clickedPathsBlizzardsPortals.filter(
-        (path) => path !== this.id
-      );
-
-      // Check if path is in blizzardArray
-      if (blizzardArray.includes(this.id)) {
-        // Remove clicked path from blizzardArray; push to history
-        blizzardArray = blizzardArray.filter((path) => path !== this.id);
-	history.push({ type: 'eraseBlizzard', pathId: this.id });
-
-        // Remove blizzard fill from clicked path
-        var clipPathId = "blizzard-clip-" + this.id;
-        var clipPath = document.getElementById(clipPathId);
-        if (clipPath) {
-          clipPath.remove();
-        }
-      }
-
-      // Check if path is in portalArray
-      if (portalArray.includes(this.id)) {
-        // Remove clicked path from portalArray; push to history
-        portalArray = portalArray.filter((path) => path !== this.id);
-	history.push({ type: 'erasePortal', pathId: this.id });
-
-        // Store the value of this.id in a variable
-        var clickedPathId = this.id;
-
-        // Remove portal image overlay from clicked path
-        var images = svgElement.querySelectorAll("image");
-        images.forEach(function (image) {
-          // Check if the data-path-id attribute of the image matches the id of the clicked path
-          if (image.getAttribute("data-path-id") === clickedPathId) {
-            // Remove the image
-            image.remove();
-          }
-        });
-      }
-
-      // Call generateMap function
-      generateMap();
-
-      // Check if clickedPathsBlizzardsPortals array is empty
-      if (clickedPathsBlizzardsPortals.length === 0) {
-	document.getElementById("stopButton").innerHTML = "Stop Editing";
-	// Set the regular background color to white
-	document.getElementById("stopButton").style.backgroundColor = "white";
-	// Set the hover background color to white
-	var styleElement = document.createElement("style");
-	styleElement.id = "stopButtonHoverStyle";
-	styleElement.textContent = "#stopButton:hover { background-color: white !important; }";
-	document.head.appendChild(styleElement);
-        return;
-      }
-    }
-  };
-
-  // Add event listeners to elements in paths array
-  paths.forEach(function (path) {
-    path.addEventListener("mouseover", mouseoverHandler);
-    path.addEventListener("mouseout", mouseoutHandler);
-    path.addEventListener("click", clickHandler);
-  });
-}
-
-function addPortals_pathID(pathID) {
-  // Find the path element with the specified pathID
-  let path = Array.from(paths).find((path) => path.getAttribute("id") === pathID);
-
-  // Create an image element and set its attributes
-  var image = document.createElementNS(
-    "http://www.w3.org/2000/svg",
-    "image"
-  );
-  image.setAttributeNS(
-    "http://www.w3.org/1999/xlink",
-    "href",
-    "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/portal.png"
-  );
-
-  // Set a custom attribute to store the id of the clicked path
-  image.setAttribute("data-path-id", pathID);
-
-  // Store the value of pathID in a variable
-  var clickedPathId = pathID;
-
-  // Find matching row in CSV data
-  var coordinates = tableData.find(function (row) {
-    return row["Territory"] === clickedPathId;
-  });
-
-  // Get coordinates from CSV data
-  var x = coordinates["Pixel Pair 1"];
-  var y = coordinates["Pixel Pair 2"];
-
-  // Set pointer-events attribute of the image element to none
-  image.setAttribute("pointer-events", "none");
-
-  // Append the image to the SVG
-  svgElement.appendChild(image);
-
-  // Add an event listener to the image element to update its x and y attributes after it has been loaded
-  image.addEventListener("load", function () {
-    // Get the bounding box of the image element
-    var bbox = image.getBBox();
-
-    // Update the x and y attributes of the image element to center it over the clicked area
-    image.setAttribute("x", x - bbox.width / 2);
-    image.setAttribute("y", y - bbox.height / 2);
-
-    // Rotate the image a random number of degrees between 0 and 359 around its center point
-    var angle = Math.floor(Math.random() * 360);
-    var cx = x;
-    var cy = y;
-    image.setAttribute(
-      "transform",
-      "rotate(" + angle + " " + cx + " " + cy + ")"
-    );
-  });
-
-   // Add clicked path to arrays; push to history
-   portalArray.push(pathID);
-   clickedPathsBlizzardsPortals.push(pathID);
-
-   // Execute generateMap function
-   generateMap();
-   return;
-}
-	
-// Update button text on page load
-updateButtonText();
-
-function updateButtonText() {
-    // Update "Add Blizzards" button text
-    if (totalBlizzards - blizzardArray.length <= 0) {
-        document.getElementById("blizzardButton").innerHTML = "Added all Blizzards";
-    } else {
-        document.getElementById("blizzardButton").innerHTML = "Add Blizzards (" + (totalBlizzards - blizzardArray.length) + " left)";
-    }
-
-    // Update "Add Portals" button text
-    if (totalPortals - portalArray.length <= 0) {
-        document.getElementById("portalButton").innerHTML = "Added all Portals";
-    } else {
-        document.getElementById("portalButton").innerHTML = "Add Portals (" + (totalPortals - portalArray.length) + " left)";
-    }
-}
-
-// Create an array to store the history of actions
-let history = [];
-
-// Add an event listener for the keydown event to the document object
-document.addEventListener('keydown', function(event) {
-  // Check if the ctrlKey property is true and if the key property is equal to 'z'
-  if (event.ctrlKey && event.key === 'z') {
-    // Call the undo function
-    undo();
-  }
-});
-
-function undo() {
-  // Check if the history array is not empty
-  if (history.length > 0) {
-    // Get the last action from the history array
-    let lastAction = history.pop();
-
-    // Check the type of the last action
-    if (lastAction.type === 'addBlizzard') {
-      // Remove the last blizzard from the blizzardArray
-      blizzardArray.pop();
-
-      // Remove the last blizzard fill from the map
-      let clipPathId = 'blizzard-clip-' + lastAction.pathId;
-      let clipPath = document.getElementById(clipPathId);
-      if (clipPath) {
-        clipPath.remove();
-      }
-
-      // Remove the id of the undone path from the clickedPathsBlizzardsPortals array
-      let index = clickedPathsBlizzardsPortals.indexOf(lastAction.pathId);
-      if (index !== -1) {
-        clickedPathsBlizzardsPortals.splice(index, 1);
-      }
-	  generateMap();
-    } else if (lastAction.type === 'addPortal') {
-      // Remove the last portal from the portalArray
-      portalArray.pop();
-
-      // Remove the last portal image from the map
-      let images = svgElement.querySelectorAll('image');
-      images.forEach(function(image) {
-        // Check if the data-path-id attribute of the image matches the id of the last portal
-        if (image.getAttribute('data-path-id') === lastAction.pathId) {
-          // Remove the image
-          image.remove();
-        }
-      });
-
-      // Remove the id of the undone path from the clickedPathsBlizzardsPortals array
-      let index = clickedPathsBlizzardsPortals.indexOf(lastAction.pathId);
-      if (index !== -1) {
-        clickedPathsBlizzardsPortals.splice(index, 1);
-      }
-	  generateMap();
-    } else if (lastAction.type === 'eraseBlizzard') {
-	  addBlizzards_pathID(lastAction.pathId);
-    } else if (lastAction.type === 'erasePortal') {
-	  addPortals_pathID(lastAction.pathId);
-    }
-  }
-}
