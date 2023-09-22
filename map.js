@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("completely new backend structure")
+console.log("completely new backend structure (again???)")
 
 const mapUrls = {
 	"boston": {
