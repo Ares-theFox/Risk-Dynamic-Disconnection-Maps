@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("fixing blizzies issue")
+console.log("111111111")
 
 const mapUrls = {
 	"boston": {
@@ -1086,6 +1086,73 @@ document.addEventListener('keydown', function(event) {
     undo();
   }
 });
+
+// Function to draw direct connection lines
+function drawLines(svgElement, tableData) {
+    // Remove existing lines
+    var existingLines = svgElement.querySelectorAll('.connection-line');
+    existingLines.forEach(function(line) {
+        line.parentNode.removeChild(line);
+    });
+
+    var checkbox = document.getElementById('showdirectConnections');
+    if (checkbox.checked) {
+    tableData.forEach(function (row) {
+        var fromTerritory = row["Territory"];
+        var connections = row["Connections"].split(',');
+
+        // Get coordinates from CSV data
+        var x1 = Number(row["Pixel Pair 1"]);
+        var y1 = Number(row["Pixel Pair 2"]);
+
+        connections.forEach(function (toTerritory) {
+            var toRow = tableData.find(function (row) {
+                return row["Territory"] === toTerritory;
+            });
+
+            if (toRow) {
+                var x2 = Number(toRow["Pixel Pair 1"]);
+                var y2 = Number(toRow["Pixel Pair 2"]);
+
+                // Calculate the direction of the line
+                var dx = x2 - x1;
+                var dy = y2 - y1;
+
+                // Calculate the length of the line
+                var length = Math.sqrt(dx * dx + dy * dy);
+
+                // Calculate a point 10% along the line from both ends
+                var shortX1 = x1 + dx * 0.1;
+                var shortY1 = y1 + dy * 0.1;
+                var shortX2 = x2 - dx * 0.1;
+                var shortY2 = y2 - dy * 0.1;
+
+                // Create a line element and set its attributes
+                var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', shortX1);
+                line.setAttribute('y1', shortY1);
+                line.setAttribute('x2', shortX2);
+                line.setAttribute('y2', shortY2);
+                line.setAttribute('stroke', 'black');
+
+		// Add a class to the line
+		line.classList.add('connection-line');
+                
+                // Append the line to the SVG
+                svgElement.appendChild(line);
+            }
+        });
+    });
+    }
+}
+
+// ------------------------------------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------------------------------------------------
 	
 // Generate the map
 function generateMap() {
@@ -1184,8 +1251,9 @@ function generateMap() {
     }
   });
 
-  // Call centrality function
+  // Call centrality function, line function
   calculateCentrality(tableData);
+  drawLines(svgElement, tableData);
 
 	// Columns at this point:
 	// Territory = nodes
