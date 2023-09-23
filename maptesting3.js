@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("checkboooox")
+console.log("checkborx")
 
 const mapUrls = {
 	"boston": {
@@ -356,6 +356,9 @@ xhr.onload = function () {
   }
 };
 xhr.send();
+
+var checkbox = document.getElementById('showdirectConnections');
+checkbox.addEventListener('change', generateMap);
 
 // Function to update button text
 function updateButtonText() {
@@ -1140,11 +1143,6 @@ function drawLines(svgElement, tableData) {
     });
 }
 
-function executeDrawLines() {
-    var checkbox = document.getElementById('showdirectConnections');
-    checkbox.addEventListener('change', generateMap);
-}
-
 // ----------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------
@@ -1377,9 +1375,6 @@ function generateMap() {
 	} else if (centralityMenu.value === "capConnections" && maxCapConnections >= 3) {
 	    baseImage.src = baseURL + colorLegend + "%20" + maxCapConnections + ".png";
 	}
-
-    // Handle direct connection lines
-    var checkbox = document.getElementById('showdirectConnections');
 
     // Clear all existing lines
     var lines = svgElement.querySelectorAll('.connection-line');
