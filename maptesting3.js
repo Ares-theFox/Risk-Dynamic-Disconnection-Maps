@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("checkborx")
+console.log("DC lines")
 
 const mapUrls = {
 	"boston": {
@@ -22,13 +22,6 @@ const mapUrls = {
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Brazil%20blizzard%20pattern.png",
 		"totalBlizzards": 2,
 		"totalPortals": 4
-	},
-	"brazil_advanced": {
-		"prettyname": "Brazil Advanced",
-		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Brazil%20Advanced.png",
-		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Brazil%20Advanced%20blizzard%20pattern.png",
-		"totalBlizzards": 5,
-		"totalPortals": 6
 	},
 	"castle": {
 		"prettyname": "Castle",
@@ -160,6 +153,9 @@ mapDirectoryButton.addEventListener("click", function() {
   // Open the URL in a new tab when the button is clicked
   window.open("https://ares-thefox.github.io/Risk-Dynamic-Disconnection-Maps/testingpage3.html", "_blank");
 });
+
+var checkbox = document.getElementById('showdirectConnections');
+checkbox.addEventListener('change', generateMap);
 
 var images = [
   "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/ready_fox1.PNG",
@@ -356,9 +352,6 @@ xhr.onload = function () {
   }
 };
 xhr.send();
-
-var checkbox = document.getElementById('showdirectConnections');
-checkbox.addEventListener('change', generateMap);
 
 // Function to update button text
 function updateButtonText() {
@@ -642,10 +635,9 @@ const resetStroke = function(element, centralityMenu, tableData, colorDarktionar
 // Function to define color, border color, and text for function generateMap
 function getColorAndTextContent(centralityMenu, tableData, i) {
   var color, border_color, textContent;
-  var checkbox = document.getElementById('showdirectConnections');
-	
+
   if (checkbox.checked) {
-      text.textContent = "";
+    text.textContent = "";
   } else if (centralityMenu.value === "standard") {
     color = colorDictionary[tableData[i]["Number of Direct Connections"]];
     border_color = colorDarktionary[tableData[i]["Number of Direct Connections"]];
@@ -1375,6 +1367,9 @@ function generateMap() {
 	} else if (centralityMenu.value === "capConnections" && maxCapConnections >= 3) {
 	    baseImage.src = baseURL + colorLegend + "%20" + maxCapConnections + ".png";
 	}
+
+    // Handle direct connection lines
+    var checkbox = document.getElementById('showdirectConnections');
 
     // Clear all existing lines
     var lines = svgElement.querySelectorAll('.connection-line');
