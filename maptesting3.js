@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("DC lineeeeeeeeeeees")
+console.log("fixing blizzies issue")
 
 const mapUrls = {
 	"boston": {
@@ -22,13 +22,6 @@ const mapUrls = {
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Brazil%20blizzard%20pattern.png",
 		"totalBlizzards": 2,
 		"totalPortals": 4
-	},
-	"brazil_advanced": {
-		"prettyname": "Brazil Advanced",
-		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Brazil%20Advanced.png",
-		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Brazil%20Advanced%20blizzard%20pattern.png",
-		"totalBlizzards": 5,
-		"totalPortals": 6
 	},
 	"castle": {
 		"prettyname": "Castle",
@@ -158,7 +151,7 @@ var mapDirectoryButton = document.getElementById("mapDirectoryButton");
 // Add an event listener to the button that listens for the "click" event
 mapDirectoryButton.addEventListener("click", function() {
   // Open the URL in a new tab when the button is clicked
-  window.open("https://ares-thefox.github.io/Risk-Dynamic-Disconnection-Maps/testingpage3.html", "_blank");
+  window.open("https://ares-thefox.github.io/Risk-Dynamic-Disconnection-Maps/", "_blank");
 });
 
 var images = [
@@ -1086,66 +1079,6 @@ document.addEventListener('keydown', function(event) {
     undo();
   }
 });
-
-// Function to draw direct connection lines
-function drawLines(svgElement, tableData) {
-    tableData.forEach(function (row) {
-        var fromTerritory = row["Territory"];
-        var connections = row["Connections"].split(',');
-
-        // Get coordinates from CSV data
-        var x1 = Number(row["Pixel Pair 1"]);
-        var y1 = Number(row["Pixel Pair 2"]);
-
-        connections.forEach(function (toTerritory) {
-            var toRow = tableData.find(function (row) {
-                return row["Territory"] === toTerritory;
-            });
-
-            if (toRow) {
-                var x2 = Number(toRow["Pixel Pair 1"]);
-                var y2 = Number(toRow["Pixel Pair 2"]);
-
-                // Calculate the direction of the line
-                var dx = x2 - x1;
-                var dy = y2 - y1;
-
-                // Calculate the length of the line
-                var length = Math.sqrt(dx * dx + dy * dy);
-
-                // Calculate a point 10% along the line from both ends
-                var shortX1 = x1 + dx * 0.1;
-                var shortY1 = y1 + dy * 0.1;
-                var shortX2 = x2 - dx * 0.1;
-                var shortY2 = y2 - dy * 0.1;
-
-                // Create a line element and set its attributes
-                var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                line.setAttribute('x1', shortX1);
-                line.setAttribute('y1', shortY1);
-                line.setAttribute('x2', shortX2);
-                line.setAttribute('y2', shortY2);
-                line.setAttribute('stroke', 'black');
-
-		// Add a class to the line
-		line.classList.add('connection-line');
-                
-                // Append the line to the SVG
-                svgElement.appendChild(line);
-            }
-        });
-    });
-}
-
-// ----------------------------------------------------------------------------------------------------------------
-// ----------------------------------------------------------------------------------------------------------------
-// ----------------------------------------------------------------------------------------------------------------
-// ----------------------------------------------------------------------------------------------------------------
-// ----------------------------------------------------------------------------------------------------------------
-// ----------------------------------------------------------------------------------------------------------------
-// ----------------------------------------------------------------------------------------------------------------
-// ----------------------------------------------------------------------------------------------------------------
-// ----------------------------------------------------------------------------------------------------------------
 	
 // Generate the map
 function generateMap() {
@@ -1369,19 +1302,6 @@ function generateMap() {
 	} else if (centralityMenu.value === "capConnections" && maxCapConnections >= 3) {
 	    baseImage.src = baseURL + colorLegend + "%20" + maxCapConnections + ".png";
 	}
-
-    // Handle direct connection lines
-    var checkbox = document.getElementById('showdirectConnections');
-
-    // Clear all existing lines
-    var lines = svgElement.querySelectorAll('.connection-line');
-    lines.forEach(function(line) {
-        line.parentNode.removeChild(line);
-    });
-
-    if (checkbox.checked) {
-        drawLines(svgElement, tableData);
-    }
 	
 // Create a mapping of node names to indices
 let nodeToIndex = {};
