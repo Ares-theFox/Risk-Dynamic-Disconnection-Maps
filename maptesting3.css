@@ -105,3 +105,97 @@
 	#zoomOutButton:hover {
 	background-color: #ababab;
 	}
+
+
+
+
+	#addWhite {
+	text-align: center;
+	background-color: #FFFFFF;
+	color: black;
+	}
+
+	#addWhite:hover {
+	background-color: #AAAAAA;
+	}
+
+	#addBlack {
+	text-align: center;
+	background-color: #000000;
+	color: white;
+	}
+
+	#addBlack:hover {
+	background-color: #555555;
+	}
+
+	#addRed {
+	text-align: center;
+	background-color: #FF0000;
+	color: black;
+	}
+
+	#addRed:hover {
+	background-color: #AA0000;
+	}
+
+	#addPink {
+	text-align: center;
+	background-color: #FF66FF;
+	color: black;
+	}
+
+	#addPink:hover {
+	background-color: #BF4DBF;
+	}
+
+	#addPurple {
+	text-align: center;
+	background-color: #6F59C7;
+	color: white;
+	}
+
+	#addPurple:hover {
+	background-color: #4A3B85;
+	}
+
+	#addBlue {
+	text-align: center;
+	background-color: #43A5F4;
+	color: black;
+	}
+
+	#addBlue:hover {
+	background-color: #3178B1;
+	}
+
+	#addGreen {
+	text-align: center;
+	background-color: #33FF33;
+	color: black;
+	}
+
+	#addGreen:hover {
+	background-color: #20A220;
+	}
+
+	#addYellow {
+	text-align: center;
+	background-color: #FFFF00;
+	color: black;
+	}
+
+	#addYellow:hover {
+	background-color: #D1D100;
+	}
+
+	#addOrange {
+	text-align: center;
+	background-color: #FFA500;
+	color: black;
+	}
+
+	#addOrange:hover {
+	background-color: #D18700;
+	}
+
