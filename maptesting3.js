@@ -1223,10 +1223,10 @@ function AddColorFunction(color) {
         yellowNodes.push(this.id);
       } else if (color === "Orange") {
         orangeNodes.push(this.id);
+      }
 
       // Execute generateMap function
       generateMap();
-      }
     }
   };
 
