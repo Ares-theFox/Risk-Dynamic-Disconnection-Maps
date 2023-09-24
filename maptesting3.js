@@ -245,8 +245,13 @@ function button_Undo() {
 var selectMenuContainer = document.getElementById("selectMenuContainer");
 selectMenuContainer.style.display = "none";
 centralityMenu = document.getElementById("centralityType");
+var boardstateMenuContainer = document.getElementById("boardstateContainer");
+boardstateMenuContainer.style.display = "none";
 centralityMenu.addEventListener("change", function() {
   generateMap();
+  if (centralityMenu.value === "boardstate") {
+    selectMenuContainer.style.display = "";
+  }
 });
 
 // Hidden menu shenanigans
