@@ -1580,7 +1580,7 @@ function generateMap() {
 	var baseURL = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/";
 
 	// Decide which image to display
-	if (centralityMenu.value !== "standard" && centralityMenu.value !== "capConnections") {
+	if (centralityMenu.value !== "standard" && centralityMenu.value !== "capConnections" && centralityMenu.value !== "boardstate") {
 	    baseImage.src = baseURL + colorLegend + "%20Heatmap.png"
 	} else if (centralityMenu.value === "standard" && maxConnections < 3) {
 	    baseImage.src = baseURL + colorLegend + ".png";
