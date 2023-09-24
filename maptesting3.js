@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("polish")
+console.log("last step")
 
 const mapUrls = {
 	"boston": {
@@ -1550,7 +1550,7 @@ function generateMap() {
 	let condition3 = centralityMenu.value === "betweenness" && tableData[i]["Betweenness Above STDEV"] === 1;
 	let condition4 = centralityMenu.value === "closeness" && tableData[i]["Closeness Above STDEV"] === 1;
 	let condition5 = centralityMenu.value === "capConnections" && tableData[i]["Number of Cap Connections"] >= 11;
-	let condition6 = centralityMenu.value === "boardstate" && tableData[i]["Ownership"] === "Black";
+	let condition6 = centralityMenu.value === "boardstate" && (tableData[i]["Ownership"] === "Black" || tableData[i]["Ownership"] === "Purple");
 		
 	  if (condition1 || condition2 || condition3 || condition4 || condition5 || condition6) {
 	    text.setAttribute("fill", "white");
@@ -1582,7 +1582,7 @@ function generateMap() {
 	// Decide which image to display
 	if (centralityMenu.value !== "standard" && centralityMenu.value !== "capConnections") {
 	    baseImage.src = baseURL + colorLegend + "%20Heatmap.png"
-	} else if (centralityMenu.value === "standard" && maxConnections < 3) {
+	} else if ((centralityMenu.value === "standard" && maxConnections < 3) || (centralityMenu.value === "boardstate")) {
 	    baseImage.src = baseURL + colorLegend + ".png";
 	} else if (centralityMenu.value === "capConnections" && maxCapConnections < 3) {
 	    baseImage.src = baseURL + colorLegend + ".png";
