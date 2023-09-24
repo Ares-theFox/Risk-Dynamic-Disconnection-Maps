@@ -1550,6 +1550,7 @@ function generateMap() {
 	let condition3 = centralityMenu.value === "betweenness" && tableData[i]["Betweenness Above STDEV"] === 1;
 	let condition4 = centralityMenu.value === "closeness" && tableData[i]["Closeness Above STDEV"] === 1;
 	let condition5 = centralityMenu.value === "capConnections" && tableData[i]["Number of Cap Connections"] >= 11;
+	let condition6 = centralityMenu.value === "boardstate" && tableData[i]["Ownership"] === "Black";
 		
 	  if (condition1 || condition2 || condition3 || condition4 || condition5) {
 	    text.setAttribute("fill", "white");
