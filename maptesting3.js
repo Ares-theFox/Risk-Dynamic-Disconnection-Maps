@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("add value")
+console.log("polish")
 
 const mapUrls = {
 	"boston": {
@@ -280,6 +280,8 @@ function button_AddOrange() {
 function button_PlaceTroops() {
   PlaceTroopsFunction();
 }
+
+const buttons = ["blizzardButton", "portalButton", "eraserButton", "stopButton", "addWhite", "addBlack", "addRed", "addPink", "addPurple", "addBlue", "addGreen", "addYellow", "addOrange"];
 
 // Troop counts
 let troopInput = document.getElementById('troopInput');
@@ -861,10 +863,9 @@ function addBlizzards() {
     shouldReturn = true;
   };
 
-  document.getElementById("blizzardButton").addEventListener("click", buttonClick);
-  document.getElementById("portalButton").addEventListener("click", buttonClick);
-  document.getElementById("eraserButton").addEventListener("click", buttonClick);
-  document.getElementById("stopButton").addEventListener("click", buttonClick);
+  buttons.forEach(button => {
+    document.getElementById(button).addEventListener("click", buttonClick);
+  });
 
   // Check if size of blizzardArray is greater than or equal to totalBlizzards
   if (blizzardArray.length >= totalBlizzards) {
@@ -896,7 +897,18 @@ function addBlizzards() {
       return;
     }
     if (!blizzardArray.includes(this.id) && !portalArray.includes(this.id)) {
+      whiteNodes = whiteNodes.filter(id => id !== this.id);
+      blackNodes = blackNodes.filter(id => id !== this.id);
+      redNodes = redNodes.filter(id => id !== this.id);
+      pinkNodes = pinkNodes.filter(id => id !== this.id);
+      purpleNodes = purpleNodes.filter(id => id !== this.id);
+      blueNodes = blueNodes.filter(id => id !== this.id);
+      greenNodes = greenNodes.filter(id => id !== this.id);
+      yellowNodes = yellowNodes.filter(id => id !== this.id);
+      orangeNodes = orangeNodes.filter(id => id !== this.id); 
+	    
       blizzardArray.push(this.id);
+      TroopArray = TroopArray.filter(obj => obj.pathId !== this.id);
       history.push({ type: 'addBlizzard', pathId: this.id });
 	    
       // Check if size of blizzardArray is greater than or equal to totalBlizzards
@@ -949,10 +961,9 @@ function addPortals() {
     shouldReturn = true;
   };
 
-  document.getElementById("blizzardButton").addEventListener("click", buttonClick);
-  document.getElementById("portalButton").addEventListener("click", buttonClick);
-  document.getElementById("eraserButton").addEventListener("click", buttonClick);
-  document.getElementById("stopButton").addEventListener("click", buttonClick);
+  buttons.forEach(button => {
+    document.getElementById(button).addEventListener("click", buttonClick);
+  });
 	
   // Check if size of blizzardArray is greater than or equal to totalBlizzards
   if (portalArray.length >= totalPortals) {
@@ -1042,10 +1053,9 @@ function eraser() {
     shouldReturn = true;
   };
 
-  document.getElementById("blizzardButton").addEventListener("click", buttonClick);
-  document.getElementById("portalButton").addEventListener("click", buttonClick);
-  document.getElementById("eraserButton").addEventListener("click", buttonClick);
-  document.getElementById("stopButton").addEventListener("click", buttonClick);
+  buttons.forEach(button => {
+    document.getElementById(button).addEventListener("click", buttonClick);
+  });
 	
   // Define mouseover, mouseout, and click event handlers
   const mouseoverHandler = function () {
@@ -1166,10 +1176,9 @@ function AddColorFunction(color) {
     shouldReturn = true;
   };
 
-  document.getElementById("blizzardButton").addEventListener("click", buttonClick);
-  document.getElementById("portalButton").addEventListener("click", buttonClick);
-  document.getElementById("eraserButton").addEventListener("click", buttonClick);
-  document.getElementById("stopButton").addEventListener("click", buttonClick);
+  buttons.forEach(button => {
+    document.getElementById(button).addEventListener("click", buttonClick);
+  });
 
   // Define mouseover, mouseout, and click event handlers
   const mouseoverHandler = function () {
@@ -1255,10 +1264,9 @@ function PlaceTroopsFunction() {
     shouldReturn = true;
   };
 
-  document.getElementById("blizzardButton").addEventListener("click", buttonClick);
-  document.getElementById("portalButton").addEventListener("click", buttonClick);
-  document.getElementById("eraserButton").addEventListener("click", buttonClick);
-  document.getElementById("stopButton").addEventListener("click", buttonClick);
+  buttons.forEach(button => {
+    document.getElementById(button).addEventListener("click", buttonClick);
+  });
 
   // Define mouseover, mouseout, and click event handlers
   const mouseoverHandler = function () {
