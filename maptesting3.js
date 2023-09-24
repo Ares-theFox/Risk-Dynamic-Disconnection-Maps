@@ -690,6 +690,7 @@ const resetStroke = function(element, centralityMenu, tableData, colorDarktionar
     border_color = colorDarktionary[Math.min(value, 12)];
   } else if (centralityMenu.value === "boardstate") {
     border_color = tableData.find(row => row['Territory'] === element.id)['Ownership Border Color'];
+  }
   element.style.setProperty("stroke", border_color, "important");
   element.style.setProperty("stroke-width", "2", "important");
 }
