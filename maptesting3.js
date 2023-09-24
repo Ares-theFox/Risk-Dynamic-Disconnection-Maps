@@ -1582,7 +1582,9 @@ function generateMap() {
 	// Decide which image to display
 	if (centralityMenu.value !== "standard" && centralityMenu.value !== "capConnections") {
 	    baseImage.src = baseURL + colorLegend + "%20Heatmap.png"
-	} else if ((centralityMenu.value === "standard" && maxConnections < 3) || (centralityMenu.value === "boardstate")) {
+	} else if (centralityMenu.value === "standard" && maxConnections < 3) {
+	    baseImage.src = baseURL + colorLegend + ".png";
+	} else if (centralityMenu.value === "boardstate") {
 	    baseImage.src = baseURL + colorLegend + ".png";
 	} else if (centralityMenu.value === "capConnections" && maxCapConnections < 3) {
 	    baseImage.src = baseURL + colorLegend + ".png";
