@@ -199,3 +199,12 @@
 	background-color: #D18700;
 	}
 
+	#troopInputButton {
+	text-align: center;
+	background-color: #99FF00;
+	color: black;
+	}
+
+	#troopInputButton:hover {
+	background-color: #61A200;
+	}
