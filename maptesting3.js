@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("22")
+console.log("add value")
 
 const mapUrls = {
 	"boston": {
@@ -196,6 +196,16 @@ var totalPortals = mapUrls[mapselected].totalPortals;
 let blizzardArray = [];
 let portalArray = [];
 let history = [];
+let whiteNodes = [];
+let blackNodes = [];
+let redNodes = [];
+let pinkNodes = [];
+let purpleNodes = [];
+let blueNodes = [];
+let greenNodes = [];
+let yellowNodes = [];
+let orangeNodes = [];
+let TroopArray = [];
 const colorDictionary = {
   0: "#ffffff",
   1: "#eb3337",
@@ -239,18 +249,57 @@ function button_StopEditing() {
 }
 function button_Undo() {
   undo();
-}	
+}
+function button_AddWhite() {
+  AddColorFunction('White');
+}
+function button_AddBlack() {
+  AddColorFunction('Black');
+}
+function button_AddRed() {
+  AddColorFunction('Red');
+}
+function button_AddPink() {
+  AddColorFunction('Pink');
+}
+function button_AddPurple() {
+  AddColorFunction('Purple');
+}
+function button_AddBlue() {
+  AddColorFunction('Blue');
+}
+function button_AddGreen() {
+  AddColorFunction('Green');
+}
+function button_AddYellow() {
+  AddColorFunction('Yellow');
+}
+function button_AddOrange() {
+  AddColorFunction('Orange');
+}
+function button_PlaceTroops() {
+  PlaceTroopsFunction();
+}
+
+// Troop counts
+let troopInput = document.getElementById('troopInput');
+let currentTroopValue = parseInt(troopInput.value);
+troopInput.addEventListener('input', function() {
+  currentTroopValue = parseInt(this.value);
+});
+
 
 // Menu stuff
 var selectMenuContainer = document.getElementById("selectMenuContainer");
 selectMenuContainer.style.display = "none";
 centralityMenu = document.getElementById("centralityType");
+
 var boardstateMenuContainer = document.getElementById("boardstateContainer");
 boardstateMenuContainer.style.display = "none";
 centralityMenu.addEventListener("change", function() {
   generateMap();
   if (centralityMenu.value === "boardstate") {
-    selectMenuContainer.style.display = "";
+    boardstateMenuContainer.style.display = "";
   }
 });
 
@@ -315,6 +364,9 @@ Papa.parse(
           let row = tableData[i];
           if (typeof row === 'object' && row.hasOwnProperty('Territory') && row.hasOwnProperty('Connections')) {
               if (typeof row['Territory'] === 'string' && typeof row['Connections'] === 'string') {
+		  row['Ownership'] = "None";
+		  row['Ownership Color'] = null;
+		  row['Ownership Border Color'] = "#808080";
                   filteredTableData.push(row);
               }
           }
@@ -636,7 +688,8 @@ const resetStroke = function(element, centralityMenu, tableData, colorDarktionar
   } else if (centralityMenu.value === "capConnections") {
     let value = tableData.find(row => row['Territory'] === element.id)['Number of Cap Connections'];
     border_color = colorDarktionary[Math.min(value, 12)];
-  }
+  } else if (centralityMenu.value === "boardstate") {
+    border_color = tableData.find(row => row['Territory'] === element.id)['Ownership Border Color'];
   element.style.setProperty("stroke", border_color, "important");
   element.style.setProperty("stroke-width", "2", "important");
 }
@@ -665,6 +718,10 @@ function getColorAndTextContent(centralityMenu, tableData, i) {
     color = colorDictionary[Math.min(tableData[i]["Number of Cap Connections"], 12)];
     border_color = colorDarktionary[Math.min(tableData[i]["Number of Cap Connections"], 12)];
     textContent = tableData[i]["Number of Cap Connections"];
+  } else if (centralityMenu.value === "boardstate") {
+    color = tableData[i]["Ownership Color"];
+    border_color = tableData[i]["Ownership Border Color"];
+    textContent = tableData[i]["Troops"];
   }
 
   return {color, border_color, textContent};
@@ -1092,6 +1149,163 @@ document.addEventListener('keydown', function(event) {
   }
 });
 
+// Function to assign ownership
+function AddColorFunction(color) {
+  document.getElementById("stopButton").innerHTML = "Stop Assigning " + color;
+  document.getElementById("stopButton").style.backgroundColor = "#4caf50";
+  
+  var styleElement = document.createElement("style");
+  styleElement.id = "stopButtonHoverStyle";
+  styleElement.textContent = "#stopButton:hover { background-color: #3e8e41 !important; }";
+  document.head.appendChild(styleElement);
+
+  let shouldReturn = false;
+	
+  const buttonClick = function () {
+    shouldReturn = true;
+  };
+
+  document.getElementById("blizzardButton").addEventListener("click", buttonClick);
+  document.getElementById("portalButton").addEventListener("click", buttonClick);
+  document.getElementById("eraserButton").addEventListener("click", buttonClick);
+  document.getElementById("stopButton").addEventListener("click", buttonClick);
+
+  // Define mouseover, mouseout, and click event handlers
+  const mouseoverHandler = function () {
+    if (shouldReturn) {
+      return;
+    }
+    if (!blizzardArray.includes(this.id)) {
+      highlightStroke(this);
+    }
+  };
+	
+  const mouseoutHandler = function () {
+    if (shouldReturn) {
+      return;
+    }
+    if (!blizzardArray.includes(this.id)) {
+      resetStroke(this, centralityMenu, tableData, colorDarktionary);
+    }
+  };
+	
+  const clickHandler = function () {
+    if (shouldReturn) {
+      return;
+    }
+    if (!blizzardArray.includes(this.id)) {
+      whiteNodes = whiteNodes.filter(id => id !== this.id);
+      blackNodes = blackNodes.filter(id => id !== this.id);
+      redNodes = redNodes.filter(id => id !== this.id);
+      pinkNodes = pinkNodes.filter(id => id !== this.id);
+      purpleNodes = purpleNodes.filter(id => id !== this.id);
+      blueNodes = blueNodes.filter(id => id !== this.id);
+      greenNodes = greenNodes.filter(id => id !== this.id);
+      yellowNodes = yellowNodes.filter(id => id !== this.id);
+      orangeNodes = orangeNodes.filter(id => id !== this.id);
+      
+      // Here we use the color parameter to decide which array to add the node to
+      if (color === "White") {
+        whiteNodes.push(this.id);
+      } else if (color === "Black") {
+        blackNodes.push(this.id);
+      } else if (color === "Red") {
+        redNodes.push(this.id);
+      } else if (color === "Pink") {
+        pinkNodes.push(this.id);
+      } else if (color === "Purple") {
+        purpleNodes.push(this.id);
+      } else if (color === "Blue") {
+        blueNodes.push(this.id);
+      } else if (color === "Green") {
+        greenNodes.push(this.id);
+      } else if (color === "Yellow") {
+        yellowNodes.push(this.id);
+      } else if (color === "Orange") {
+        orangeNodes.push(this.id);
+
+      // Execute generateMap function
+      generateMap();
+      }
+    }
+  };
+
+  // Add event listeners to elements in paths array
+  paths.forEach(function (path) {
+    path.addEventListener("mouseover", mouseoverHandler);
+    path.addEventListener("mouseout", mouseoutHandler);
+    path.addEventListener("click", clickHandler);
+  });
+}
+
+// Function to place troops
+function PlaceTroopsFunction() {
+  document.getElementById("stopButton").innerHTML = "Stop Placing Troops";
+  document.getElementById("stopButton").style.backgroundColor = "#4caf50";
+
+  var styleElement = document.createElement("style");
+  styleElement.id = "stopButtonHoverStyle";
+  styleElement.textContent = "#stopButton:hover { background-color: #3e8e41 !important; }";
+  document.head.appendChild(styleElement);
+
+  let shouldReturn = false;
+
+  const buttonClick = function () {
+    shouldReturn = true;
+  };
+
+  document.getElementById("blizzardButton").addEventListener("click", buttonClick);
+  document.getElementById("portalButton").addEventListener("click", buttonClick);
+  document.getElementById("eraserButton").addEventListener("click", buttonClick);
+  document.getElementById("stopButton").addEventListener("click", buttonClick);
+
+  // Define mouseover, mouseout, and click event handlers
+  const mouseoverHandler = function () {
+    if (shouldReturn) {
+      return;
+    }
+    if (!blizzardArray.includes(this.id)) {
+      highlightStroke(this);
+    }
+  };
+
+  const mouseoutHandler = function () {
+    if (shouldReturn) {
+      return;
+    }
+    if (!blizzardArray.includes(this.id)) {
+      resetStroke(this, centralityMenu, tableData, colorDarktionary);
+    }
+  };
+
+  const clickHandler = function () {
+    if (shouldReturn) {
+      return;
+    }
+    if (!blizzardArray.includes(this.id)) {
+      let existingObject = TroopArray.find(obj => obj.pathId === this.id);
+      if (existingObject) {
+        existingObject.value = currentTroopValue;
+      } else {
+      TroopArray.push({
+        pathId: this.id,
+        value: currentTroopValue
+      });
+      }
+      generateMap();
+    }
+  };
+
+  // Add event listeners to elements in paths array
+  paths.forEach(function (path) {
+    path.addEventListener("mouseover", mouseoverHandler);
+    path.addEventListener("mouseout", mouseoutHandler);
+    path.addEventListener("click", clickHandler);
+  });
+}
+
+
+
 // ------------------------------------------------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------------------------------------------------
@@ -1195,6 +1409,51 @@ function generateMap() {
       row["Number of Indirect Connections"] = 0;
       row["Number of Cap Connections"] = 0;
     }
+
+	// Add troop values
+	let troopInfo = TroopArray.find(obj => obj.pathId === row.Territory);	
+	if (troopInfo) {
+	  row.Troops = troopInfo.value;
+	}
+
+	  // Check which color array the Territory is in and update the Ownership, Ownership Color, and Ownership Border Color values accordingly
+	  if (whiteNodes.includes(row.Territory)) {
+	    row.Ownership = 'White';
+	    row["Ownership Color"] = "#FFFFFF";
+	    row["Ownership Border Color"] = "#AAAAAA";
+	  } else if (blackNodes.includes(row.Territory)) {
+	    row.Ownership = 'Black';
+	    row["Ownership Color"] = "#000000";
+	    row["Ownership Border Color"] = "#555555";
+	  } else if (redNodes.includes(row.Territory)) {
+	    row.Ownership = 'Red';
+	    row["Ownership Color"] = "#FF0000";
+	    row["Ownership Border Color"] = "#AA0000";
+	  } else if (pinkNodes.includes(row.Territory)) {
+	    row.Ownership = 'Pink';
+	    row["Ownership Color"] = "#FF66FF";
+	    row["Ownership Border Color"] = "#BF4DBF";
+	  } else if (purpleNodes.includes(row.Territory)) {
+	    row.Ownership = 'Purple';
+	    row["Ownership Color"] = "#6F59C7";
+	    row["Ownership Border Color"] = "#4A3B85";
+	  } else if (blueNodes.includes(row.Territory)) {
+	    row.Ownership = 'Blue';
+	    row["Ownership Color"] = "#43A5F4";
+	    row["Ownership Border Color"] = "#3178B1";
+	  } else if (greenNodes.includes(row.Territory)) {
+	    row.Ownership = 'Green';
+	    row["Ownership Color"] = "#33FF33";
+	    row["Ownership Border Color"] = "#20A220";
+	  } else if (yellowNodes.includes(row.Territory)) {
+	    row.Ownership = 'Yellow';
+	    row["Ownership Color"] = "#FFFF00";
+	    row["Ownership Border Color"] = "#D1D100";
+	  } else if (orangeNodes.includes(row.Territory)) {
+	    row.Ownership = 'Orange';
+	    row["Ownership Color"] = "#FFA500";
+	    row["Ownership Border Color"] = "#D18700";
+	  }
   });
 
   // Call centrality function, line function
