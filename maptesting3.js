@@ -281,7 +281,7 @@ function button_PlaceTroops() {
   PlaceTroopsFunction();
 }
 
-const buttons = ["blizzardButton", "portalButton", "eraserButton", "stopButton", "addWhite", "addBlack", "addRed", "addPink", "addPurple", "addBlue", "addGreen", "addYellow", "addOrange"];
+const buttons = ["blizzardButton", "portalButton", "eraserButton", "stopButton", "addWhite", "addBlack", "addRed", "addPink", "addPurple", "addBlue", "addGreen", "addYellow", "addOrange", "troopInputButton"];
 
 // Troop counts
 let troopInput = document.getElementById('troopInput');
@@ -1552,7 +1552,7 @@ function generateMap() {
 	let condition5 = centralityMenu.value === "capConnections" && tableData[i]["Number of Cap Connections"] >= 11;
 	let condition6 = centralityMenu.value === "boardstate" && tableData[i]["Ownership"] === "Black";
 		
-	  if (condition1 || condition2 || condition3 || condition4 || condition5) {
+	  if (condition1 || condition2 || condition3 || condition4 || condition5 || condition6) {
 	    text.setAttribute("fill", "white");
 	  } else {
 	    text.setAttribute("fill", "black");
