@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("asdfasdf")
+console.log("2123")
 
 const mapUrls = {
 	"boston": {
@@ -342,9 +342,6 @@ sequence.forEach(function (item) {
   button.addEventListener("click", clickHandler);
 });
 
-
-
-
 // Load the CSVs and push to tableData
 let tableData;
 let tableDataClone;
@@ -370,10 +367,11 @@ Papa.parse(
           let row = tableData[i];
           if (typeof row === 'object' && row.hasOwnProperty('Territory') && row.hasOwnProperty('Connections')) {
               if (typeof row['Territory'] === 'string' && typeof row['Connections'] === 'string') {
-	    	row['Ownership'] = "None";
-	    	row['Ownership Color'] = null;
-	    	row['Ownership Border Color'] = "#808080";
-	    	filteredTableData.push(row);
+	    	  row['Ownership'] = "None";
+	    	  row['Ownership Color'] = null;
+	    	  row['Ownership Border Color'] = "#808080";
+	    	  filteredTableData.push(row);
+              }
           }
       }
       // Assign filtered data to tableData and create a clone
