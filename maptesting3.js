@@ -6,7 +6,7 @@ if (urlParams.has('map')) {
 	console.log(urlParams.get('map'));
 }
 
-console.log("last step")
+console.log("asdfasdf")
 
 const mapUrls = {
 	"boston": {
@@ -158,7 +158,7 @@ var mapDirectoryButton = document.getElementById("mapDirectoryButton");
 // Add an event listener to the button that listens for the "click" event
 mapDirectoryButton.addEventListener("click", function() {
   // Open the URL in a new tab when the button is clicked
-  window.open("https://ares-thefox.github.io/Risk-Dynamic-Disconnection-Maps/", "_blank");
+  window.open("https://ares-thefox.github.io/Risk-Dynamic-Disconnection-Maps/testingpage3.html", "_blank");
 });
 
 var images = [
@@ -368,11 +368,12 @@ Papa.parse(
       let filteredTableData = [];
       for (let i = 0; i < tableData.length; i++) {
           let row = tableData[i];
-          if (typeof row === 'object' && row.hasOwnProperty('Territory') && typeof row['Territory'] === 'string') {
-	    row['Ownership'] = "None";
-	    row['Ownership Color'] = null;
-	    row['Ownership Border Color'] = "#808080";
-	    filteredTableData.push(row);
+          if (typeof row === 'object' && row.hasOwnProperty('Territory') && row.hasOwnProperty('Connections')) {
+              if (typeof row['Territory'] === 'string' && typeof row['Connections'] === 'string') {
+	    	row['Ownership'] = "None";
+	    	row['Ownership Color'] = null;
+	    	row['Ownership Border Color'] = "#808080";
+	    	filteredTableData.push(row);
           }
       }
       // Assign filtered data to tableData and create a clone
