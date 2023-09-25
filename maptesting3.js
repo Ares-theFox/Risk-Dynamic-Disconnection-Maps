@@ -189,6 +189,7 @@ window.onload = function() {
 // Set initial variables
 var colorLegend = mapUrls[mapselected].prettyname;
 var csvData = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "%20Master%20File.csv";
+var atkData = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/atkmin_DDM.csv";
 var SVG = "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/" + colorLegend + "%20Paths.svg";
 var BlizzardPattern = blizzardPatternImage.src;
 var totalBlizzards = mapUrls[mapselected].totalBlizzards;
@@ -341,6 +342,9 @@ sequence.forEach(function (item) {
   button.addEventListener("click", clickHandler);
 });
 
+
+
+
 // Load the CSVs and push to tableData
 let tableData;
 let tableDataClone;
@@ -364,19 +368,38 @@ Papa.parse(
       let filteredTableData = [];
       for (let i = 0; i < tableData.length; i++) {
           let row = tableData[i];
-          if (typeof row === 'object' && row.hasOwnProperty('Territory') && row.hasOwnProperty('Connections')) {
-              if (typeof row['Territory'] === 'string' && typeof row['Connections'] === 'string') {
-		  row['Ownership'] = "None";
-		  row['Ownership Color'] = null;
-		  row['Ownership Border Color'] = "#808080";
-                  filteredTableData.push(row);
-              }
+          if (typeof row === 'object' && row.hasOwnProperty('Territory') && typeof row['Territory'] === 'string') {
+	    row['Ownership'] = "None";
+	    row['Ownership Color'] = null;
+	    row['Ownership Border Color'] = "#808080";
+	    filteredTableData.push(row);
           }
       }
       // Assign filtered data to tableData and create a clone
       tableData = filteredTableData;
       tableDataClone = JSON.parse(JSON.stringify(tableData));
       onRequestComplete();
+    },
+  }
+);
+
+let atkMin;
+Papa.parse(
+  atkData,
+  {
+    download: true,
+    header: true,
+    complete: function (results) {
+      // Assign parsed data to atkMin
+      atkMin = results.data;
+      // Remove zero-width space character from atkMin
+      for (let i = 0; i < atkMin.length; i++) {
+	for (let key in atkMin[i]) {
+	  if (atkMin[i].hasOwnProperty(key)) {
+	    atkMin[i][key] = atkMin[i][key].replace(/\u200B/g, "");
+	  }
+	}
+      }
     },
   }
 );
@@ -432,9 +455,6 @@ function updateButtonText() {
     document.getElementById("portalButton").innerHTML = "Add Portals (" + (totalPortals - portalArray.length) + " left)";
   }
 }
-
-// Update button text on page load
-updateButtonText();
 
 // FUNCTION: stop editing
 function stopEditing() {
