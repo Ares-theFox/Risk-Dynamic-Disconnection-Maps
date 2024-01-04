@@ -28,7 +28,7 @@ const mapUrls = {
 		"baseurl": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Brazil%20Advanced.png",
 		"blizzardPatternImage": "https://raw.githubusercontent.com/Ares-theFox/Risk-Dynamic-Disconnection-Maps/main/Brazil%20Advanced%20blizzard%20pattern.png",
 		"totalBlizzards": 5,
-		"totalPortals": 6
+		"totalPortals": 7
 	},
 	"castle": {
 		"prettyname": "Castle",
